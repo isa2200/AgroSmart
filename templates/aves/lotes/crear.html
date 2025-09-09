@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ form.instance.pk|yesno:'Editar,Crear' }} Lote - AgroSmart{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        {{ form.instance.pk|yesno:'Editar,Crear' }} Lote de Aves
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.codigo.id_for_label }}" class="form-label">Código del Lote *</label>
+                                    {{ form.codigo }}
+                                    {% if form.codigo.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.codigo.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.raza.id_for_label }}" class="form-label">Raza *</label>
+                                    {{ form.raza }}
+                                    {% if form.raza.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.raza.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="{{ form.cantidad_inicial.id_for_label }}" class="form-label">Cantidad Inicial *</label>
+                                    {{ form.cantidad_inicial }}
+                                    {% if form.cantidad_inicial.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.cantidad_inicial.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="{{ form.fecha_ingreso.id_for_label }}" class="form-label">Fecha de Ingreso *</label>
+                                    {{ form.fecha_ingreso }}
+                                    {% if form.fecha_ingreso.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.fecha_ingreso.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="{{ form.edad_semanas.id_for_label }}" class="form-label">Edad en Semanas *</label>
+                                    {{ form.edad_semanas }}
+                                    {% if form.edad_semanas.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.edad_semanas.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
+                            {{ form.observaciones }}
+                            {% if form.observaciones.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.observaciones.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'aves:lista_lotes' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>
+                                {{ form.instance.pk|yesno:'Actualizar,Crear' }} Lote
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Validación del formulario
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            var forms = document.getElementsByClassName('needs-validation');
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+{% endblock %}

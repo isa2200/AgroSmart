@@ -1,0 +1,1 @@
+# App LoteAvess - Gestión de LoteAvess y producción avícola

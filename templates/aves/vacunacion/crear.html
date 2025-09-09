@@ -1,0 +1,120 @@
+{% extends 'aves/base_aves.html' %}
+{% load static %}
+
+{% block title %}Registrar Vacunación - AgroSmart{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-syringe me-2"></i>
+                        Registrar Vacunación
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.lote.id_for_label }}" class="form-label">Lote *</label>
+                                    {{ form.lote }}
+                                    {% if form.lote.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.lote.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.fecha_aplicacion.id_for_label }}" class="form-label">Fecha de Aplicación *</label>
+                                    {{ form.fecha_aplicacion }}
+                                    {% if form.fecha_aplicacion.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.fecha_aplicacion.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.vacuna.id_for_label }}" class="form-label">Vacuna *</label>
+                                    {{ form.vacuna }}
+                                    {% if form.vacuna.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.vacuna.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.dosis.id_for_label }}" class="form-label">Dosis</label>
+                                    {{ form.dosis }}
+                                    {% if form.dosis.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.dosis.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.veterinario.id_for_label }}" class="form-label">Veterinario</label>
+                                    {{ form.veterinario }}
+                                    {% if form.veterinario.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.veterinario.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.proxima_dosis.id_for_label }}" class="form-label">Próxima Dosis</label>
+                                    {{ form.proxima_dosis }}
+                                    {% if form.proxima_dosis.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.proxima_dosis.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
+                            {{ form.observaciones }}
+                            {% if form.observaciones.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.observaciones.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'aves:lista_vacunacion' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Registrar Vacunación
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

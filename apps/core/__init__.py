@@ -1,0 +1,1 @@
+# App core - Configuraciones comunes y modelos base

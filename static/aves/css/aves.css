@@ -1,0 +1,128 @@
+/* Aves Module - Estilos Específicos */
+
+/* Cards de Métricas */
+.metric-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    padding: 20px;
+    color: white;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+}
+
+.metric-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.metric-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.metric-change {
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+/* Contenedores de Gráficas */
+.chart-container {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+/* Botones de Acción Rápida */
+.quick-action-btn {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    border: none;
+    border-radius: 10px;
+    padding: 15px 20px;
+    color: white;
+    font-weight: 600;
+    margin: 5px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.quick-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+/* Alertas */
+.alert-card {
+    border-left: 4px solid #dc3545;
+    background: #fff5f5;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+/* Formulario de producción diaria */
+#produccionDiariaForm {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+}
+
+#produccionDiariaForm .form-group label {
+    font-weight: 600;
+    color: #495057;
+}
+
+/* Tabla de historial */
+#historialTable {
+    font-size: 0.9rem;
+}
+
+#historialTable th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    border-top: none;
+}
+
+#historialTable tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .metric-value {
+        font-size: 2rem;
+    }
+    
+    .quick-action-btn {
+        padding: 10px 15px;
+        margin: 3px;
+        font-size: 0.9rem;
+    }
+    
+    .chart-container {
+        padding: 15px;
+    }
+}

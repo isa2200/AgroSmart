@@ -1,0 +1,81 @@
+{% extends 'aves/base_aves.html' %}
+
+{% block titulo %}Registro de Producción{% endblock %}
+
+{% block toolbar %}
+<a href="{% url 'aves:registrar_produccion' %}" class="btn btn-success">
+    <i class="fas fa-plus"></i> Registrar Producción
+</a>
+{% endblock %}
+
+{% block aves_content %}
+<!-- Filtros -->
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            {{ filtro_form|crispy }}
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Filtrar
+                </button>
+                <a href="{% url 'aves:lista_produccion' %}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Limpiar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Tabla de producción -->
+<div class="card shadow">
+    <div class="card-header">
+        <h6 class="m-0 font-weight-bold text-primary">Registros de Producción</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Lote</th>
+                        <th>Semana</th>
+                        <th>Total Huevos</th>
+                        <th>% Postura</th>
+                        <th>Peso Promedio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for produccion in producciones %}
+                    <tr>
+                        <td>{{ produccion.fecha|date:"d/m/Y" }}</td>
+                        <td>{{ produccion.lote.nombre_lote }}</td>
+                        <td>{{ produccion.semana_produccion }}</td>
+                        <td><strong>{{ produccion.total_huevos }}</strong></td>
+                        <td>
+                            <span class="badge badge-{% if produccion.porcentaje_postura >= 80 %}success{% elif produccion.porcentaje_postura >= 60 %}warning{% else %}danger{% endif %}">
+                                {{ produccion.porcentaje_postura|floatformat:1 }}%
+                            </span>
+                        </td>
+                        <td>{{ produccion.peso_promedio_huevo }}g</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="{% url 'aves:editar_produccion' produccion.id %}" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">
+                            No hay registros de producción. <a href="{% url 'aves:registrar_produccion' %}">Registrar el primero</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

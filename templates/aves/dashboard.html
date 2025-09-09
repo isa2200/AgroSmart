@@ -1,0 +1,458 @@
+{% extends 'aves/base_aves.html' %}
+{% load static %}
+{% load json_script %}
+
+{% block title %}Dashboard Aves - AgroSmart{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.css" rel="stylesheet">
+<link href="{% static 'aves/css/aves.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- Datos JSON para JavaScript -->
+{{ produccion_30_dias|json_script:"produccion-data" }}
+{{ clasificacion_semanal|json_script:"clasificacion-data" }}
+{% with mortalidad_data='{"actual":'|add:porcentaje_mortalidad|add:',"objetivo":'|add:objetivo_mortalidad|add:'}' %}
+    <script id="mortalidad-data" type="application/json">{{ mortalidad_data }}</script>
+{% endwith %}
+{% with financiero_data='{"ingresos":'|add:costos_mes.total_ingresos|default:0|add:',"costos":'|add:costos_mes.total_costos|default:0|add:'}' %}
+    <script id="financiero-data" type="application/json">{{ financiero_data }}</script>
+{% endwith %}
+
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0">🐔 Dashboard Aves</h1>
+                    <p class="text-muted mb-0">{{ fecha_actual }}</p>
+                </div>
+                <div>
+                    <span class="badge badge-success badge-lg">{{ lotes_activos.count }} Lotes Activos</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario de Producción Diaria -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="chart-container">
+                <h5 class="mb-3"><i class="fas fa-plus-circle text-primary"></i> Registro Rápido de Producción</h5>
+                <form id="produccionDiariaForm" method="post" action="{% url 'aves:registrar_produccion' %}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="lote">Lote</label>
+                                <select class="form-control" id="lote" name="lote" required>
+                                    <option value="">Seleccionar lote...</option>
+                                    {% for lote in lotes_activos %}
+                                    <option value="{{ lote.id }}">{{ lote.nombre_lote }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="huevos_totales">Huevos Totales</label>
+                                <input type="number" class="form-control" id="huevos_totales" name="huevos_totales" min="0" required>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="huevos_rotos">Huevos Rotos</label>
+                                <input type="number" class="form-control" id="huevos_rotos" name="huevos_rotos" min="0" value="0">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="mortalidad">Mortalidad</label>
+                                <input type="number" class="form-control" id="mortalidad" name="mortalidad" min="0" value="0">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="fecha">Fecha</label>
+                                <input type="date" class="form-control" id="fecha" name="fecha" value="{{ fecha_actual|date:'Y-m-d' }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    <i class="fas fa-save"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Indicadores Principales -->
+    <div class="row mb-4">
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="metric-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="metric-value">{{ total_aves_activas }}</div>
+                <div class="metric-label">Aves Activas</div>
+                <div class="metric-change">
+                    <i class="fas fa-feather-alt"></i> Total en producción
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="metric-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <div class="metric-value">{{ huevos_comerciales_hoy }}</div>
+                <div class="metric-label">Huevos Hoy</div>
+                <div class="metric-change">
+                    <i class="fas fa-egg"></i> {{ fecha_actual|date:'d/m/Y' }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="metric-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                <div class="metric-value">{{ postura_7_dias }}%</div>
+                <div class="metric-label">% Postura 7 días</div>
+                <div class="metric-change">
+                    <i class="fas fa-chart-line"></i> Promedio semanal
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="metric-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                <div class="metric-value">{{ porcentaje_mortalidad }}%</div>
+                <div class="metric-label">Mortalidad Total</div>
+                <div class="metric-change">
+                    <i class="fas fa-heartbeat"></i> Acumulada
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="metric-card" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333;">
+                <div class="metric-value">{{ gramos_ave_dia }}g</div>
+                <div class="metric-label">Gramos Ave/Día</div>
+                <div class="metric-change">
+                    <i class="fas fa-weight"></i> Promedio 30 días
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="metric-card" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333;">
+                <div class="metric-value">
+                    {% if costos_mes.total_ingresos and costos_mes.total_costos %}
+                        ${{ costos_mes.total_ingresos|sub:costos_mes.total_costos|floatformat:0 }}
+                    {% else %}
+                        $0
+                    {% endif %}
+                </div>
+                <div class="metric-label">Utilidad Mes</div>
+                <div class="metric-change">
+                    <i class="fas fa-dollar-sign"></i> {{ mes_actual }}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Accesos Rápidos -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="chart-container">
+                <h5 class="mb-3"><i class="fas fa-bolt text-warning"></i> Accesos Rápidos</h5>
+                <div class="text-center">
+                    <a href="{% url 'aves:registrar_produccion' %}" class="quick-action-btn">
+                        <i class="fas fa-plus-circle"></i> Registro Diario
+                    </a>
+                    <a href="{% url 'aves:registrar_produccion' %}" class="quick-action-btn">
+                        <i class="fas fa-layer-group"></i> Clasificación
+                    </a>
+                    <a href="{% url 'aves:registrar_mortalidad' %}" class="quick-action-btn">
+                        <i class="fas fa-heartbeat"></i> Mortalidad
+                    </a>
+                    <a href="{% url 'aves:registrar_vacunacion' %}" class="quick-action-btn">
+                        <i class="fas fa-syringe"></i> Vacunación
+                    </a>
+                    <a href="{% url 'aves:crear_lote' %}" class="quick-action-btn">
+                        <i class="fas fa-plus"></i> Nuevo Lote
+                    </a>
+                    <a href="{% url 'aves:registrar_costos' %}" class="quick-action-btn">
+                        <i class="fas fa-calculator"></i> Costos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Gráficas -->
+    <div class="row mb-4">
+        <!-- Producción últimos 30 días -->
+        <div class="col-lg-6">
+            <div class="chart-container">
+                <h5 class="mb-3"><i class="fas fa-chart-line text-primary"></i> Producción Últimos 30 Días</h5>
+                <canvas id="produccionChart" height="300"></canvas>
+            </div>
+        </div>
+        
+        <!-- Clasificación Semanal -->
+        <div class="col-lg-6">
+            <div class="chart-container">
+                <h5 class="mb-3"><i class="fas fa-chart-pie text-success"></i> Clasificación Semanal</h5>
+                <canvas id="clasificacionChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <!-- Mortalidad vs Objetivo -->
+        <div class="col-lg-6">
+            <div class="chart-container">
+                <h5 class="mb-3"><i class="fas fa-chart-bar text-danger"></i> Mortalidad vs Objetivo</h5>
+                <canvas id="mortalidadChart" height="300"></canvas>
+            </div>
+        </div>
+        
+        <!-- Ingresos vs Costos -->
+        <div class="col-lg-6">
+            <div class="chart-container">
+                <h5 class="mb-3"><i class="fas fa-chart-area text-info"></i> Ingresos vs Costos ({{ mes_actual }})</h5>
+                <canvas id="financieroChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Alertas y Lotes -->
+    <div class="row">
+        <!-- Alertas Sanitarias -->
+        <div class="col-lg-6">
+            <div class="chart-container">
+                <h5 class="mb-3"><i class="fas fa-exclamation-triangle text-warning"></i> Alertas Sanitarias</h5>
+                {% if lotes_con_alertas %}
+                    {% for item in lotes_con_alertas %}
+                        <div class="alert-card">
+                            <strong>{{ item.lote.nombre_lote }}</strong>
+                            {% for alerta in item.alertas %}
+                                <p class="mb-1">{{ alerta }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-shield-alt text-success"></i>
+                        <p>No hay alertas sanitarias activas</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Próximas Vacunaciones -->
+        <div class="col-lg-6">
+            <div class="chart-container">
+                <h5 class="mb-3"><i class="fas fa-syringe text-info"></i> Próximas Vacunaciones</h5>
+                {% if proximas_vacunas %}
+                    {% for vacuna in proximas_vacunas %}
+                        <div class="alert-card" style="border-left-color: #17a2b8;">
+                            <strong>{{ vacuna.lote.nombre_lote }}</strong>
+                            <p class="mb-1">{{ vacuna.calendario_vacuna.nombre_vacuna }}</p>
+                            <small class="text-muted">{{ vacuna.fecha_programada|date:'d/m/Y' }}</small>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-check-circle text-success"></i>
+                        <p>Vacunaciones al día</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Datos para JavaScript -->
+{{ block.super }}
+<script id="chart-data" type="application/json">
+{
+    "fechas_produccion": {{ fechas_produccion|safe }},
+    "datos_produccion": {{ datos_produccion|safe }},
+    "datos_clasificacion": {{ datos_clasificacion|safe }},
+    "fechas_mortalidad": {{ fechas_mortalidad|safe }},
+    "datos_mortalidad": {{ datos_mortalidad|safe }},
+    "costos_mes": {
+        "total_ingresos": {{ costos_mes.total_ingresos|default:0 }},
+        "total_costos": {{ costos_mes.total_costos|default:0 }}
+    }
+}
+</script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- JavaScript del módulo aves -->
+<script src="{% static 'aves/js/aves.js' %}"></script>
+{% endblock %}
+<script>
+// Configuración de gráficas
+Chart.defaults.font.family = 'Inter, sans-serif';
+Chart.defaults.color = '#6c757d';
+
+// Gráfica de Producción
+const produccionCtx = document.getElementById('produccionChart').getContext('2d');
+const produccionChart = new Chart(produccionCtx, {
+    type: 'line',
+    data: {
+        labels: [{% for item in produccion_30_dias %}'{{ item.fecha }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+        datasets: [{
+            label: 'Huevos Comerciales',
+            data: [{% for item in produccion_30_dias %}{{ item.total }}{% if not forloop.last %},{% endif %}{% endfor %}],
+            borderColor: '#667eea',
+            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: 'rgba(0,0,0,0.1)'
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        }
+    }
+});
+
+// Gráfica de Clasificación
+const clasificacionCtx = document.getElementById('clasificacionChart').getContext('2d');
+const clasificacionChart = new Chart(clasificacionCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Yumbo', 'Extra', 'AA', 'A', 'B', 'C', 'Pipo', 'Sucios', 'Totiados', 'Yema'],
+        datasets: [{
+            data: [
+                {{ clasificacion_semanal.yumbos|default:0 }},
+                {{ clasificacion_semanal.extra|default:0 }},
+                {{ clasificacion_semanal.aa|default:0 }},
+                {{ clasificacion_semanal.a|default:0 }},
+                {{ clasificacion_semanal.b|default:0 }},
+                {{ clasificacion_semanal.c|default:0 }},
+                {{ clasificacion_semanal.pipo|default:0 }},
+                {{ clasificacion_semanal.sucios|default:0 }},
+                {{ clasificacion_semanal.totiados|default:0 }},
+                {{ clasificacion_semanal.yema|default:0 }}
+            ],
+            backgroundColor: [
+                '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', 
+                '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F',
+                '#BB8FCE', '#85C1E9'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+
+// Gráfica de Mortalidad
+const mortalidadCtx = document.getElementById('mortalidadChart').getContext('2d');
+const mortalidadChart = new Chart(mortalidadCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Mortalidad Actual', 'Objetivo Anual'],
+        datasets: [{
+            label: 'Porcentaje',
+            data: [{{ porcentaje_mortalidad }}, {{ objetivo_mortalidad }}],
+            backgroundColor: ['#ff6b6b', '#51cf66'],
+            borderColor: ['#ff5252', '#40c057'],
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 10,
+                grid: {
+                    color: 'rgba(0,0,0,0.1)'
+                }
+            }
+        }
+    }
+});
+
+// Gráfica Financiera
+const financieroCtx = document.getElementById('financieroChart').getContext('2d');
+const financieroChart = new Chart(financieroCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Ingresos', 'Costos'],
+        datasets: [{
+            label: 'Monto ($)',
+            data: [
+                {{ costos_mes.total_ingresos|default:0 }},
+                {{ costos_mes.total_costos|default:0 }}
+            ],
+            backgroundColor: ['#51cf66', '#ff6b6b'],
+            borderColor: ['#40c057', '#ff5252'],
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: 'rgba(0,0,0,0.1)'
+                }
+            }
+        }
+    }
+});
+
+// Auto-refresh cada 5 minutos
+setTimeout(function() {
+    location.reload();
+}, 300000);
+</script>
+{% endblock %}
