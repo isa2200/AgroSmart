@@ -175,7 +175,7 @@ class ReportePersonalizadoForm(forms.Form):
         campos_opciones = {
             'aves': [
                 ('identificacion', 'Identificación'),
-                ('raza', 'Raza'),
+                ('linea', 'Línea'),
                 ('sexo', 'Sexo'),
                 ('fecha_nacimiento', 'Fecha de Nacimiento'),
                 ('peso_inicial', 'Peso Inicial')

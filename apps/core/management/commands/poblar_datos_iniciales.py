@@ -183,12 +183,12 @@ class Command(BaseCommand):
         cat_ponedoras = Categoria.objects.get(nombre='Aves Ponedoras')
         cat_engorde_aves = Categoria.objects.get(nombre='Aves de Engorde')
         
-        razas_aves = ['Rhode Island Red', 'Leghorn', 'Plymouth Rock', 'Sussex']
+        lineas_aves = ['Rhode Island Red', 'Leghorn', 'Plymouth Rock', 'Sussex']
         for i in range(1, 51):
             Ave.objects.get_or_create(
                 identificacion=f'A{i:03d}',
                 defaults={
-                    'raza': random.choice(razas_aves),
+                    'linea': random.choice(lineas_aves),
                     'sexo': 'H' if i <= 30 else 'M',
                     'fecha_nacimiento': date(2023, random.randint(6, 12), random.randint(1, 28)),
                     'peso_actual': random.uniform(1.5, 2.5),

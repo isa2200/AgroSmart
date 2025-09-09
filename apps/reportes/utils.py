@@ -136,7 +136,7 @@ class GeneradorReportes:
         datos = {
             'aves': {
                 'total': LoteAves.objects.filter(estado='activo').count(),
-                'por_raza': list(LoteAves.objects.filter(estado='activo')
+                'por_linea': list(LoteAves.objects.filter(estado='activo')
                                 .values('linea')
                                 .annotate(cantidad=Count('id'))
                                 .order_by('linea')),
@@ -279,13 +279,13 @@ class GeneradorReportes:
                 ])
         if datos['aves']:
             ws_aves = wb.create_sheet("Producción Aves")
-            headers = ['Identificación', 'Raza', 'Huevos', 'Peso Prom. (g)', 'Fecha', 'Calidad']
+            headers = ['Identificación', 'Línea', 'Huevos', 'Peso Prom. (g)', 'Fecha', 'Calidad']
             ws_aves.append(headers)
             
             for item in datos['aves']:
                 ws_aves.append([
                     item['ave__identificacion'],
-                    item['ave__raza'],
+                    item['ave__linea'],
                     item['huevos_recolectados'],
                     item['peso_promedio_huevo'],
                     item['fecha'].strftime('%d/%m/%Y') if item['fecha'] else '',

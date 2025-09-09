@@ -27,7 +27,7 @@ def dashboard_aves(request):
     mes_actual = timezone.now().replace(day=1).date()
     
     # Obtener lotes activos
-    lotes_activos = LoteAves.objects.filter(estado='activo').select_related('usuario')
+    lotes_activos = LoteAves.objects.filter(estado='activo')
     
     # 1. TOTAL AVES ACTIVAS
     total_aves_activas = lotes_activos.aggregate(total=Sum('cantidad_actual'))['total'] or 0
@@ -86,8 +86,8 @@ def dashboard_aves(request):
         
         for prod in producciones:
             huevos_dia = (prod.yumbos + prod.extra + prod.aa + prod.a + 
-                         prod.b + prod.c + prod.pipo + prod.sucios + 
-                         prod.totiados + prod.yema)
+                        prod.b + prod.c + prod.pipo + prod.sucios + 
+                        prod.totiados + prod.yema)
             total_huevos += huevos_dia
             total_aves_dia += prod.numero_aves_produccion
             
@@ -131,7 +131,7 @@ def dashboard_aves(request):
             lote__in=lotes_activos
         ).aggregate(
             total=Sum('yumbos') + Sum('extra') + Sum('aa') + Sum('a') + 
-                  Sum('b') + Sum('c')
+                    Sum('b') + Sum('c')
         )['total'] or 0
         
         produccion_30_dias.append({
@@ -164,12 +164,36 @@ def dashboard_aves(request):
         fecha__gte=mes_actual,
         lote__in=lotes_activos
     ).aggregate(
-        total_costos=Sum('costos_fijos') + Sum('costos_variables') + 
-                    Sum('gastos_administracion') + Sum('costo_alimento') + 
-                    Sum('costo_mano_obra') + Sum('otros_costos'),
-        total_ingresos=Sum('ingresos_venta_huevos') + Sum('ingresos_venta_aves') + 
-                      Sum('otros_ingresos')
+        costos_fijos_total=Sum('costos_fijos'),
+        costos_variables_total=Sum('costos_variables'),
+        gastos_administracion_total=Sum('gastos_administracion'),
+        costo_alimento_total=Sum('costo_alimento'),
+        costo_mano_obra_total=Sum('costo_mano_obra'),
+        otros_costos_total=Sum('otros_costos'),
+        ingresos_venta_huevos_total=Sum('ingresos_venta_huevos'),
+        ingresos_venta_aves_total=Sum('ingresos_venta_aves'),
+        otros_ingresos_total=Sum('otros_ingresos')
     )
+    
+    # Calcular totales
+    total_costos = (
+        (costos_mes['costos_fijos_total'] or 0) +
+        (costos_mes['costos_variables_total'] or 0) +
+        (costos_mes['gastos_administracion_total'] or 0) +
+        (costos_mes['costo_alimento_total'] or 0) +
+        (costos_mes['costo_mano_obra_total'] or 0) +
+        (costos_mes['otros_costos_total'] or 0)
+    )
+    
+    total_ingresos = (
+        (costos_mes['ingresos_venta_huevos_total'] or 0) +
+        (costos_mes['ingresos_venta_aves_total'] or 0) +
+        (costos_mes['otros_ingresos_total'] or 0)
+    )
+    
+    # Agregar los totales al diccionario
+    costos_mes['total_costos'] = total_costos
+    costos_mes['total_ingresos'] = total_ingresos
     
     # Alertas de vacunación próximas
     proximas_vacunas = Vacunacion.objects.filter(
@@ -203,7 +227,7 @@ def dashboard_aves(request):
         if postura_lote.exists():
             avg_postura = postura_lote.aggregate(
                 huevos=Avg('yumbos') + Avg('extra') + Avg('aa') + Avg('a') + 
-                       Avg('b') + Avg('c'),
+                        Avg('b') + Avg('c'),
                 aves=Avg('numero_aves_produccion')
             )
             
@@ -217,6 +241,11 @@ def dashboard_aves(request):
                 'lote': lote,
                 'alertas': alertas
             })
+    
+    if costos_mes:
+        utilidad_mes = (costos_mes['total_ingresos'] or 0) - (costos_mes['total_costos'] or 0)
+    else:
+        utilidad_mes = 0
     
     context = {
         # Indicadores principales

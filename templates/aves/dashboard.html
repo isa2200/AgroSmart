@@ -1,6 +1,5 @@
 {% extends 'aves/base_aves.html' %}
 {% load static %}
-{% load json_script %}
 
 {% block title %}Dashboard Aves - AgroSmart{% endblock %}
 
@@ -41,7 +40,7 @@
         <div class="col-12">
             <div class="chart-container">
                 <h5 class="mb-3"><i class="fas fa-plus-circle text-primary"></i> Registro Rápido de Producción</h5>
-                <form id="produccionDiariaForm" method="post" action="{% url 'aves:registrar_produccion' %}">
+                <form id="produccionDiariaForm" method="post" action="{% url 'aves:crear_produccion' %}">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-3">
@@ -148,11 +147,7 @@
         <div class="col-xl-2 col-md-4 col-sm-6">
             <div class="metric-card" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333;">
                 <div class="metric-value">
-                    {% if costos_mes.total_ingresos and costos_mes.total_costos %}
-                        ${{ costos_mes.total_ingresos|sub:costos_mes.total_costos|floatformat:0 }}
-                    {% else %}
-                        $0
-                    {% endif %}
+                    ${{ utilidad_mes|floatformat:0 }}
                 </div>
                 <div class="metric-label">Utilidad Mes</div>
                 <div class="metric-change">
@@ -168,22 +163,22 @@
             <div class="chart-container">
                 <h5 class="mb-3"><i class="fas fa-bolt text-warning"></i> Accesos Rápidos</h5>
                 <div class="text-center">
-                    <a href="{% url 'aves:registrar_produccion' %}" class="quick-action-btn">
+                    <a href="{% url 'aves:crear_produccion' %}" class="quick-action-btn">
                         <i class="fas fa-plus-circle"></i> Registro Diario
                     </a>
-                    <a href="{% url 'aves:registrar_produccion' %}" class="quick-action-btn">
+                    <a href="{% url 'aves:crear_produccion' %}" class="quick-action-btn">
                         <i class="fas fa-layer-group"></i> Clasificación
                     </a>
-                    <a href="{% url 'aves:registrar_mortalidad' %}" class="quick-action-btn">
+                    <a href="{% url 'aves:crear_mortalidad' %}" class="quick-action-btn">
                         <i class="fas fa-heartbeat"></i> Mortalidad
                     </a>
-                    <a href="{% url 'aves:registrar_vacunacion' %}" class="quick-action-btn">
+                    <a href="{% url 'aves:crear_vacunacion' %}" class="quick-action-btn">
                         <i class="fas fa-syringe"></i> Vacunación
                     </a>
                     <a href="{% url 'aves:crear_lote' %}" class="quick-action-btn">
                         <i class="fas fa-plus"></i> Nuevo Lote
                     </a>
-                    <a href="{% url 'aves:registrar_costos' %}" class="quick-action-btn">
+                    <a href="{% url 'aves:crear_costo' %}" class="quick-action-btn">
                         <i class="fas fa-calculator"></i> Costos
                     </a>
                 </div>
@@ -297,7 +292,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <!-- JavaScript del módulo aves -->
 <script src="{% static 'aves/js/aves.js' %}"></script>
-{% endblock %}
+
 <script>
 // Configuración de gráficas
 Chart.defaults.font.family = 'Inter, sans-serif';
