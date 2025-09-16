@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Registro de Usuario - AgroSmart{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    .registro-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 2rem 0;
+    }
+    .registro-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        margin: 2rem auto;
+        max-width: 800px;
+    }
+    .logo {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .logo h2 {
+        color: #333;
+        font-weight: bold;
+    }
+    .logo p {
+        color: #666;
+        margin: 0;
+    }
+    .role-info {
+        background: #f8f9fa;
+        border-left: 4px solid #007bff;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 0 8px 8px 0;
+    }
+    .role-description {
+        font-size: 0.9em;
+        color: #666;
+        margin-top: 0.5rem;
+    }
+    .permissions-section {
+        background: #e8f4fd;
+        border: 1px solid #bee5eb;
+        border-radius: 8px;
+        padding: 1rem;
+    }
+    .form-section {
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #eee;
+    }
+    .form-section:last-child {
+        border-bottom: none;
+    }
+    .btn-registro {
+        background: linear-gradient(45deg, #28a745, #20c997);
+        border: none;
+        padding: 12px 30px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .btn-registro:hover {
+        background: linear-gradient(45deg, #218838, #1ea080);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="registro-container">
+    <div class="container">
+        <div class="registro-card">
+            <div class="logo">
+                <h2>🐔 AgroSmart</h2>
+                <p>Registro de Nuevo Usuario</p>
+            </div>
+            
+            <div class="role-info">
+                <h5><i class="fas fa-info-circle"></i> Información sobre Roles</h5>
+                <div class="role-description">
+                    <strong>Superusuario:</strong> Acceso completo al sistema<br>
+                    <strong>Admin de Aves:</strong> Administrador del módulo avícola<br>
+                    <strong>Veterinario:</strong> Gestión de salud y vacunación<br>
+                    <strong>Punto Blanco:</strong> Gestión de ventas y distribución<br>
+                    <strong>Solo Vista:</strong> Acceso de solo lectura
+                </div>
+            </div>
+            
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% crispy form %}
+            </form>
+            
+            <div class="text-center mt-4">
+                <p class="text-muted">
+                    ¿Ya tienes una cuenta? 
+                    <a href="{% url 'usuarios:login' %}" class="text-decoration-none">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Mostrar/ocultar permisos según el rol seleccionado
+    const rolSelect = document.getElementById('id_rol');
+    const permissionsDiv = document.querySelector('.permissions-section');
+    
+    function togglePermissions() {
+        const selectedRole = rolSelect.value;
+        if (selectedRole === 'superusuario') {
+            // Los superusuarios tienen todos los permisos por defecto
+            document.getElementById('id_acceso_modulo_avicola').checked = true;
+            document.getElementById('id_puede_eliminar_registros').checked = true;
+            permissionsDiv.style.opacity = '0.6';
+        } else if (selectedRole === 'admin_aves') {
+            document.getElementById('id_acceso_modulo_avicola').checked = true;
+            permissionsDiv.style.opacity = '1';
+        } else if (selectedRole === 'veterinario') {
+            document.getElementById('id_acceso_modulo_avicola').checked = true;
+            document.getElementById('id_puede_eliminar_registros').checked = false;
+            permissionsDiv.style.opacity = '1';
+        } else {
+            permissionsDiv.style.opacity = '1';
+        }
+    }
+    
+    rolSelect.addEventListener('change', togglePermissions);
+    togglePermissions(); // Ejecutar al cargar la página
+});
+</script>
+{% endblock %}

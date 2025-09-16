@@ -34,7 +34,11 @@ class AlertaSistema(BaseModel):
         ('error', 'Error'),
         ('success', 'Éxito')
     ])
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE,
+        related_name='alertas_dashboard'  # Agregar related_name único
+    )
     leida = models.BooleanField(default=False)
     fecha_expiracion = models.DateTimeField(null=True, blank=True)
     

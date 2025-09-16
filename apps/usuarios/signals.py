@@ -15,10 +15,14 @@ def crear_perfil_usuario(sender, instance, created, **kwargs):
         # Verificar si ya existe un perfil para este usuario
         if not hasattr(instance, 'perfilusuario'):
             try:
+                # Usar un identificador único temporal para evitar conflictos
+                import uuid
+                temp_cedula = f'temp_{uuid.uuid4().hex[:8]}'
+                
                 PerfilUsuario.objects.create(
                     user=instance,
                     rol='solo_vista',
-                    cedula=f'temp_{instance.id}'
+                    cedula=temp_cedula
                 )
             except Exception as e:
                 # Si hay algún error, no crear el perfil automáticamente

@@ -4,12 +4,13 @@ Vistas para la aplicación de reportes en AgroSmart.
 
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.db.models import Sum, Count, Avg, Q
+from django.http import JsonResponse, HttpResponse
+from django.db.models import Sum, Count, Avg
+from django.utils import timezone
 from datetime import datetime, timedelta
 from django.utils import timezone
 
-from apps.aves.models import LoteAves, ProduccionHuevos, CostosProduccion, Mortalidad
+from apps.aves.models import LoteAves, BitacoraDiaria, MovimientoHuevos, ControlConcentrado
 
 
 @login_required
@@ -31,47 +32,122 @@ def lista_reportes(request):
 @login_required
 def reporte_produccion(request):
     """
-    Reporte de producción de huevos
+    Vista para generar reportes de producción de huevos
     """
-    # Datos básicos de producción
-    lotes_activos = LoteAves.objects.filter(estado='activo')
+    if request.method == 'POST':
+        fecha_inicio = request.POST.get('fecha_inicio')
+        fecha_fin = request.POST.get('fecha_fin')
+        formato = request.POST.get('formato', 'pdf')
+        
+        # Usar BitacoraDiaria en lugar de ProduccionHuevos
+        datos_produccion = BitacoraDiaria.objects.filter(
+            fecha__range=[fecha_inicio, fecha_fin]
+        ).select_related('lote').values(
+            'lote__codigo',
+            'lote__nombre_lote', 
+            'fecha',
+            'huevos_recolectados',
+            'peso_promedio_huevo'
+        )
+        
+        # Datos básicos de producción
+        lotes_activos = LoteAves.objects.filter(estado='postura')
+        
+        # Producción del último mes usando BitacoraDiaria
+        fecha_inicio = timezone.now().date() - timedelta(days=30)
+        produccion_mes = BitacoraDiaria.objects.filter(
+            fecha__gte=fecha_inicio
+        ).aggregate(
+            total_huevos_aaa=Sum('produccion_aaa'),
+            total_huevos_aa=Sum('produccion_aa'),
+            total_huevos_a=Sum('produccion_a'),
+            total_huevos_b=Sum('produccion_b'),
+            total_huevos_c=Sum('produccion_c'),
+            promedio_mortalidad=Avg('mortalidad'),
+            total_consumo=Sum('consumo_alimento')
+        )
+        
+        # Calcular total de huevos
+        total_huevos = (
+            (produccion_mes['total_huevos_aaa'] or 0) +
+            (produccion_mes['total_huevos_aa'] or 0) +
+            (produccion_mes['total_huevos_a'] or 0) +
+            (produccion_mes['total_huevos_b'] or 0) +
+            (produccion_mes['total_huevos_c'] or 0)
+        )
+        
+        context = {
+            'titulo': 'Reporte de Producción',
+            'lotes_activos': lotes_activos,
+            'produccion_mes': produccion_mes,
+            'total_huevos': total_huevos,
+            'fecha_reporte': timezone.now().date()
+        }
+        return render(request, 'reportes/produccion.html', context)
+
+def api_datos_produccion(request):
+    """
+    API para obtener datos de producción para gráficos
+    """
+    fecha_inicio = request.GET.get('fecha_inicio')
+    fecha_fin = request.GET.get('fecha_fin')
     
-    # Producción del último mes
-    fecha_inicio = timezone.now().date() - timedelta(days=30)
-    produccion_mes = ProduccionHuevos.objects.filter(
-        fecha__gte=fecha_inicio
-    ).aggregate(
-        total_huevos=Sum('yumbos') + Sum('extra') + Sum('aa') + Sum('a') + Sum('b') + Sum('c'),
-        promedio_postura=Avg('numero_aves_produccion')
-    )
+    # Usar BitacoraDiaria en lugar de ProduccionHuevos
+    datos = BitacoraDiaria.objects.filter(
+        fecha__range=[fecha_inicio, fecha_fin]
+    ).values('fecha').annotate(
+        total_huevos=Sum('huevos_recolectados'),
+        promedio_peso=Avg('peso_promedio_huevo')
+    ).order_by('fecha')
     
-    context = {
-        'titulo': 'Reporte de Producción',
-        'lotes_activos': lotes_activos,
-        'produccion_mes': produccion_mes,
-        'fecha_reporte': timezone.now().date()
-    }
-    return render(request, 'reportes/produccion.html', context)
+    return JsonResponse(list(datos), safe=False)
+
 
 # REPORTE DE PRODUCCIÓN SEMANAL
 def reporte_produccion_semanal(lote_id, fecha_inicio, fecha_fin):
     """
     Fórmulas:
-    - Total huevos = Sum(yumbos + extra + aa + a + b + c + pipo + sucios + totiados + yema)
-    - Huevos comerciales = Sum(yumbos + extra + aa + a + b + c)
+    - Total huevos = Sum(produccion_aaa + produccion_aa + produccion_a + produccion_b + produccion_c)
+    - Huevos comerciales = Sum(produccion_aaa + produccion_aa + produccion_a + produccion_b)
     - % Postura promedio = (Total huevos / Aves promedio en producción) * 100
-    - Peso promedio = Avg(peso_promedio_huevo)
+    - Peso promedio = Calculado basado en categorías
     - Gramos/ave/día = (Peso promedio * Total huevos) / Aves promedio
     """
+    bitacoras = BitacoraDiaria.objects.filter(
+        lote_id=lote_id,
+        fecha__range=[fecha_inicio, fecha_fin]
+    ).aggregate(
+        total_aaa=Sum('produccion_aaa'),
+        total_aa=Sum('produccion_aa'),
+        total_a=Sum('produccion_a'),
+        total_b=Sum('produccion_b'),
+        total_c=Sum('produccion_c'),
+        promedio_mortalidad=Avg('mortalidad'),
+        total_consumo=Sum('consumo_alimento')
+    )
+    
+    total_huevos = (
+        (bitacoras['total_aaa'] or 0) +
+        (bitacoras['total_aa'] or 0) +
+        (bitacoras['total_a'] or 0) +
+        (bitacoras['total_b'] or 0) +
+        (bitacoras['total_c'] or 0)
+    )
+    
+    huevos_comerciales = (
+        (bitacoras['total_aaa'] or 0) +
+        (bitacoras['total_aa'] or 0) +
+        (bitacoras['total_a'] or 0) +
+        (bitacoras['total_b'] or 0)
+    )
+    
     return {
         'periodo': f'{fecha_inicio} - {fecha_fin}',
-        'total_huevos': 6850,  # Ejemplo
-        'huevos_comerciales': 6520,
-        'porcentaje_comerciales': 95.18,
-        'porcentaje_postura_promedio': 89.5,
-        'peso_promedio_huevo': 61.2,
-        'gramos_ave_dia': 54.8,
-        'aves_promedio_produccion': 945
+        'total_huevos': total_huevos,
+        'huevos_comerciales': huevos_comerciales,
+        'porcentaje_comerciales': (huevos_comerciales / total_huevos * 100) if total_huevos > 0 else 0,
+        'promedio_mortalidad': bitacoras['promedio_mortalidad'] or 0,
+        'total_consumo': bitacoras['total_consumo'] or 0
     }
 
 
@@ -80,18 +156,29 @@ def reporte_financiero(request):
     """
     Reporte financiero de costos e ingresos
     """
-    # Costos del último mes
+    # Costos del último mes basado en movimientos de huevos y concentrados
     fecha_inicio = timezone.now().date() - timedelta(days=30)
-    costos_mes = CostosProduccion.objects.filter(
-        fecha__gte=fecha_inicio
+    
+    # Ingresos por venta de huevos
+    ingresos_huevos = MovimientoHuevos.objects.filter(
+        fecha__gte=fecha_inicio,
+        tipo_movimiento='venta'
     ).aggregate(
-        total_costos=Sum('costos_fijos') + Sum('costos_variables'),
-        total_ingresos=Sum('ingresos_venta_huevos') + Sum('ingresos_venta_aves')
+        total_ingresos=Sum('cantidad') * Avg('precio_unitario')
+    )
+    
+    # Costos de concentrados
+    costos_concentrados = ControlConcentrado.objects.filter(
+        fecha__gte=fecha_inicio,
+        tipo_movimiento='entrada'
+    ).aggregate(
+        total_costos=Sum('cantidad_kg') * 0.5  # Precio estimado por kg
     )
     
     context = {
         'titulo': 'Reporte Financiero',
-        'costos_mes': costos_mes,
+        'ingresos_huevos': ingresos_huevos,
+        'costos_concentrados': costos_concentrados,
         'fecha_reporte': timezone.now().date()
     }
     return render(request, 'reportes/financiero.html', context)
@@ -100,8 +187,8 @@ def reporte_financiero(request):
 def reporte_financiero_mensual(lote_id, mes, año):
     """
     Fórmulas:
-    - Ingresos totales = Sum(ingresos_venta_huevos + ingresos_venta_aves + otros_ingresos)
-    - Costos totales = Sum(costos_fijos + costos_variables + costo_alimento + costo_mano_obra)
+    - Ingresos totales = Sum(ventas de huevos)
+    - Costos totales = Sum(costos de concentrados + otros costos estimados)
     - Utilidad neta = Ingresos totales - Costos totales
     - Margen utilidad = (Utilidad neta / Ingresos totales) * 100
     - Costo por huevo = Costos totales / Total huevos producidos
@@ -122,36 +209,43 @@ def reporte_financiero_mensual(lote_id, mes, año):
 # REPORTE DE INDICADORES ZOOTÉCNICOS
 def reporte_indicadores_zootecnicos(lote_id):
     """
-    Fórmulas estándar de la industria:
-    - Mortalidad acumulada = ((Aves iniciales - Aves actuales) / Aves iniciales) * 100
+    Fórmulas estándar de la industria basadas en BitacoraDiaria:
+    - Mortalidad acumulada = Sum(mortalidad) / Aves iniciales * 100
     - Conversión alimenticia = Kg alimento consumido / Kg huevos producidos
     - Huevos por ave alojada = Total huevos / Aves iniciales
     - Huevos por ave día = Total huevos / (Aves promedio * Días)
     - Pico de producción = Máximo % postura alcanzado
-    - Persistencia = Semanas con >80% postura
+    - Persistencia = Días con alta producción
     """
+    lote = LoteAves.objects.get(id=lote_id)
+    bitacoras = BitacoraDiaria.objects.filter(lote=lote)
+    
+    total_mortalidad = bitacoras.aggregate(Sum('mortalidad'))['mortalidad__sum'] or 0
+    total_produccion = bitacoras.aggregate(
+        total=Sum('produccion_aaa') + Sum('produccion_aa') + Sum('produccion_a') + Sum('produccion_b') + Sum('produccion_c')
+    )['total'] or 0
+    
     return {
-        'edad_lote_semanas': 28,
-        'mortalidad_acumulada': 5.5,
-        'porcentaje_postura_actual': 89.2,
-        'pico_produccion': 94.8,
-        'persistencia_semanas': 12,
-        'huevos_ave_alojada': 156.8,
-        'conversion_alimenticia': 2.1,
-        'peso_corporal_promedio': 1850  # gramos
+        'edad_lote_dias': lote.edad_dias,
+        'mortalidad_acumulada': (total_mortalidad / lote.numero_aves_inicial * 100) if lote.numero_aves_inicial > 0 else 0,
+        'total_produccion': total_produccion,
+        'huevos_ave_alojada': (total_produccion / lote.numero_aves_inicial) if lote.numero_aves_inicial > 0 else 0,
+        'aves_actuales': lote.numero_aves_actual
     }
+
 @login_required
 def reporte_sanitario(request):
     """
-    Reporte sanitario - mortalidad y vacunaciones
+    Reporte sanitario - mortalidad basado en BitacoraDiaria
     """
     # Mortalidad del último mes
     fecha_inicio = timezone.now().date() - timedelta(days=30)
-    mortalidad_mes = Mortalidad.objects.filter(
+    mortalidad_mes = BitacoraDiaria.objects.filter(
         fecha__gte=fecha_inicio
     ).aggregate(
-        total_muertes=Sum('cantidad_muertas'),
-        casos_enfermedad=Count('id', filter=Q(causa='enfermedad'))
+        total_muertes=Sum('mortalidad'),
+        promedio_diario=Avg('mortalidad'),
+        dias_con_mortalidad=Count('id', filter=Q(mortalidad__gt=0))
     )
     
     context = {
@@ -165,14 +259,21 @@ def reporte_sanitario(request):
 # APIs para datos de reportes
 @login_required
 def api_datos_produccion(request):
-    """
-    API para obtener datos de producción en formato JSON
-    """
+    # Obtener datos de producción desde BitacoraDiaria
+    datos = BitacoraDiaria.objects.filter(
+        huevos_producidos__gt=0
+    ).values(
+        'fecha',
+        'huevos_producidos',
+        'lote_aves__numero_lote',
+        'galpon__nombre'
+    ).order_by('-fecha')[:100]
+    
     fecha_inicio = timezone.now().date() - timedelta(days=30)
-    producciones = ProduccionHuevos.objects.filter(
+    producciones = BitacoraDiaria.objects.filter(
         fecha__gte=fecha_inicio
-    ).values('fecha', 'lote__nombre_lote').annotate(
-        total_huevos=Sum('yumbos') + Sum('extra') + Sum('aa') + Sum('a') + Sum('b') + Sum('c')
+    ).values('fecha', 'lote__codigo').annotate(
+        total_huevos=Sum('produccion_aaa') + Sum('produccion_aa') + Sum('produccion_a') + Sum('produccion_b') + Sum('produccion_c')
     )
     
     data = list(producciones)
@@ -185,12 +286,14 @@ def api_datos_financieros(request):
     API para obtener datos financieros en formato JSON
     """
     fecha_inicio = timezone.now().date() - timedelta(days=30)
-    costos = CostosProduccion.objects.filter(
-        fecha__gte=fecha_inicio
-    ).values('fecha', 'lote__nombre_lote').annotate(
-        total_costos=Sum('costos_fijos') + Sum('costos_variables'),
-        total_ingresos=Sum('ingresos_venta_huevos') + Sum('ingresos_venta_aves')
+    
+    # Datos de movimientos de huevos (ventas)
+    ventas = MovimientoHuevos.objects.filter(
+        fecha__gte=fecha_inicio,
+        tipo_movimiento='venta'
+    ).values('fecha').annotate(
+        total_ingresos=Sum('cantidad') * Avg('precio_unitario')
     )
     
-    data = list(costos)
-    return JsonResponse({'costos': data})
+    data = list(ventas)
+    return JsonResponse({'ventas': data})

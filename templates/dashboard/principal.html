@@ -1,0 +1,721 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - AgroSmart{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+    :root {
+        --sidebar-width: 280px;
+        --primary-color: #2c3e50;
+        --secondary-color: #34495e;
+        --accent-color: #3498db;
+        --success-color: #27ae60;
+        --warning-color: #f39c12;
+        --danger-color: #e74c3c;
+        --light-bg: #f8f9fa;
+        --border-color: #dee2e6;
+    }
+
+    body {
+        background-color: var(--light-bg);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .dashboard-container {
+        display: flex;
+        min-height: 100vh;
+        padding-top: 0;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: var(--sidebar-width);
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: white;
+        z-index: 1000;
+        transition: all 0.3s ease;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+
+    .sidebar-header {
+        padding: 2rem 1.5rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        text-align: center;
+    }
+
+    .sidebar-header h3 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
+
+    .sidebar-header p {
+        margin: 0.5rem 0 0 0;
+        opacity: 0.8;
+        font-size: 0.9rem;
+    }
+
+    .sidebar-nav {
+        padding: 1rem 0;
+    }
+
+    .nav-section {
+        margin-bottom: 2rem;
+    }
+
+    .nav-section-title {
+        padding: 0 1.5rem 0.5rem 1.5rem;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        opacity: 0.6;
+        font-weight: 600;
+    }
+
+    .nav-item {
+        margin: 0.2rem 1rem;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.8rem 1rem;
+        color: rgba(255,255,255,0.8);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .nav-link:hover {
+        background-color: rgba(255,255,255,0.1);
+        color: white;
+        transform: translateX(5px);
+    }
+
+    .nav-link.active {
+        background-color: var(--accent-color);
+        color: white;
+        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    }
+
+    .nav-link i {
+        width: 20px;
+        margin-right: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .nav-link .badge {
+        margin-left: auto;
+        background-color: var(--danger-color);
+        font-size: 0.7rem;
+    }
+
+    /* Main Content */
+    .main-content {
+        margin-left: var(--sidebar-width);
+        min-height: 100vh;
+        padding: 2rem;
+        transition: all 0.3s ease;
+    }
+
+    .dashboard-header {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+    }
+
+    .welcome-section {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .welcome-text h1 {
+        margin: 0;
+        color: var(--primary-color);
+        font-weight: 700;
+        font-size: 2rem;
+    }
+
+    .welcome-text p {
+        margin: 0.5rem 0 0 0;
+        color: #6c757d;
+        font-size: 1.1rem;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .user-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent-color), var(--success-color));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    /* Metrics Cards */
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .metric-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .metric-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--accent-color);
+    }
+
+    .metric-card.success::before { background: var(--success-color); }
+    .metric-card.warning::before { background: var(--warning-color); }
+    .metric-card.danger::before { background: var(--danger-color); }
+
+    .metric-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    }
+
+    .metric-header {
+        display: flex;
+        justify-content: between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+
+    .metric-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+        background: var(--accent-color);
+    }
+
+    .metric-icon.success { background: var(--success-color); }
+    .metric-icon.warning { background: var(--warning-color); }
+    .metric-icon.danger { background: var(--danger-color); }
+
+    .metric-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin: 0;
+    }
+
+    .metric-label {
+        color: #6c757d;
+        font-size: 1rem;
+        margin: 0.5rem 0 0 0;
+    }
+
+    .metric-change {
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .metric-change.positive { color: var(--success-color); }
+    .metric-change.negative { color: var(--danger-color); }
+
+    /* Content Grid */
+    .content-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .content-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+    }
+
+    .content-card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid var(--border-color);
+        background: #f8f9fa;
+    }
+
+    .content-card-header h5 {
+        margin: 0;
+        color: var(--primary-color);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .content-card-body {
+        padding: 2rem;
+    }
+
+    /* Alerts */
+    .alert-item {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 10px;
+        border-left: 4px solid var(--danger-color);
+        background: #fff5f5;
+        transition: all 0.3s ease;
+    }
+
+    .alert-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .alert-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .alert-header {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .alert-title {
+        font-weight: 600;
+        color: var(--primary-color);
+        margin: 0;
+    }
+
+    .alert-time {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+
+    .alert-description {
+        color: #6c757d;
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .quick-action {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border-radius: 10px;
+        text-decoration: none;
+        color: var(--primary-color);
+        background: #f8f9fa;
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+    }
+
+    .quick-action:hover {
+        background: var(--accent-color);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    }
+
+    .quick-action i {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        background: var(--accent-color);
+        color: white;
+        font-size: 1.1rem;
+    }
+
+    .quick-action:hover i {
+        background: white;
+        color: var(--accent-color);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .content-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .sidebar {
+            transform: translateX(-100%);
+        }
+        
+        .sidebar.active {
+            transform: translateX(0);
+        }
+        
+        .main-content {
+            margin-left: 0;
+            padding: 1rem;
+        }
+        
+        .metrics-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .welcome-section {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+    }
+
+    /* Mobile Menu Toggle */
+    .mobile-toggle {
+        display: none;
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        z-index: 1001;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.5rem;
+        font-size: 1.2rem;
+        cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-toggle {
+            display: block;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Mobile Menu Toggle -->
+<button class="mobile-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</button>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h3><i class="fas fa-seedling"></i> AgroSmart</h3>
+        <p>Sistema de Gestión Agrícola</p>
+    </div>
+    
+    <nav class="sidebar-nav">
+        <!-- Dashboard Section -->
+        <div class="nav-section">
+            <div class="nav-section-title">Dashboard</div>
+            <div class="nav-item">
+                <a href="{% url 'dashboard:principal' %}" class="nav-link active">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Módulos Section -->
+        <div class="nav-section">
+            <div class="nav-section-title">Módulos</div>
+            <div class="nav-item">
+                <a href="{% url 'aves:dashboard' %}" class="nav-link">
+                    <i class="fas fa-dove"></i>
+                    <span>Módulo Avícola</span>
+                    {% if total_aves %}
+                        <span class="badge">{{ total_aves }}</span>
+                    {% endif %}
+                </a>
+            </div>
+            <!-- Futuras áreas se agregarán aquí -->
+            <div class="nav-item">
+                <a href="#" class="nav-link" style="opacity: 0.5;">
+                    <i class="fas fa-cow"></i>
+                    <span>Módulo Ganadero</span>
+                    <span class="badge bg-secondary">Próximamente</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" style="opacity: 0.5;">
+                    <i class="fas fa-tractor"></i>
+                    <span>Módulo Agrícola</span>
+                    <span class="badge bg-secondary">Próximamente</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Gestión Section -->
+        <div class="nav-section">
+            <div class="nav-section-title">Gestión</div>
+            <div class="nav-item">
+                <a href="{% url 'usuarios:lista' %}" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>Usuarios</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="{% url 'reportes:lista_reportes' %}" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reportes</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Usuario Section -->
+        <div class="nav-section">
+            <div class="nav-section-title">Usuario</div>
+            <div class="nav-item">
+                <a href="{% url 'usuarios:perfil' %}" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    <span>Mi Perfil</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="{% url 'usuarios:logout' %}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Cerrar Sesión</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="welcome-section">
+            <div class="welcome-text">
+                <h1>¡Bienvenido de vuelta!</h1>
+                <p>Aquí tienes un resumen de tu sistema AgroSmart</p>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar">
+                    {{ user.first_name|first|default:user.username|first|upper }}
+                </div>
+                <div>
+                    <h6 class="mb-0">{{ user.get_full_name|default:user.username }}</h6>
+                    <small class="text-muted">{{ user.perfilusuario.get_rol_display|default:"Usuario" }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Metrics Grid -->
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon">
+                    <i class="fas fa-dove"></i>
+                </div>
+            </div>
+            <h2 class="metric-value">{{ total_aves|default:0 }}</h2>
+            <p class="metric-label">Total de Aves</p>
+            <p class="metric-change positive">
+                <i class="fas fa-arrow-up"></i> +5% este mes
+            </p>
+        </div>
+
+        <div class="metric-card success">
+            <div class="metric-header">
+                <div class="metric-icon success">
+                    <i class="fas fa-egg"></i>
+                </div>
+            </div>
+            <h2 class="metric-value">{{ produccion_aves|default:0 }}</h2>
+            <p class="metric-label">Producción del Mes</p>
+            <p class="metric-change positive">
+                <i class="fas fa-arrow-up"></i> +12% vs mes anterior
+            </p>
+        </div>
+
+        <div class="metric-card warning">
+            <div class="metric-header">
+                <div class="metric-icon warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+            </div>
+            <h2 class="metric-value">{{ alertas.count|default:0 }}</h2>
+            <p class="metric-label">Alertas Activas</p>
+            <p class="metric-change negative">
+                <i class="fas fa-arrow-down"></i> -3 desde ayer
+            </p>
+        </div>
+
+        <div class="metric-card danger">
+            <div class="metric-header">
+                <div class="metric-icon danger">
+                    <i class="fas fa-thermometer-half"></i>
+                </div>
+            </div>
+            <h2 class="metric-value">24°C</h2>
+            <p class="metric-label">Temperatura Promedio</p>
+            <p class="metric-change positive">
+                <i class="fas fa-arrow-up"></i> Óptima
+            </p>
+        </div>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="content-grid">
+        <!-- Alertas Recientes -->
+        <div class="content-card">
+            <div class="content-card-header">
+                <h5>
+                    <i class="fas fa-bell"></i>
+                    Alertas Recientes
+                </h5>
+            </div>
+            <div class="content-card-body">
+                {% if alertas %}
+                    {% for alerta in alertas %}
+                    <div class="alert-item">
+                        <div class="alert-header">
+                            <h6 class="alert-title">{{ alerta.titulo|default:"Alerta del Sistema" }}</h6>
+                            <span class="alert-time">{{ alerta.created_at|date:"d/m H:i" }}</span>
+                        </div>
+                        <p class="alert-description">{{ alerta.descripcion|default:"Descripción no disponible" }}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                        <h6>¡Todo en orden!</h6>
+                        <p class="text-muted">No hay alertas pendientes en este momento</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Acciones Rápidas -->
+        <div class="content-card">
+            <div class="content-card-header">
+                <h5>
+                    <i class="fas fa-bolt"></i>
+                    Acciones Rápidas
+                </h5>
+            </div>
+            <div class="content-card-body">
+                <div class="quick-actions">
+                    <a href="{% url 'aves:dashboard' %}" class="quick-action">
+                        <i class="fas fa-dove"></i>
+                        <div>
+                            <h6 class="mb-0">Módulo Avícola</h6>
+                            <small>Gestionar aves y producción</small>
+                        </div>
+                    </a>
+                    
+                    <a href="{% url 'reportes:lista_reportes' %}" class="quick-action">
+                        <i class="fas fa-chart-bar"></i>
+                        <div>
+                            <h6 class="mb-0">Generar Reporte</h6>
+                            <small>Crear reportes personalizados</small>
+                        </div>
+                    </a>
+                    
+                    <a href="{% url 'usuarios:lista' %}" class="quick-action">
+                        <i class="fas fa-users"></i>
+                        <div>
+                            <h6 class="mb-0">Gestionar Usuarios</h6>
+                            <small>Administrar permisos y roles</small>
+                        </div>
+                    </a>
+                    
+                    <a href="{% url 'usuarios:perfil' %}" class="quick-action">
+                        <i class="fas fa-user-cog"></i>
+                        <div>
+                            <h6 class="mb-0">Configuración</h6>
+                            <small>Ajustar preferencias</small>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('active');
+}
+
+// Auto-close sidebar on mobile when clicking outside
+document.addEventListener('click', function(event) {
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.querySelector('.mobile-toggle');
+    
+    if (window.innerWidth <= 768) {
+        if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
+            sidebar.classList.remove('active');
+        }
+    }
+});
+
+// Smooth animations on load
+document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.metric-card, .content-card');
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            card.style.transition = 'all 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
+    });
+});
+
+// Auto-refresh data every 5 minutes
+setInterval(function() {
+    // Aquí puedes agregar lógica para actualizar datos específicos
+    console.log('Actualizando datos del dashboard...');
+}, 300000);
+</script>
+{% endblock %}

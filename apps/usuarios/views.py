@@ -13,7 +13,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.db.models import Q
 from .models import PerfilUsuario, RegistroAcceso
-from .forms import RegistroUsuarioForm, PerfilUsuarioForm, LoginForm
+from .forms import RegistroUsuarioForm, PerfilUsuarioForm, LoginForm, RegistroCompletoForm
 from .decorators import role_required
 
 
@@ -29,7 +29,7 @@ class LoginView(CreateView):
             return redirect('dashboard:principal')
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
-    
+
     def post(self, request, *args, **kwargs):
         form = self.form_class(data=request.POST)
         if form.is_valid():
@@ -49,6 +49,55 @@ class LoginView(CreateView):
                 messages.success(request, f'Bienvenido {user.get_full_name()}')
                 return redirect('dashboard:principal')
         return render(request, self.template_name, {'form': form})
+    
+    def get_client_ip(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
+
+
+class RegistroView(CreateView):
+    """
+    Vista para registro de nuevos usuarios con roles.
+    """
+    model = User
+    form_class = RegistroCompletoForm
+    template_name = 'usuarios/registro.html'
+    success_url = reverse_lazy('usuarios:login')
+    
+    def get(self, request, *args, **kwargs):
+        # Si el usuario ya está autenticado, redirigir al dashboard
+        if request.user.is_authenticated:
+            return redirect('dashboard:principal')
+        return super().get(request, *args, **kwargs)
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        user = form.instance
+        
+        # Registrar la creación del usuario
+        RegistroAcceso.objects.create(
+            usuario=user,
+            ip_address=self.get_client_ip(self.request),
+            user_agent=self.request.META.get('HTTP_USER_AGENT', ''),
+            accion='Registro',
+            modulo='Usuarios'
+        )
+        
+        messages.success(
+            self.request, 
+            f'Usuario {user.get_full_name()} creado exitosamente. '
+            f'Rol asignado: {user.perfilusuario.get_rol_display()}'
+        )
+        
+        # Opcionalmente, hacer login automático del usuario
+        # login(self.request, user)
+        # return redirect('dashboard:principal')
+        
+        return response
     
     def get_client_ip(self, request):
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')

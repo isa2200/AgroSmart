@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.db.models import Sum
+from django.db.models import Sum, F
 from django.utils import timezone
 from datetime import timedelta
-from apps.aves.models import LoteAves, ProduccionHuevos, AlertaSanitaria
+from apps.aves.models import LoteAves, BitacoraDiaria
+from apps.dashboard.models import AlertaSistema  # Usar el AlertaSistema del dashboard
 from apps.usuarios.decorators import role_required
-
 
 @login_required
 @role_required(['superusuario', 'admin_aves', 'solo_vista'])
@@ -17,37 +17,25 @@ def dashboard_principal(request):
     # Métricas generales
     total_aves = LoteAves.objects.filter(estado='activo').count()
     
-    # Producción del mes actual
+    # Producción del mes actual usando BitacoraDiaria
     mes_actual = timezone.now().replace(day=1)
     
-    produccion_aves = ProduccionHuevos.objects.filter(
+    produccion_aves = BitacoraDiaria.objects.filter(
         fecha__gte=mes_actual
     ).aggregate(
-        total_yumbos=Sum('yumbos'),
-        total_extra=Sum('extra'),
-        total_aa=Sum('aa'),
-        total_a=Sum('a'),
-        total_b=Sum('b'),
-        total_c=Sum('c')
+        total_huevos=Sum(
+            F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + 
+            F('produccion_b') + F('produccion_c')
+        )
     )
     
-    # Calcular el total sumando todos los tipos
-    total_produccion = (
-        (produccion_aves['total_yumbos'] or 0) +
-        (produccion_aves['total_extra'] or 0) +
-        (produccion_aves['total_aa'] or 0) +
-        (produccion_aves['total_a'] or 0) +
-        (produccion_aves['total_b'] or 0) +
-        (produccion_aves['total_c'] or 0)
-    )
+    total_produccion = produccion_aves['total_huevos'] or 0
     
-    
-    # Alertas activas
-    # Alertas sanitarias activas (usar AlertaSanitaria de aves)
-    alertas = AlertaSanitaria.objects.filter(
-        fecha_deteccion__gte=timezone.now().date() - timedelta(days=7),
-        resuelta=False
-    ).select_related('lote')[:5]
+    # Alertas activas usando AlertaSistema del dashboard
+    alertas = AlertaSistema.objects.filter(
+        created_at__gte=timezone.now().date() - timedelta(days=7),
+        leida=False
+    )[:5]
     
     context = {
         'total_aves': total_aves,
@@ -65,37 +53,22 @@ def datos_graficos_produccion(request):
     # Obtener los últimos 30 días de producción
     fecha_inicio = timezone.now().date() - timedelta(days=30)
     
-    # Calcular producción diaria
+    # Calcular producción diaria usando BitacoraDiaria
     produccion_diaria = []
     for i in range(30):
         fecha = fecha_inicio + timedelta(days=i)
         
-        # Corregir la agregación de campos
-        produccion_dia = ProduccionHuevos.objects.filter(
+        produccion_dia = BitacoraDiaria.objects.filter(
             fecha=fecha
         ).aggregate(
-            total_yumbos=Sum('yumbos'),
-            total_extra=Sum('extra'),
-            total_aa=Sum('aa'),
-            total_a=Sum('a'),
-            total_b=Sum('b'),
-            total_c=Sum('c')
+            total_huevos=Sum('huevos_recolectados')
         )
         
-        # Calcular total de huevos del día
-        total_huevos = sum([
-            produccion_dia['total_yumbos'] or 0,
-            produccion_dia['total_extra'] or 0,
-            produccion_dia['total_aa'] or 0,
-            produccion_dia['total_a'] or 0,
-            produccion_dia['total_b'] or 0,
-            produccion_dia['total_c'] or 0
-        ])
+        total_huevos = produccion_dia['total_huevos'] or 0
         
         produccion_diaria.append({
             'fecha': fecha.strftime('%Y-%m-%d'),
-            'total': total_huevos,
-            'detalle': produccion_dia
+            'total': total_huevos
         })
     
     return JsonResponse({

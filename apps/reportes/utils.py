@@ -27,7 +27,7 @@ try:
 except ImportError:
     OPENPYXL_AVAILABLE = False
 
-from apps.aves.models import LoteAves, ProduccionHuevos
+from apps.aves.models import LoteAves, BitacoraDiaria
 
 class GeneradorReportes:
     """
@@ -56,21 +56,21 @@ class GeneradorReportes:
         if self.fecha_fin:
             filtros_fecha['fecha__lte'] = self.fecha_fin
         
-        # Datos de producción por lote
-        produccion_lotes = ProduccionHuevos.objects.filter(**filtros_fecha).select_related('lote')
+        # Datos de producción por lote usando BitacoraDiaria
+        produccion_lotes = BitacoraDiaria.objects.filter(**filtros_fecha).select_related('lote')
         datos['lotes'] = list(produccion_lotes.values(
             'lote__codigo',
             'lote__nombre_lote',
             'lote__linea',
-            'total_huevos',
+            'huevos_recolectados',
             'peso_promedio_huevo',
             'fecha'
         ))
         
         # Resumen estadístico
         datos['resumen'] = {
-            'total_huevos': produccion_lotes.aggregate(total=Sum('total_huevos'))['total'] or 0,
-            'promedio_huevos_lote': produccion_lotes.aggregate(promedio=Avg('total_huevos'))['promedio'] or 0,
+            'total_huevos': produccion_lotes.aggregate(total=Sum('huevos_recolectados'))['total'] or 0,
+            'promedio_huevos_lote': produccion_lotes.aggregate(promedio=Avg('huevos_recolectados'))['promedio'] or 0,
         }
         
         return datos
@@ -109,17 +109,15 @@ class GeneradorReportes:
         if self.fecha_fin:
             filtros_fecha['fecha__lte'] = self.fecha_fin
         
-        # Datos de aves
-        produccion_aves = ProduccionHuevos.objects.filter(**filtros_fecha).select_related('ave')
+        # Datos de aves usando BitacoraDiaria
+        produccion_aves = BitacoraDiaria.objects.filter(**filtros_fecha).select_related('lote')
         datos['aves'] = list(produccion_aves.values(
-            'ave__identificacion',
-            'ave__linea',
+            'lote__codigo',
+            'lote__linea',
             'huevos_recolectados',
             'peso_promedio_huevo',
-            'fecha',
-            'calidad'
+            'fecha'
         ))
-        
         
         # Resumen estadístico
         datos['resumen'] = {

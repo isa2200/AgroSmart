@@ -7,7 +7,7 @@ from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from apps.usuarios.models import PerfilUsuario
 from apps.core.models import Lote, Categoria
-from apps.aves.models import LoteAves
+from apps.aves.models import LoteAves, BitacoraDiaria
 from apps.dashboard.models import MetricaGeneral
 from apps.reportes.models import TipoReporte
 from datetime import date, datetime
@@ -57,7 +57,7 @@ class Command(BaseCommand):
         Lote.objects.all().delete()
         Categoria.objects.all().delete()
         LoteAves.objects.all().delete()
-        ProduccionHuevos.objects.all().delete()
+        BitacoraDiaria.objects.all().delete()  # Cambiar ProduccionHuevos por BitacoraDiaria
         MetricaGeneral.objects.all().delete()
         TipoReporte.objects.all().delete()
     
@@ -81,7 +81,7 @@ class Command(BaseCommand):
         
         # Los operarios solo pueden ver y agregar registros básicos
         operario_permissions = Permission.objects.filter(
-            codename__in=['view_ave', 'add_produccionhuevos']
+            codename__in=['view_loteaves', 'add_bitacoradiaria']  # Cambiar add_produccionhuevos por add_bitacoradiaria
         )
         operario_group.permissions.set(operario_permissions)
     

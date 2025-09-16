@@ -333,7 +333,13 @@ class AlertaSistema(BaseModel):
     galpon = models.ForeignKey(Galpon, on_delete=models.CASCADE, null=True, blank=True)
     fecha_generacion = models.DateTimeField('Fecha de generación', auto_now_add=True)
     leida = models.BooleanField('Leída', default=False)
-    usuario_destinatario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    usuario_destinatario = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True,
+        related_name='alertas_aves'  # Agregar related_name único
+    )
     
     class Meta:
         verbose_name = 'Alerta del Sistema'
