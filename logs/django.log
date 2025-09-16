@@ -3739,3 +3739,679 @@ syntax_color
 tz
 widont
 ERROR 2025-09-09 01:17:15,055 basehttp 23192 17756 "GET /aves/lotes/crear/ HTTP/1.1" 500 236779
+INFO 2025-09-09 01:20:31,400 autoreload 23192 17664 C:\Users\bp877\TRAE\AgroSmart\config\settings\base.py changed, reloading.
+INFO 2025-09-09 01:20:32,389 autoreload 11492 4580 Watching for file changes with StatReloader
+INFO 2025-09-09 01:20:48,642 autoreload 18144 19180 Watching for file changes with StatReloader
+INFO 2025-09-09 01:20:50,155 basehttp 18144 9848 "GET / HTTP/1.1" 200 23980
+INFO 2025-09-09 01:20:50,591 basehttp 18144 6932 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 01:20:50,602 basehttp 18144 9848 "GET /api/produccion/ HTTP/1.1" 200 4883
+INFO 2025-09-09 01:20:53,725 basehttp 18144 9848 "GET / HTTP/1.1" 200 23979
+INFO 2025-09-09 01:20:53,752 basehttp 18144 6932 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-09 01:20:53,752 basehttp 18144 9848 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-09 01:20:54,071 basehttp 18144 6932 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-09 01:20:54,089 basehttp 18144 6932 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-09-09 01:20:54,168 basehttp 18144 4016 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 01:20:54,175 basehttp 18144 9848 "GET /api/produccion/ HTTP/1.1" 200 4883
+WARNING 2025-09-09 01:20:54,280 log 18144 9848 Not Found: /favicon.ico
+WARNING 2025-09-09 01:20:54,281 basehttp 18144 9848 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-09 01:20:55,425 basehttp 18144 9848 "GET /aves/ HTTP/1.1" 200 34163
+INFO 2025-09-09 01:21:14,288 basehttp 18144 9848 "GET /aves/lotes/crear/ HTTP/1.1" 200 22051
+INFO 2025-09-09 01:21:44,511 basehttp 18144 9848 "POST /aves/lotes/crear/ HTTP/1.1" 200 22067
+INFO 2025-09-09 01:21:46,994 basehttp 18144 9848 "POST /aves/lotes/crear/ HTTP/1.1" 200 22067
+INFO 2025-09-09 01:21:47,838 basehttp 18144 9848 "POST /aves/lotes/crear/ HTTP/1.1" 200 22067
+INFO 2025-09-09 01:21:48,505 basehttp 18144 9848 "POST /aves/lotes/crear/ HTTP/1.1" 200 22067
+INFO 2025-09-09 01:21:49,076 basehttp 18144 9848 "POST /aves/lotes/crear/ HTTP/1.1" 200 22067
+INFO 2025-09-09 01:21:49,634 basehttp 18144 9848 "POST /aves/lotes/crear/ HTTP/1.1" 200 22067
+INFO 2025-09-09 01:21:50,111 basehttp 18144 9848 "POST /aves/lotes/crear/ HTTP/1.1" 200 22067
+INFO 2025-09-09 01:21:50,603 basehttp 18144 9848 "POST /aves/lotes/crear/ HTTP/1.1" 200 22067
+INFO 2025-09-09 01:21:51,023 basehttp 18144 9848 "POST /aves/lotes/crear/ HTTP/1.1" 200 22067
+INFO 2025-09-09 01:21:51,297 basehttp 18144 9848 "POST /aves/lotes/crear/ HTTP/1.1" 200 22067
+INFO 2025-09-09 01:21:51,522 basehttp 18144 9848 "POST /aves/lotes/crear/ HTTP/1.1" 200 22067
+INFO 2025-09-09 01:21:51,694 basehttp 18144 9848 "POST /aves/lotes/crear/ HTTP/1.1" 200 22067
+INFO 2025-09-09 01:21:51,884 basehttp 18144 9848 "POST /aves/lotes/crear/ HTTP/1.1" 200 22067
+INFO 2025-09-09 01:21:52,068 basehttp 18144 9848 "POST /aves/lotes/crear/ HTTP/1.1" 200 22067
+INFO 2025-09-09 01:21:53,653 basehttp 18144 9848 "GET /aves/ HTTP/1.1" 200 34163
+INFO 2025-09-09 01:21:56,240 basehttp 18144 9848 "GET /aves/lotes/crear/ HTTP/1.1" 200 22051
+INFO 2025-09-09 01:26:57,375 autoreload 18144 19180 C:\Users\bp877\TRAE\AgroSmart\apps\aves\forms.py changed, reloading.
+INFO 2025-09-09 01:26:58,252 autoreload 23264 10588 Watching for file changes with StatReloader
+INFO 2025-09-09 01:27:25,656 autoreload 14536 2496 Watching for file changes with StatReloader
+INFO 2025-09-09 01:27:27,245 basehttp 14536 22784 "GET / HTTP/1.1" 200 23980
+INFO 2025-09-09 01:27:28,290 basehttp 14536 22924 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 01:27:28,299 basehttp 14536 22784 "GET /api/produccion/ HTTP/1.1" 200 4883
+INFO 2025-09-09 01:27:32,808 basehttp 14536 22784 "GET / HTTP/1.1" 200 23979
+INFO 2025-09-09 01:27:32,833 basehttp 14536 22924 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-09 01:27:32,833 basehttp 14536 22784 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-09 01:27:33,033 basehttp 14536 22924 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-09 01:27:33,052 basehttp 14536 22924 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-09-09 01:27:33,162 basehttp 14536 21764 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 01:27:33,182 basehttp 14536 22784 "GET /api/produccion/ HTTP/1.1" 200 4883
+WARNING 2025-09-09 01:27:33,274 log 14536 22784 Not Found: /favicon.ico
+WARNING 2025-09-09 01:27:33,276 basehttp 14536 22784 "GET /favicon.ico HTTP/1.1" 404 16809
+ERROR 2025-09-09 01:27:34,745 log 14536 22784 Internal Server Error: /reportes/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\reportes\views.py", line 28, in lista_reportes
+    return render(request, 'reportes/lista_reportes.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: reportes/lista_reportes.html
+ERROR 2025-09-09 01:27:34,795 basehttp 14536 22784 "GET /reportes/ HTTP/1.1" 500 107430
+INFO 2025-09-09 01:27:37,253 basehttp 14536 22784 "GET /aves/ HTTP/1.1" 200 34163
+INFO 2025-09-09 01:27:37,285 basehttp 14536 22784 "GET /static/aves/css/aves.css HTTP/1.1" 304 0
+INFO 2025-09-09 01:27:37,287 basehttp 14536 21764 "GET /static/aves/js/aves.js HTTP/1.1" 304 0
+INFO 2025-09-09 01:27:42,752 basehttp 14536 21764 "GET /aves/costos/crear/ HTTP/1.1" 200 21640
+INFO 2025-09-09 01:27:46,785 basehttp 14536 21764 "GET /aves/lotes/crear/ HTTP/1.1" 200 23139
+INFO 2025-09-09 01:31:17,607 autoreload 14536 2496 C:\Users\bp877\TRAE\AgroSmart\apps\aves\forms.py changed, reloading.
+INFO 2025-09-09 01:31:18,763 autoreload 11860 23284 Watching for file changes with StatReloader
+INFO 2025-09-09 01:34:15,877 basehttp 11860 19948 "GET / HTTP/1.1" 200 23980
+INFO 2025-09-09 01:34:16,447 basehttp 11860 23500 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 01:34:16,460 basehttp 11860 19948 "GET /api/produccion/ HTTP/1.1" 200 4883
+INFO 2025-09-09 01:34:24,053 basehttp 11860 19948 "GET / HTTP/1.1" 200 23979
+INFO 2025-09-09 01:34:24,090 basehttp 11860 19948 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-09 01:34:24,091 basehttp 11860 23500 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-09 01:34:24,267 basehttp 11860 23500 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-09 01:34:24,275 basehttp 11860 19948 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-09-09 01:34:24,386 basehttp 11860 23624 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 01:34:24,411 basehttp 11860 23500 "GET /api/produccion/ HTTP/1.1" 200 4883
+WARNING 2025-09-09 01:34:24,496 log 11860 23500 Not Found: /favicon.ico
+WARNING 2025-09-09 01:34:24,497 basehttp 11860 23500 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-09 01:34:26,292 basehttp 11860 23500 "GET /aves/ HTTP/1.1" 200 34162
+INFO 2025-09-09 01:34:27,710 basehttp 11860 23500 "GET /aves/lotes/crear/ HTTP/1.1" 200 23207
+INFO 2025-09-09 01:34:53,620 basehttp 11860 23500 "POST /aves/lotes/crear/ HTTP/1.1" 200 23254
+ERROR 2025-09-09 01:34:56,763 log 11860 23500 Internal Server Error: /aves/lotes/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 287, in lista_lotes
+    return render(request, 'aves/lotes/lista.html', {'lotes': lotes})
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'calendario_vacunas' not found. 'calendario_vacunas' is not a valid view function or pattern name.
+ERROR 2025-09-09 01:34:56,855 basehttp 11860 23500 "GET /aves/lotes/ HTTP/1.1" 500 198254
+INFO 2025-09-09 01:35:02,635 basehttp 11860 23500 "GET / HTTP/1.1" 200 23979
+INFO 2025-09-09 01:35:02,780 basehttp 11860 23624 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 01:35:02,801 basehttp 11860 23500 "GET /api/produccion/ HTTP/1.1" 200 4883
+INFO 2025-09-09 01:35:03,586 basehttp 11860 23500 "GET /aves/ HTTP/1.1" 200 34163
+INFO 2025-09-09 01:35:08,594 basehttp 11860 23500 "GET /aves/lotes/crear/ HTTP/1.1" 200 23207
+INFO 2025-09-09 01:35:16,005 basehttp 11860 23500 "GET /aves/lotes/crear/ HTTP/1.1" 200 23207
+INFO 2025-09-09 01:35:16,031 basehttp 11860 23624 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-09 01:35:16,033 basehttp 11860 23500 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-09 01:35:16,176 basehttp 11860 23500 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-09 01:35:16,191 basehttp 11860 23500 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-09 01:35:16,417 log 11860 23500 Not Found: /favicon.ico
+WARNING 2025-09-09 01:35:16,417 basehttp 11860 23500 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-09 01:36:40,919 basehttp 11860 23500 "GET /aves/lotes/crear/ HTTP/1.1" 200 22485
+INFO 2025-09-09 01:36:40,941 basehttp 11860 23624 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-09 01:36:40,941 basehttp 11860 23500 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-09 01:36:41,388 basehttp 11860 23500 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-09 01:36:41,402 basehttp 11860 23500 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-09 01:36:41,893 log 11860 23500 Not Found: /favicon.ico
+WARNING 2025-09-09 01:36:41,893 basehttp 11860 23500 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-09 01:37:06,218 basehttp 11860 23500 "POST /aves/lotes/crear/ HTTP/1.1" 200 22541
+INFO 2025-09-09 01:37:09,451 basehttp 11860 23500 "GET /aves/ HTTP/1.1" 200 34163
+INFO 2025-09-09 01:37:09,474 basehttp 11860 23500 "GET /static/aves/css/aves.css HTTP/1.1" 304 0
+INFO 2025-09-09 01:37:09,474 basehttp 11860 23624 "GET /static/aves/js/aves.js HTTP/1.1" 304 0
+INFO 2025-09-09 01:40:03,036 autoreload 6212 23176 Watching for file changes with StatReloader
+INFO 2025-09-09 01:40:04,501 basehttp 6212 21032 "GET / HTTP/1.1" 200 23980
+INFO 2025-09-09 01:40:04,972 basehttp 6212 2756 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 01:40:04,978 basehttp 6212 21032 "GET /api/produccion/ HTTP/1.1" 200 4883
+INFO 2025-09-09 01:40:08,602 basehttp 6212 21032 "GET /aves/ HTTP/1.1" 200 34162
+INFO 2025-09-09 01:40:09,987 basehttp 6212 21032 "GET /aves/lotes/crear/ HTTP/1.1" 200 24758
+INFO 2025-09-09 01:41:16,326 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24853
+ERROR 2025-09-09 01:41:21,052 log 6212 21032 Internal Server Error: /aves/lotes/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 287, in lista_lotes
+    return render(request, 'aves/lotes/lista.html', {'lotes': lotes})
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'calendario_vacunas' not found. 'calendario_vacunas' is not a valid view function or pattern name.
+ERROR 2025-09-09 01:41:21,155 basehttp 6212 21032 "GET /aves/lotes/ HTTP/1.1" 500 198254
+INFO 2025-09-09 01:41:23,410 basehttp 6212 21032 "GET /aves/ HTTP/1.1" 200 34163
+INFO 2025-09-09 01:41:36,558 basehttp 6212 21032 "GET /aves/produccion/crear/ HTTP/1.1" 200 23564
+INFO 2025-09-09 01:42:20,846 basehttp 6212 21032 "GET /aves/lotes/crear/ HTTP/1.1" 200 24758
+INFO 2025-09-09 01:42:57,599 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:42:58,396 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:42:58,983 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:42:59,478 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:42:59,676 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:42:59,850 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:43:00,033 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:43:00,188 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:43:00,367 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:43:00,524 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:43:00,711 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:43:00,852 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:43:01,041 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:43:01,221 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:43:01,416 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:43:01,596 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:43:01,985 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:43:02,383 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:43:02,832 basehttp 6212 21032 "POST /aves/lotes/crear/ HTTP/1.1" 200 24852
+INFO 2025-09-09 01:46:03,650 autoreload 6212 23176 C:\Users\bp877\TRAE\AgroSmart\apps\aves\forms.py changed, reloading.
+INFO 2025-09-09 01:46:04,590 autoreload 14552 20688 Watching for file changes with StatReloader
+INFO 2025-09-09 01:46:11,757 basehttp 14552 7328 "GET / HTTP/1.1" 200 23980
+INFO 2025-09-09 01:46:12,187 basehttp 14552 17612 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 01:46:12,197 basehttp 14552 7328 "GET /api/produccion/ HTTP/1.1" 200 4883
+INFO 2025-09-09 01:46:13,759 basehttp 14552 7328 "GET / HTTP/1.1" 200 23979
+INFO 2025-09-09 01:46:13,783 basehttp 14552 17612 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-09 01:46:13,783 basehttp 14552 7328 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-09 01:46:13,981 basehttp 14552 17612 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-09 01:46:13,994 basehttp 14552 17612 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-09-09 01:46:14,062 basehttp 14552 11488 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 01:46:14,078 basehttp 14552 7328 "GET /api/produccion/ HTTP/1.1" 200 4883
+WARNING 2025-09-09 01:46:14,235 log 14552 7328 Not Found: /favicon.ico
+WARNING 2025-09-09 01:46:14,236 basehttp 14552 7328 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-09 01:46:14,683 basehttp 14552 7328 "GET /aves/ HTTP/1.1" 200 34157
+INFO 2025-09-09 01:46:14,712 basehttp 14552 7328 "GET /static/aves/js/aves.js HTTP/1.1" 304 0
+INFO 2025-09-09 01:46:16,071 basehttp 14552 7328 "GET /aves/lotes/crear/ HTTP/1.1" 200 24758
+INFO 2025-09-09 01:46:36,791 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:37,797 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:38,336 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:38,726 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:39,091 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:39,383 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:39,576 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:39,748 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:39,921 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:40,114 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:40,301 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:40,645 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:41,273 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:41,777 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:42,272 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:42,728 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:43,131 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:43,553 basehttp 14552 7328 "POST /aves/lotes/crear/ HTTP/1.1" 200 24855
+INFO 2025-09-09 01:46:55,423 autoreload 11964 5612 Watching for file changes with StatReloader
+INFO 2025-09-09 01:46:57,035 basehttp 11964 15780 "GET / HTTP/1.1" 200 23980
+INFO 2025-09-09 01:46:57,560 basehttp 11964 2656 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 01:46:57,573 basehttp 11964 15780 "GET /api/produccion/ HTTP/1.1" 200 4883
+INFO 2025-09-09 01:47:02,150 basehttp 11964 15780 "GET / HTTP/1.1" 200 23979
+INFO 2025-09-09 01:47:02,171 basehttp 11964 2656 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-09 01:47:02,171 basehttp 11964 15780 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-09 01:47:02,409 basehttp 11964 2656 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-09 01:47:02,420 basehttp 11964 2656 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-09-09 01:47:02,494 basehttp 11964 17596 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 01:47:02,503 basehttp 11964 15780 "GET /api/produccion/ HTTP/1.1" 200 4883
+WARNING 2025-09-09 01:47:02,757 log 11964 15780 Not Found: /favicon.ico
+WARNING 2025-09-09 01:47:02,758 basehttp 11964 15780 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-09 01:47:03,130 basehttp 11964 15780 "GET /aves/ HTTP/1.1" 200 34157
+INFO 2025-09-09 01:47:05,271 basehttp 11964 15780 "GET /aves/lotes/crear/ HTTP/1.1" 200 24758
+INFO 2025-09-09 01:47:30,575 basehttp 11964 15780 "POST /aves/lotes/crear/ HTTP/1.1" 200 24853
+INFO 2025-09-09 01:47:31,750 basehttp 11964 15780 "POST /aves/lotes/crear/ HTTP/1.1" 200 24853
+INFO 2025-09-09 01:47:33,662 basehttp 11964 15780 "GET /aves/ HTTP/1.1" 200 34158
+INFO 2025-09-09 01:47:33,681 basehttp 11964 15780 "GET /static/aves/css/aves.css HTTP/1.1" 304 0
+INFO 2025-09-09 01:48:06,181 basehttp 11964 15780 "GET /aves/produccion/crear/ HTTP/1.1" 200 23564
+INFO 2025-09-09 01:48:16,605 basehttp 11964 15780 "GET /aves/produccion/crear/ HTTP/1.1" 200 23564
+ERROR 2025-09-09 01:48:20,519 log 11964 15780 Internal Server Error: /aves/mortalidad/crear/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 702, in crear_mortalidad
+    return render(request, 'aves/mortalidad/crear.html', {'form': form})
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: aves/mortalidad/crear.html
+ERROR 2025-09-09 01:48:20,565 basehttp 11964 15780 "GET /aves/mortalidad/crear/ HTTP/1.1" 500 106429
+INFO 2025-09-09 01:48:23,400 basehttp 11964 15780 "GET /aves/vacunacion/crear/ HTTP/1.1" 200 22387
+INFO 2025-09-09 01:48:32,953 basehttp 11964 15780 "GET /aves/costos/crear/ HTTP/1.1" 200 21640
+INFO 2025-09-09 11:18:38,967 autoreload 24180 6348 Watching for file changes with StatReloader
+INFO 2025-09-09 11:18:44,301 basehttp 24180 7580 "GET / HTTP/1.1" 200 23981
+INFO 2025-09-09 11:18:44,594 basehttp 24180 11600 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 304 0
+INFO 2025-09-09 11:18:44,594 basehttp 24180 7580 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 304 0
+INFO 2025-09-09 11:18:45,302 basehttp 24180 11600 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 304 0
+INFO 2025-09-09 11:18:45,307 basehttp 24180 7580 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 304 0
+INFO 2025-09-09 11:18:45,445 basehttp 24180 11600 "GET /api/produccion/ HTTP/1.1" 200 4883
+INFO 2025-09-09 11:18:45,471 basehttp 24180 19180 "GET /api/inventario/ HTTP/1.1" 200 27
+WARNING 2025-09-09 11:18:45,507 log 24180 7580 Not Found: /favicon.ico
+WARNING 2025-09-09 11:18:45,513 basehttp 24180 7580 "GET /favicon.ico HTTP/1.1" 404 16810
+INFO 2025-09-09 11:18:48,874 basehttp 24180 7580 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-09-09 11:18:48,927 basehttp 24180 7580 "GET /usuarios/login/ HTTP/1.1" 200 17531
+INFO 2025-09-09 11:18:58,977 basehttp 24180 7580 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-09-09 11:18:59,063 basehttp 24180 7580 "GET / HTTP/1.1" 200 24327
+INFO 2025-09-09 11:18:59,318 basehttp 24180 19180 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 11:18:59,368 basehttp 24180 7580 "GET /api/produccion/ HTTP/1.1" 200 4883
+INFO 2025-09-09 11:26:40,144 basehttp 24180 4164 "GET /aves/ HTTP/1.1" 200 34158
+INFO 2025-09-09 11:26:40,171 basehttp 24180 6412 "GET /static/aves/js/aves.js HTTP/1.1" 304 0
+INFO 2025-09-09 11:26:40,171 basehttp 24180 4164 "GET /static/aves/css/aves.css HTTP/1.1" 304 0
+INFO 2025-09-09 11:26:51,075 basehttp 24180 4164 "GET /aves/lotes/crear/ HTTP/1.1" 200 24759
+INFO 2025-09-09 11:27:23,813 basehttp 24180 4164 "GET /aves/ HTTP/1.1" 200 34158
+INFO 2025-09-09 11:28:23,903 basehttp 24180 5580 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-09-09 11:28:23,949 basehttp 24180 5580 "GET /usuarios/login/ HTTP/1.1" 200 17531
+INFO 2025-09-09 11:28:47,493 basehttp 24180 5580 "GET /admin HTTP/1.1" 301 0
+INFO 2025-09-09 11:28:47,576 basehttp 24180 20284 "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-09-09 11:28:47,819 basehttp 24180 20284 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 17767
+INFO 2025-09-09 11:28:47,836 basehttp 24180 20284 "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2025-09-09 11:28:47,837 basehttp 24180 11392 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2025-09-09 11:28:47,838 basehttp 24180 20920 "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2025-09-09 11:28:47,876 basehttp 24180 11392 "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2025-09-09 11:28:47,876 basehttp 24180 20920 "GET /static/admin/css/login.css HTTP/1.1" 304 0
+INFO 2025-09-09 11:28:47,892 basehttp 24180 20920 "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2025-09-09 11:28:47,893 basehttp 24180 11392 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2025-09-09 11:29:32,175 basehttp 24180 11392 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 17766
+INFO 2025-09-09 11:30:30,995 autoreload 3524 20796 Watching for file changes with StatReloader
+INFO 2025-09-09 11:30:32,760 basehttp 3524 22004 "GET / HTTP/1.1" 302 0
+INFO 2025-09-09 11:30:32,791 basehttp 3524 22004 "GET /usuarios/login/?next=/ HTTP/1.1" 200 17538
+INFO 2025-09-09 11:30:34,971 basehttp 3524 22004 "POST /usuarios/login/?next=/ HTTP/1.1" 302 0
+INFO 2025-09-09 11:30:35,024 basehttp 3524 22004 "GET / HTTP/1.1" 200 24327
+INFO 2025-09-09 11:30:35,152 basehttp 3524 22024 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 11:30:35,163 basehttp 3524 22004 "GET /api/produccion/ HTTP/1.1" 200 4883
+INFO 2025-09-09 11:30:36,269 basehttp 3524 22004 "GET /aves/ HTTP/1.1" 200 34157
+INFO 2025-09-09 11:30:37,549 basehttp 3524 22004 "GET / HTTP/1.1" 200 23979
+INFO 2025-09-09 11:30:37,682 basehttp 3524 22024 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 11:30:37,688 basehttp 3524 22004 "GET /api/produccion/ HTTP/1.1" 200 4883
+INFO 2025-09-09 11:31:33,655 basehttp 3524 22004 "GET /aves/ HTTP/1.1" 200 34158
+INFO 2025-09-09 11:31:36,328 basehttp 3524 22004 "GET /aves/vacunacion/crear/ HTTP/1.1" 200 22388
+INFO 2025-09-09 11:32:14,449 basehttp 3524 22004 "GET /aves/ HTTP/1.1" 200 34158
+INFO 2025-09-09 11:32:44,476 basehttp 3524 22004 "GET /aves/produccion/crear/ HTTP/1.1" 200 23564
+WARNING 2025-09-09 12:11:46,620 log 3524 19584 Not Found: /favicon.ico
+WARNING 2025-09-09 12:11:46,621 basehttp 3524 19584 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-09 12:11:48,794 basehttp 3524 13072 "GET /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-09-09 12:11:48,946 basehttp 3524 13072 "GET /admin/ HTTP/1.1" 200 25489
+INFO 2025-09-09 14:45:53,847 autoreload 14984 10256 Watching for file changes with StatReloader
+INFO 2025-09-09 14:45:56,505 basehttp 14984 19104 "GET / HTTP/1.1" 200 23980
+INFO 2025-09-09 14:45:57,267 basehttp 14984 18176 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 14:45:57,277 basehttp 14984 19104 "GET /api/produccion/ HTTP/1.1" 200 4883
+WARNING 2025-09-09 14:45:57,326 log 14984 5412 Not Found: /favicon.ico
+WARNING 2025-09-09 14:45:57,326 basehttp 14984 5412 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-09 14:46:04,170 basehttp 14984 5412 "GET /aves/ HTTP/1.1" 200 34158
+INFO 2025-09-09 14:46:04,202 basehttp 14984 19104 "GET /static/aves/js/aves.js HTTP/1.1" 304 0
+INFO 2025-09-09 14:46:04,202 basehttp 14984 5412 "GET /static/aves/css/aves.css HTTP/1.1" 304 0
+INFO 2025-09-09 14:46:09,699 basehttp 14984 5412 "GET /aves/produccion/crear/ HTTP/1.1" 200 23565
+INFO 2025-09-09 14:46:30,050 basehttp 14984 5412 "GET /aves/ HTTP/1.1" 200 34158
+INFO 2025-09-09 14:46:37,338 basehttp 14984 5412 "GET /aves/ HTTP/1.1" 200 34157
+INFO 2025-09-09 14:46:37,365 basehttp 14984 5412 "GET /static/aves/css/aves.css HTTP/1.1" 200 2466
+INFO 2025-09-09 14:46:37,365 basehttp 14984 19104 "GET /static/aves/js/aves.js HTTP/1.1" 200 8703
+INFO 2025-09-09 14:46:37,381 basehttp 14984 18176 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-09 14:46:37,407 basehttp 14984 5348 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-09 14:46:37,705 basehttp 14984 5348 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-09 14:46:37,723 basehttp 14984 18176 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-09 14:46:38,243 log 14984 18176 Not Found: /favicon.ico
+WARNING 2025-09-09 14:46:38,244 basehttp 14984 18176 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-09 14:46:39,488 basehttp 14984 18176 "GET /aves/lotes/crear/ HTTP/1.1" 200 24758
+INFO 2025-09-09 14:47:23,770 basehttp 14984 18176 "POST /aves/lotes/crear/ HTTP/1.1" 200 24848
+INFO 2025-09-09 14:53:55,445 autoreload 14056 8716 Watching for file changes with StatReloader
+INFO 2025-09-09 14:53:57,787 basehttp 14056 5716 "GET / HTTP/1.1" 200 23980
+INFO 2025-09-09 14:53:58,309 basehttp 14056 5544 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 14:53:58,321 basehttp 14056 5716 "GET /api/produccion/ HTTP/1.1" 200 4883
+INFO 2025-09-09 14:54:00,659 basehttp 14056 5716 "GET / HTTP/1.1" 200 23979
+INFO 2025-09-09 14:54:00,724 basehttp 14056 5716 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-09 14:54:00,739 basehttp 14056 5544 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-09 14:54:00,904 basehttp 14056 5544 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-09 14:54:00,954 basehttp 14056 5716 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-09-09 14:54:01,077 basehttp 14056 12464 "GET /api/inventario/ HTTP/1.1" 200 27
+INFO 2025-09-09 14:54:01,090 basehttp 14056 17864 "GET /api/produccion/ HTTP/1.1" 200 4883
+WARNING 2025-09-09 14:54:01,473 log 14056 17864 Not Found: /favicon.ico
+WARNING 2025-09-09 14:54:01,473 basehttp 14056 17864 "GET /favicon.ico HTTP/1.1" 404 16810
+INFO 2025-09-09 14:54:02,375 basehttp 14056 17864 "GET /aves/ HTTP/1.1" 200 34158
+INFO 2025-09-09 14:54:04,447 basehttp 14056 17864 "GET /aves/lotes/crear/ HTTP/1.1" 200 24764
+INFO 2025-09-09 14:54:54,341 basehttp 14056 17864 "POST /aves/lotes/crear/ HTTP/1.1" 200 24867
+ERROR 2025-09-09 14:55:11,505 log 14056 17864 Internal Server Error: /aves/lotes/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 287, in lista_lotes
+    return render(request, 'aves/lotes/lista.html', {'lotes': lotes})
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'calendario_vacunas' not found. 'calendario_vacunas' is not a valid view function or pattern name.
+ERROR 2025-09-09 14:55:11,585 basehttp 14056 17864 "GET /aves/lotes/ HTTP/1.1" 500 197967
+INFO 2025-09-09 14:55:16,376 basehttp 14056 17864 "GET /aves/lotes/crear/ HTTP/1.1" 200 24763
+INFO 2025-09-09 14:55:21,952 basehttp 14056 17864 "GET /aves/ HTTP/1.1" 200 34157
+INFO 2025-09-09 14:55:29,143 basehttp 14056 17864 "GET /admin HTTP/1.1" 301 0
+INFO 2025-09-09 14:55:29,322 basehttp 14056 12464 "GET /admin/ HTTP/1.1" 200 25489
+INFO 2025-09-09 14:55:29,371 basehttp 14056 12464 "GET /static/admin/css/dashboard.css HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:29,401 basehttp 14056 12464 "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:29,567 basehttp 14056 12464 "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:29,567 basehttp 14056 5716 "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:38,055 basehttp 14056 5716 "GET /admin/aves/loteaves/ HTTP/1.1" 200 26564
+INFO 2025-09-09 14:55:38,094 basehttp 14056 5716 "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:38,097 basehttp 14056 5544 "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:38,098 basehttp 14056 5716 "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:38,103 basehttp 14056 5544 "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:38,106 basehttp 14056 13804 "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:38,107 basehttp 14056 9064 "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:38,107 basehttp 14056 15572 "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:38,149 basehttp 14056 12464 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-09-09 14:55:38,187 basehttp 14056 5716 "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:38,187 basehttp 14056 5544 "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:38,271 basehttp 14056 5544 "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:38,274 basehttp 14056 5544 "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:38,290 basehttp 14056 5544 "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:43,324 basehttp 14056 5544 "GET /admin/aves/loteaves/add/ HTTP/1.1" 200 31910
+INFO 2025-09-09 14:55:43,352 basehttp 14056 5716 "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:43,352 basehttp 14056 15572 "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:43,352 basehttp 14056 13804 "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:43,353 basehttp 14056 9064 "GET /static/admin/js/calendar.js HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:43,377 basehttp 14056 5544 "GET /static/admin/js/collapse.js HTTP/1.1" 200 1803
+INFO 2025-09-09 14:55:43,387 basehttp 14056 12464 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-09-09 14:55:43,388 basehttp 14056 5544 "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:43,396 basehttp 14056 5544 "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+INFO 2025-09-09 14:55:43,445 basehttp 14056 5544 "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 304 0
+INFO 2025-09-09 14:56:08,968 basehttp 14056 5544 "POST /admin/aves/loteaves/add/ HTTP/1.1" 302 0
+INFO 2025-09-09 14:56:09,037 basehttp 14056 5544 "GET /admin/aves/loteaves/ HTTP/1.1" 200 29214
+INFO 2025-09-09 14:56:09,083 basehttp 14056 5544 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-09-09 14:56:09,104 basehttp 14056 5544 "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+INFO 2025-09-09 14:56:09,104 basehttp 14056 12464 "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 304 0
+INFO 2025-09-09 14:56:22,099 basehttp 14056 12464 "GET /admin/aves/loteaves/ HTTP/1.1" 200 28994
+INFO 2025-09-09 14:56:22,148 basehttp 14056 12464 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-09-09 14:56:23,347 basehttp 14056 12464 "GET /admin/aves/loteaves/ HTTP/1.1" 200 28994
+INFO 2025-09-09 14:56:23,389 basehttp 14056 5544 "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2929
+INFO 2025-09-09 14:56:23,390 basehttp 14056 9064 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2694
+INFO 2025-09-09 14:56:23,390 basehttp 14056 13804 "GET /static/admin/css/changelists.css HTTP/1.1" 200 6566
+INFO 2025-09-09 14:56:23,391 basehttp 14056 12464 "GET /static/admin/css/base.css HTTP/1.1" 200 21310
+INFO 2025-09-09 14:56:23,450 basehttp 14056 15572 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-09-09 14:56:23,451 basehttp 14056 5544 "GET /static/admin/css/responsive.css HTTP/1.1" 200 18559
+INFO 2025-09-09 14:56:23,451 basehttp 14056 13804 "GET /static/admin/js/core.js HTTP/1.1" 200 5682
+INFO 2025-09-09 14:56:23,452 basehttp 14056 12464 "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 8943
+INFO 2025-09-09 14:56:23,453 basehttp 14056 9064 "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2025-09-09 14:56:23,459 basehttp 14056 13804 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-09 14:56:23,481 basehttp 14056 5544 "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2025-09-09 14:56:23,483 basehttp 14056 12464 "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2025-09-09 14:56:23,485 basehttp 14056 5716 "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 292458
+INFO 2025-09-09 14:56:23,487 basehttp 14056 13804 "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2025-09-09 14:56:23,490 basehttp 14056 5544 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-09 14:56:23,501 basehttp 14056 15572 "GET /static/admin/js/actions.js HTTP/1.1" 200 7872
+INFO 2025-09-09 14:56:23,544 basehttp 14056 15572 "GET /static/admin/js/theme.js HTTP/1.1" 200 1943
+INFO 2025-09-09 14:56:23,581 basehttp 14056 9064 "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 232381
+INFO 2025-09-09 14:56:23,590 basehttp 14056 5544 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-09 14:56:23,606 basehttp 14056 15572 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2025-09-09 14:56:23,607 basehttp 14056 9064 "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2025-09-09 14:56:23,611 basehttp 14056 5716 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-09-09 14:56:23,612 basehttp 14056 5544 "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-09-09 14:56:23,617 basehttp 14056 13804 "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2025-09-09 14:56:23,618 basehttp 14056 12464 "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+WARNING 2025-09-09 14:56:23,678 log 14056 12464 Not Found: /favicon.ico
+WARNING 2025-09-09 14:56:23,679 basehttp 14056 12464 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-09 14:56:29,439 basehttp 14056 12464 "GET / HTTP/1.1" 200 23979
+INFO 2025-09-09 14:56:29,618 basehttp 14056 13804 "GET /api/inventario/ HTTP/1.1" 200 70
+INFO 2025-09-09 14:56:29,631 basehttp 14056 12464 "GET /api/produccion/ HTTP/1.1" 200 4883
+INFO 2025-09-09 14:56:31,663 basehttp 14056 12464 "GET /aves/ HTTP/1.1" 200 34271
+INFO 2025-09-09 14:56:55,974 basehttp 14056 12464 "POST /aves/produccion/crear/ HTTP/1.1" 200 23633
+INFO 2025-09-09 14:57:01,082 basehttp 14056 12464 "GET /aves/ HTTP/1.1" 200 34271
+INFO 2025-09-09 14:57:04,985 basehttp 14056 12464 "GET /aves/produccion/crear/ HTTP/1.1" 200 23614
+ERROR 2025-09-09 14:57:07,206 log 14056 12464 Internal Server Error: /reportes/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\reportes\views.py", line 28, in lista_reportes
+    return render(request, 'reportes/lista_reportes.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: reportes/lista_reportes.html
+ERROR 2025-09-09 14:57:07,256 basehttp 14056 12464 "GET /reportes/ HTTP/1.1" 500 107165
+INFO 2025-09-09 14:57:09,865 basehttp 14056 12464 "GET /aves/ HTTP/1.1" 200 34271
+INFO 2025-09-09 14:57:12,412 basehttp 14056 12464 "GET /aves/costos/crear/ HTTP/1.1" 200 21690
+INFO 2025-09-09 15:01:56,103 autoreload 14056 8716 C:\Users\bp877\TRAE\AgroSmart\apps\aves\forms.py changed, reloading.
+INFO 2025-09-09 15:01:57,068 autoreload 19244 3580 Watching for file changes with StatReloader
+INFO 2025-09-09 15:02:19,198 autoreload 1980 5476 Watching for file changes with StatReloader
+INFO 2025-09-09 15:02:20,735 basehttp 1980 2948 "GET / HTTP/1.1" 200 23980
+INFO 2025-09-09 15:02:21,148 basehttp 1980 12416 "GET /api/inventario/ HTTP/1.1" 200 70
+INFO 2025-09-09 15:02:21,186 basehttp 1980 2948 "GET /api/produccion/ HTTP/1.1" 200 4883
+INFO 2025-09-09 15:02:23,323 basehttp 1980 2948 "GET / HTTP/1.1" 200 23979
+INFO 2025-09-09 15:02:23,347 basehttp 1980 12416 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-09 15:02:23,347 basehttp 1980 2948 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-09 15:02:23,773 basehttp 1980 12416 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-09 15:02:23,790 basehttp 1980 12416 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-09-09 15:02:23,844 basehttp 1980 15224 "GET /api/inventario/ HTTP/1.1" 200 70
+INFO 2025-09-09 15:02:23,888 basehttp 1980 2948 "GET /api/produccion/ HTTP/1.1" 200 4883
+WARNING 2025-09-09 15:02:24,288 log 1980 2948 Not Found: /favicon.ico
+WARNING 2025-09-09 15:02:24,288 basehttp 1980 2948 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-09 15:02:24,918 basehttp 1980 2948 "GET /aves/ HTTP/1.1" 200 34271
+INFO 2025-09-09 15:02:25,954 basehttp 1980 2948 "GET / HTTP/1.1" 200 23979
+INFO 2025-09-09 15:02:26,078 basehttp 1980 15224 "GET /api/inventario/ HTTP/1.1" 200 70
+INFO 2025-09-09 15:02:26,088 basehttp 1980 2948 "GET /api/produccion/ HTTP/1.1" 200 4883
+INFO 2025-09-09 15:02:35,583 basehttp 1980 2948 "GET /aves/ HTTP/1.1" 200 34270
+INFO 2025-09-09 15:02:38,646 basehttp 1980 2948 "GET /aves/lotes/crear/ HTTP/1.1" 200 24763
+INFO 2025-09-09 15:03:31,199 basehttp 1980 2948 "POST /aves/lotes/crear/ HTTP/1.1" 200 25101
+INFO 2025-09-09 15:03:37,217 basehttp 1980 2948 "POST /aves/lotes/crear/ HTTP/1.1" 200 24865
+INFO 2025-09-09 15:03:44,503 basehttp 1980 2948 "GET /aves/ HTTP/1.1" 200 34271
+INFO 2025-09-09 15:04:10,103 basehttp 1980 2948 "GET /aves/lotes/crear/ HTTP/1.1" 200 24763
+INFO 2025-09-09 15:11:37,314 basehttp 1980 12040 "GET /aves/ HTTP/1.1" 200 34270
+INFO 2025-09-09 15:12:22,566 basehttp 1980 12040 "GET /aves/ HTTP/1.1" 200 34271
+ERROR 2025-09-09 15:12:22,815 log 1980 12040 Internal Server Error: /reportes/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\reportes\views.py", line 28, in lista_reportes
+    return render(request, 'reportes/lista_reportes.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: reportes/lista_reportes.html
+ERROR 2025-09-09 15:12:22,872 basehttp 1980 12040 "GET /reportes/ HTTP/1.1" 500 107148
+INFO 2025-09-11 09:16:44,514 autoreload 5640 1576 Watching for file changes with StatReloader
+INFO 2025-09-11 09:16:57,612 basehttp 5640 16932 "GET / HTTP/1.1" 200 23981
+INFO 2025-09-11 09:16:57,687 basehttp 5640 16932 "GET / HTTP/1.1" 200 23979
+INFO 2025-09-11 09:16:57,877 basehttp 5640 16632 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-11 09:16:57,898 basehttp 5640 16052 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-11 09:16:58,426 basehttp 5640 16052 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-11 09:16:58,442 basehttp 5640 16632 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-09-11 09:16:58,585 basehttp 5640 12688 "GET /api/inventario/ HTTP/1.1" 200 70
+INFO 2025-09-11 09:16:58,612 basehttp 5640 2236 "GET /api/produccion/ HTTP/1.1" 200 4883
+WARNING 2025-09-11 09:16:59,046 log 5640 2236 Not Found: /favicon.ico
+WARNING 2025-09-11 09:16:59,047 basehttp 5640 2236 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-11 09:17:01,925 basehttp 5640 376 "GET /aves/ HTTP/1.1" 200 34271
+INFO 2025-09-11 09:17:01,973 basehttp 5640 376 "GET /static/aves/css/aves.css HTTP/1.1" 304 0
+INFO 2025-09-11 09:17:01,975 basehttp 5640 364 "GET /static/aves/js/aves.js HTTP/1.1" 304 0
+INFO 2025-09-11 09:28:24,406 basehttp 5640 5248 "GET /aves/lotes/crear/ HTTP/1.1" 200 24764
+INFO 2025-09-11 09:31:43,126 basehttp 5640 5248 "GET /aves/ HTTP/1.1" 200 34269
+INFO 2025-09-11 13:29:34,134 basehttp 5640 9864 "POST /aves/produccion/crear/ HTTP/1.1" 200 23634

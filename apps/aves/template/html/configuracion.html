@@ -1,0 +1,455 @@
+{% extends 'aves/base.html' %}
+{% load static %}
+
+{% block title %}Configuración del Módulo Avícola{% endblock %}
+
+{% block extra_css %}
+<style>
+    .config-section {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        padding: 20px;
+    }
+    .config-header {
+        border-bottom: 2px solid #e9ecef;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+    }
+    .config-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #f8f9fa;
+    }
+    .config-item:last-child {
+        border-bottom: none;
+    }
+    .config-value {
+        font-weight: 500;
+        color: #495057;
+    }
+    .btn-config {
+        padding: 5px 15px;
+        font-size: 0.875rem;
+    }
+    .alert-config {
+        border-left: 4px solid #ffc107;
+        background-color: #fff3cd;
+        padding: 10px 15px;
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-cogs"></i> Configuración del Módulo Avícola</h2>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevaConfig">
+                    <i class="fas fa-plus"></i> Nueva Configuración
+                </button>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Configuraciones Generales -->
+            <div class="config-section">
+                <div class="config-header">
+                    <h4><i class="fas fa-sliders-h"></i> Configuraciones Generales</h4>
+                </div>
+                
+                <div class="config-item">
+                    <div>
+                        <strong>Capacidad Máxima por Galpón</strong>
+                        <small class="text-muted d-block">Número máximo de aves por galpón</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="config-value me-3">{{ config.capacidad_maxima_galpon|default:"10,000" }} aves</span>
+                        <button class="btn btn-outline-primary btn-config" onclick="editarConfig('capacidad_maxima_galpon')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="config-item">
+                    <div>
+                        <strong>Días de Vida Útil de Huevos</strong>
+                        <small class="text-muted d-block">Tiempo máximo de almacenamiento</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="config-value me-3">{{ config.dias_vida_util_huevos|default:"21" }} días</span>
+                        <button class="btn btn-outline-primary btn-config" onclick="editarConfig('dias_vida_util_huevos')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="config-item">
+                    <div>
+                        <strong>Temperatura Óptima</strong>
+                        <small class="text-muted d-block">Rango de temperatura ideal</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="config-value me-3">{{ config.temp_min|default:"18" }}°C - {{ config.temp_max|default:"24" }}°C</span>
+                        <button class="btn btn-outline-primary btn-config" onclick="editarConfig('temperatura')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="config-item">
+                    <div>
+                        <strong>Humedad Óptima</strong>
+                        <small class="text-muted d-block">Rango de humedad ideal</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="config-value me-3">{{ config.humedad_min|default:"60" }}% - {{ config.humedad_max|default:"70" }}%</span>
+                        <button class="btn btn-outline-primary btn-config" onclick="editarConfig('humedad')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuraciones de Alertas -->
+            <div class="config-section">
+                <div class="config-header">
+                    <h4><i class="fas fa-bell"></i> Configuraciones de Alertas</h4>
+                </div>
+
+                <div class="config-item">
+                    <div>
+                        <strong>Mortalidad Crítica (%)</strong>
+                        <small class="text-muted d-block">Porcentaje que activa alerta crítica</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="config-value me-3">{{ config.mortalidad_critica|default:"5" }}%</span>
+                        <button class="btn btn-outline-warning btn-config" onclick="editarConfig('mortalidad_critica')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="config-item">
+                    <div>
+                        <strong>Stock Mínimo de Huevos</strong>
+                        <small class="text-muted d-block">Cantidad mínima antes de alerta</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="config-value me-3">{{ config.stock_minimo_huevos|default:"1000" }} unidades</span>
+                        <button class="btn btn-outline-warning btn-config" onclick="editarConfig('stock_minimo_huevos')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="config-item">
+                    <div>
+                        <strong>Consumo Concentrado Crítico</strong>
+                        <small class="text-muted d-block">Variación que activa alerta (%)</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="config-value me-3">{{ config.consumo_critico|default:"20" }}%</span>
+                        <button class="btn btn-outline-warning btn-config" onclick="editarConfig('consumo_critico')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuraciones de Producción -->
+            <div class="config-section">
+                <div class="config-header">
+                    <h4><i class="fas fa-chart-line"></i> Configuraciones de Producción</h4>
+                </div>
+
+                <div class="config-item">
+                    <div>
+                        <strong>Producción Esperada (%)</strong>
+                        <small class="text-muted d-block">Porcentaje de postura esperado</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="config-value me-3">{{ config.produccion_esperada|default:"85" }}%</span>
+                        <button class="btn btn-outline-success btn-config" onclick="editarConfig('produccion_esperada')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="config-item">
+                    <div>
+                        <strong>Peso Promedio Huevo</strong>
+                        <small class="text-muted d-block">Peso estándar en gramos</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="config-value me-3">{{ config.peso_promedio_huevo|default:"60" }} gramos</span>
+                        <button class="btn btn-outline-success btn-config" onclick="editarConfig('peso_promedio_huevo')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="config-item">
+                    <div>
+                        <strong>Consumo Diario Concentrado</strong>
+                        <small class="text-muted d-block">Gramos por ave por día</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="config-value me-3">{{ config.consumo_diario_concentrado|default:"120" }} g/ave/día</span>
+                        <button class="btn btn-outline-success btn-config" onclick="editarConfig('consumo_diario_concentrado')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuraciones de Vacunación -->
+            <div class="config-section">
+                <div class="config-header">
+                    <h4><i class="fas fa-syringe"></i> Configuraciones de Vacunación</h4>
+                </div>
+
+                <div class="alert-config">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Nota:</strong> Los planes de vacunación se configuran por separado en el módulo de vacunas.
+                </div>
+
+                <div class="config-item">
+                    <div>
+                        <strong>Días de Anticipación para Alertas</strong>
+                        <small class="text-muted d-block">Días antes de mostrar recordatorio</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="config-value me-3">{{ config.dias_anticipacion_vacuna|default:"3" }} días</span>
+                        <button class="btn btn-outline-info btn-config" onclick="editarConfig('dias_anticipacion_vacuna')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="config-item">
+                    <div>
+                        <strong>Notificaciones Automáticas</strong>
+                        <small class="text-muted d-block">Enviar recordatorios por email</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="config-value me-3">
+                            {% if config.notificaciones_automaticas %}
+                                <span class="badge bg-success">Activado</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Desactivado</span>
+                            {% endif %}
+                        </span>
+                        <button class="btn btn-outline-info btn-config" onclick="toggleConfig('notificaciones_automaticas')">
+                            <i class="fas fa-toggle-on"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Historial de Cambios -->
+            <div class="config-section">
+                <div class="config-header">
+                    <h4><i class="fas fa-history"></i> Historial de Cambios Recientes</h4>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Usuario</th>
+                                <th>Configuración</th>
+                                <th>Valor Anterior</th>
+                                <th>Valor Nuevo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cambio in historial_cambios %}
+                            <tr>
+                                <td>{{ cambio.fecha|date:"d/m/Y H:i" }}</td>
+                                <td>{{ cambio.usuario.get_full_name|default:cambio.usuario.username }}</td>
+                                <td>{{ cambio.configuracion }}</td>
+                                <td><span class="text-muted">{{ cambio.valor_anterior }}</span></td>
+                                <td><strong>{{ cambio.valor_nuevo }}</strong></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">No hay cambios recientes</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Nueva Configuración -->
+<div class="modal fade" id="modalNuevaConfig" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nueva Configuración</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" id="formNuevaConfig">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nombre_config" class="form-label">Nombre de la Configuración</label>
+                        <input type="text" class="form-control" id="nombre_config" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="valor_config" class="form-label">Valor</label>
+                        <input type="text" class="form-control" id="valor_config" name="valor" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion_config" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion_config" name="descripcion" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Editar Configuración -->
+<div class="modal fade" id="modalEditarConfig" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Configuración</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" id="formEditarConfig">
+                {% csrf_token %}
+                <input type="hidden" id="config_id" name="config_id">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nuevo_valor" class="form-label">Nuevo Valor</label>
+                        <input type="text" class="form-control" id="nuevo_valor" name="nuevo_valor" required>
+                        <div class="form-text" id="config_descripcion"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function editarConfig(configName) {
+    // Configurar modal de edición
+    document.getElementById('config_id').value = configName;
+    
+    // Obtener valor actual
+    const currentValue = document.querySelector(`[onclick="editarConfig('${configName}')"]`)
+        .parentElement.querySelector('.config-value').textContent.trim();
+    
+    document.getElementById('nuevo_valor').value = currentValue.replace(/[^\d.,]/g, '');
+    
+    // Mostrar descripción según el tipo
+    const descriptions = {
+        'capacidad_maxima_galpon': 'Número máximo de aves que puede albergar un galpón',
+        'dias_vida_util_huevos': 'Días máximos de almacenamiento de huevos',
+        'temperatura': 'Rango de temperatura óptima (mín-máx en °C)',
+        'humedad': 'Rango de humedad óptima (mín-máx en %)',
+        'mortalidad_critica': 'Porcentaje de mortalidad que activa alerta crítica',
+        'stock_minimo_huevos': 'Cantidad mínima de huevos antes de generar alerta',
+        'consumo_critico': 'Variación porcentual en consumo que genera alerta',
+        'produccion_esperada': 'Porcentaje de postura esperado diariamente',
+        'peso_promedio_huevo': 'Peso estándar de un huevo en gramos',
+        'consumo_diario_concentrado': 'Gramos de concentrado por ave por día',
+        'dias_anticipacion_vacuna': 'Días de anticipación para recordatorios de vacunación'
+    };
+    
+    document.getElementById('config_descripcion').textContent = descriptions[configName] || '';
+    
+    // Mostrar modal
+    new bootstrap.Modal(document.getElementById('modalEditarConfig')).show();
+}
+
+function toggleConfig(configName) {
+    // Enviar petición AJAX para cambiar estado
+    fetch(`{% url 'aves:toggle_config' %}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: JSON.stringify({
+            'config_name': configName
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Error al actualizar la configuración');
+        }
+    });
+}
+
+// Validación de formularios
+document.getElementById('formEditarConfig').addEventListener('submit', function(e) {
+    const valor = document.getElementById('nuevo_valor').value;
+    const configId = document.getElementById('config_id').value;
+    
+    // Validaciones específicas
+    if (configId.includes('temperatura') || configId.includes('humedad')) {
+        if (!valor.includes('-')) {
+            e.preventDefault();
+            alert('Para rangos, use el formato: mínimo-máximo (ej: 18-24)');
+            return;
+        }
+    }
+    
+    if (configId.includes('porcentaje') || configId.includes('critica') || configId.includes('esperada')) {
+        const num = parseFloat(valor);
+        if (num < 0 || num > 100) {
+            e.preventDefault();
+            alert('Los porcentajes deben estar entre 0 y 100');
+            return;
+        }
+    }
+});
+
+// Auto-refresh cada 30 segundos para el historial
+setInterval(function() {
+    fetch(window.location.href + '?ajax=historial')
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newHistorial = doc.querySelector('.table tbody');
+            if (newHistorial) {
+                document.querySelector('.table tbody').innerHTML = newHistorial.innerHTML;
+            }
+        });
+}, 30000);
+</script>
+{% endblock %}

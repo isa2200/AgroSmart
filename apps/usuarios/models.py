@@ -15,16 +15,22 @@ class PerfilUsuario(BaseModel):
     ROLES = [
         ('superusuario', 'Superusuario'),
         ('admin_aves', 'Administrador de Aves'),
+        ('veterinario', 'Veterinario'),
+        ('punto_blanco', 'Punto Blanco (Venta)'),
         ('solo_vista', 'Solo Vista'),
     ]
     
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Usuario')
     rol = models.CharField('Rol', max_length=20, choices=ROLES)
     telefono = models.CharField('Teléfono', max_length=15, blank=True)
-    cedula = models.CharField('Cédula', max_length=20, unique=True, blank=True, null=True)  # Permitir vacío temporalmente
+    cedula = models.CharField('Cédula', max_length=20, unique=True, blank=True, null=True)
     fecha_nacimiento = models.DateField('Fecha de nacimiento', null=True, blank=True)
     direccion = models.TextField('Dirección', blank=True)
     foto = models.ImageField('Foto de perfil', upload_to='usuarios/fotos/', blank=True)
+    
+    # Permisos específicos del módulo avícola
+    puede_eliminar_registros = models.BooleanField('Puede eliminar registros', default=False)
+    acceso_modulo_avicola = models.BooleanField('Acceso módulo avícola', default=False)
     
     class Meta:
         verbose_name = 'Perfil de Usuario'
@@ -37,11 +43,33 @@ class PerfilUsuario(BaseModel):
         """Verifica si el usuario tiene acceso a un área específica."""
         if self.rol == 'superusuario':
             return True
+        if area == 'aves':
+            return self.acceso_modulo_avicola
         return f'admin_{area}' == self.rol
     
     def puede_editar(self):
         """Verifica si el usuario puede editar datos."""
-        return self.rol != 'solo_vista'
+        return self.rol not in ['solo_vista', 'punto_blanco']
+    
+    def puede_registrar_vacunas(self):
+        """Verifica si puede registrar vacunas."""
+        return self.rol in ['superusuario', 'veterinario']
+    
+    def puede_gestionar_vacunacion(self):
+        """Verifica si el usuario puede gestionar vacunación."""
+        return self.rol in ['superusuario', 'veterinario']
+    
+    def puede_ver_inventarios(self):
+        """Verifica si el usuario puede ver inventarios."""
+        return self.rol in ['superusuario', 'admin_aves', 'punto_blanco', 'solo_vista']
+    
+    def puede_generar_pedidos(self):
+        """Verifica si el usuario puede generar pedidos."""
+        return self.rol in ['superusuario', 'punto_blanco']
+    
+    def requiere_justificacion_modificacion(self):
+        """Verifica si requiere justificación para modificaciones."""
+        return self.rol in ['admin_aves', 'veterinario']
 
 
 class RegistroAcceso(BaseModel):

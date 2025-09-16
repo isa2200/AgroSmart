@@ -1,3 +1,7 @@
+"""
+URLs para el módulo avícola.
+"""
+
 from django.urls import path
 from . import views
 
@@ -7,38 +11,27 @@ urlpatterns = [
     # Dashboard
     path('', views.dashboard_aves, name='dashboard'),
     
+    # Bitácora diaria
+    path('bitacora/', views.bitacora_list, name='bitacora_list'),
+    path('bitacora/nueva/', views.bitacora_diaria_create, name='bitacora_create'),
+    
     # Lotes
-    path('lotes/', views.lista_lotes, name='lista_lotes'),
-    path('lotes/crear/', views.crear_lote, name='crear_lote'),
-    path('lotes/<int:pk>/editar/', views.editar_lote, name='editar_lote'),
-    path('lotes/<int:pk>/eliminar/', views.eliminar_lote, name='eliminar_lote'),
+    path('lotes/nuevo/', views.lote_create, name='lote_create'),
+    path('lotes/<int:pk>/', views.lote_detail, name='lote_detail'),
     
-    # Producción
-    path('produccion/', views.lista_produccion, name='lista_produccion'),
-    path('produccion/crear/', views.crear_produccion, name='crear_produccion'),
-    path('produccion/<int:pk>/editar/', views.editar_produccion, name='editar_produccion'),
-    path('produccion/<int:pk>/eliminar/', views.eliminar_produccion, name='eliminar_produccion'),
+    # Inventario de huevos
+    path('inventario-huevos/', views.inventario_huevos, name='inventario_huevos'),
+    path('movimiento-huevos/nuevo/', views.movimiento_huevos_create, name='movimiento_huevos_create'),
     
-    # Costos
-    path('costos/', views.lista_costos, name='lista_costos'),
-    path('costos/crear/', views.crear_costo, name='crear_costo'),
-    path('costos/<int:pk>/editar/', views.editar_costo, name='editar_costo'),
-    path('costos/<int:pk>/eliminar/', views.eliminar_costo, name='eliminar_costo'),
+    # Plan de vacunación
+    path('vacunacion/', views.plan_vacunacion_list, name='plan_vacunacion_list'),
+    path('vacunacion/nuevo/', views.plan_vacunacion_create, name='plan_vacunacion_create'),
     
-    # Vacunación
-    path('vacunacion/', views.lista_vacunacion, name='lista_vacunacion'),
-    path('vacunacion/crear/', views.crear_vacunacion, name='crear_vacunacion'),
-    path('vacunacion/<int:pk>/editar/', views.editar_vacunacion, name='editar_vacunacion'),
-    path('vacunacion/<int:pk>/eliminar/', views.eliminar_vacunacion, name='eliminar_vacunacion'),
+    # Alertas
+    path('alertas/', views.alertas_list, name='alertas_list'),
+    path('alertas/<int:pk>/marcar-leida/', views.marcar_alerta_leida, name='marcar_alerta_leida'),
     
-    # Mortalidad
-    path('mortalidad/', views.lista_mortalidad, name='lista_mortalidad'),
-    path('mortalidad/crear/', views.crear_mortalidad, name='crear_mortalidad'),
-    path('mortalidad/<int:pk>/editar/', views.editar_mortalidad, name='editar_mortalidad'),
-    path('mortalidad/<int:pk>/eliminar/', views.eliminar_mortalidad, name='eliminar_mortalidad'),
-    
-    # APIs para gráficos
-    path('api/produccion-semanal/', views.api_produccion_semanal, name='api_produccion_semanal'),
-    path('api/costos-mensuales/', views.api_costos_mensuales, name='api_costos_mensuales'),
-    path('api/indicadores/', views.api_indicadores, name='api_indicadores'),
+    # Reportes
+    path('reportes/', views.reportes, name='reportes'),
+    path('reportes/produccion/', views.reporte_produccion, name='reporte_produccion'),
 ]

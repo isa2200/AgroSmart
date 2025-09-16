@@ -5,6 +5,7 @@ django-extensions>=3.2.0
 # Formularios y UI
 django-crispy-forms>=2.0
 crispy-bootstrap5>=0.7
+django-widget-tweaks>=1.4.12
 
 # Reportes y documentos
 reportlab>=4.0.0

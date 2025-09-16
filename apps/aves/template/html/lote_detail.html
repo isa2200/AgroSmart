@@ -1,0 +1,242 @@
+{% extends 'aves/base.html' %}
+
+{% block title %}Detalle Lote {{ lote.codigo }} - AgroSmart{% endblock %}
+
+{% block page_title %}Lote {{ lote.codigo }}{% endblock %}
+
+{% block breadcrumb_items %}
+    <li class="breadcrumb-item active">Detalle Lote</li>
+{% endblock %}
+
+{% block page_actions %}
+    <div class="btn-group">
+        <a href="{% url 'aves:dashboard' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Volver
+        </a>
+        <a href="{% url 'aves:bitacora_create' %}?lote={{ lote.id }}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Nueva Bitácora
+        </a>
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Información del Lote -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Información General</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <td><strong>Código:</strong></td>
+                        <td>{{ lote.codigo }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Galpón:</strong></td>
+                        <td>{{ lote.galpon.nombre }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Línea Genética:</strong></td>
+                        <td>{{ lote.linea_genetica.nombre }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fecha Ingreso:</strong></td>
+                        <td>{{ lote.fecha_ingreso|date:"d/m/Y" }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Estado:</strong></td>
+                        <td>
+                            {% if lote.estado == 'activo' %}
+                                <span class="badge bg-success">Activo</span>
+                            {% elif lote.estado == 'finalizado' %}
+                                <span class="badge bg-secondary">Finalizado</span>
+                            {% else %}
+                                <span class="badge bg-warning">{{ lote.estado|title }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Aves Inicial:</strong></td>
+                        <td>{{ lote.numero_aves_inicial|floatformat:0 }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Aves Actual:</strong></td>
+                        <td>{{ lote.numero_aves_actual|floatformat:0 }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Edad Actual:</strong></td>
+                        <td>{{ lote.edad_actual_semanas }} semanas</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Estadísticas Rápidas -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Estadísticas</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h4 class="text-success">{{ estadisticas.produccion_total|floatformat:0 }}</h4>
+                        <small class="text-muted">Producción Total</small>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-danger">{{ estadisticas.mortalidad_total|floatformat:0 }}</h4>
+                        <small class="text-muted">Mortalidad Total</small>
+                    </div>
+                </div>
+                <hr>
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h5 class="text-info">{{ estadisticas.promedio_produccion|floatformat:1 }}</h5>
+                        <small class="text-muted">Promedio Diario</small>
+                    </div>
+                    <div class="col-6">
+                        <h5 class="text-warning">{{ estadisticas.porcentaje_mortalidad|floatformat:2 }}%</h5>
+                        <small class="text-muted">% Mortalidad</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Gráfico de Producción -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Evolución de Producción</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="produccionChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bitácoras Recientes -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-clipboard-list me-2"></i>Bitácoras Recientes</h5>
+                <a href="{% url 'aves:bitacora_list' %}?lote={{ lote.id }}" class="btn btn-sm btn-outline-primary">
+                    Ver Todas
+                </a>
+            </div>
+            <div class="card-body">
+                {% if bitacoras_recientes %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Semana</th>
+                                    <th>Producción</th>
+                                    <th>Mortalidad</th>
+                                    <th>Consumo</th>
+                                    <th>Temperatura</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for bitacora in bitacoras_recientes %}
+                                <tr>
+                                    <td>{{ bitacora.fecha|date:"d/m/Y" }}</td>
+                                    <td>{{ bitacora.semana_vida|default:"-" }}</td>
+                                    <td>{{ bitacora.total_produccion|floatformat:0 }}</td>
+                                    <td>
+                                        {% if bitacora.mortalidad > 0 %}
+                                            <span class="text-danger">{{ bitacora.mortalidad }}</span>
+                                        {% else %}
+                                            <span class="text-success">0</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ bitacora.consumo_concentrado|default:"-" }} kg</td>
+                                    <td>{{ bitacora.temperatura_promedio|default:"-" }}°C</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-clipboard-list fa-2x text-muted mb-3"></i>
+                        <p class="text-muted">No hay bitácoras registradas para este lote</p>
+                        <a href="{% url 'aves:bitacora_create' %}?lote={{ lote.id }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Crear Primera Bitácora
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Datos para el gráfico (normalmente vendrían del backend)
+    const ctx = document.getElementById('produccionChart').getContext('2d');
+    const produccionChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ fechas_grafico|safe }},
+            datasets: [{
+                label: 'Producción Diaria',
+                data: {{ produccion_grafico|safe }},
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                tension: 0.1
+            }, {
+                label: 'Mortalidad',
+                data: {{ mortalidad_grafico|safe }},
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                tension: 0.1,
+                yAxisID: 'y1'
+            }]
+        },
+        options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: 'Producción (huevos)'
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: 'Mortalidad (aves)'
+                    },
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Evolución del Lote {{ lote.codigo }}'
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

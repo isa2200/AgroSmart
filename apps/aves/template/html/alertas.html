@@ -1,0 +1,346 @@
+{% extends 'aves/base.html' %}
+{% load static %}
+
+{% block title %}Alertas y Notificaciones - Módulo Avícola{% endblock %}
+
+{% block extra_css %}
+<style>
+    .alert-card {
+        border-left: 4px solid;
+        transition: all 0.3s ease;
+    }
+    .alert-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .alert-critica { border-left-color: #dc3545; }
+    .alert-alta { border-left-color: #fd7e14; }
+    .alert-media { border-left-color: #ffc107; }
+    .alert-baja { border-left-color: #20c997; }
+    .alert-info { border-left-color: #0dcaf0; }
+    
+    .alert-nueva { background-color: #fff3cd; }
+    .alert-leida { background-color: #f8f9fa; }
+    
+    .pulse {
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2><i class="fas fa-bell text-warning"></i> Alertas y Notificaciones</h2>
+                    <p class="text-muted">Centro de notificaciones del módulo avícola</p>
+                </div>
+                <div>
+                    <button class="btn btn-outline-secondary" onclick="marcarTodasLeidas()">
+                        <i class="fas fa-check-double"></i> Marcar todas como leídas
+                    </button>
+                    <button class="btn btn-info" onclick="configurarAlertas()">
+                        <i class="fas fa-cog"></i> Configurar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resumen de Alertas -->
+    <div class="row mb-4">
+        <div class="col-md-2">
+            <div class="card text-center border-danger">
+                <div class="card-body">
+                    <h3 class="text-danger">{{ stats.criticas }}</h3>
+                    <small>Críticas</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-center border-warning">
+                <div class="card-body">
+                    <h3 class="text-warning">{{ stats.altas }}</h3>
+                    <small>Altas</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-center border-info">
+                <div class="card-body">
+                    <h3 class="text-info">{{ stats.medias }}</h3>
+                    <small>Medias</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-center border-success">
+                <div class="card-body">
+                    <h3 class="text-success">{{ stats.bajas }}</h3>
+                    <small>Bajas</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-center border-secondary">
+                <div class="card-body">
+                    <h3 class="text-secondary">{{ stats.nuevas }}</h3>
+                    <small>Nuevas</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-center border-primary">
+                <div class="card-body">
+                    <h3 class="text-primary">{{ stats.total }}</h3>
+                    <small>Total</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="GET" class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Prioridad</label>
+                            <select name="prioridad" class="form-select" onchange="this.form.submit()">
+                                <option value="">Todas</option>
+                                <option value="critica" {% if request.GET.prioridad == 'critica' %}selected{% endif %}>Crítica</option>
+                                <option value="alta" {% if request.GET.prioridad == 'alta' %}selected{% endif %}>Alta</option>
+                                <option value="media" {% if request.GET.prioridad == 'media' %}selected{% endif %}>Media</option>
+                                <option value="baja" {% if request.GET.prioridad == 'baja' %}selected{% endif %}>Baja</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Estado</label>
+                            <select name="estado" class="form-select" onchange="this.form.submit()">
+                                <option value="">Todas</option>
+                                <option value="nueva" {% if request.GET.estado == 'nueva' %}selected{% endif %}>Nuevas</option>
+                                <option value="leida" {% if request.GET.estado == 'leida' %}selected{% endif %}>Leídas</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Tipo</label>
+                            <select name="tipo" class="form-select" onchange="this.form.submit()">
+                                <option value="">Todos</option>
+                                <option value="mortalidad" {% if request.GET.tipo == 'mortalidad' %}selected{% endif %}>Mortalidad</option>
+                                <option value="produccion" {% if request.GET.tipo == 'produccion' %}selected{% endif %}>Producción</option>
+                                <option value="vacunacion" {% if request.GET.tipo == 'vacunacion' %}selected{% endif %}>Vacunación</option>
+                                <option value="inventario" {% if request.GET.tipo == 'inventario' %}selected{% endif %}>Inventario</option>
+                                <option value="sistema" {% if request.GET.tipo == 'sistema' %}selected{% endif %}>Sistema</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Lote</label>
+                            <select name="lote" class="form-select" onchange="this.form.submit()">
+                                <option value="">Todos</option>
+                                {% for lote in lotes %}
+                                <option value="{{ lote.id }}" {% if request.GET.lote == lote.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ lote.codigo }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Alertas -->
+    <div class="row">
+        <div class="col-12">
+            {% for alerta in alertas %}
+            <div class="card alert-card alert-{{ alerta.prioridad }} {% if not alerta.leida %}alert-nueva pulse{% else %}alert-leida{% endif %} mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-1 text-center">
+                            {% if alerta.prioridad == 'critica' %}
+                                <i class="fas fa-exclamation-triangle fa-2x text-danger"></i>
+                            {% elif alerta.prioridad == 'alta' %}
+                                <i class="fas fa-exclamation-circle fa-2x text-warning"></i>
+                            {% elif alerta.prioridad == 'media' %}
+                                <i class="fas fa-info-circle fa-2x text-info"></i>
+                            {% else %}
+                                <i class="fas fa-bell fa-2x text-success"></i>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6 class="mb-1">{{ alerta.titulo }}</h6>
+                                    <p class="mb-1">{{ alerta.mensaje }}</p>
+                                    <div class="small text-muted">
+                                        <i class="fas fa-clock"></i> {{ alerta.fecha_creacion|date:"d/m/Y H:i" }}
+                                        {% if alerta.lote %}
+                                        | <i class="fas fa-layer-group"></i> Lote {{ alerta.lote.codigo }}
+                                        {% endif %}
+                                        | <i class="fas fa-tag"></i> {{ alerta.get_tipo_display }}
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-{{ alerta.prioridad|yesno:'danger,warning,info,success' }}">
+                                        {{ alerta.get_prioridad_display }}
+                                    </span>
+                                    {% if not alerta.leida %}
+                                    <span class="badge bg-primary">Nueva</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% if alerta.datos_adicionales %}
+                            <div class="mt-2">
+                                <small class="text-muted">Detalles adicionales:</small>
+                                <div class="small bg-light p-2 rounded">
+                                    {{ alerta.datos_adicionales }}
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-3 text-end">
+                            {% if not alerta.leida %}
+                            <button class="btn btn-sm btn-outline-primary" onclick="marcarLeida({{ alerta.id }})">
+                                <i class="fas fa-check"></i> Marcar leída
+                            </button>
+                            {% endif %}
+                            {% if alerta.accion_url %}
+                            <a href="{{ alerta.accion_url }}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-external-link-alt"></i> Ver detalles
+                            </a>
+                            {% endif %}
+                            <button class="btn btn-sm btn-outline-danger" onclick="eliminarAlerta({{ alerta.id }})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-5">
+                <i class="fas fa-bell-slash fa-4x text-muted mb-3"></i>
+                <h4 class="text-muted">No hay alertas</h4>
+                <p class="text-muted">¡Excelente! No tienes alertas pendientes en este momento.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Paginación -->
+    {% if alertas.has_other_pages %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% if alertas.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ alertas.previous_page_number }}">Anterior</a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in alertas.paginator.page_range %}
+                    {% if alertas.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    
+                    {% if alertas.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ alertas.next_page_number }}">Siguiente</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function marcarLeida(alertaId) {
+    fetch(`{% url 'aves:marcar_alerta_leida' 0 %}`.replace('0', alertaId), {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        }
+    });
+}
+
+function marcarTodasLeidas() {
+    if (confirm('¿Marcar todas las alertas como leídas?')) {
+        fetch('{% url "aves:marcar_todas_leidas" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            }
+        });
+    }
+}
+
+function eliminarAlerta(alertaId) {
+    if (confirm('¿Está seguro de eliminar esta alerta?')) {
+        fetch(`{% url 'aves:eliminar_alerta' 0 %}`.replace('0', alertaId), {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            }
+        });
+    }
+}
+
+function configurarAlertas() {
+    window.location.href = '{% url "aves:configurar_alertas" %}';
+}
+
+// Auto-actualización cada 30 segundos
+setInterval(function() {
+    if (document.visibilityState === 'visible') {
+        fetch('{% url "aves:alertas_count" %}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.nuevas > 0) {
+                location.reload();
+            }
+        });
+    }
+}, 30000);
+</script>
+{% endblock %}

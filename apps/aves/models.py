@@ -1,393 +1,365 @@
 """
-Modelos para la gestión de gallinas ponedoras en AgroSmart.
-Enfocado en producción de huevos y gestión sanitaria.
+Modelos para el módulo avícola de AgroSmart.
+Sistema integral de gestión de gallinas ponedoras.
 """
 
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils import timezone
-from apps.core.models import BaseModel
-from apps.core.utils import validar_fecha_no_futura
 from django.core.validators import MinValueValidator, MaxValueValidator
-
-# CHOICES PARA MODELOS
-LINEA_CHOICES = [
-    ('hy_line_brown', 'Hy-Line Brown'),
-    ('hy_line_white', 'Hy-Line White'),
-    ('lohmann_brown', 'Lohmann Brown'),
-    ('isa_brown', 'ISA Brown'),
-    ('bovans_brown', 'Bovans Brown'),
-    ('otra', 'Otra'),
-]
-
-ESTADO_CHOICES = [
-    ('activo', 'Activo'),
-    ('inactivo', 'Inactivo'),
-    ('vendido', 'Vendido'),
-    ('terminado', 'Terminado'),
-]
-
-# LOTES DE AVES (Refinado)
-class LoteAves(BaseModel):
-    codigo = models.CharField(max_length=20, unique=True, null=True, blank=True)
-    nombre_lote = models.CharField(max_length=100, unique=True)
-    linea = models.CharField(max_length=20, choices=LINEA_CHOICES)
-    fecha_inicio = models.DateField()
-    fecha_fin_produccion = models.DateField(null=True, blank=True)
-    cantidad_aves = models.PositiveIntegerField()
-    cantidad_actual = models.PositiveIntegerField()
-    semana_actual = models.PositiveIntegerField(default=1,validators=[MinValueValidator(1), MaxValueValidator(100)])
-    estado = models.CharField(max_length=15, choices=ESTADO_CHOICES)
-    costo_ave_inicial = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
-    observaciones = models.TextField(blank=True)
-    
-    # Campos calculados
-
-    class Meta:
-        verbose_name = 'Lote de Aves'
-        verbose_name_plural = 'Lotes de Aves'
-        ordering = ['-fecha_inicio']
-        indexes = [
-            models.Index(fields=['estado']),
-            models.Index(fields=['linea']),
-            models.Index(fields=['fecha_inicio']),
-            models.Index(fields=['codigo']),
-        ]
-
-    @property
-    def mortalidad_porcentaje(self):
-        return ((self.cantidad_aves - self.cantidad_actual) / self.cantidad_aves) * 100
-    
-    @property
-    def dias_produccion(self):
-        if self.fecha_fin_produccion:
-            return (self.fecha_fin_produccion - self.fecha_inicio).days
-        return (timezone.now().date() - self.fecha_inicio).days
-        
-    def calcular_indicadores(self):  # agregado por corrección QA
-        """
-        Calcula indicadores de producción del lote.
-        """
-        from django.db.models import Sum, Avg
-        
-        # Producción total
-        produccion_total = self.producciones.aggregate(
-            total_huevos=Sum('yumbos') + Sum('extra') + Sum('aa') + Sum('a') + Sum('b') + Sum('c')
-        )['total_huevos'] or 0
-        
-        # Mortalidad total
-        mortalidad_total = self.mortalidades.aggregate(
-            total_muertas=Sum('cantidad_muertas')
-        )['total_muertas'] or 0
-        
-        # Costos totales
-        costos_totales = self.costos.aggregate(
-            total_costos=Sum('costos_fijos') + Sum('costos_variables') + Sum('costo_alimento')
-        )['total_costos'] or 0
-        
-        return {
-            'produccion_total': produccion_total,
-            'mortalidad_total': mortalidad_total,
-            'mortalidad_porcentaje': (mortalidad_total / self.cantidad_aves * 100) if self.cantidad_aves > 0 else 0,
-            'costos_totales': costos_totales,
-            'costo_por_huevo': (costos_totales / produccion_total) if produccion_total > 0 else 0
-        }
+from django.utils import timezone
+from decimal import Decimal
+from apps.core.models import BaseModel
 
 
-# ALERTAS SANITARIAS (Nuevo)
-class AlertaSanitaria(BaseModel):
-    TIPO_CHOICES = [
-        ('mortalidad_alta', 'Mortalidad Alta'),
-        ('postura_baja', 'Postura Baja'),
-        ('peso_bajo', 'Peso Promedio Bajo'),
-        ('vacuna_vencida', 'Vacuna Vencida'),
-        ('costo_alto', 'Costo Elevado'),
-    ]
-    
-    lote = models.ForeignKey(LoteAves, on_delete=models.CASCADE)
-    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES)
-    mensaje = models.TextField()
-    valor_actual = models.DecimalField(max_digits=10, decimal_places=2)
-    valor_umbral = models.DecimalField(max_digits=10, decimal_places=2)
-    fecha_deteccion = models.DateTimeField(auto_now_add=True)
-    resuelta = models.BooleanField(default=False)
-    fecha_resolucion = models.DateTimeField(null=True, blank=True)
-
-
-class ProduccionHuevos(BaseModel):
+class Galpon(BaseModel):
     """
-    Modelo para registrar la producción diaria/semanal de huevos por categorías.
+    Modelo para representar galpones donde se alojan las aves.
     """
-    lote = models.ForeignKey(LoteAves, on_delete=models.CASCADE, related_name='producciones', verbose_name='Lote')
-    fecha = models.DateField('Fecha de Producción', validators=[validar_fecha_no_futura])
-    semana_produccion = models.PositiveIntegerField('Semana de Producción')
-    
-    # Clasificación de huevos por categorías
-    yumbos = models.PositiveIntegerField('Yumbos', default=0)
-    extra = models.PositiveIntegerField('Extra', default=0)
-    aa = models.PositiveIntegerField('AA', default=0)
-    a = models.PositiveIntegerField('A', default=0)
-    b = models.PositiveIntegerField('B', default=0)
-    c = models.PositiveIntegerField('C', default=0)
-    pipo = models.PositiveIntegerField('Pipo', default=0)
-    sucios = models.PositiveIntegerField('Sucios', default=0)
-    totiados = models.PositiveIntegerField('Totiados', default=0)
-    yema = models.PositiveIntegerField('Yema', default=0)
-    
-    peso_promedio_huevo = models.DecimalField(
-    'Peso Promedio por Huevo (g)', 
-    max_digits=5, 
-    decimal_places=2,
-    validators=[MinValueValidator(30), MaxValueValidator(100)]
-    )
-    numero_aves_produccion = models.PositiveIntegerField('Número de Aves en Producción')
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuario que Registró')
+    nombre = models.CharField('Nombre del galpón', max_length=100)
+    codigo = models.CharField('Código', max_length=20, unique=True)
+    capacidad_maxima = models.PositiveIntegerField('Capacidad máxima de aves')
+    area_m2 = models.DecimalField('Área en m²', max_digits=10, decimal_places=2)
+    tipo_ventilacion = models.CharField('Tipo de ventilación', max_length=50, 
+                                      choices=[
+                                          ('natural', 'Natural'),
+                                          ('forzada', 'Forzada'),
+                                          ('mixta', 'Mixta')
+                                      ])
+    ubicacion = models.CharField('Ubicación', max_length=200, blank=True)
     observaciones = models.TextField('Observaciones', blank=True)
     
     class Meta:
-        verbose_name = 'Producción de Huevos'
-        verbose_name_plural = 'Producción de Huevos'
-        ordering = ['-fecha']
-        unique_together = ['lote', 'fecha']
-        indexes = [
-            models.Index(fields=['lote', 'fecha']),
-            models.Index(fields=['fecha']),
-            models.Index(fields=['semana_produccion']),
-            models.Index(fields=['lote', 'semana_produccion']),
-        ]
+        verbose_name = 'Galpón'
+        verbose_name_plural = 'Galpones'
+        ordering = ['nombre']
     
     def __str__(self):
-        return f"{self.lote.nombre_lote} - {self.fecha} ({self.total_huevos} huevos)"
+        return self.nombre
+
+
+class LineaGenetica(BaseModel):
+    """
+    Líneas genéticas de gallinas ponedoras.
+    """
+    nombre = models.CharField('Nombre de la línea', max_length=100)
+    descripcion = models.TextField('Descripción', blank=True)
+    peso_promedio_adulto = models.DecimalField('Peso promedio adulto (kg)', max_digits=5, decimal_places=2)
+    produccion_estimada_dia = models.PositiveIntegerField('Producción estimada por día (%)')
+    
+    class Meta:
+        verbose_name = 'Línea Genética'
+        verbose_name_plural = 'Líneas Genéticas'
+    
+    def __str__(self):
+        return self.nombre
+
+
+class LoteAves(BaseModel):
+    """Lotes de aves ponedoras."""
+    ESTADOS = [
+        ('levante', 'Pollas de Levante'),
+        ('postura', 'En Postura'),
+        ('finalizado', 'Finalizado'),
+    ]
+    
+    codigo = models.CharField('Código del lote', max_length=50, unique=True)
+    galpon = models.ForeignKey(Galpon, on_delete=models.CASCADE, verbose_name='Galpón')
+    linea_genetica = models.ForeignKey(LineaGenetica, on_delete=models.CASCADE, verbose_name='Línea genética')
+    procedencia = models.CharField('Procedencia', max_length=200)
+    numero_aves_inicial = models.PositiveIntegerField('Número inicial de aves')
+    numero_aves_actual = models.PositiveIntegerField('Número actual de aves')
+    fecha_llegada = models.DateField('Fecha de llegada')
+    fecha_inicio_postura = models.DateField('Fecha inicio postura', null=True, blank=True)
+    peso_total_llegada = models.DecimalField('Peso total llegada (kg)', max_digits=10, decimal_places=2)
+    peso_promedio_llegada = models.DecimalField('Peso promedio llegada (g)', max_digits=8, decimal_places=2)
+    estado = models.CharField('Estado', max_length=20, choices=ESTADOS, default='levante')
+    observaciones = models.TextField('Observaciones', blank=True)
+    
+    class Meta:
+        verbose_name = 'Lote de Aves'
+        verbose_name_plural = 'Lotes de Aves'
+        ordering = ['-fecha_llegada']
+    
+    def __str__(self):
+        return f"{self.codigo} - {self.galpon.nombre}"
     
     @property
-    def total_huevos(self):
-        """Calcula el total de huevos producidos."""
-        return (self.yumbos + self.extra + self.aa + self.a + self.b + 
-                self.c + self.pipo + self.sucios + self.totiados + self.yema)
+    def edad_dias(self):
+        """Calcula la edad del lote en días."""
+        return (timezone.now().date() - self.fecha_llegada).days
     
     @property
-    def huevos_comerciales(self):
-        """Calcula huevos comerciales (excluyendo pipo, sucios, totiados, yema)."""
-        return self.yumbos + self.extra + self.aa + self.a + self.b + self.c
+    def mortalidad_total(self):
+        """Calcula la mortalidad total del lote."""
+        return self.numero_aves_inicial - self.numero_aves_actual
+    
+    @property
+    def porcentaje_mortalidad(self):
+        """Calcula el porcentaje de mortalidad."""
+        if self.numero_aves_inicial > 0:
+            return (self.mortalidad_total / self.numero_aves_inicial) * 100
+        return 0
+
+
+class BitacoraDiaria(BaseModel):
+    """Bitácora diaria unificada de producción."""
+    lote = models.ForeignKey(LoteAves, on_delete=models.CASCADE, verbose_name='Lote')
+    fecha = models.DateField('Fecha')
+    
+    # Producción por categoría
+    produccion_aaa = models.PositiveIntegerField('Producción AAA', default=0)
+    produccion_aa = models.PositiveIntegerField('Producción AA', default=0)
+    produccion_a = models.PositiveIntegerField('Producción A', default=0)
+    produccion_b = models.PositiveIntegerField('Producción B', default=0)
+    produccion_c = models.PositiveIntegerField('Producción C', default=0)
+    
+    # Mortalidad y consumo
+    mortalidad = models.PositiveIntegerField('Mortalidad', default=0)
+    consumo_alimento = models.DecimalField('Consumo alimento (kg)', max_digits=10, decimal_places=2, default=0)
+    
+    # Condiciones ambientales
+    temperatura_min = models.DecimalField('Temperatura mínima (°C)', max_digits=5, decimal_places=2, null=True, blank=True)
+    temperatura_max = models.DecimalField('Temperatura máxima (°C)', max_digits=5, decimal_places=2, null=True, blank=True)
+    humedad_min = models.DecimalField('Humedad mínima (%)', max_digits=5, decimal_places=2, null=True, blank=True)
+    humedad_max = models.DecimalField('Humedad máxima (%)', max_digits=5, decimal_places=2, null=True, blank=True)
+    
+    observaciones = models.TextField('Observaciones', blank=True)
+    usuario_registro = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuario que registra')
+    
+    class Meta:
+        verbose_name = 'Bitácora Diaria'
+        verbose_name_plural = 'Bitácoras Diarias'
+        unique_together = ['lote', 'fecha']
+        ordering = ['-fecha']
+    
+    def __str__(self):
+        return f"{self.lote.codigo} - {self.fecha}"
+    
+    @property
+    def produccion_total(self):
+        """Calcula la producción total del día."""
+        return (self.produccion_aaa + self.produccion_aa + self.produccion_a + 
+                self.produccion_b + self.produccion_c)
     
     @property
     def porcentaje_postura(self):
         """Calcula el porcentaje de postura."""
-        if self.numero_aves_produccion > 0:
-            return (self.total_huevos / self.numero_aves_produccion) * 100
+        if self.lote.numero_aves_actual > 0:
+            return (self.produccion_total / self.lote.numero_aves_actual) * 100
         return 0
-    
-    @property
-    def gramos_ave_dia(self):
-        """Calcula gramos de huevo por ave por día."""
-        if self.numero_aves_produccion > 0:
-            peso_total = float(self.peso_promedio_huevo) * self.total_huevos
-            return peso_total / self.numero_aves_produccion
-        return 0
-
-
-class CostosProduccion(BaseModel):
-    """
-    Modelo para registrar costos e ingresos de producción.
-    """
-    lote = models.ForeignKey(LoteAves, on_delete=models.CASCADE, related_name='costos', verbose_name='Lote')
-    fecha = models.DateField('Fecha', validators=[validar_fecha_no_futura])
-    periodo = models.CharField('Período', max_length=20, help_text='Ej: Semana 1, Mes 1')
-    
-    # Costos
-    costos_fijos = models.DecimalField('Costos Fijos', max_digits=12, decimal_places=2, default=0)
-    costos_variables = models.DecimalField('Costos Variables', max_digits=12, decimal_places=2, default=0)
-    gastos_administracion = models.DecimalField('Gastos de Administración', max_digits=12, decimal_places=2, default=0)
-    costo_alimento = models.DecimalField('Costo de Alimento', max_digits=12, decimal_places=2, default=0)
-    costo_mano_obra = models.DecimalField('Costo Mano de Obra', max_digits=12, decimal_places=2, default=0)
-    otros_costos = models.DecimalField('Otros Costos', max_digits=12, decimal_places=2, default=0)
-    
-    # Ingresos
-    ingresos_venta_huevos = models.DecimalField('Ingresos por Venta de Huevos', max_digits=12, decimal_places=2, default=0)
-    ingresos_venta_aves = models.DecimalField('Ingresos por Venta de Aves', max_digits=12, decimal_places=2, default=0)
-    otros_ingresos = models.DecimalField('Otros Ingresos', max_digits=12, decimal_places=2, default=0)
-    
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuario que Registró')
-    observaciones = models.TextField('Observaciones', blank=True)
-    
-    class Meta:
-        verbose_name = 'Costos de Producción'
-        verbose_name_plural = 'Costos de Producción'
-        ordering = ['-fecha']
-        unique_together = ['lote', 'fecha', 'periodo']
-    
-    def __str__(self):
-        return f"{self.lote.nombre_lote} - {self.periodo} ({self.fecha})"
-    
-    @property
-    def total_costos(self):
-        """Calcula el total de costos."""
-        return (self.costos_fijos + self.costos_variables + self.gastos_administracion + 
-                self.costo_alimento + self.costo_mano_obra + self.otros_costos)
-    
-    @property
-    def total_ingresos(self):
-        """Calcula el total de ingresos."""
-        return self.ingresos_venta_huevos + self.ingresos_venta_aves + self.otros_ingresos
-    
-    @property
-    def utilidad_neta(self):
-        """Calcula la utilidad neta."""
-        return self.total_ingresos - self.total_costos
-    
-    @property
-    def margen_contribucion(self):
-        """Calcula el margen de contribución porcentual."""
-        if self.total_ingresos > 0:
-            return ((self.total_ingresos - self.costos_variables) / self.total_ingresos) * 100
-        return 0
-    
-    @property
-    def rentabilidad(self):
-        """Calcula la rentabilidad porcentual."""
-        if self.total_costos > 0:
-            return (self.utilidad_neta / self.total_costos) * 100
-        return 0
-
-
-class CalendarioVacunas(BaseModel):
-    """
-    Modelo para definir el calendario de vacunación.
-    """
-    nombre_vacuna = models.CharField('Nombre de la Vacuna', max_length=100)
-    dias_post_nacimiento = models.PositiveIntegerField('Días Post-Nacimiento')
-    descripcion = models.TextField('Descripción')
-    dosis_ml = models.DecimalField('Dosis (ml)', max_digits=6, decimal_places=2)
-    via_aplicacion = models.CharField('Vía de Aplicación', max_length=50)
-    obligatoria = models.BooleanField('Obligatoria', default=True)
-    
-    class Meta:
-        verbose_name = 'Calendario de Vacunas'
-        verbose_name_plural = 'Calendario de Vacunas'
-        ordering = ['dias_post_nacimiento']
-    
-    def __str__(self):
-        return f"{self.nombre_vacuna} - Día {self.dias_post_nacimiento}"
-
-
-class Vacunacion(BaseModel):
-    """
-    Modelo para registrar vacunaciones aplicadas.
-    """
-    ESTADO_CHOICES = [
-        ('aplicada', 'Aplicada'),
-        ('pendiente', 'Pendiente'),
-        ('vencida', 'Vencida'),
-    ]
-    
-    lote = models.ForeignKey(LoteAves, on_delete=models.CASCADE, related_name='vacunaciones', verbose_name='Lote')
-    calendario_vacuna = models.ForeignKey(CalendarioVacunas, on_delete=models.CASCADE, verbose_name='Vacuna del Calendario')
-    fecha_programada = models.DateField('Fecha Programada')
-    fecha_aplicacion = models.DateField('Fecha de Aplicación', null=True, blank=True)
-    dosis_aplicada = models.DecimalField('Dosis Aplicada (ml)', max_digits=6, decimal_places=2)
-    numero_aves_vacunadas = models.PositiveIntegerField('Número de Aves Vacunadas')
-    responsable = models.CharField('Responsable', max_length=100)
-    lote_vacuna = models.CharField('Lote de Vacuna', max_length=50, blank=True)
-    estado = models.CharField('Estado', max_length=10, choices=ESTADO_CHOICES, default='pendiente')
-    observaciones = models.TextField('Observaciones', blank=True)
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuario que Registró')
-    
-    class Meta:
-        verbose_name = 'Vacunación'
-        verbose_name_plural = 'Vacunaciones'
-        ordering = ['-fecha_programada']
-    
-    def __str__(self):
-        return f"{self.lote.nombre_lote} - {self.calendario_vacuna.nombre_vacuna} ({self.get_estado_display()})"
-    
-    @property
-    def dias_vencimiento(self):
-        """Calcula días hasta vencimiento (negativo si ya venció)."""
-        return (self.fecha_programada - timezone.now().date()).days
-    
-    @property
-    def porcentaje_cobertura(self):
-        """Calcula el porcentaje de cobertura de vacunación."""
-        if self.lote.cantidad_actual > 0:
-            return (self.numero_aves_vacunadas / self.lote.cantidad_actual) * 100
-        return 0
-
-
-class Mortalidad(BaseModel):
-    """
-    Modelo para registrar mortalidad diaria.
-    """
-    CAUSA_CHOICES = [
-        ('enfermedad', 'Enfermedad'),
-        ('accidente', 'Accidente'),
-        ('estres', 'Estrés'),
-        ('depredacion', 'Depredación'),
-        ('vejez', 'Vejez'),
-        ('desconocida', 'Desconocida'),
-        ('otra', 'Otra'),
-    ]
-    
-    lote = models.ForeignKey(LoteAves, on_delete=models.CASCADE, related_name='mortalidades', verbose_name='Lote')
-    fecha = models.DateField('Fecha', validators=[validar_fecha_no_futura])
-    cantidad_muertas = models.PositiveIntegerField('Cantidad de Aves Muertas')
-    causa = models.CharField('Causa', max_length=15, choices=CAUSA_CHOICES)
-    descripcion_causa = models.TextField('Descripción de la Causa', blank=True)
-    accion_tomada = models.TextField('Acción Tomada', blank=True)
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuario que Registró')
-    
-    class Meta:
-        verbose_name = 'Mortalidad'
-        verbose_name_plural = 'Mortalidades'
-        ordering = ['-fecha']
-        indexes = [  # agregado por corrección QA
-            models.Index(fields=['lote', 'fecha']),
-            models.Index(fields=['fecha']),
-            models.Index(fields=['causa']),
-        ]
-    
-    def __str__(self):
-        return f"{self.lote.nombre_lote} - {self.fecha} ({self.cantidad_muertas} muertas)"
     
     def save(self, *args, **kwargs):
-        if self.pk is None:
-            # Validar que no exceda la cantidad actual
-            if self.cantidad_muertas > self.lote.cantidad_actual:
-                raise ValidationError(
-                    f'No se pueden registrar {self.cantidad_muertas} muertes. '
-                    f'Solo hay {self.lote.cantidad_actual} aves en el lote.'
-                )
-            
-            # Actualizar cantidad actual del lote
-            self.lote.cantidad_actual -= self.cantidad_muertas
+        # Actualizar número de aves actual del lote si hay mortalidad
+        if self.mortalidad > 0:
+            self.lote.numero_aves_actual = max(0, self.lote.numero_aves_actual - self.mortalidad)
             self.lote.save()
-        
         super().save(*args, **kwargs)
 
 
-class IndicadorProduccion(BaseModel):
-    """
-    Modelo para almacenar indicadores calculados de producción.
-    """
-    lote = models.ForeignKey(LoteAves, on_delete=models.CASCADE, related_name='indicadores', verbose_name='Lote')
-    fecha_calculo = models.DateField('Fecha de Cálculo', auto_now=True)
-    semana_produccion = models.PositiveIntegerField('Semana de Producción')
-    
-    # Indicadores de producción
-    porcentaje_postura_promedio = models.DecimalField('% Postura Promedio', max_digits=5, decimal_places=2, default=0)
-    huevos_ave_alojada = models.DecimalField('Huevos por Ave Alojada', max_digits=8, decimal_places=2, default=0)
-    gramos_ave_dia_promedio = models.DecimalField('Gramos Ave/Día Promedio', max_digits=6, decimal_places=2, default=0)
-    peso_huevo_promedio = models.DecimalField('Peso Huevo Promedio (g)', max_digits=5, decimal_places=2, default=0)
-    
-    # Indicadores financieros
-    costo_por_huevo = models.DecimalField('Costo por Huevo', max_digits=8, decimal_places=4, default=0)
-    ingreso_por_huevo = models.DecimalField('Ingreso por Huevo', max_digits=8, decimal_places=4, default=0)
-    margen_por_huevo = models.DecimalField('Margen por Huevo', max_digits=8, decimal_places=4, default=0)
+class TipoConcentrado(BaseModel):
+    """Tipos de concentrado para aves."""
+    nombre = models.CharField('Nombre', max_length=100)
+    descripcion = models.TextField('Descripción', blank=True)
+    proteina_porcentaje = models.DecimalField('% Proteína', max_digits=5, decimal_places=2)
+    precio_por_kg = models.DecimalField('Precio por kg', max_digits=10, decimal_places=2)
     
     class Meta:
-        verbose_name = 'Indicador de Producción'
-        verbose_name_plural = 'Indicadores de Producción'
-        ordering = ['-fecha_calculo']
-        unique_together = ['lote', 'semana_produccion']
+        verbose_name = 'Tipo de Concentrado'
+        verbose_name_plural = 'Tipos de Concentrado'
     
     def __str__(self):
-        return f"{self.lote.nombre_lote} - Semana {self.semana_produccion}"
+        return self.nombre
+
+
+class ControlConcentrado(BaseModel):
+    """Control de entradas y salidas de concentrado."""
+    TIPOS_MOVIMIENTO = [
+        ('entrada', 'Entrada'),
+        ('salida', 'Salida'),
+    ]
+    
+    tipo_concentrado = models.ForeignKey(TipoConcentrado, on_delete=models.CASCADE)
+    tipo_movimiento = models.CharField('Tipo de movimiento', max_length=10, choices=TIPOS_MOVIMIENTO)
+    cantidad_kg = models.DecimalField('Cantidad (kg)', max_digits=10, decimal_places=2)
+    fecha = models.DateField('Fecha')
+    lote = models.ForeignKey(LoteAves, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Lote destino')
+    galpon = models.ForeignKey(Galpon, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Galpón destino')
+    proveedor = models.CharField('Proveedor', max_length=200, blank=True)
+    numero_factura = models.CharField('Número de factura', max_length=100, blank=True)
+    observaciones = models.TextField('Observaciones', blank=True)
+    usuario_registro = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    class Meta:
+        verbose_name = 'Control de Concentrado'
+        verbose_name_plural = 'Control de Concentrados'
+        ordering = ['-fecha']
+    
+    def __str__(self):
+        return f"{self.tipo_concentrado.nombre} - {self.get_tipo_movimiento_display()} - {self.fecha}"
+
+
+class TipoVacuna(BaseModel):
+    """Tipos de vacunas para aves."""
+    nombre = models.CharField('Nombre de la vacuna', max_length=100)
+    laboratorio = models.CharField('Laboratorio', max_length=100)
+    enfermedad_previene = models.CharField('Enfermedad que previene', max_length=200)
+    via_aplicacion = models.CharField('Vía de aplicación', max_length=100)
+    dosis_por_ave = models.DecimalField('Dosis por ave (ml)', max_digits=5, decimal_places=2)
+    intervalo_dias = models.PositiveIntegerField('Intervalo entre dosis (días)', null=True, blank=True)
+    
+    class Meta:
+        verbose_name = 'Tipo de Vacuna'
+        verbose_name_plural = 'Tipos de Vacunas'
+    
+    def __str__(self):
+        return f"{self.nombre} - {self.laboratorio}"
+
+
+class PlanVacunacion(BaseModel):
+    """Plan de vacunación para lotes."""
+    lote = models.ForeignKey(LoteAves, on_delete=models.CASCADE)
+    tipo_vacuna = models.ForeignKey(TipoVacuna, on_delete=models.CASCADE)
+    fecha_programada = models.DateField('Fecha programada')
+    fecha_aplicada = models.DateField('Fecha aplicada', null=True, blank=True)
+    numero_aves_vacunadas = models.PositiveIntegerField('Número de aves vacunadas', null=True, blank=True)
+    lote_vacuna = models.CharField('Lote de vacuna', max_length=100, blank=True)
+    veterinario = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Veterinario')
+    observaciones = models.TextField('Observaciones', blank=True)
+    aplicada = models.BooleanField('Aplicada', default=False)
+    
+    class Meta:
+        verbose_name = 'Plan de Vacunación'
+        verbose_name_plural = 'Planes de Vacunación'
+        ordering = ['fecha_programada']
+    
+    def __str__(self):
+        return f"{self.lote.codigo} - {self.tipo_vacuna.nombre} - {self.fecha_programada}"
+    
+    @property
+    def dias_para_aplicacion(self):
+        """Días restantes para la aplicación."""
+        if not self.aplicada:
+            return (self.fecha_programada - timezone.now().date()).days
+        return 0
+
+
+class MovimientoHuevos(BaseModel):
+    """Movimientos de huevos (despachos, ventas, autoconsumo)."""
+    TIPOS_MOVIMIENTO = [
+        ('venta', 'Venta'),
+        ('autoconsumo', 'Autoconsumo'),
+        ('baja', 'Baja'),
+        ('devolucion', 'Devolución'),
+    ]
+    
+    CATEGORIAS_HUEVO = [
+        ('AAA', 'AAA'),
+        ('AA', 'AA'),
+        ('A', 'A'),
+        ('B', 'B'),
+        ('C', 'C'),
+    ]
+    
+    fecha = models.DateField('Fecha')
+    tipo_movimiento = models.CharField('Tipo de movimiento', max_length=15, choices=TIPOS_MOVIMIENTO)
+    categoria_huevo = models.CharField('Categoría', max_length=3, choices=CATEGORIAS_HUEVO)
+    cantidad = models.PositiveIntegerField('Cantidad')
+    precio_unitario = models.DecimalField('Precio unitario', max_digits=10, decimal_places=2, null=True, blank=True)
+    cliente = models.CharField('Cliente/Destino', max_length=200, blank=True)
+    conductor = models.CharField('Conductor', max_length=200, blank=True)
+    numero_comprobante = models.CharField('Número de comprobante', max_length=100, blank=True)
+    observaciones = models.TextField('Observaciones', blank=True)
+    usuario_registro = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    class Meta:
+        verbose_name = 'Movimiento de Huevos'
+        verbose_name_plural = 'Movimientos de Huevos'
+        ordering = ['-fecha']
+    
+    def __str__(self):
+        return f"{self.get_tipo_movimiento_display()} - {self.categoria_huevo} - {self.cantidad} - {self.fecha}"
+    
+    @property
+    def valor_total(self):
+        """Calcula el valor total del movimiento."""
+        if self.precio_unitario:
+            return self.cantidad * self.precio_unitario
+        return 0
+
+
+class InventarioHuevos(BaseModel):
+    """Inventario actual de huevos por categoría."""
+    categoria = models.CharField('Categoría', max_length=3, choices=MovimientoHuevos.CATEGORIAS_HUEVO, unique=True)
+    cantidad_actual = models.PositiveIntegerField('Cantidad actual', default=0)
+    cantidad_minima = models.PositiveIntegerField('Cantidad mínima', default=100)
+    fecha_ultima_actualizacion = models.DateTimeField('Última actualización', auto_now=True)
+    
+    class Meta:
+        verbose_name = 'Inventario de Huevos'
+        verbose_name_plural = 'Inventarios de Huevos'
+    
+    def __str__(self):
+        return f"Categoría {self.categoria}: {self.cantidad_actual} unidades"
+    
+    @property
+    def necesita_reposicion(self):
+        """Indica si el inventario está por debajo del mínimo."""
+        return self.cantidad_actual <= self.cantidad_minima
+
+
+class AlertaSistema(BaseModel):
+    """Sistema de alertas automáticas."""
+    TIPOS_ALERTA = [
+        ('stock_bajo', 'Stock Bajo'),
+        ('mortalidad_alta', 'Mortalidad Alta'),
+        ('vacuna_pendiente', 'Vacuna Pendiente'),
+        ('temperatura_fuera_rango', 'Temperatura Fuera de Rango'),
+        ('humedad_fuera_rango', 'Humedad Fuera de Rango'),
+        ('produccion_baja', 'Producción Baja'),
+    ]
+    
+    NIVELES = [
+        ('info', 'Información'),
+        ('warning', 'Advertencia'),
+        ('error', 'Error'),
+        ('critical', 'Crítico'),
+    ]
+    
+    tipo_alerta = models.CharField('Tipo de alerta', max_length=30, choices=TIPOS_ALERTA)
+    nivel = models.CharField('Nivel', max_length=10, choices=NIVELES)
+    titulo = models.CharField('Título', max_length=200)
+    mensaje = models.TextField('Mensaje')
+    lote = models.ForeignKey(LoteAves, on_delete=models.CASCADE, null=True, blank=True)
+    galpon = models.ForeignKey(Galpon, on_delete=models.CASCADE, null=True, blank=True)
+    fecha_generacion = models.DateTimeField('Fecha de generación', auto_now_add=True)
+    leida = models.BooleanField('Leída', default=False)
+    usuario_destinatario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    
+    class Meta:
+        verbose_name = 'Alerta del Sistema'
+        verbose_name_plural = 'Alertas del Sistema'
+        ordering = ['-fecha_generacion']
+    
+    def __str__(self):
+        return f"{self.get_tipo_alerta_display()} - {self.titulo}"
+
+
+class RegistroModificacion(BaseModel):
+    """Registro de modificaciones para auditoría."""
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    modelo = models.CharField('Modelo', max_length=100)
+    objeto_id = models.PositiveIntegerField('ID del objeto')
+    accion = models.CharField('Acción', max_length=20)  # CREATE, UPDATE, DELETE
+    campos_modificados = models.JSONField('Campos modificados', default=dict)
+    valores_anteriores = models.JSONField('Valores anteriores', default=dict)
+    valores_nuevos = models.JSONField('Valores nuevos', default=dict)
+    justificacion = models.TextField('Justificación', blank=True)
+    fecha_modificacion = models.DateTimeField('Fecha de modificación', auto_now_add=True)
+    
+    class Meta:
+        verbose_name = 'Registro de Modificación'
+        verbose_name_plural = 'Registros de Modificaciones'
+        ordering = ['-fecha_modificacion']
+    
+    def __str__(self):
+        return f"{self.usuario.username} - {self.accion} - {self.modelo} - {self.fecha_modificacion}"

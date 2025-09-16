@@ -1,0 +1,469 @@
+{% extends 'aves/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard de Reportes - AgroSmart{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'aves/css/reportes.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2><i class="fas fa-chart-bar text-primary me-2"></i>Dashboard de Reportes</h2>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-primary" id="btnRefreshData">
+                        <i class="fas fa-sync-alt me-1"></i>Actualizar
+                    </button>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-download me-1"></i>Exportar
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="exportarReporte('pdf')">
+                                <i class="fas fa-file-pdf me-2"></i>PDF
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="exportarReporte('excel')">
+                                <i class="fas fa-file-excel me-2"></i>Excel
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="exportarReporte('csv')">
+                                <i class="fas fa-file-csv me-2"></i>CSV
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Filtros de Período -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form id="filtrosForm">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="form-label">Período</label>
+                                <input type="text" id="daterange" class="form-control" readonly>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Lote</label>
+                                <select id="loteFilter" class="form-select">
+                                    <option value="">Todos los lotes</option>
+                                    {% for lote in lotes %}
+                                        <option value="{{ lote.id }}">{{ lote.codigo }} - {{ lote.galpon.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Galpón</label>
+                                <select id="galponFilter" class="form-select">
+                                    <option value="">Todos los galpones</option>
+                                    {% for galpon in galpones %}
+                                        <option value="{{ galpon.id }}">{{ galpon.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">&nbsp;</label>
+                                <button type="button" class="btn btn-primary d-block w-100" onclick="aplicarFiltros()">
+                                    <i class="fas fa-filter me-1"></i>Filtrar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- KPIs Principales -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="mb-0" id="kpiTotalAves">{{ kpis.total_aves|default:0 }}</h4>
+                            <p class="mb-0">Total Aves</p>
+                        </div>
+                        <i class="fas fa-dove fa-2x"></i>
+                    </div>
+                    <div class="mt-2">
+                        <small id="kpiAvesVariacion" class="text-light">
+                            {% if kpis.variacion_aves > 0 %}
+                                <i class="fas fa-arrow-up"></i> +{{ kpis.variacion_aves }}%
+                            {% elif kpis.variacion_aves < 0 %}
+                                <i class="fas fa-arrow-down"></i> {{ kpis.variacion_aves }}%
+                            {% else %}
+                                <i class="fas fa-minus"></i> 0%
+                            {% endif %}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="mb-0" id="kpiProduccionHuevos">{{ kpis.produccion_huevos|default:0 }}</h4>
+                            <p class="mb-0">Huevos Producidos</p>
+                        </div>
+                        <i class="fas fa-egg fa-2x"></i>
+                    </div>
+                    <div class="mt-2">
+                        <small id="kpiProduccionVariacion" class="text-light">
+                            Promedio: {{ kpis.promedio_diario|default:0 }}/día
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="mb-0" id="kpiMortalidad">{{ kpis.mortalidad|default:0 }}%</h4>
+                            <p class="mb-0">Mortalidad</p>
+                        </div>
+                        <i class="fas fa-heartbeat fa-2x"></i>
+                    </div>
+                    <div class="mt-2">
+                        <small id="kpiMortalidadEstado" class="text-light">
+                            {% if kpis.mortalidad <= 2 %}
+                                <i class="fas fa-check"></i> Normal
+                            {% elif kpis.mortalidad <= 5 %}
+                                <i class="fas fa-exclamation-triangle"></i> Atención
+                            {% else %}
+                                <i class="fas fa-exclamation-circle"></i> Crítico
+                            {% endif %}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="mb-0" id="kpiConsumoConcentrado">{{ kpis.consumo_concentrado|default:0 }}</h4>
+                            <p class="mb-0">Kg Concentrado</p>
+                        </div>
+                        <i class="fas fa-weight-hanging fa-2x"></i>
+                    </div>
+                    <div class="mt-2">
+                        <small id="kpiConsumoPromedio" class="text-light">
+                            {{ kpis.consumo_por_ave|default:0 }}g/ave/día
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Gráficos Principales -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Producción de Huevos - Últimos 30 días</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartProduccion" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Distribución por Lotes</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartLotes" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Gráficos Secundarios -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Mortalidad por Lote</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartMortalidad" height="150"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Consumo de Concentrado</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartConcentrado" height="150"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tabla de Resumen por Lotes -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Resumen por Lotes</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="tablaResumen">
+                            <thead>
+                                <tr>
+                                    <th>Lote</th>
+                                    <th>Galpón</th>
+                                    <th>Aves Actuales</th>
+                                    <th>Edad (días)</th>
+                                    <th>Producción Hoy</th>
+                                    <th>% Postura</th>
+                                    <th>Mortalidad</th>
+                                    <th>Consumo (kg)</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for lote in resumen_lotes %}
+                                    <tr>
+                                        <td><strong>{{ lote.codigo }}</strong></td>
+                                        <td>{{ lote.galpon.nombre }}</td>
+                                        <td>{{ lote.aves_actuales }}</td>
+                                        <td>{{ lote.edad_dias }}</td>
+                                        <td>{{ lote.produccion_hoy|default:0 }}</td>
+                                        <td>
+                                            <span class="badge {% if lote.porcentaje_postura >= 80 %}bg-success{% elif lote.porcentaje_postura >= 60 %}bg-warning{% else %}bg-danger{% endif %}">
+                                                {{ lote.porcentaje_postura|default:0 }}%
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge {% if lote.mortalidad_porcentaje <= 2 %}bg-success{% elif lote.mortalidad_porcentaje <= 5 %}bg-warning{% else %}bg-danger{% endif %}">
+                                                {{ lote.mortalidad_porcentaje|default:0 }}%
+                                            </span>
+                                        </td>
+                                        <td>{{ lote.consumo_hoy|default:0 }}</td>
+                                        <td>
+                                            {% if lote.activo %}
+                                                <span class="badge bg-success">Activo</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary">Finalizado</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="{% url 'aves:lote_detail' lote.id %}" class="btn btn-outline-primary btn-sm" title="Ver detalle">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="{% url 'aves:bitacora_create' %}?lote={{ lote.id }}" class="btn btn-outline-success btn-sm" title="Nueva bitácora">
+                                                    <i class="fas fa-plus"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="10" class="text-center text-muted">No hay lotes activos</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script src="{% static 'aves/js/reportes-dashboard.js' %}"></script>
+<script>
+// Configuración de gráficos
+document.addEventListener('DOMContentLoaded', function() {
+    // Configurar daterangepicker
+    $('#daterange').daterangepicker({
+        startDate: moment().subtract(29, 'days'),
+        endDate: moment(),
+        ranges: {
+           'Últimos 7 días': [moment().subtract(6, 'days'), moment()],
+           'Últimos 30 días': [moment().subtract(29, 'days'), moment()],
+           'Este mes': [moment().startOf('month'), moment().endOf('month')],
+           'Mes anterior': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        locale: {
+            format: 'DD/MM/YYYY',
+            separator: ' - ',
+            applyLabel: 'Aplicar',
+            cancelLabel: 'Cancelar',
+            fromLabel: 'Desde',
+            toLabel: 'Hasta',
+            customRangeLabel: 'Personalizado',
+            weekLabel: 'S',
+            daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            firstDay: 1
+        }
+    });
+    
+    // Inicializar gráficos
+    inicializarGraficos();
+});
+
+function inicializarGraficos() {
+    // Gráfico de Producción
+    const ctxProduccion = document.getElementById('chartProduccion').getContext('2d');
+    new Chart(ctxProduccion, {
+        type: 'line',
+        data: {
+            labels: {{ datos_produccion.fechas|safe }},
+            datasets: [{
+                label: 'Huevos Producidos',
+                data: {{ datos_produccion.valores|safe }},
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    
+    // Gráfico de Lotes (Pie)
+    const ctxLotes = document.getElementById('chartLotes').getContext('2d');
+    new Chart(ctxLotes, {
+        type: 'doughnut',
+        data: {
+            labels: {{ datos_lotes.labels|safe }},
+            datasets: [{
+                data: {{ datos_lotes.valores|safe }},
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+    
+    // Gráfico de Mortalidad
+    const ctxMortalidad = document.getElementById('chartMortalidad').getContext('2d');
+    new Chart(ctxMortalidad, {
+        type: 'bar',
+        data: {
+            labels: {{ datos_mortalidad.labels|safe }},
+            datasets: [{
+                label: 'Mortalidad (%)',
+                data: {{ datos_mortalidad.valores|safe }},
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 10
+                }
+            }
+        }
+    });
+    
+    // Gráfico de Concentrado
+    const ctxConcentrado = document.getElementById('chartConcentrado').getContext('2d');
+    new Chart(ctxConcentrado, {
+        type: 'line',
+        data: {
+            labels: {{ datos_concentrado.fechas|safe }},
+            datasets: [{
+                label: 'Consumo (kg)',
+                data: {{ datos_concentrado.valores|safe }},
+                borderColor: 'rgb(255, 159, 64)',
+                backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function aplicarFiltros() {
+    const daterange = document.getElementById('daterange').value;
+    const lote = document.getElementById('loteFilter').value;
+    const galpon = document.getElementById('galponFilter').value;
+    
+    // Construir URL con parámetros
+    const params = new URLSearchParams();
+    if (daterange) {
+        const [inicio, fin] = daterange.split(' - ');
+        params.append('fecha_inicio', moment(inicio, 'DD/MM/YYYY').format('YYYY-MM-DD'));
+        params.append('fecha_fin', moment(fin, 'DD/MM/YYYY').format('YYYY-MM-DD'));
+    }
+    if (lote) params.append('lote', lote);
+    if (galpon) params.append('galpon', galpon);
+    
+    // Recargar página con filtros
+    window.location.href = `${window.location.pathname}?${params.toString()}`;
+}
+
+function exportarReporte(formato) {
+    const daterange = document.getElementById('daterange').value;
+    const lote = document.getElementById('loteFilter').value;
+    const galpon = document.getElementById('galponFilter').value;
+    
+    const params = new URLSearchParams();
+    params.append('formato', formato);
+    if (daterange) {
+        const [inicio, fin] = daterange.split(' - ');
+        params.append('fecha_inicio', moment(inicio, 'DD/MM/YYYY').format('YYYY-MM-DD'));
+        params.append('fecha_fin', moment(fin, 'DD/MM/YYYY').format('YYYY-MM-DD'));
+    }
+    if (lote) params.append('lote', lote);
+    if (galpon) params.append('galpon', galpon);
+    
+    window.open(`{% url 'aves:exportar_reporte_dashboard' %}?${params.toString()}`, '_blank');
+}
+</script>
+{% endblock %}

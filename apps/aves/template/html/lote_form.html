@@ -1,0 +1,192 @@
+{% extends 'aves/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Nuevo Lote - AgroSmart{% endblock %}
+
+{% block page_title %}Nuevo Lote de Aves{% endblock %}
+
+{% block breadcrumb_items %}
+    <li class="breadcrumb-item active">Nuevo Lote</li>
+{% endblock %}
+
+{% block page_actions %}
+    <a href="{% url 'aves:dashboard' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Volver
+    </a>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-layer-group me-2"></i>Crear Nuevo Lote</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" id="loteForm">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <!-- Información Básica -->
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">Información Básica</h6>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.codigo.id_for_label }}" class="form-label">Código del Lote *</label>
+                                {{ form.codigo|add_class:"form-control" }}
+                                {% if form.codigo.errors %}
+                                    <div class="text-danger small">{{ form.codigo.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.galpon.id_for_label }}" class="form-label">Galpón *</label>
+                                {{ form.galpon|add_class:"form-select" }}
+                                {% if form.galpon.errors %}
+                                    <div class="text-danger small">{{ form.galpon.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.linea_genetica.id_for_label }}" class="form-label">Línea Genética *</label>
+                                {{ form.linea_genetica|add_class:"form-select" }}
+                                {% if form.linea_genetica.errors %}
+                                    <div class="text-danger small">{{ form.linea_genetica.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.fecha_ingreso.id_for_label }}" class="form-label">Fecha de Ingreso *</label>
+                                {{ form.fecha_ingreso|add_class:"form-control" }}
+                                {% if form.fecha_ingreso.errors %}
+                                    <div class="text-danger small">{{ form.fecha_ingreso.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Datos del Lote -->
+                        <div class="col-md-6">
+                            <h6 class="text-success mb-3">Datos del Lote</h6>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.numero_aves_inicial.id_for_label }}" class="form-label">Número de Aves Inicial *</label>
+                                {{ form.numero_aves_inicial|add_class:"form-control" }}
+                                {% if form.numero_aves_inicial.errors %}
+                                    <div class="text-danger small">{{ form.numero_aves_inicial.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.edad_inicial_semanas.id_for_label }}" class="form-label">Edad Inicial (semanas)</label>
+                                {{ form.edad_inicial_semanas|add_class:"form-control" }}
+                                {% if form.edad_inicial_semanas.errors %}
+                                    <div class="text-danger small">{{ form.edad_inicial_semanas.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.peso_promedio_inicial.id_for_label }}" class="form-label">Peso Promedio Inicial (g)</label>
+                                {{ form.peso_promedio_inicial|add_class:"form-control" }}
+                                {% if form.peso_promedio_inicial.errors %}
+                                    <div class="text-danger small">{{ form.peso_promedio_inicial.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.estado.id_for_label }}" class="form-label">Estado</label>
+                                {{ form.estado|add_class:"form-select" }}
+                                {% if form.estado.errors %}
+                                    <div class="text-danger small">{{ form.estado.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Observaciones -->
+                    <div class="row">
+                        <div class="col-12">
+                            <h6 class="text-secondary mb-3">Información Adicional</h6>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
+                                {{ form.observaciones|add_class:"form-control" }}
+                                {% if form.observaciones.errors %}
+                                    <div class="text-danger small">{{ form.observaciones.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Botones -->
+                    <div class="row">
+                        <div class="col-12">
+                            <hr>
+                            <div class="d-flex justify-content-end gap-2">
+                                <a href="{% url 'aves:dashboard' %}" class="btn btn-secondary">
+                                    <i class="fas fa-times me-2"></i>Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Crear Lote
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Establecer fecha actual por defecto
+    if (!$('#id_fecha_ingreso').val()) {
+        let today = new Date().toISOString().split('T')[0];
+        $('#id_fecha_ingreso').val(today);
+    }
+    
+    // Validación del formulario
+    $('#loteForm').on('submit', function(e) {
+        let valid = true;
+        let errors = [];
+        
+        // Validar código
+        if (!$('#id_codigo').val().trim()) {
+            errors.push('El código del lote es obligatorio');
+            valid = false;
+        }
+        
+        // Validar galpón
+        if (!$('#id_galpon').val()) {
+            errors.push('Debe seleccionar un galpón');
+            valid = false;
+        }
+        
+        // Validar número de aves
+        let numAves = parseInt($('#id_numero_aves_inicial').val());
+        if (!numAves || numAves <= 0) {
+            errors.push('El número de aves debe ser mayor a 0');
+            valid = false;
+        }
+        
+        if (!valid) {
+            e.preventDefault();
+            alert('Errores encontrados:\n' + errors.join('\n'));
+        }
+    });
+    
+    // Auto-generar código si está vacío
+    $('#id_galpon').on('change', function() {
+        if (!$('#id_codigo').val()) {
+            let galponText = $(this).find('option:selected').text();
+            let fecha = new Date();
+            let codigo = 'L' + fecha.getFullYear() + (fecha.getMonth() + 1).toString().padStart(2, '0') + 
+                        fecha.getDate().toString().padStart(2, '0') + '-' + galponText.substring(0, 3).toUpperCase();
+            $('#id_codigo').val(codigo);
+        }
+    });
+});
+</script>
+{% endblock %}

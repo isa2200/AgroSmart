@@ -1,0 +1,420 @@
+{% extends 'aves/base.html' %}
+{% load static %}
+
+{% block title %}Centro de Alertas - AgroSmart{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'aves/css/alertas.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header con Estadísticas -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2><i class="fas fa-exclamation-triangle text-warning me-2"></i>Centro de Alertas</h2>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-primary" id="btnRefresh">
+                        <i class="fas fa-sync-alt me-1"></i>Actualizar
+                    </button>
+                    <button type="button" class="btn btn-outline-success" id="btnMarkAllRead">
+                        <i class="fas fa-check-double me-1"></i>Marcar Todo Leído
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Estadísticas de Alertas -->
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card bg-danger text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">{{ stats.criticas }}</h4>
+                                    <p class="mb-0">Críticas</p>
+                                </div>
+                                <i class="fas fa-exclamation-circle fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">{{ stats.altas }}</h4>
+                                    <p class="mb-0">Altas</p>
+                                </div>
+                                <i class="fas fa-exclamation-triangle fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">{{ stats.medias }}</h4>
+                                    <p class="mb-0">Medias</p>
+                                </div>
+                                <i class="fas fa-info-circle fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-secondary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-0">{{ stats.bajas }}</h4>
+                                    <p class="mb-0">Bajas</p>
+                                </div>
+                                <i class="fas fa-bell fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Filtros -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="get" id="filtrosForm">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="form-label">Prioridad</label>
+                                <select name="prioridad" class="form-select">
+                                    <option value="">Todas</option>
+                                    <option value="critica" {% if request.GET.prioridad == 'critica' %}selected{% endif %}>Crítica</option>
+                                    <option value="alta" {% if request.GET.prioridad == 'alta' %}selected{% endif %}>Alta</option>
+                                    <option value="media" {% if request.GET.prioridad == 'media' %}selected{% endif %}>Media</option>
+                                    <option value="baja" {% if request.GET.prioridad == 'baja' %}selected{% endif %}>Baja</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Estado</label>
+                                <select name="estado" class="form-select">
+                                    <option value="">Todos</option>
+                                    <option value="activa" {% if request.GET.estado == 'activa' %}selected{% endif %}>Activa</option>
+                                    <option value="leida" {% if request.GET.estado == 'leida' %}selected{% endif %}>Leída</option>
+                                    <option value="resuelta" {% if request.GET.estado == 'resuelta' %}selected{% endif %}>Resuelta</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Tipo</label>
+                                <select name="tipo" class="form-select">
+                                    <option value="">Todos</option>
+                                    <option value="mortalidad" {% if request.GET.tipo == 'mortalidad' %}selected{% endif %}>Mortalidad</option>
+                                    <option value="produccion" {% if request.GET.tipo == 'produccion' %}selected{% endif %}>Producción</option>
+                                    <option value="inventario" {% if request.GET.tipo == 'inventario' %}selected{% endif %}>Inventario</option>
+                                    <option value="vacunacion" {% if request.GET.tipo == 'vacunacion' %}selected{% endif %}>Vacunación</option>
+                                    <option value="sistema" {% if request.GET.tipo == 'sistema' %}selected{% endif %}>Sistema</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Lote</label>
+                                <select name="lote" class="form-select">
+                                    <option value="">Todos</option>
+                                    {% for lote in lotes %}
+                                        <option value="{{ lote.id }}" {% if request.GET.lote == lote.id|stringformat:"s" %}selected{% endif %}>
+                                            {{ lote.codigo }} - {{ lote.galpon.nombre }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-filter me-1"></i>Filtrar
+                                </button>
+                                <a href="{% url 'aves:alertas_list' %}" class="btn btn-outline-secondary ms-2">
+                                    <i class="fas fa-times me-1"></i>Limpiar
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Lista de Alertas -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    {% if alertas %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th width="5%">
+                                            <input type="checkbox" id="selectAll" class="form-check-input">
+                                        </th>
+                                        <th width="10%">Prioridad</th>
+                                        <th width="15%">Tipo</th>
+                                        <th width="25%">Mensaje</th>
+                                        <th width="15%">Lote/Galpón</th>
+                                        <th width="15%">Fecha</th>
+                                        <th width="10%">Estado</th>
+                                        <th width="5%">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for alerta in alertas %}
+                                        <tr class="alerta-row {% if not alerta.leida %}table-warning{% endif %}" data-id="{{ alerta.id }}">
+                                            <td>
+                                                <input type="checkbox" class="form-check-input alerta-checkbox" value="{{ alerta.id }}">
+                                            </td>
+                                            <td>
+                                                {% if alerta.prioridad == 'critica' %}
+                                                    <span class="badge bg-danger">
+                                                        <i class="fas fa-exclamation-circle me-1"></i>Crítica
+                                                    </span>
+                                                {% elif alerta.prioridad == 'alta' %}
+                                                    <span class="badge bg-warning">
+                                                        <i class="fas fa-exclamation-triangle me-1"></i>Alta
+                                                    </span>
+                                                {% elif alerta.prioridad == 'media' %}
+                                                    <span class="badge bg-info">
+                                                        <i class="fas fa-info-circle me-1"></i>Media
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">
+                                                        <i class="fas fa-bell me-1"></i>Baja
+                                                    </span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-light text-dark">{{ alerta.get_tipo_display }}</span>
+                                            </td>
+                                            <td>
+                                                <strong>{{ alerta.titulo }}</strong>
+                                                <br><small class="text-muted">{{ alerta.mensaje|truncatechars:50 }}</small>
+                                            </td>
+                                            <td>
+                                                {% if alerta.lote %}
+                                                    <strong>{{ alerta.lote.codigo }}</strong>
+                                                    <br><small class="text-muted">{{ alerta.lote.galpon.nombre }}</small>
+                                                {% else %}
+                                                    <span class="text-muted">General</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <span title="{{ alerta.fecha_creacion }}">
+                                                    {{ alerta.fecha_creacion|date:"d/m/Y H:i" }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {% if alerta.resuelta %}
+                                                    <span class="badge bg-success">Resuelta</span>
+                                                {% elif alerta.leida %}
+                                                    <span class="badge bg-primary">Leída</span>
+                                                {% else %}
+                                                    <span class="badge bg-warning">Nueva</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <button type="button" class="btn btn-outline-primary btn-sm" 
+                                                            onclick="verDetalle({{ alerta.id }})" title="Ver detalle">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    {% if not alerta.resuelta %}
+                                                        <button type="button" class="btn btn-outline-success btn-sm" 
+                                                                onclick="marcarResuelta({{ alerta.id }})" title="Marcar como resuelta">
+                                                            <i class="fas fa-check"></i>
+                                                        </button>
+                                                    {% endif %}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Paginación -->
+                        {% if is_paginated %}
+                            <nav aria-label="Paginación de alertas">
+                                <ul class="pagination justify-content-center">
+                                    {% if page_obj.has_previous %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page=1{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Primera</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Anterior</a>
+                                        </li>
+                                    {% endif %}
+                                    
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+                                    </li>
+                                    
+                                    {% if page_obj.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Siguiente</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Última</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        {% endif %}
+                        
+                        <!-- Acciones en Lote -->
+                        <div class="mt-3">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-outline-primary" id="btnMarcarLeidas" disabled>
+                                    <i class="fas fa-eye me-1"></i>Marcar como Leídas
+                                </button>
+                                <button type="button" class="btn btn-outline-success" id="btnMarcarResueltas" disabled>
+                                    <i class="fas fa-check me-1"></i>Marcar como Resueltas
+                                </button>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No hay alertas</h5>
+                            <p class="text-muted">No se encontraron alertas con los filtros aplicados.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Detalle -->
+<div class="modal fade" id="detalleModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalle de Alerta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="detalleContent">
+                <!-- Contenido cargado dinámicamente -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success" id="btnResolverModal">Marcar como Resuelta</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'aves/js/alertas.js' %}"></script>
+<script>
+// Funciones para manejo de alertas
+function verDetalle(alertaId) {
+    fetch(`/aves/api/alerta/${alertaId}/`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('detalleContent').innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Información General</h6>
+                        <p><strong>Tipo:</strong> ${data.tipo}</p>
+                        <p><strong>Prioridad:</strong> ${data.prioridad}</p>
+                        <p><strong>Estado:</strong> ${data.estado}</p>
+                        <p><strong>Fecha:</strong> ${data.fecha_creacion}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Ubicación</h6>
+                        <p><strong>Lote:</strong> ${data.lote || 'General'}</p>
+                        <p><strong>Galpón:</strong> ${data.galpon || 'N/A'}</p>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h6>Mensaje</h6>
+                        <div class="alert alert-info">${data.mensaje}</div>
+                    </div>
+                </div>
+                ${data.datos_adicionales ? `
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h6>Datos Adicionales</h6>
+                        <pre class="bg-light p-3 rounded">${JSON.stringify(data.datos_adicionales, null, 2)}</pre>
+                    </div>
+                </div>` : ''}
+            `;
+            document.getElementById('btnResolverModal').setAttribute('data-id', alertaId);
+            new bootstrap.Modal(document.getElementById('detalleModal')).show();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al cargar el detalle de la alerta');
+        });
+}
+
+function marcarResuelta(alertaId) {
+    if (confirm('¿Está seguro de marcar esta alerta como resuelta?')) {
+        fetch(`/aves/api/alerta/${alertaId}/resolver/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error al resolver la alerta');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al resolver la alerta');
+        });
+    }
+}
+
+// Manejo de selección múltiple
+document.addEventListener('DOMContentLoaded', function() {
+    const selectAll = document.getElementById('selectAll');
+    const checkboxes = document.querySelectorAll('.alerta-checkbox');
+    const btnMarcarLeidas = document.getElementById('btnMarcarLeidas');
+    const btnMarcarResueltas = document.getElementById('btnMarcarResueltas');
+    
+    selectAll.addEventListener('change', function() {
+        checkboxes.forEach(cb => cb.checked = this.checked);
+        updateBatchButtons();
+    });
+    
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', updateBatchButtons);
+    });
+    
+    function updateBatchButtons() {
+        const selected = document.querySelectorAll('.alerta-checkbox:checked');
+        const hasSelection = selected.length > 0;
+        btnMarcarLeidas.disabled = !hasSelection;
+        btnMarcarResueltas.disabled = !hasSelection;
+    }
+    
+    // Auto-refresh cada 30 segundos
+    setInterval(() => {
+        if (!document.querySelector('.modal.show')) {
+            location.reload();
+        }
+    }, 30000);
+});
+</script>
+{% endblock %}
