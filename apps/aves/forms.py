@@ -14,25 +14,22 @@ class BitacoraDiariaForm(forms.ModelForm):
     class Meta:
         model = BitacoraDiaria
         fields = [
-            'lote', 'fecha', 'produccion_aaa', 'produccion_aa', 'produccion_a',
-            'produccion_b', 'produccion_c', 'mortalidad', 'consumo_alimento',
-            'temperatura_min', 'temperatura_max', 'humedad_min', 'humedad_max',
-            'observaciones'
+            'lote', 'fecha', 'semana_vida', 'produccion_aaa', 'produccion_aa', 'produccion_a',
+            'produccion_b', 'produccion_c', 'mortalidad', 'causa_mortalidad', 
+            'consumo_concentrado', 'observaciones'
         ]
         widgets = {
             'fecha': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'lote': forms.Select(attrs={'class': 'form-control'}),
+            'semana_vida': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'}),
             'produccion_aaa': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'produccion_aa': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'produccion_a': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'produccion_b': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'produccion_c': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'mortalidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
-            'consumo_alimento': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0'}),
-            'temperatura_min': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1'}),
-            'temperatura_max': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1'}),
-            'humedad_min': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1', 'min': '0', 'max': '100'}),
-            'humedad_max': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1', 'min': '0', 'max': '100'}),
+            'causa_mortalidad': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: Enfermedad, Accidente, etc.'}),
+            'consumo_concentrado': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0'}),
             'observaciones': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
     
@@ -45,17 +42,12 @@ class BitacoraDiariaForm(forms.ModelForm):
         if fecha and fecha > timezone.now().date():
             raise ValidationError("No se puede registrar información en fechas futuras.")
         
-        # Validar temperaturas
-        temp_min = cleaned_data.get('temperatura_min')
-        temp_max = cleaned_data.get('temperatura_max')
-        if temp_min and temp_max and temp_min > temp_max:
-            raise ValidationError("La temperatura mínima no puede ser mayor que la máxima.")
+        # Validar que si hay mortalidad, debe haber una causa
+        mortalidad = cleaned_data.get('mortalidad', 0)
+        causa_mortalidad = cleaned_data.get('causa_mortalidad', '').strip()
         
-        # Validar humedad
-        hum_min = cleaned_data.get('humedad_min')
-        hum_max = cleaned_data.get('humedad_max')
-        if hum_min and hum_max and hum_min > hum_max:
-            raise ValidationError("La humedad mínima no puede ser mayor que la máxima.")
+        if mortalidad > 0 and not causa_mortalidad:
+            raise ValidationError("Debe especificar la causa de mortalidad cuando hay aves muertas.")
         
         return cleaned_data
 
@@ -67,17 +59,18 @@ class LoteAvesForm(forms.ModelForm):
         model = LoteAves
         fields = [
             'codigo', 'galpon', 'linea_genetica', 'procedencia', 'numero_aves_inicial',
-            'fecha_llegada', 'peso_total_llegada', 'peso_promedio_llegada', 'observaciones'
+            'fecha_llegada', 'peso_total_llegada', 'peso_promedio_llegada', 'estado', 'observaciones'
         ]
         widgets = {
             'codigo': forms.TextInput(attrs={'class': 'form-control'}),
-            'galpon': forms.Select(attrs={'class': 'form-control'}),
+            'galpon': forms.TextInput(attrs={'class': 'form-control'}),
             'linea_genetica': forms.Select(attrs={'class': 'form-control'}),
             'procedencia': forms.TextInput(attrs={'class': 'form-control'}),
             'numero_aves_inicial': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'}),
             'fecha_llegada': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'peso_total_llegada': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0'}),
             'peso_promedio_llegada': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0'}),
+            'estado': forms.Select(attrs={'class': 'form-control'}),
             'observaciones': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
     

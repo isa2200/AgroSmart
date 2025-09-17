@@ -20,11 +20,11 @@ class Galpon(BaseModel):
     capacidad_maxima = models.PositiveIntegerField('Capacidad máxima de aves')
     area_m2 = models.DecimalField('Área en m²', max_digits=10, decimal_places=2)
     tipo_ventilacion = models.CharField('Tipo de ventilación', max_length=50, 
-                                      choices=[
-                                          ('natural', 'Natural'),
-                                          ('forzada', 'Forzada'),
-                                          ('mixta', 'Mixta')
-                                      ])
+                                        choices=[
+                                            ('natural', 'Natural'),
+                                            ('forzada', 'Forzada'),
+                                            ('mixta', 'Mixta')
+                                        ])
     ubicacion = models.CharField('Ubicación', max_length=200, blank=True)
     observaciones = models.TextField('Observaciones', blank=True)
     
@@ -106,6 +106,9 @@ class BitacoraDiaria(BaseModel):
     lote = models.ForeignKey(LoteAves, on_delete=models.CASCADE, verbose_name='Lote')
     fecha = models.DateField('Fecha')
     
+    # Información del lote
+    semana_vida = models.PositiveIntegerField('Semana de vida', null=True, blank=True)
+    
     # Producción por categoría
     produccion_aaa = models.PositiveIntegerField('Producción AAA', default=0)
     produccion_aa = models.PositiveIntegerField('Producción AA', default=0)
@@ -115,13 +118,8 @@ class BitacoraDiaria(BaseModel):
     
     # Mortalidad y consumo
     mortalidad = models.PositiveIntegerField('Mortalidad', default=0)
-    consumo_alimento = models.DecimalField('Consumo alimento (kg)', max_digits=10, decimal_places=2, default=0)
-    
-    # Condiciones ambientales
-    temperatura_min = models.DecimalField('Temperatura mínima (°C)', max_digits=5, decimal_places=2, null=True, blank=True)
-    temperatura_max = models.DecimalField('Temperatura máxima (°C)', max_digits=5, decimal_places=2, null=True, blank=True)
-    humedad_min = models.DecimalField('Humedad mínima (%)', max_digits=5, decimal_places=2, null=True, blank=True)
-    humedad_max = models.DecimalField('Humedad máxima (%)', max_digits=5, decimal_places=2, null=True, blank=True)
+    causa_mortalidad = models.CharField('Causa de mortalidad', max_length=200, blank=True)
+    consumo_concentrado = models.DecimalField('Consumo concentrado (kg)', max_digits=10, decimal_places=2, default=0)
     
     observaciones = models.TextField('Observaciones', blank=True)
     usuario_registro = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuario que registra')
@@ -149,6 +147,11 @@ class BitacoraDiaria(BaseModel):
         return 0
     
     def save(self, *args, **kwargs):
+        # Calcular semana de vida automáticamente si no se proporciona
+        if not self.semana_vida and self.lote.fecha_llegada:
+            dias_vida = (self.fecha - self.lote.fecha_llegada).days
+            self.semana_vida = (dias_vida // 7) + 1
+            
         # Actualizar número de aves actual del lote si hay mortalidad
         if self.mortalidad > 0:
             self.lote.numero_aves_actual = max(0, self.lote.numero_aves_actual - self.mortalidad)

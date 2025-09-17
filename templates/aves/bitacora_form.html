@@ -1,169 +1,169 @@
-{% extends 'aves/base.html' %}
+{% extends 'base.html' %}
 {% load widget_tweaks %}
 
-{% block title %}Nueva Bitácora Diaria - AgroSmart{% endblock %}
+{% block title %}Bitácora Diaria - AgroSmart{% endblock %}
 
-{% block page_title %}Nueva Bitácora Diaria{% endblock %}
-
-{% block breadcrumb_items %}
-    <li class="breadcrumb-item"><a href="{% url 'aves:bitacora_list' %}">Bitácora</a></li>
-    <li class="breadcrumb-item active">Nueva</li>
-{% endblock %}
-
-{% block page_actions %}
-    <a href="{% url 'aves:bitacora_list' %}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left me-2"></i>Volver
-    </a>
+{% block extra_css %}
+<style>
+    .card-header {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+    }
+    .section-header {
+        border-left: 4px solid #28a745;
+        padding-left: 15px;
+        margin-bottom: 20px;
+    }
+    .form-section {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-10">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-clipboard-list me-2"></i>Registro de Bitácora Diaria</h5>
-            </div>
-            <div class="card-body">
-                <form method="post" id="bitacoraForm">
-                    {% csrf_token %}
-                    
-                    <div class="row">
-                        <!-- Información Básica -->
-                        <div class="col-md-6">
-                            <h6 class="text-primary mb-3">Información Básica</h6>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.lote.id_for_label }}" class="form-label">Lote *</label>
-                                {{ form.lote|add_class:"form-select" }}
-                                {% if form.lote.errors %}
-                                    <div class="text-danger small">{{ form.lote.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.fecha.id_for_label }}" class="form-label">Fecha *</label>
-                                {{ form.fecha|add_class:"form-control" }}
-                                {% if form.fecha.errors %}
-                                    <div class="text-danger small">{{ form.fecha.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.semana_vida.id_for_label }}" class="form-label">Semana de Vida</label>
-                                {{ form.semana_vida|add_class:"form-control" }}
-                                {% if form.semana_vida.errors %}
-                                    <div class="text-danger small">{{ form.semana_vida.errors.0 }}</div>
-                                {% endif %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-clipboard-list me-2"></i>
+                        Nueva Bitácora Diaria
+                    </h4>
+                </div>
+                
+                <div class="card-body">
+                    <form method="post" id="bitacoraForm">
+                        {% csrf_token %}
+                        
+                        <!-- Información General -->
+                        <div class="form-section">
+                            <h6 class="section-header text-primary">Información General</h6>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="{{ form.lote.id_for_label }}" class="form-label">Lote *</label>
+                                    {{ form.lote|add_class:"form-select" }}
+                                    {% if form.lote.errors %}
+                                        <div class="text-danger small">{{ form.lote.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-4 mb-3">
+                                    <label for="{{ form.fecha.id_for_label }}" class="form-label">Fecha *</label>
+                                    {{ form.fecha|add_class:"form-control" }}
+                                    {% if form.fecha.errors %}
+                                        <div class="text-danger small">{{ form.fecha.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-4 mb-3">
+                                    <label for="{{ form.semana_vida.id_for_label }}" class="form-label">Semana de Vida</label>
+                                    {{ form.semana_vida|add_class:"form-control" }}
+                                    <small class="text-muted">Se calcula automáticamente si se deja vacío</small>
+                                    {% if form.semana_vida.errors %}
+                                        <div class="text-danger small">{{ form.semana_vida.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                         
                         <!-- Producción de Huevos -->
-                        <div class="col-md-6">
-                            <h6 class="text-success mb-3">Producción de Huevos</h6>
-                            
+                        <div class="form-section">
+                            <h6 class="section-header text-success">Producción de Huevos</h6>
                             <div class="row">
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-2 mb-3">
                                     <label for="{{ form.produccion_aaa.id_for_label }}" class="form-label">AAA</label>
                                     {{ form.produccion_aaa|add_class:"form-control" }}
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-2 mb-3">
                                     <label for="{{ form.produccion_aa.id_for_label }}" class="form-label">AA</label>
                                     {{ form.produccion_aa|add_class:"form-control" }}
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-2 mb-3">
                                     <label for="{{ form.produccion_a.id_for_label }}" class="form-label">A</label>
                                     {{ form.produccion_a|add_class:"form-control" }}
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-2 mb-3">
                                     <label for="{{ form.produccion_b.id_for_label }}" class="form-label">B</label>
                                     {{ form.produccion_b|add_class:"form-control" }}
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-2 mb-3">
                                     <label for="{{ form.produccion_c.id_for_label }}" class="form-label">C</label>
                                     {{ form.produccion_c|add_class:"form-control" }}
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-2 mb-3">
                                     <label class="form-label">Total</label>
                                     <input type="text" class="form-control" id="totalProduccion" readonly>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="row">
-                        <!-- Mortalidad -->
-                        <div class="col-md-4">
-                            <h6 class="text-danger mb-3">Mortalidad</h6>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.mortalidad.id_for_label }}" class="form-label">Cantidad</label>
-                                {{ form.mortalidad|add_class:"form-control" }}
+                        
+                        <div class="row">
+                            <!-- Mortalidad -->
+                            <div class="col-md-6">
+                                <div class="form-section">
+                                    <h6 class="section-header text-danger">Mortalidad</h6>
+                                    
+                                    <div class="mb-3">
+                                        <label for="{{ form.mortalidad.id_for_label }}" class="form-label">Cantidad</label>
+                                        {{ form.mortalidad|add_class:"form-control" }}
+                                        {% if form.mortalidad.errors %}
+                                            <div class="text-danger small">{{ form.mortalidad.errors.0 }}</div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="{{ form.causa_mortalidad.id_for_label }}" class="form-label">Causa</label>
+                                        {{ form.causa_mortalidad|add_class:"form-control" }}
+                                        {% if form.causa_mortalidad.errors %}
+                                            <div class="text-danger small">{{ form.causa_mortalidad.errors.0 }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
                             
-                            <div class="mb-3">
-                                <label for="{{ form.causa_mortalidad.id_for_label }}" class="form-label">Causa</label>
-                                {{ form.causa_mortalidad|add_class:"form-control" }}
+                            <!-- Consumo -->
+                            <div class="col-md-6">
+                                <div class="form-section">
+                                    <h6 class="section-header text-warning">Consumo</h6>
+                                    
+                                    <div class="mb-3">
+                                        <label for="{{ form.consumo_concentrado.id_for_label }}" class="form-label">Concentrado (kg)</label>
+                                        {{ form.consumo_concentrado|add_class:"form-control" }}
+                                        {% if form.consumo_concentrado.errors %}
+                                            <div class="text-danger small">{{ form.consumo_concentrado.errors.0 }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
-                        <!-- Consumo -->
-                        <div class="col-md-4">
-                            <h6 class="text-warning mb-3">Consumo</h6>
-                            
+                        <!-- Observaciones -->
+                        <div class="form-section">
+                            <h6 class="section-header text-info">Observaciones</h6>
                             <div class="mb-3">
-                                <label for="{{ form.consumo_concentrado.id_for_label }}" class="form-label">Concentrado (kg)</label>
-                                {{ form.consumo_concentrado|add_class:"form-control" }}
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.consumo_agua.id_for_label }}" class="form-label">Agua (L)</label>
-                                {{ form.consumo_agua|add_class:"form-control" }}
-                            </div>
-                        </div>
-                        
-                        <!-- Condiciones Ambientales -->
-                        <div class="col-md-4">
-                            <h6 class="text-info mb-3">Condiciones Ambientales</h6>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.temperatura_promedio.id_for_label }}" class="form-label">Temperatura (°C)</label>
-                                {{ form.temperatura_promedio|add_class:"form-control" }}
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.humedad_promedio.id_for_label }}" class="form-label">Humedad (%)</label>
-                                {{ form.humedad_promedio|add_class:"form-control" }}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Observaciones -->
-                    <div class="row">
-                        <div class="col-12">
-                            <h6 class="text-secondary mb-3">Observaciones</h6>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones Generales</label>
+                                <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
                                 {{ form.observaciones|add_class:"form-control" }}
+                                {% if form.observaciones.errors %}
+                                    <div class="text-danger small">{{ form.observaciones.errors.0 }}</div>
+                                {% endif %}
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Botones -->
-                    <div class="row">
-                        <div class="col-12">
-                            <hr>
-                            <div class="d-flex justify-content-end gap-2">
-                                <a href="{% url 'aves:bitacora_list' %}" class="btn btn-secondary">
-                                    <i class="fas fa-times me-2"></i>Cancelar
-                                </a>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save me-2"></i>Guardar Bitácora
-                                </button>
-                            </div>
+                        
+                        <!-- Botones -->
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'aves:bitacora_list' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-2"></i>Guardar Bitácora
+                            </button>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -172,50 +172,47 @@
 
 {% block extra_js %}
 <script>
-$(document).ready(function() {
+document.addEventListener('DOMContentLoaded', function() {
     // Calcular total de producción automáticamente
+    const produccionInputs = ['produccion_aaa', 'produccion_aa', 'produccion_a', 'produccion_b', 'produccion_c'];
+    const totalInput = document.getElementById('totalProduccion');
+    
     function calcularTotal() {
         let total = 0;
-        ['produccion_aaa', 'produccion_aa', 'produccion_a', 'produccion_b', 'produccion_c'].forEach(function(field) {
-            let valor = parseFloat($('#id_' + field).val()) || 0;
-            total += valor;
+        produccionInputs.forEach(function(inputId) {
+            const input = document.getElementById('id_' + inputId);
+            if (input && input.value) {
+                total += parseInt(input.value) || 0;
+            }
         });
-        $('#totalProduccion').val(total.toFixed(0));
+        totalInput.value = total;
     }
     
-    // Eventos para calcular total
-    $('[id^="id_produccion_"]').on('input', calcularTotal);
+    // Agregar event listeners
+    produccionInputs.forEach(function(inputId) {
+        const input = document.getElementById('id_' + inputId);
+        if (input) {
+            input.addEventListener('input', calcularTotal);
+        }
+    });
     
     // Calcular total inicial
     calcularTotal();
     
-    // Validación del formulario
-    $('#bitacoraForm').on('submit', function(e) {
-        let valid = true;
-        let errors = [];
-        
-        // Validar lote
-        if (!$('#id_lote').val()) {
-            errors.push('Debe seleccionar un lote');
-            valid = false;
-        }
-        
-        // Validar fecha
-        if (!$('#id_fecha').val()) {
-            errors.push('Debe ingresar una fecha');
-            valid = false;
-        }
-        
-        if (!valid) {
-            e.preventDefault();
-            alert('Errores encontrados:\n' + errors.join('\n'));
-        }
-    });
+    // Validación de mortalidad y causa
+    const mortalidadInput = document.getElementById('id_mortalidad');
+    const causaInput = document.getElementById('id_causa_mortalidad');
     
-    // Establecer fecha actual por defecto
-    if (!$('#id_fecha').val()) {
-        let today = new Date().toISOString().split('T')[0];
-        $('#id_fecha').val(today);
+    if (mortalidadInput && causaInput) {
+        mortalidadInput.addEventListener('input', function() {
+            if (parseInt(this.value) > 0) {
+                causaInput.required = true;
+                causaInput.parentElement.querySelector('label').innerHTML = 'Causa *';
+            } else {
+                causaInput.required = false;
+                causaInput.parentElement.querySelector('label').innerHTML = 'Causa';
+            }
+        });
     }
 });
 </script>

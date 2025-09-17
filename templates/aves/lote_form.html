@@ -41,7 +41,7 @@
                             
                             <div class="mb-3">
                                 <label for="{{ form.galpon.id_for_label }}" class="form-label">Galpón *</label>
-                                {{ form.galpon|add_class:"form-select" }}
+                                {{ form.galpon|add_class:"form-control" }}
                                 {% if form.galpon.errors %}
                                     <div class="text-danger small">{{ form.galpon.errors.0 }}</div>
                                 {% endif %}
@@ -56,10 +56,18 @@
                             </div>
                             
                             <div class="mb-3">
-                                <label for="{{ form.fecha_ingreso.id_for_label }}" class="form-label">Fecha de Ingreso *</label>
-                                {{ form.fecha_ingreso|add_class:"form-control" }}
-                                {% if form.fecha_ingreso.errors %}
-                                    <div class="text-danger small">{{ form.fecha_ingreso.errors.0 }}</div>
+                                <label for="{{ form.procedencia.id_for_label }}" class="form-label">Procedencia *</label>
+                                {{ form.procedencia|add_class:"form-control" }}
+                                {% if form.procedencia.errors %}
+                                    <div class="text-danger small">{{ form.procedencia.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.fecha_llegada.id_for_label }}" class="form-label">Fecha de Llegada *</label>
+                                {{ form.fecha_llegada|add_class:"form-control" }}
+                                {% if form.fecha_llegada.errors %}
+                                    <div class="text-danger small">{{ form.fecha_llegada.errors.0 }}</div>
                                 {% endif %}
                             </div>
                         </div>
@@ -77,30 +85,21 @@
                             </div>
                             
                             <div class="mb-3">
-                                <label for="{{ form.edad_inicial_semanas.id_for_label }}" class="form-label">Edad Inicial (semanas)</label>
-                                {{ form.edad_inicial_semanas|add_class:"form-control" }}
-                                {% if form.edad_inicial_semanas.errors %}
-                                    <div class="text-danger small">{{ form.edad_inicial_semanas.errors.0 }}</div>
+                                <label for="{{ form.peso_total_llegada.id_for_label }}" class="form-label">Peso Total Llegada (kg) *</label>
+                                {{ form.peso_total_llegada|add_class:"form-control" }}
+                                {% if form.peso_total_llegada.errors %}
+                                    <div class="text-danger small">{{ form.peso_total_llegada.errors.0 }}</div>
                                 {% endif %}
                             </div>
                             
                             <div class="mb-3">
-                                <label for="{{ form.peso_promedio_inicial.id_for_label }}" class="form-label">Peso Promedio Inicial (g)</label>
-                                {{ form.peso_promedio_inicial|add_class:"form-control" }}
-                                {% if form.peso_promedio_inicial.errors %}
-                                    <div class="text-danger small">{{ form.peso_promedio_inicial.errors.0 }}</div>
+                                <label for="{{ form.peso_promedio_llegada.id_for_label }}" class="form-label">Peso Promedio Llegada (g) *</label>
+                                {{ form.peso_promedio_llegada|add_class:"form-control" }}
+                                {% if form.peso_promedio_llegada.errors %}
+                                    <div class="text-danger small">{{ form.peso_promedio_llegada.errors.0 }}</div>
                                 {% endif %}
                             </div>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.estado.id_for_label }}" class="form-label">Estado</label>
-                                {{ form.estado|add_class:"form-select" }}
-                                {% if form.estado.errors %}
-                                    <div class="text-danger small">{{ form.estado.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
+                        
                     
                     <!-- Observaciones -->
                     <div class="row">
@@ -142,9 +141,9 @@
 <script>
 $(document).ready(function() {
     // Establecer fecha actual por defecto
-    if (!$('#id_fecha_ingreso').val()) {
+    if (!$('#id_fecha_llegada').val()) {
         let today = new Date().toISOString().split('T')[0];
-        $('#id_fecha_ingreso').val(today);
+        $('#id_fecha_llegada').val(today);
     }
     
     // Validación del formulario
@@ -158,9 +157,9 @@ $(document).ready(function() {
             valid = false;
         }
         
-        // Validar galpón
-        if (!$('#id_galpon').val()) {
-            errors.push('Debe seleccionar un galpón');
+        // Validar línea genética
+        if (!$('#id_linea_genetica').val()) {
+            errors.push('Debe seleccionar una línea genética');
             valid = false;
         }
         

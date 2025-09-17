@@ -12,9 +12,9 @@ reportlab>=4.0.0
 openpyxl>=3.1.0
 Pillow>=10.0.0
 
-# Base de datos (opcional para producción)
+# Base de datos
 psycopg2-binary>=2.9.0  # Para PostgreSQL
-# mysqlclient>=2.2.0     # Para MySQL
+mysqlclient>=2.2.0     # Para MySQL - HABILITADO
 
 # Utilidades de desarrollo
 ipython>=8.0.0

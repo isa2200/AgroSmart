@@ -85,7 +85,7 @@ class LoteAvesAdmin(admin.ModelAdmin):
 
 @admin.register(BitacoraDiaria)
 class BitacoraDiariaAdmin(admin.ModelAdmin):
-    list_display = ['fecha', 'lote', 'produccion_total', 'mortalidad', 'consumo_alimento']
+    list_display = ['fecha', 'lote', 'produccion_total', 'mortalidad', 'consumo_concentrado']
     list_filter = ['fecha', 'lote', 'lote__galpon']
     search_fields = ['lote__codigo', 'observaciones']
     ordering = ['-fecha']

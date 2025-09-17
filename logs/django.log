@@ -5550,3 +5550,202 @@ INFO 2025-09-17 07:37:33,008 basehttp 20928 3976 "GET /aves/inventario-huevos/ H
 INFO 2025-09-17 07:39:33,996 basehttp 20928 3976 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
 INFO 2025-09-17 07:41:34,999 basehttp 20928 3976 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
 INFO 2025-09-17 07:43:36,002 basehttp 20928 3976 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-17 07:45:37,001 basehttp 20928 3976 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-17 07:47:01,117 basehttp 20928 3976 "GET / HTTP/1.1" 200 36614
+INFO 2025-09-17 07:47:52,997 basehttp 20928 3976 "GET /aves/ HTTP/1.1" 200 26689
+WARNING 2025-09-17 07:48:03,362 log 20928 3976 Forbidden (Permission denied): /aves/lotes/nuevo/
+Traceback (most recent call last):
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 25, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 28, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+WARNING 2025-09-17 07:48:03,412 basehttp 20928 3976 "GET /aves/lotes/nuevo/ HTTP/1.1" 403 13611
+INFO 2025-09-17 07:48:08,832 basehttp 20928 3976 "GET /aves/bitacora/ HTTP/1.1" 200 22623
+WARNING 2025-09-17 07:48:15,201 log 20928 3976 Forbidden (Permission denied): /aves/bitacora/nueva/
+Traceback (most recent call last):
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 25, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 28, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+WARNING 2025-09-17 07:48:15,246 basehttp 20928 3976 "GET /aves/bitacora/nueva/ HTTP/1.1" 403 13625
+INFO 2025-09-17 07:51:36,843 autoreload 20928 16436 C:\Users\bp877\TRAE\AgroSmart\config\settings\dev.py changed, reloading.
+INFO 2025-09-17 07:51:37,624 autoreload 4356 5684 Watching for file changes with StatReloader
+INFO 2025-09-17 07:51:54,582 autoreload 4356 5684 C:\Users\bp877\TRAE\AgroSmart\config\settings\dev.py changed, reloading.
+INFO 2025-09-17 07:51:55,218 autoreload 12496 23976 Watching for file changes with StatReloader
+INFO 2025-09-17 07:52:38,066 autoreload 12496 23976 C:\Users\bp877\TRAE\AgroSmart\config\settings\dev.py changed, reloading.
+INFO 2025-09-17 13:07:35,511 autoreload 3576 4732 Watching for file changes with StatReloader
+INFO 2025-09-17 13:11:29,172 autoreload 3576 4732 C:\Users\bp877\TRAE\AgroSmart\config\settings\dev.py changed, reloading.
+INFO 2025-09-17 13:11:29,916 autoreload 5816 20664 Watching for file changes with StatReloader
+INFO 2025-09-17 13:11:40,717 autoreload 5816 20664 C:\Users\bp877\TRAE\AgroSmart\config\settings\dev.py changed, reloading.
+INFO 2025-09-17 13:11:41,424 autoreload 8160 22336 Watching for file changes with StatReloader
+INFO 2025-09-17 13:13:14,801 autoreload 14412 15236 Watching for file changes with StatReloader
+INFO 2025-09-17 13:18:02,272 autoreload 18564 13812 Watching for file changes with StatReloader
+INFO 2025-09-17 13:18:05,483 basehttp 18564 25296 "GET / HTTP/1.1" 302 0
+INFO 2025-09-17 13:18:05,635 basehttp 18564 25296 "GET /usuarios/login/?next=/ HTTP/1.1" 200 18040
+INFO 2025-09-17 13:22:01,043 basehttp 18564 16740 "GET /usuarios/registro/ HTTP/1.1" 200 25032
+INFO 2025-09-17 13:23:04,268 basehttp 18564 16740 "POST /usuarios/registro/ HTTP/1.1" 302 0
+INFO 2025-09-17 13:23:04,294 basehttp 18564 16740 "GET /usuarios/login/ HTTP/1.1" 200 17222
+INFO 2025-09-17 13:23:15,821 basehttp 18564 16740 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-09-17 13:23:16,072 basehttp 18564 16740 "GET / HTTP/1.1" 200 33516
+ERROR 2025-09-17 13:23:51,208 log 18564 16740 Internal Server Error: /usuarios/lista/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: usuarios/lista_usuarios.html, auth/user_list.html
+ERROR 2025-09-17 13:23:51,264 basehttp 18564 16740 "GET /usuarios/lista/ HTTP/1.1" 500 103332
+ERROR 2025-09-17 13:23:53,902 log 18564 16740 Internal Server Error: /reportes/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\reportes\views.py", line 29, in lista_reportes
+    return render(request, 'reportes/lista_reportes.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: reportes/lista_reportes.html
+ERROR 2025-09-17 13:23:53,951 basehttp 18564 16740 "GET /reportes/ HTTP/1.1" 500 107871
+INFO 2025-09-17 13:23:55,839 basehttp 18564 16740 "GET /aves/ HTTP/1.1" 200 26690
+INFO 2025-09-17 13:23:58,392 basehttp 18564 16740 "GET /aves/bitacora/ HTTP/1.1" 200 22623
+INFO 2025-09-17 13:23:59,935 basehttp 18564 16740 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 28058
+INFO 2025-09-17 13:24:48,309 basehttp 18564 16740 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 25488
+INFO 2025-09-17 13:26:58,725 basehttp 18564 6536 "GET /aves/ HTTP/1.1" 200 26690
+INFO 2025-09-17 13:26:59,878 basehttp 18564 6536 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 25488
+INFO 2025-09-17 13:27:01,347 basehttp 18564 6536 "GET /aves/ HTTP/1.1" 200 26690
+INFO 2025-09-17 13:27:01,973 basehttp 18564 6536 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 25488
+INFO 2025-09-17 13:27:04,358 basehttp 18564 6536 "GET /aves/ HTTP/1.1" 200 26690
+INFO 2025-09-17 13:27:16,643 basehttp 18564 6536 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-17 13:27:18,109 basehttp 18564 6536 "GET /aves/ HTTP/1.1" 200 26690
+INFO 2025-09-17 13:27:24,102 basehttp 18564 6536 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 25488
+INFO 2025-09-17 13:27:30,209 basehttp 18564 6536 "GET /aves/bitacora/ HTTP/1.1" 200 22623
+INFO 2025-09-17 13:28:40,906 basehttp 18564 6536 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 28057
+INFO 2025-09-17 13:33:08,844 autoreload 18564 13812 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-17 13:33:09,696 autoreload 6696 24412 Watching for file changes with StatReloader
+INFO 2025-09-17 13:33:33,926 autoreload 6696 24412 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-17 13:33:34,840 autoreload 5460 24824 Watching for file changes with StatReloader
+INFO 2025-09-17 13:33:37,156 autoreload 5460 24824 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-17 13:33:37,959 autoreload 21284 23672 Watching for file changes with StatReloader
+INFO 2025-09-17 13:33:39,240 autoreload 21284 23672 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-17 13:33:39,914 autoreload 18624 15544 Watching for file changes with StatReloader
+INFO 2025-09-17 13:33:57,742 autoreload 18624 15544 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-17 13:33:58,478 autoreload 8188 24060 Watching for file changes with StatReloader
+INFO 2025-09-17 13:34:02,863 autoreload 8188 24060 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-17 13:34:03,564 autoreload 14552 23736 Watching for file changes with StatReloader
+INFO 2025-09-17 13:35:06,032 autoreload 14552 23736 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-17 13:35:06,772 autoreload 18276 19576 Watching for file changes with StatReloader
+INFO 2025-09-17 13:35:09,087 autoreload 18276 19576 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-17 13:35:09,829 autoreload 12596 3196 Watching for file changes with StatReloader
+INFO 2025-09-17 13:35:13,130 autoreload 12596 3196 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-17 13:35:13,976 autoreload 8232 22280 Watching for file changes with StatReloader
+INFO 2025-09-17 13:35:36,154 autoreload 8232 22280 C:\Users\bp877\TRAE\AgroSmart\apps\aves\forms.py changed, reloading.
+INFO 2025-09-17 13:35:37,076 autoreload 18200 20156 Watching for file changes with StatReloader
+INFO 2025-09-17 13:40:05,102 autoreload 11572 26304 Watching for file changes with StatReloader
+INFO 2025-09-17 13:40:06,692 basehttp 11572 19188 "GET / HTTP/1.1" 200 33228
+INFO 2025-09-17 13:40:12,282 basehttp 11572 19188 "GET /aves/ HTTP/1.1" 200 26690
+INFO 2025-09-17 13:40:14,045 basehttp 11572 19188 "GET /aves/bitacora/ HTTP/1.1" 200 22623
+INFO 2025-09-17 13:40:16,047 basehttp 11572 19188 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 24063
+INFO 2025-09-17 13:42:59,898 autoreload 16148 5344 Watching for file changes with StatReloader
+INFO 2025-09-17 13:43:01,508 basehttp 16148 17140 "GET / HTTP/1.1" 200 33228
+INFO 2025-09-17 13:43:03,827 basehttp 16148 17140 "GET /aves/ HTTP/1.1" 200 26690
+INFO 2025-09-17 13:43:05,684 basehttp 16148 17140 "GET /aves/bitacora/ HTTP/1.1" 200 22623
+INFO 2025-09-17 13:43:12,414 basehttp 16148 17140 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 24235
+INFO 2025-09-17 13:43:17,311 basehttp 16148 17140 "GET /aves/bitacora/ HTTP/1.1" 200 22623
+INFO 2025-09-17 13:43:19,542 basehttp 16148 17140 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 24234
+INFO 2025-09-17 13:43:21,628 basehttp 16148 17140 "GET /aves/bitacora/ HTTP/1.1" 200 22623
+INFO 2025-09-17 13:43:23,990 basehttp 16148 17140 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 25488
+INFO 2025-09-17 13:50:07,900 autoreload 16148 5344 C:\Users\bp877\TRAE\AgroSmart\apps\aves\forms.py changed, reloading.
+INFO 2025-09-17 13:50:08,638 autoreload 21224 2536 Watching for file changes with StatReloader
+INFO 2025-09-17 13:52:12,610 basehttp 21224 9560 "GET / HTTP/1.1" 200 33228
+INFO 2025-09-17 13:52:14,755 basehttp 21224 9560 "GET / HTTP/1.1" 200 33227
+INFO 2025-09-17 13:52:14,795 basehttp 21224 9560 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-17 13:52:14,815 basehttp 21224 18992 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-17 13:52:15,274 basehttp 21224 18992 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-17 13:52:15,291 basehttp 21224 9560 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-17 13:52:15,722 log 21224 9560 Not Found: /favicon.ico
+WARNING 2025-09-17 13:52:15,723 basehttp 21224 9560 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-17 13:52:16,893 basehttp 21224 9560 "GET /aves/ HTTP/1.1" 200 26690
+INFO 2025-09-17 13:52:18,747 basehttp 21224 9560 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 28577
+INFO 2025-09-17 13:53:25,832 autoreload 15004 1868 Watching for file changes with StatReloader
+INFO 2025-09-17 13:53:27,345 basehttp 15004 8616 "GET / HTTP/1.1" 200 33228
+INFO 2025-09-17 13:53:29,083 basehttp 15004 8616 "GET /aves/ HTTP/1.1" 200 26690
+INFO 2025-09-17 13:53:31,083 basehttp 15004 8616 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-17 13:53:32,617 basehttp 15004 8616 "GET /aves/bitacora/ HTTP/1.1" 200 22623
+INFO 2025-09-17 13:53:34,354 basehttp 15004 8616 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 28275
+INFO 2025-09-17 13:55:00,917 basehttp 15004 8616 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 26238
+INFO 2025-09-17 13:55:00,936 basehttp 15004 11576 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-17 13:55:00,936 basehttp 15004 8616 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-17 13:55:01,780 basehttp 15004 11576 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-17 13:55:01,791 basehttp 15004 11576 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-17 13:55:02,405 log 15004 11576 Not Found: /favicon.ico
+WARNING 2025-09-17 13:55:02,406 basehttp 15004 11576 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-17 13:55:29,254 basehttp 15004 11576 "GET / HTTP/1.1" 200 33227
+INFO 2025-09-17 13:55:30,706 basehttp 15004 11576 "GET /aves/ HTTP/1.1" 200 26690
+INFO 2025-09-17 13:55:33,248 basehttp 15004 11576 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 26238
+INFO 2025-09-17 14:03:45,298 autoreload 15004 1868 C:\Users\bp877\TRAE\AgroSmart\apps\aves\forms.py changed, reloading.
+INFO 2025-09-17 14:03:46,025 autoreload 14160 13440 Watching for file changes with StatReloader
+INFO 2025-09-17 14:05:15,734 autoreload 14160 13440 C:\Users\bp877\TRAE\AgroSmart\apps\aves\forms.py changed, reloading.
+INFO 2025-09-17 14:05:16,575 autoreload 17200 4976 Watching for file changes with StatReloader
+INFO 2025-09-17 14:05:45,122 autoreload 17200 4976 C:\Users\bp877\TRAE\AgroSmart\apps\aves\forms.py changed, reloading.
+INFO 2025-09-17 14:05:45,844 autoreload 12500 18336 Watching for file changes with StatReloader
+INFO 2025-09-17 14:05:50,001 basehttp 12500 8524 "GET / HTTP/1.1" 200 33228
+INFO 2025-09-17 14:05:53,305 basehttp 12500 8524 "GET /aves/ HTTP/1.1" 200 26690
+INFO 2025-09-17 14:05:55,876 basehttp 12500 8524 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 26191
+INFO 2025-09-17 14:07:33,112 basehttp 12500 6512 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 26025
+INFO 2025-09-17 14:07:33,130 basehttp 12500 8080 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-17 14:07:33,130 basehttp 12500 6512 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-17 14:07:35,607 basehttp 12500 6512 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-17 14:07:35,625 basehttp 12500 6512 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-17 14:07:37,904 log 12500 6512 Not Found: /favicon.ico
+WARNING 2025-09-17 14:07:37,905 basehttp 12500 6512 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-17 14:07:48,476 autoreload 2484 16140 Watching for file changes with StatReloader
+INFO 2025-09-17 14:07:50,281 basehttp 2484 25848 "GET / HTTP/1.1" 200 33228
+INFO 2025-09-17 14:07:53,023 basehttp 2484 25848 "GET /aves/ HTTP/1.1" 200 26690
+INFO 2025-09-17 14:07:56,374 basehttp 2484 25848 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 26025
+INFO 2025-09-17 14:14:58,334 autoreload 8124 5808 Watching for file changes with StatReloader
+INFO 2025-09-17 14:14:59,759 basehttp 8124 26512 "GET / HTTP/1.1" 200 33228
+INFO 2025-09-17 14:15:01,799 basehttp 8124 26512 "GET /aves/ HTTP/1.1" 200 26690
+INFO 2025-09-17 14:15:03,005 basehttp 8124 26512 "GET /aves/bitacora/ HTTP/1.1" 200 22623
+INFO 2025-09-17 14:15:05,469 basehttp 8124 26512 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 24234
+INFO 2025-09-17 14:15:25,476 basehttp 8124 26512 "GET /aves/bitacora/ HTTP/1.1" 200 22623
+INFO 2025-09-17 14:15:29,435 basehttp 8124 26512 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 26025
