@@ -102,9 +102,29 @@ class Command(BaseCommand):
             
             PerfilUsuario.objects.create(
                 usuario=admin_user,
+                rol='superusuario',  # Agregar el rol
                 telefono='3001234567',
-                cargo='Administrador General',
-                fecha_ingreso=date.today()
+                acceso_modulo_avicola=True,  # Dar acceso al módulo avícola
+                puede_eliminar_registros=True
+            )
+        
+        # Usuario admin de aves
+        if not User.objects.filter(username='admin_aves').exists():
+            admin_aves_user = User.objects.create_user(
+                username='admin_aves',
+                email='admin_aves@agrosmart.com',
+                password='aves123',
+                first_name='Admin',
+                last_name='Aves',
+                is_staff=True
+            )
+            
+            PerfilUsuario.objects.create(
+                usuario=admin_aves_user,
+                rol='admin_aves',  # Rol específico para aves
+                telefono='3001234568',
+                acceso_modulo_avicola=True,  # Dar acceso al módulo avícola
+                puede_eliminar_registros=True
             )
         
         # Usuario veterinario
@@ -121,9 +141,9 @@ class Command(BaseCommand):
             
             PerfilUsuario.objects.create(
                 usuario=vet_user,
+                rol='veterinario',  # Agregar el rol
                 telefono='3007654321',
-                cargo='Veterinario Principal',
-                fecha_ingreso=date.today()
+                acceso_modulo_avicola=True  # Dar acceso al módulo avícola
             )
         
         # Usuario operario
@@ -140,9 +160,9 @@ class Command(BaseCommand):
             
             PerfilUsuario.objects.create(
                 usuario=op_user,
+                rol='solo_vista',  # Agregar el rol
                 telefono='3009876543',
-                cargo='Operario de Campo',
-                fecha_ingreso=date.today()
+                acceso_modulo_avicola=True  # Dar acceso al módulo avícola
             )
     
     def crear_categorias_lotes(self):

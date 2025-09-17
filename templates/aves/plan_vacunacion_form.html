@@ -1,0 +1,93 @@
+{% extends 'aves/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Nuevo Plan de Vacunación - AgroSmart{% endblock %}
+
+{% block page_title %}Nuevo Plan de Vacunación{% endblock %}
+
+{% block breadcrumb_items %}
+    <li class="breadcrumb-item"><a href="{% url 'aves:plan_vacunacion_list' %}">Vacunación</a></li>
+    <li class="breadcrumb-item active">Nuevo Plan</li>
+{% endblock %}
+
+{% block page_actions %}
+    <a href="{% url 'aves:plan_vacunacion_list' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Volver
+    </a>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-syringe me-2"></i>Crear Plan de Vacunación</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.lote.id_for_label }}" class="form-label">Lote *</label>
+                                {{ form.lote|add_class:"form-select" }}
+                                {% if form.lote.errors %}
+                                    <div class="text-danger small">{{ form.lote.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.vacuna.id_for_label }}" class="form-label">Vacuna *</label>
+                                {{ form.vacuna|add_class:"form-control" }}
+                                {% if form.vacuna.errors %}
+                                    <div class="text-danger small">{{ form.vacuna.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.fecha_programada.id_for_label }}" class="form-label">Fecha Programada *</label>
+                                {{ form.fecha_programada|add_class:"form-control" }}
+                                {% if form.fecha_programada.errors %}
+                                    <div class="text-danger small">{{ form.fecha_programada.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.dosis.id_for_label }}" class="form-label">Dosis</label>
+                                {{ form.dosis|add_class:"form-control" }}
+                                {% if form.dosis.errors %}
+                                    <div class="text-danger small">{{ form.dosis.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
+                        {{ form.observaciones|add_class:"form-control" }}
+                        {% if form.observaciones.errors %}
+                            <div class="text-danger small">{{ form.observaciones.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'aves:plan_vacunacion_list' %}" class="btn btn-secondary me-md-2">
+                            <i class="fas fa-times me-2"></i>Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Guardar Plan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

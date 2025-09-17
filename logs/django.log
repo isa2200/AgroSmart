@@ -5190,3 +5190,363 @@ Traceback (most recent call last):
     raise TemplateDoesNotExist(template_name, chain=chain)
 django.template.exceptions.TemplateDoesNotExist: aves/bitacora_list.html
 ERROR 2025-09-16 12:34:50,678 basehttp 22612 24836 "GET /aves/bitacora/ HTTP/1.1" 500 112813
+INFO 2025-09-16 13:05:06,004 basehttp 22612 15008 "GET / HTTP/1.1" 200 33814
+INFO 2025-09-16 13:05:38,215 basehttp 22612 15008 "GET /aves/ HTTP/1.1" 200 26689
+INFO 2025-09-16 13:07:18,569 basehttp 22612 15008 "GET /aves/ HTTP/1.1" 200 26689
+INFO 2025-09-16 13:29:07,066 basehttp 22612 26180 "GET / HTTP/1.1" 200 33232
+INFO 2025-09-17 07:15:54,784 autoreload 25432 16504 Watching for file changes with StatReloader
+INFO 2025-09-17 07:15:57,029 basehttp 25432 23756 "GET / HTTP/1.1" 200 33233
+WARNING 2025-09-17 07:15:57,652 log 25432 23756 Not Found: /favicon.ico
+WARNING 2025-09-17 07:15:57,653 basehttp 25432 23756 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-17 07:15:59,713 basehttp 25432 23756 "GET / HTTP/1.1" 200 33232
+INFO 2025-09-17 07:15:59,742 basehttp 25432 23756 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-17 07:15:59,758 basehttp 25432 17000 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-17 07:16:00,028 basehttp 25432 17000 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-17 07:16:00,043 basehttp 25432 23756 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-17 07:16:00,848 log 25432 23756 Not Found: /favicon.ico
+WARNING 2025-09-17 07:16:00,849 basehttp 25432 23756 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-17 07:16:09,314 basehttp 25432 23756 "GET /aves/ HTTP/1.1" 200 26689
+INFO 2025-09-17 07:16:16,691 basehttp 25432 23756 "GET / HTTP/1.1" 200 33232
+INFO 2025-09-17 07:16:20,885 basehttp 25432 23756 "GET /aves/ HTTP/1.1" 200 26689
+ERROR 2025-09-17 07:16:24,038 log 25432 2424 Internal Server Error: /aves/bitacora/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 30, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 122, in bitacora_list
+    return render(request, 'aves/bitacora_list.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: aves/bitacora_list.html
+ERROR 2025-09-17 07:16:24,071 basehttp 25432 2424 "GET /aves/bitacora/ HTTP/1.1" 500 112182
+WARNING 2025-09-17 07:17:44,058 log 25432 2424 Forbidden (Permission denied): /aves/lotes/nuevo/
+Traceback (most recent call last):
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 25, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 28, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+WARNING 2025-09-17 07:17:44,072 basehttp 25432 2424 "GET /aves/lotes/nuevo/ HTTP/1.1" 403 13611
+ERROR 2025-09-17 07:18:44,499 log 25432 2424 Internal Server Error: /aves/bitacora/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 30, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 122, in bitacora_list
+    return render(request, 'aves/bitacora_list.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: aves/bitacora_list.html
+ERROR 2025-09-17 07:18:44,538 basehttp 25432 2424 "GET /aves/bitacora/ HTTP/1.1" 500 112509
+INFO 2025-09-17 07:20:58,404 basehttp 25432 2424 "GET /aves/ HTTP/1.1" 200 27271
+INFO 2025-09-17 07:20:58,429 basehttp 25432 11820 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-17 07:20:58,429 basehttp 25432 2424 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-17 07:20:58,727 basehttp 25432 2424 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-17 07:20:58,727 basehttp 25432 11820 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-17 07:20:58,768 log 25432 11820 Not Found: /favicon.ico
+WARNING 2025-09-17 07:20:58,768 basehttp 25432 11820 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-17 07:21:09,948 basehttp 25432 11820 "GET /aves/ HTTP/1.1" 200 26689
+INFO 2025-09-17 07:21:09,965 basehttp 25432 2424 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-17 07:21:09,966 basehttp 25432 11820 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-17 07:21:10,065 basehttp 25432 11820 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-17 07:21:10,067 basehttp 25432 2424 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-17 07:21:10,097 log 25432 2424 Not Found: /favicon.ico
+WARNING 2025-09-17 07:21:10,097 basehttp 25432 2424 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-17 07:21:44,093 basehttp 25432 11192 "GET /aves/ HTTP/1.1" 200 26689
+INFO 2025-09-17 07:21:46,115 basehttp 25432 11192 "GET /aves/ HTTP/1.1" 200 26689
+INFO 2025-09-17 07:21:46,132 basehttp 25432 21392 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-17 07:21:46,132 basehttp 25432 11192 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-17 07:21:46,514 basehttp 25432 21392 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-17 07:21:46,517 basehttp 25432 21392 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-17 07:21:46,547 log 25432 21392 Not Found: /favicon.ico
+WARNING 2025-09-17 07:21:46,547 basehttp 25432 21392 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-17 07:21:48,234 basehttp 25432 21392 "GET /aves/bitacora/ HTTP/1.1" 200 22623
+WARNING 2025-09-17 07:21:52,755 log 25432 21392 Forbidden (Permission denied): /aves/bitacora/nueva/
+Traceback (most recent call last):
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 25, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 28, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+WARNING 2025-09-17 07:21:52,767 basehttp 25432 21392 "GET /aves/bitacora/nueva/ HTTP/1.1" 403 13625
+WARNING 2025-09-17 07:21:56,913 log 25432 21392 Forbidden (Permission denied): /aves/lotes/nuevo/
+Traceback (most recent call last):
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 25, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 28, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+WARNING 2025-09-17 07:21:56,925 basehttp 25432 21392 "GET /aves/lotes/nuevo/ HTTP/1.1" 403 13611
+INFO 2025-09-17 07:21:58,808 basehttp 25432 21392 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+WARNING 2025-09-17 07:22:04,783 log 25432 21392 Forbidden (Permission denied): /aves/vacunacion/
+Traceback (most recent call last):
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 25, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 28, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+WARNING 2025-09-17 07:22:04,795 basehttp 25432 21392 "GET /aves/vacunacion/ HTTP/1.1" 403 13619
+INFO 2025-09-17 07:22:09,345 basehttp 25432 21392 "GET /aves/alertas/ HTTP/1.1" 200 30469
+WARNING 2025-09-17 07:22:09,373 basehttp 25432 21392 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+WARNING 2025-09-17 07:22:09,374 basehttp 25432 11192 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+ERROR 2025-09-17 07:22:19,479 log 25432 17028 Internal Server Error: /aves/reportes/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 30, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 329, in reportes
+    return render(request, 'aves/reportes.html')
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: aves/reportes.html
+ERROR 2025-09-17 07:22:19,510 basehttp 25432 17028 "GET /aves/reportes/ HTTP/1.1" 500 110466
+INFO 2025-09-17 07:22:22,973 basehttp 25432 17028 "GET / HTTP/1.1" 200 34934
+INFO 2025-09-17 07:22:30,529 basehttp 25432 17028 "GET /aves/ HTTP/1.1" 200 26689
+INFO 2025-09-17 07:22:33,114 basehttp 25432 17028 "GET /aves/bitacora/ HTTP/1.1" 200 22623
+INFO 2025-09-17 07:22:36,385 basehttp 25432 17028 "GET /aves/ HTTP/1.1" 200 26689
+WARNING 2025-09-17 07:22:38,513 log 25432 17028 Forbidden (Permission denied): /aves/lotes/nuevo/
+Traceback (most recent call last):
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 25, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 28, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+WARNING 2025-09-17 07:22:38,525 basehttp 25432 17028 "GET /aves/lotes/nuevo/ HTTP/1.1" 403 13611
+INFO 2025-09-17 07:22:41,013 basehttp 25432 17028 "GET /aves/bitacora/ HTTP/1.1" 200 22623
+WARNING 2025-09-17 07:23:47,147 log 25432 17028 Forbidden (Permission denied): /aves/bitacora/nueva/
+Traceback (most recent call last):
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 25, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 28, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+WARNING 2025-09-17 07:23:47,158 basehttp 25432 17028 "GET /aves/bitacora/nueva/ HTTP/1.1" 403 13625
+INFO 2025-09-17 07:32:22,814 autoreload 20928 16436 Watching for file changes with StatReloader
+INFO 2025-09-17 07:32:24,103 basehttp 20928 22024 "GET / HTTP/1.1" 200 34375
+INFO 2025-09-17 07:32:35,244 basehttp 20928 22024 "GET /aves/ HTTP/1.1" 200 26689
+INFO 2025-09-17 07:32:38,233 basehttp 20928 22024 "GET /aves/bitacora/ HTTP/1.1" 200 22623
+WARNING 2025-09-17 07:32:40,187 log 20928 22024 Forbidden (Permission denied): /aves/bitacora/nueva/
+Traceback (most recent call last):
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 25, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 28, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+WARNING 2025-09-17 07:32:40,198 basehttp 20928 22024 "GET /aves/bitacora/nueva/ HTTP/1.1" 403 13625
+WARNING 2025-09-17 07:32:45,345 log 20928 22024 Forbidden (Permission denied): /aves/lotes/nuevo/
+Traceback (most recent call last):
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 25, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 28, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+WARNING 2025-09-17 07:32:45,357 basehttp 20928 22024 "GET /aves/lotes/nuevo/ HTTP/1.1" 403 13611
+INFO 2025-09-17 07:32:48,327 basehttp 20928 22024 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+WARNING 2025-09-17 07:32:49,835 log 20928 22024 Forbidden (Permission denied): /aves/vacunacion/
+Traceback (most recent call last):
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 25, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 28, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+WARNING 2025-09-17 07:32:49,848 basehttp 20928 22024 "GET /aves/vacunacion/ HTTP/1.1" 403 13619
+INFO 2025-09-17 07:32:54,172 basehttp 20928 22024 "GET /aves/alertas/ HTTP/1.1" 200 30469
+WARNING 2025-09-17 07:32:54,205 basehttp 20928 18568 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+WARNING 2025-09-17 07:32:54,207 basehttp 20928 22024 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+INFO 2025-09-17 07:32:57,861 basehttp 20928 18452 "GET /aves/reportes/ HTTP/1.1" 200 21688
+INFO 2025-09-17 07:32:59,959 basehttp 20928 18452 "GET /aves/reportes/produccion/ HTTP/1.1" 200 20302
+INFO 2025-09-17 07:33:06,141 basehttp 20928 18452 "GET /aves/reportes/ HTTP/1.1" 200 21688
+INFO 2025-09-17 07:33:14,850 basehttp 20928 18452 "GET /aves/reportes/produccion/ HTTP/1.1" 200 20302
+INFO 2025-09-17 07:33:16,209 basehttp 20928 18452 "GET /aves/reportes/produccion/?lote=&fecha_desde=&fecha_hasta= HTTP/1.1" 200 20342
+INFO 2025-09-17 07:33:20,212 basehttp 20928 18452 "GET /aves/alertas/ HTTP/1.1" 200 30469
+WARNING 2025-09-17 07:33:20,246 basehttp 20928 18452 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+WARNING 2025-09-17 07:33:20,247 basehttp 20928 20616 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+WARNING 2025-09-17 07:33:20,897 log 20928 3976 Forbidden (Permission denied): /aves/vacunacion/
+Traceback (most recent call last):
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 25, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 28, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+WARNING 2025-09-17 07:33:20,909 basehttp 20928 3976 "GET /aves/vacunacion/ HTTP/1.1" 403 13619
+WARNING 2025-09-17 07:33:27,270 log 20928 3976 Forbidden (Permission denied): /aves/vacunacion/
+Traceback (most recent call last):
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 25, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 28, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+WARNING 2025-09-17 07:33:27,280 basehttp 20928 3976 "GET /aves/vacunacion/ HTTP/1.1" 403 13619
+INFO 2025-09-17 07:33:31,344 basehttp 20928 3976 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+WARNING 2025-09-17 07:33:32,679 log 20928 3976 Forbidden (Permission denied): /aves/lotes/nuevo/
+Traceback (most recent call last):
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 25, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 28, in _wrapped_view
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+WARNING 2025-09-17 07:33:32,692 basehttp 20928 3976 "GET /aves/lotes/nuevo/ HTTP/1.1" 403 13611
+INFO 2025-09-17 07:35:32,039 basehttp 20928 3976 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-17 07:37:33,008 basehttp 20928 3976 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-17 07:39:33,996 basehttp 20928 3976 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-17 07:41:34,999 basehttp 20928 3976 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-17 07:43:36,002 basehttp 20928 3976 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385

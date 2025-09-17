@@ -1,0 +1,140 @@
+{% extends 'aves/base.html' %}
+
+{% block title %}Reporte de Producción - AgroSmart{% endblock %}
+
+{% block page_title %}Reporte de Producción{% endblock %}
+
+{% block breadcrumb_items %}
+    <li class="breadcrumb-item"><a href="{% url 'aves:reportes' %}">Reportes</a></li>
+    <li class="breadcrumb-item active">Producción</li>
+{% endblock %}
+
+{% block page_actions %}
+    <a href="{% url 'aves:reportes' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Volver
+    </a>
+{% endblock %}
+
+{% block content %}
+<!-- Filtros -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filtros</h5>
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Lote</label>
+                <select name="lote" class="form-select">
+                    <option value="">Todos los lotes</option>
+                    {% for lote in lotes_disponibles %}
+                        <option value="{{ lote.id }}" {% if request.GET.lote == lote.id|stringformat:"s" %}selected{% endif %}>
+                            {{ lote.codigo }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Fecha Desde</label>
+                <input type="date" name="fecha_desde" class="form-control" value="{{ request.GET.fecha_desde }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Fecha Hasta</label>
+                <input type="date" name="fecha_hasta" class="form-control" value="{{ request.GET.fecha_hasta }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">&nbsp;</label>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search me-2"></i>Generar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if datos_reporte %}
+<!-- Resumen -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3 class="text-primary">{{ resumen.total_huevos|default:0 }}</h3>
+                <p class="mb-0">Total Huevos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3 class="text-success">{{ resumen.promedio_diario|default:0|floatformat:1 }}</h3>
+                <p class="mb-0">Promedio Diario</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3 class="text-info">{{ resumen.mejor_dia|default:0 }}</h3>
+                <p class="mb-0">Mejor Día</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3 class="text-warning">{{ resumen.porcentaje_postura|default:0|floatformat:1 }}%</h3>
+                <p class="mb-0">% Postura</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabla de Datos -->
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="fas fa-table me-2"></i>Datos Detallados</h5>
+        <button class="btn btn-success btn-sm">
+            <i class="fas fa-download me-2"></i>Exportar Excel
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Lote</th>
+                        <th>Huevos Buenos</th>
+                        <th>Huevos Rotos</th>
+                        <th>Total</th>
+                        <th>% Postura</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dato in datos_reporte %}
+                    <tr>
+                        <td>{{ dato.fecha|date:"d/m/Y" }}</td>
+                        <td>{{ dato.lote.codigo }}</td>
+                        <td>{{ dato.huevos_buenos }}</td>
+                        <td>{{ dato.huevos_rotos }}</td>
+                        <td>{{ dato.total_huevos }}</td>
+                        <td>{{ dato.porcentaje_postura|floatformat:1 }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="card">
+    <div class="card-body text-center py-5">
+        <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+        <h5 class="text-muted">No hay datos para mostrar</h5>
+        <p class="text-muted">Selecciona los filtros y haz clic en "Generar" para ver el reporte.</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
