@@ -3,10 +3,9 @@ Vistas para el sistema de reportes del módulo avícola
 """
 
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_http_methods
-from django.contrib import messages
+from django.http import JsonResponse, HttpResponse
+from django.db.models import Q, Sum, Avg, Count
 from django.utils import timezone
 from datetime import datetime, timedelta
 import json
@@ -35,6 +34,17 @@ def dashboard_reportes(request):
     }
     
     return render(request, 'aves/reportes/dashboard.html', context)
+
+@login_required
+@requiere_permiso_avicola
+def dashboard_reportes(request):
+    """Dashboard principal de reportes."""
+    lotes_activos = LoteAves.objects.filter(estado='activo')
+    
+    context = {
+        'lotes_activos': lotes_activos,
+    }
+    return render(request, 'aves/reportes_dashboard.html', context)
 
 @login_required
 @requiere_permiso_avicola
@@ -293,7 +303,7 @@ def reporte_salud_vacunacion(request):
 
 @login_required
 @requiere_permiso_avicola
-def reporte_consumo_alimento(request):
+def reporte_consumo_concentrado(request):
     """
     Genera reportes de consumo de alimento
     """
@@ -314,9 +324,9 @@ def reporte_consumo_alimento(request):
             reporte = ReporteAvicola(parametros)
             
             if formato == 'excel':
-                return reporte.generar_excel_consumo_alimento()
+                return reporte.generar_excel_consumo_concentrado()
             elif formato == 'pdf':
-                return reporte.generar_pdf_consumo_alimento()
+                return reporte.generar_pdf_consumo_concentrado()
                 
         except Exception as e:
             messages.error(request, f'Error al generar reporte de consumo: {str(e)}')
@@ -328,7 +338,7 @@ def reporte_consumo_alimento(request):
         'titulo': 'Reporte de Consumo de Alimento'
     }
     
-    return render(request, 'aves/reportes/consumo_alimento.html', context)
+    return render(request, 'aves/reportes/consumo_concentrado.html', context)
 
 def generar_excel_comparativo_lotes(datos_comparacion, fecha_inicio, fecha_fin):
     """

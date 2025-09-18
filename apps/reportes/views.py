@@ -64,7 +64,7 @@ def reporte_produccion(request):
             total_huevos_b=Sum('produccion_b'),
             total_huevos_c=Sum('produccion_c'),
             promedio_mortalidad=Avg('mortalidad'),
-            total_consumo=Sum('consumo_alimento')
+            total_consumo=Sum('consumo_concentrado')
         )
         
         # Calcular total de huevos
@@ -123,7 +123,7 @@ def reporte_produccion_semanal(lote_id, fecha_inicio, fecha_fin):
         total_b=Sum('produccion_b'),
         total_c=Sum('produccion_c'),
         promedio_mortalidad=Avg('mortalidad'),
-        total_consumo=Sum('consumo_alimento')
+        total_consumo=Sum('consumo_concentrado')
     )
     
     total_huevos = (

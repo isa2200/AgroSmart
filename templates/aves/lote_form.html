@@ -49,7 +49,7 @@
                             
                             <div class="mb-3">
                                 <label for="{{ form.linea_genetica.id_for_label }}" class="form-label">Línea Genética *</label>
-                                {{ form.linea_genetica|add_class:"form-select" }}
+                                {{ form.linea_genetica|add_class:"form-control" }}
                                 {% if form.linea_genetica.errors %}
                                     <div class="text-danger small">{{ form.linea_genetica.errors.0 }}</div>
                                 {% endif %}
@@ -146,45 +146,136 @@ $(document).ready(function() {
         $('#id_fecha_llegada').val(today);
     }
     
-    // Validación del formulario
+    // Función para calcular peso promedio automáticamente
+    function calcularPesoPromedio() {
+        let pesoTotal = parseFloat($('#id_peso_total_llegada').val()) || 0;
+        let numeroAves = parseInt($('#id_numero_aves_inicial').val()) || 0;
+        
+        if (pesoTotal > 0 && numeroAves > 0) {
+            let pesoPromedio = (pesoTotal * 1000) / numeroAves;
+            $('#id_peso_promedio_llegada').val(pesoPromedio.toFixed(2));
+        } else {
+            $('#id_peso_promedio_llegada').val('');
+        }
+    }
+    
+    // Calcular peso promedio cuando cambien los valores
+    $('#id_peso_total_llegada, #id_numero_aves_inicial').on('input change blur', calcularPesoPromedio);
+    
+    // Calcular al cargar la página si ya hay valores
+    calcularPesoPromedio();
+    
+    // Validación mejorada del formulario
     $('#loteForm').on('submit', function(e) {
         let valid = true;
         let errors = [];
         
+        // Limpiar estilos de error previos
+        $('.form-control').removeClass('is-invalid');
+        
         // Validar código
-        if (!$('#id_codigo').val().trim()) {
+        let codigo = $('#id_codigo').val().trim();
+        if (!codigo) {
             errors.push('El código del lote es obligatorio');
+            $('#id_codigo').addClass('is-invalid');
             valid = false;
         }
         
-        // Validar línea genética
-        if (!$('#id_linea_genetica').val()) {
-            errors.push('Debe seleccionar una línea genética');
-            valid = false;
+        // Validar galpón
+        function validarFormulario() {
+            let esValido = true;
+            
+            // Limpiar errores previos
+            $('.is-invalid').removeClass('is-invalid');
+            
+            // Validar galpón
+            let galpon = $('#id_galpon').val().trim();
+            if (!galpon) {
+                mostrarError('El galpón es obligatorio');
+                $('#id_galpon').addClass('is-invalid');
+                esValido = false;
+            }
+            
+            // Validar línea genética
+            let lineaGenetica = $('#id_linea_genetica').val();
+            if (!lineaGenetica) {
+                mostrarError('La línea genética es obligatoria');
+                $('#id_linea_genetica').addClass('is-invalid');
+                esValido = false;
+            }
+            
+            if (!valid) {
+                e.preventDefault();
+                alert('Por favor corrija los siguientes errores:\n\n' + errors.join('\n'));
+                // Hacer scroll al primer campo con error
+                $('.is-invalid').first().focus();
+            } else {
+                // Calcular peso promedio una vez más antes de enviar
+                calcularPesoPromedio();
+            }
         }
         
         // Validar número de aves
         let numAves = parseInt($('#id_numero_aves_inicial').val());
         if (!numAves || numAves <= 0) {
             errors.push('El número de aves debe ser mayor a 0');
+            $('#id_numero_aves_inicial').addClass('is-invalid');
+            valid = false;
+        }
+        
+        // Validar peso total
+        let pesoTotal = parseFloat($('#id_peso_total_llegada').val());
+        if (!pesoTotal || pesoTotal <= 0) {
+            errors.push('El peso total debe ser mayor a 0');
+            $('#id_peso_total_llegada').addClass('is-invalid');
+            valid = false;
+        }
+        
+        // Validar fecha
+        let fecha = $('#id_fecha_llegada').val();
+        if (!fecha) {
+            errors.push('La fecha de llegada es obligatoria');
+            $('#id_fecha_llegada').addClass('is-invalid');
+            valid = false;
+        }
+        
+        // Validar procedencia
+        let procedencia = $('#id_procedencia').val().trim();
+        if (!procedencia) {
+            errors.push('La procedencia es obligatoria');
+            $('#id_procedencia').addClass('is-invalid');
             valid = false;
         }
         
         if (!valid) {
             e.preventDefault();
-            alert('Errores encontrados:\n' + errors.join('\n'));
+            alert('Por favor corrija los siguientes errores:\n\n' + errors.join('\n'));
+            // Hacer scroll al primer campo con error
+            $('.is-invalid').first().focus();
+        } else {
+            // Calcular peso promedio una vez más antes de enviar
+            calcularPesoPromedio();
         }
     });
     
     // Auto-generar código si está vacío
-    $('#id_galpon').on('change', function() {
+    $('#id_galpon').on('change blur', function() {
         if (!$('#id_codigo').val()) {
-            let galponText = $(this).find('option:selected').text();
-            let fecha = new Date();
-            let codigo = 'L' + fecha.getFullYear() + (fecha.getMonth() + 1).toString().padStart(2, '0') + 
-                        fecha.getDate().toString().padStart(2, '0') + '-' + galponText.substring(0, 3).toUpperCase();
-            $('#id_codigo').val(codigo);
+            let galponText = $(this).val().trim();
+            if (galponText) {
+                let fecha = new Date();
+                let codigo = 'L' + fecha.getFullYear() + 
+                           (fecha.getMonth() + 1).toString().padStart(2, '0') + 
+                           fecha.getDate().toString().padStart(2, '0') + 
+                           '-' + galponText.substring(0, 3).toUpperCase();
+                $('#id_codigo').val(codigo);
+            }
         }
+    });
+    
+    // Remover clase de error cuando el usuario corrija el campo
+    $('.form-control').on('input change', function() {
+        $(this).removeClass('is-invalid');
     });
 });
 </script>

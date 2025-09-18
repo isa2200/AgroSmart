@@ -46,13 +46,13 @@ def formatear_numero(numero, decimales=2):
     return f"{numero:,.{decimales}f}".replace(',', 'X').replace('.', ',').replace('X', '.')
 
 
-def calcular_conversion_alimenticia(consumo_alimento, ganancia_peso):
+def calcular_conversion_alimenticia(consumo_concentrado, ganancia_peso):
     """
     Calcula la conversión alimenticia (kg alimento / kg ganancia peso).
     """
     if ganancia_peso <= 0:
         return None
-    return round(consumo_alimento / ganancia_peso, 2)
+    return round(consumo_concentrado / ganancia_peso, 2)
 
 
 def generar_codigo_lote(prefijo, fecha):

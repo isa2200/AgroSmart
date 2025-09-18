@@ -3,15 +3,19 @@ Configuración del admin para el módulo avícola.
 """
 
 from django.contrib import admin
+from django.contrib.admin import SimpleListFilter
+from django.contrib.auth.models import User
 from django.utils.html import format_html
 from django.urls import reverse
-from django.utils.safestring import mark_safe
 from django.db.models import Sum, Avg, Count
-from django.contrib.admin import SimpleListFilter
+from django.utils import timezone
+from datetime import datetime, timedelta
+
 from .models import (
-    Galpon, LoteAves, LineaGenetica, BitacoraDiaria, TipoConcentrado,
-    ControlConcentrado, TipoVacuna, PlanVacunacion, MovimientoHuevos,
-    InventarioHuevos, AlertaSistema, RegistroModificacion
+    LoteAves, BitacoraDiaria, TipoConcentrado,
+    ControlConcentrado, TipoVacuna, PlanVacunacion,
+    MovimientoHuevos, InventarioHuevos, AlertaSistema,
+    RegistroModificacion
 )
 
 
@@ -44,49 +48,39 @@ class FiltroFechaPersonalizado(SimpleListFilter):
             inicio_trimestre = timezone.now().date() - timedelta(days=90)
             return queryset.filter(fecha__gte=inicio_trimestre)
 
-
-@admin.register(Galpon)
-class GalponAdmin(admin.ModelAdmin):
-    list_display = ['nombre', 'codigo', 'capacidad_maxima', 'tipo_ventilacion', 'is_active']
-    list_filter = ['tipo_ventilacion', 'is_active', 'created_at']
-    search_fields = ['nombre', 'codigo', 'ubicacion']
-    ordering = ['nombre']
-    readonly_fields = ['created_at', 'updated_at']
-
+@admin.register(LoteAves)
+class LoteAvesAdmin(admin.ModelAdmin):
+    list_display = ['codigo', 'galpon', 'linea_genetica', 'numero_aves_inicial', 'numero_aves_actual', 'fecha_llegada', 'estado']
+    list_filter = ['estado', 'linea_genetica', FiltroFechaPersonalizado]
+    search_fields = ['codigo', 'galpon', 'procedencia']
+    date_hierarchy = 'fecha_llegada'
+    
     fieldsets = (
         ('Información Básica', {
-            'fields': ('nombre', 'codigo', 'ubicacion')
+            'fields': ('codigo', 'galpon', 'linea_genetica', 'procedencia')
         }),
-        ('Especificaciones', {
-            'fields': ('capacidad_maxima', 'area_m2', 'tipo_ventilacion')
+        ('Datos de Llegada', {
+            'fields': ('numero_aves_inicial', 'fecha_llegada', 'peso_total_llegada', 'peso_promedio_llegada')
+        }),
+        ('Estado Actual', {
+            'fields': ('numero_aves_actual', 'estado', 'fecha_inicio_postura')
         }),
         ('Observaciones', {
             'fields': ('observaciones',)
         }),
-        ('Auditoría', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',)
-        }),
     )
-
-@admin.register(LineaGenetica)
-class LineaGeneticaAdmin(admin.ModelAdmin):
-    list_display = ['nombre', 'peso_promedio_adulto', 'produccion_estimada_dia']
-    search_fields = ['nombre', 'descripcion']
-    ordering = ['nombre']
-
-@admin.register(LoteAves)
-class LoteAvesAdmin(admin.ModelAdmin):
-    list_display = ['codigo', 'galpon', 'linea_genetica', 'numero_aves_inicial', 'numero_aves_actual', 'estado', 'fecha_llegada']
-    list_filter = ['galpon', 'linea_genetica', 'estado', 'fecha_llegada']
-    search_fields = ['codigo', 'procedencia', 'galpon__nombre']
-    ordering = ['-fecha_llegada']
-    readonly_fields = ['created_at', 'updated_at', 'edad_dias', 'mortalidad_total', 'porcentaje_mortalidad']
+    
+    readonly_fields = ['numero_aves_actual']
+    
+    def save_model(self, request, obj, form, change):
+        if not change:  # Si es un nuevo objeto
+            obj.numero_aves_actual = obj.numero_aves_inicial
+        super().save_model(request, obj, form, change)
 
 @admin.register(BitacoraDiaria)
 class BitacoraDiariaAdmin(admin.ModelAdmin):
     list_display = ['fecha', 'lote', 'produccion_total', 'mortalidad', 'consumo_concentrado']
-    list_filter = ['fecha', 'lote', 'lote__galpon']
+    list_filter = ['fecha', 'lote']
     search_fields = ['lote__codigo', 'observaciones']
     ordering = ['-fecha']
     readonly_fields = ['created_at', 'updated_at', 'produccion_total', 'porcentaje_postura']
@@ -100,9 +94,27 @@ class TipoConcentradoAdmin(admin.ModelAdmin):
 
 @admin.register(ControlConcentrado)
 class ControlConcentradoAdmin(admin.ModelAdmin):
-    list_display = ['fecha', 'tipo_movimiento', 'tipo_concentrado', 'cantidad_kg', 'lote']
-    list_filter = ['tipo_movimiento', 'tipo_concentrado', 'fecha', 'lote']
-    search_fields = ['proveedor', 'numero_factura', 'lote__codigo']
+    list_display = ['tipo_concentrado', 'tipo_movimiento', 'cantidad_kg', 'fecha', 'lote', 'galpon_destino']
+    list_filter = ['tipo_movimiento', 'fecha', 'tipo_concentrado']
+    search_fields = ['tipo_concentrado__nombre', 'lote__codigo', 'galpon_destino', 'proveedor']
+    date_hierarchy = 'fecha'
+    
+    fieldsets = (
+        ('Información del Movimiento', {
+            'fields': ('tipo_concentrado', 'tipo_movimiento', 'cantidad_kg', 'fecha')
+        }),
+        ('Destino', {
+            'fields': ('lote', 'galpon_destino')
+        }),
+        ('Información Comercial', {
+            'fields': ('proveedor', 'numero_factura'),
+            'classes': ('collapse',)
+        }),
+        ('Observaciones', {
+            'fields': ('observaciones',)
+        }),
+    )
+    search_fields = ['proveedor', 'numero_factura', 'lote__codigo', 'galpon_destino']
     ordering = ['-fecha']
 
 @admin.register(TipoVacuna)

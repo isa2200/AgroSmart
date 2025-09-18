@@ -129,13 +129,26 @@ def lote_create(request):
     if request.method == 'POST':
         form = LoteAvesForm(request.POST)
         if form.is_valid():
-            lote = form.save(commit=False)
-            lote.numero_aves_actual = lote.numero_aves_inicial
-            lote.save()
-            messages.success(request, f'Lote {lote.codigo} creado exitosamente.')
-            return redirect('aves:lote_detail', pk=lote.pk)
+            try:
+                lote = form.save(commit=False)
+                lote.numero_aves_actual = lote.numero_aves_inicial
+                lote.save()
+                messages.success(request, f'Lote {lote.codigo} creado exitosamente.')
+                return redirect('aves:lote_detail', pk=lote.pk)
+            except Exception as e:
+                messages.error(request, f'Error al guardar el lote: {str(e)}')
         else:
-            messages.error(request, 'Error al crear el lote. Verifique los datos.')
+            # Mostrar errores específicos para debugging
+            messages.error(request, 'Error al validar el formulario:')
+            for field, errors in form.errors.items():
+                field_name = form.fields[field].label if field in form.fields else field
+                for error in errors:
+                    messages.error(request, f'• {field_name}: {error}')
+            
+            # Errores no específicos de campo
+            if form.non_field_errors():
+                for error in form.non_field_errors():
+                    messages.error(request, f'• {error}')
     else:
         form = LoteAvesForm()
     
@@ -160,7 +173,7 @@ def lote_detail(request, pk):
     mortalidad_total = bitacoras.aggregate(total=Sum('mortalidad'))['total'] or 0
     
     # Consumo promedio
-    consumo_promedio = bitacoras.aggregate(promedio=Avg('consumo_alimento'))['promedio'] or 0
+    consumo_promedio = bitacoras.aggregate(promedio=Avg('consumo_concentrado'))['promedio'] or 0
     
     context = {
         'lote': lote,
@@ -356,7 +369,7 @@ def reporte_produccion(request):
         total_produccion=Sum('produccion_aaa') + Sum('produccion_aa') + Sum('produccion_a') + 
                         Sum('produccion_b') + Sum('produccion_c'),
         total_mortalidad=Sum('mortalidad'),
-        consumo_promedio=Avg('consumo_alimento'),
+        consumo_promedio=Avg('consumo_concentrado'),
     )
     
     if formato == 'pdf':

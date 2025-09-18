@@ -11,49 +11,6 @@ from decimal import Decimal
 from apps.core.models import BaseModel
 
 
-class Galpon(BaseModel):
-    """
-    Modelo para representar galpones donde se alojan las aves.
-    """
-    nombre = models.CharField('Nombre del galpón', max_length=100)
-    codigo = models.CharField('Código', max_length=20, unique=True)
-    capacidad_maxima = models.PositiveIntegerField('Capacidad máxima de aves')
-    area_m2 = models.DecimalField('Área en m²', max_digits=10, decimal_places=2)
-    tipo_ventilacion = models.CharField('Tipo de ventilación', max_length=50, 
-                                        choices=[
-                                            ('natural', 'Natural'),
-                                            ('forzada', 'Forzada'),
-                                            ('mixta', 'Mixta')
-                                        ])
-    ubicacion = models.CharField('Ubicación', max_length=200, blank=True)
-    observaciones = models.TextField('Observaciones', blank=True)
-    
-    class Meta:
-        verbose_name = 'Galpón'
-        verbose_name_plural = 'Galpones'
-        ordering = ['nombre']
-    
-    def __str__(self):
-        return self.nombre
-
-
-class LineaGenetica(BaseModel):
-    """
-    Líneas genéticas de gallinas ponedoras.
-    """
-    nombre = models.CharField('Nombre de la línea', max_length=100)
-    descripcion = models.TextField('Descripción', blank=True)
-    peso_promedio_adulto = models.DecimalField('Peso promedio adulto (kg)', max_digits=5, decimal_places=2)
-    produccion_estimada_dia = models.PositiveIntegerField('Producción estimada por día (%)')
-    
-    class Meta:
-        verbose_name = 'Línea Genética'
-        verbose_name_plural = 'Líneas Genéticas'
-    
-    def __str__(self):
-        return self.nombre
-
-
 class LoteAves(BaseModel):
     """Lotes de aves ponedoras."""
     ESTADOS = [
@@ -62,9 +19,23 @@ class LoteAves(BaseModel):
         ('finalizado', 'Finalizado'),
     ]
     
+    LINEAS_GENETICAS = [
+        ('hy_line_brown', 'Hy-Line Brown'),
+        ('hy_line_white', 'Hy-Line White'),
+        ('lohmann_brown', 'Lohmann Brown'),
+        ('lohmann_white', 'Lohmann White'),
+        ('isa_brown', 'ISA Brown'),
+        ('isa_white', 'ISA White'),
+        ('bovans_brown', 'Bovans Brown'),
+        ('bovans_white', 'Bovans White'),
+        ('dekalb_brown', 'Dekalb Brown'),
+        ('dekalb_white', 'Dekalb White'),
+        ('otra', 'Otra'),
+    ]
+    
     codigo = models.CharField('Código del lote', max_length=50, unique=True)
-    galpon = models.ForeignKey(Galpon, on_delete=models.CASCADE, verbose_name='Galpón')
-    linea_genetica = models.ForeignKey(LineaGenetica, on_delete=models.CASCADE, verbose_name='Línea genética')
+    galpon = models.CharField('Galpón', max_length=100)
+    linea_genetica = models.CharField('Línea genética', max_length=50, choices=LINEAS_GENETICAS)
     procedencia = models.CharField('Procedencia', max_length=200)
     numero_aves_inicial = models.PositiveIntegerField('Número inicial de aves')
     numero_aves_actual = models.PositiveIntegerField('Número actual de aves')
@@ -81,7 +52,7 @@ class LoteAves(BaseModel):
         ordering = ['-fecha_llegada']
     
     def __str__(self):
-        return f"{self.codigo} - {self.galpon.nombre}"
+        return f"{self.codigo} - {self.galpon}"
     
     @property
     def edad_dias(self):
@@ -95,10 +66,14 @@ class LoteAves(BaseModel):
     
     @property
     def porcentaje_mortalidad(self):
-        """Calcula el porcentaje de mortalidad."""
+        """Calcula el porcentaje de mortalidad del lote."""
         if self.numero_aves_inicial > 0:
-            return (self.mortalidad_total / self.numero_aves_inicial) * 100
+            return round((self.mortalidad_total / self.numero_aves_inicial) * 100, 2)
         return 0
+    
+    def get_linea_genetica_display_name(self):
+        """Retorna el nombre completo de la línea genética."""
+        return dict(self.LINEAS_GENETICAS).get(self.linea_genetica, self.linea_genetica)
 
 
 class BitacoraDiaria(BaseModel):
@@ -175,7 +150,7 @@ class TipoConcentrado(BaseModel):
 
 
 class ControlConcentrado(BaseModel):
-    """Control de entradas y salidas de concentrado."""
+    """Control de entrada y salida de concentrado."""
     TIPOS_MOVIMIENTO = [
         ('entrada', 'Entrada'),
         ('salida', 'Salida'),
@@ -186,7 +161,7 @@ class ControlConcentrado(BaseModel):
     cantidad_kg = models.DecimalField('Cantidad (kg)', max_digits=10, decimal_places=2)
     fecha = models.DateField('Fecha')
     lote = models.ForeignKey(LoteAves, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Lote destino')
-    galpon = models.ForeignKey(Galpon, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Galpón destino')
+    galpon_destino = models.CharField('Galpón destino', max_length=100, blank=True)
     proveedor = models.CharField('Proveedor', max_length=200, blank=True)
     numero_factura = models.CharField('Número de factura', max_length=100, blank=True)
     observaciones = models.TextField('Observaciones', blank=True)
@@ -198,7 +173,7 @@ class ControlConcentrado(BaseModel):
         ordering = ['-fecha']
     
     def __str__(self):
-        return f"{self.tipo_concentrado.nombre} - {self.get_tipo_movimiento_display()} - {self.fecha}"
+        return f"{self.tipo_concentrado.nombre} - {self.fecha} - {self.tipo_movimiento}"
 
 
 class TipoVacuna(BaseModel):
@@ -311,13 +286,11 @@ class InventarioHuevos(BaseModel):
 
 
 class AlertaSistema(BaseModel):
-    """Sistema de alertas automáticas."""
+    """Sistema de alertas para el módulo avícola."""
     TIPOS_ALERTA = [
         ('stock_bajo', 'Stock Bajo'),
         ('mortalidad_alta', 'Mortalidad Alta'),
         ('vacuna_pendiente', 'Vacuna Pendiente'),
-        ('temperatura_fuera_rango', 'Temperatura Fuera de Rango'),
-        ('humedad_fuera_rango', 'Humedad Fuera de Rango'),
         ('produccion_baja', 'Producción Baja'),
     ]
     
@@ -333,7 +306,7 @@ class AlertaSistema(BaseModel):
     titulo = models.CharField('Título', max_length=200)
     mensaje = models.TextField('Mensaje')
     lote = models.ForeignKey(LoteAves, on_delete=models.CASCADE, null=True, blank=True)
-    galpon = models.ForeignKey(Galpon, on_delete=models.CASCADE, null=True, blank=True)
+    galpon_nombre = models.CharField('Galpón', max_length=100, blank=True)
     fecha_generacion = models.DateTimeField('Fecha de generación', auto_now_add=True)
     leida = models.BooleanField('Leída', default=False)
     usuario_destinatario = models.ForeignKey(
@@ -341,7 +314,7 @@ class AlertaSistema(BaseModel):
         on_delete=models.CASCADE, 
         null=True, 
         blank=True,
-        related_name='alertas_aves'  # Agregar related_name único
+        related_name='alertas_aves'
     )
     
     class Meta:
@@ -350,7 +323,7 @@ class AlertaSistema(BaseModel):
         ordering = ['-fecha_generacion']
     
     def __str__(self):
-        return f"{self.get_tipo_alerta_display()} - {self.titulo}"
+        return f"{self.titulo} - {self.fecha_generacion.strftime('%d/%m/%Y %H:%M')}"
 
 
 class RegistroModificacion(BaseModel):
