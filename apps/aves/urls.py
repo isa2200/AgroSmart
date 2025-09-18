@@ -14,6 +14,8 @@ urlpatterns = [
     # Bitácora diaria
     path('bitacora/', views.bitacora_list, name='bitacora_list'),
     path('bitacora/nueva/', views.bitacora_diaria_create, name='bitacora_create'),
+    path('bitacora/<int:pk>/', views.bitacora_detail, name='bitacora_detail'),
+    path('bitacora/<int:pk>/editar/', views.bitacora_edit, name='bitacora_edit'),
     
     # Lotes
     path('lotes/nuevo/', views.lote_create, name='lote_create'),

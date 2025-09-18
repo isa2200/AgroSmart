@@ -68,7 +68,6 @@
                             <th>Producción Total</th>
                             <th>Mortalidad</th>
                             <th>Consumo Concentrado</th>
-                            <th>Temperatura</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -79,10 +78,10 @@
                             <td>
                                 <span class="badge bg-primary">{{ bitacora.lote.codigo }}</span>
                             </td>
-                            <td>{{ bitacora.lote.galpon.nombre }}</td>
+                            <td>{{ bitacora.lote.galpon }}</td>
                             <td>{{ bitacora.semana_vida|default:"-" }}</td>
                             <td>
-                                <strong>{{ bitacora.total_produccion|floatformat:0 }}</strong>
+                                <strong>{{ bitacora.produccion_total|floatformat:0 }}</strong>
                                 <small class="text-muted d-block">
                                     AAA: {{ bitacora.produccion_aaa|default:0 }} | 
                                     AA: {{ bitacora.produccion_aa|default:0 }} | 
@@ -97,15 +96,14 @@
                                 {% endif %}
                             </td>
                             <td>{{ bitacora.consumo_concentrado|default:"-" }} kg</td>
-                            <td>{{ bitacora.temperatura_promedio|default:"-" }}°C</td>
                             <td>
                                 <div class="btn-group btn-group-sm">
-                                    <button class="btn btn-outline-info" onclick="verDetalle({{ bitacora.id }})" title="Ver detalle">
+                                    <a href="{% url 'aves:bitacora_detail' bitacora.id %}" class="btn btn-outline-info" title="Ver detalle">
                                         <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn btn-outline-warning" onclick="editarBitacora({{ bitacora.id }})" title="Editar">
+                                    </a>
+                                    <a href="{% url 'aves:bitacora_edit' bitacora.id %}" class="btn btn-outline-warning" title="Editar">
                                         <i class="fas fa-edit"></i>
-                                    </button>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -174,31 +172,10 @@
 {% block extra_js %}
 <script>
 function verDetalle(bitacoraId) {
-    // Aquí cargarías los detalles vía AJAX
-    $('#detalleModal').modal('show');
-    $('#detalleContent').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Cargando...</div>');
-    
-    // Simulación de carga de datos
-    setTimeout(function() {
-        $('#detalleContent').html(`
-            <div class="row">
-                <div class="col-md-6">
-                    <h6>Información General</h6>
-                    <p><strong>ID:</strong> ${bitacoraId}</p>
-                    <p><strong>Fecha:</strong> Fecha de la bitácora</p>
-                    <p><strong>Lote:</strong> Código del lote</p>
-                </div>
-                <div class="col-md-6">
-                    <h6>Producción Detallada</h6>
-                    <p>Detalles de producción...</p>
-                </div>
-            </div>
-        `);
-    }, 1000);
+    window.location.href = '/aves/bitacora/' + bitacoraId + '/';
 }
 
 function editarBitacora(bitacoraId) {
-    // Redirigir a página de edición
     window.location.href = '/aves/bitacora/' + bitacoraId + '/editar/';
 }
 

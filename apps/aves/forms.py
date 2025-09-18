@@ -221,6 +221,56 @@ class PlanVacunacionForm(forms.ModelForm):
         }
 
 
+class BitacoraDiariaEditForm(forms.ModelForm):
+    """Formulario para editar bitácora diaria con justificación obligatoria."""
+    
+    justificacion = forms.CharField(
+        label='Justificación de la modificación',
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 3,
+            'placeholder': 'Explique detalladamente el motivo de la modificación...',
+            'required': True
+        }),
+        help_text='Este campo es obligatorio para registrar cualquier modificación.',
+        min_length=10,
+        error_messages={
+            'required': 'La justificación de la modificación es obligatoria.',
+            'min_length': 'La justificación debe tener al menos 10 caracteres.'
+        }
+    )
+    
+    class Meta:
+        model = BitacoraDiaria
+        fields = [
+            'lote', 'fecha', 'semana_vida', 'produccion_aaa', 'produccion_aa', 'produccion_a',
+            'produccion_b', 'produccion_c', 'mortalidad', 'causa_mortalidad', 
+            'consumo_concentrado', 'observaciones'
+        ]
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'lote': forms.Select(attrs={'class': 'form-control'}),
+            'semana_vida': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'}),
+            'produccion_aaa': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'produccion_aa': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'produccion_a': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'produccion_b': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'produccion_c': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'mortalidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'causa_mortalidad': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: Enfermedad, Accidente, etc.'}),
+            'consumo_concentrado': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0'}),
+            'observaciones': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }
+    
+    def clean_justificacion(self):
+        justificacion = self.cleaned_data.get('justificacion', '').strip()
+        if not justificacion:
+            raise forms.ValidationError('La justificación de la modificación es obligatoria.')
+        if len(justificacion) < 10:
+            raise forms.ValidationError('La justificación debe tener al menos 10 caracteres.')
+        return justificacion
+
+
 class JustificacionForm(forms.Form):
     """Formulario para justificaciones de modificaciones."""
     justificacion = forms.CharField(

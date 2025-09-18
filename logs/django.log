@@ -6196,3 +6196,491 @@ INFO 2025-09-18 11:19:28,061 basehttp 21396 18852 "GET /aves/inventario-huevos/ 
 INFO 2025-09-18 11:19:43,886 basehttp 21396 18852 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 29575
 INFO 2025-09-18 11:20:12,698 basehttp 21396 18852 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
 INFO 2025-09-18 11:22:12,771 basehttp 21396 18852 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-18 11:24:13,338 basehttp 21396 18852 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-18 11:26:14,347 basehttp 21396 18852 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-18 11:28:15,367 basehttp 21396 18852 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-18 11:30:16,351 basehttp 21396 18852 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-18 11:32:17,347 basehttp 21396 18852 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-18 11:34:18,356 basehttp 21396 18852 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-18 11:36:19,332 basehttp 21396 18852 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-18 11:38:19,441 basehttp 21396 18852 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-18 11:40:19,524 basehttp 21396 18852 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-18 11:40:37,568 basehttp 21396 18852 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-18 11:40:39,661 basehttp 21396 18852 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 11:40:57,086 basehttp 21396 18852 "GET /aves/vacunacion/ HTTP/1.1" 200 19517
+INFO 2025-09-18 11:40:59,003 basehttp 21396 18852 "GET /aves/vacunacion/nuevo/ HTTP/1.1" 200 21848
+ERROR 2025-09-18 11:41:03,504 log 21396 18852 Internal Server Error: /aves/alertas/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 30, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 325, in alertas_list
+    return render(request, 'aves/alertas_list.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 320, in render
+    if match:
+       ^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\paginator.py", line 174, in __len__
+    return len(self.object_list)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 380, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1881, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 1549, in execute_sql
+    sql, params = self.as_sql()
+                  ~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 736, in as_sql
+    extra_select, order_by, group_by = self.pre_sql_setup(
+                                       ~~~~~~~~~~~~~~~~~~^
+        with_col_aliases=with_col_aliases or bool(combinator),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 84, in pre_sql_setup
+    self.setup_query(with_col_aliases=with_col_aliases)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 73, in setup_query
+    self.select, self.klass_info, self.annotation_col_map = self.get_select(
+                                                            ~~~~~~~~~~~~~~~^
+        with_col_aliases=with_col_aliases,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 279, in get_select
+    related_klass_infos = self.get_related_selections(select, select_mask)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 1367, in get_related_selections
+    raise FieldError(
+    ...<6 lines>...
+    )
+django.core.exceptions.FieldError: Invalid field name(s) given in select_related: 'galpon'. Choices are: lote, usuario_destinatario
+ERROR 2025-09-18 11:41:03,621 basehttp 21396 18852 "GET /aves/alertas/ HTTP/1.1" 500 245038
+INFO 2025-09-18 11:41:08,119 basehttp 21396 18852 "GET /aves/reportes/ HTTP/1.1" 200 21688
+INFO 2025-09-18 11:41:10,153 basehttp 21396 18852 "GET /aves/reportes/produccion/ HTTP/1.1" 200 20302
+INFO 2025-09-18 11:41:17,983 basehttp 21396 18852 "GET /aves/reportes/ HTTP/1.1" 200 21688
+INFO 2025-09-18 11:41:26,228 basehttp 21396 18852 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 11:41:42,793 basehttp 21396 18852 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-18 11:41:43,924 basehttp 21396 18852 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 11:45:06,478 basehttp 21396 18852 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 11:45:12,598 basehttp 21396 18852 "GET / HTTP/1.1" 200 33229
+ERROR 2025-09-18 11:45:17,242 log 21396 18852 Internal Server Error: /usuarios/lista/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: usuarios/lista_usuarios.html, auth/user_list.html
+ERROR 2025-09-18 11:45:17,289 basehttp 21396 18852 "GET /usuarios/lista/ HTTP/1.1" 500 103902
+ERROR 2025-09-18 11:46:26,848 log 21396 18852 Internal Server Error: /reportes/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\reportes\views.py", line 29, in lista_reportes
+    return render(request, 'reportes/lista_reportes.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: reportes/lista_reportes.html
+ERROR 2025-09-18 11:46:26,901 basehttp 21396 18852 "GET /reportes/ HTTP/1.1" 500 108441
+INFO 2025-09-18 11:48:22,818 basehttp 21396 18852 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 24280
+INFO 2025-09-18 11:56:21,155 basehttp 21396 16908 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 11:56:24,644 basehttp 21396 16908 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 11:56:45,468 basehttp 21396 16908 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 24280
+INFO 2025-09-18 11:57:21,095 basehttp 21396 16908 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-18 11:57:24,382 basehttp 21396 16908 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 11:57:26,024 basehttp 21396 16908 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-18 11:57:29,520 basehttp 21396 16908 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-18 11:57:31,939 basehttp 21396 16908 "GET /aves/vacunacion/ HTTP/1.1" 200 19517
+INFO 2025-09-18 11:57:36,565 basehttp 21396 16908 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 11:57:38,394 basehttp 21396 16908 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 11:58:04,612 basehttp 21396 16908 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-18 12:01:53,645 basehttp 21396 16908 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 12:03:33,883 basehttp 21396 16908 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-18 12:03:35,757 basehttp 21396 16908 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 29575
+INFO 2025-09-18 12:06:15,617 basehttp 21396 16908 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-18 12:06:18,323 basehttp 21396 16908 "GET / HTTP/1.1" 200 33229
+INFO 2025-09-18 12:06:20,800 basehttp 21396 16908 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 12:06:22,839 basehttp 21396 16908 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 12:06:24,769 basehttp 21396 16908 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 24280
+INFO 2025-09-18 14:09:37,285 autoreload 21252 8024 Watching for file changes with StatReloader
+INFO 2025-09-18 14:09:38,891 basehttp 21252 4212 "GET / HTTP/1.1" 200 33230
+INFO 2025-09-18 14:09:49,890 basehttp 21252 4212 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:09:55,812 basehttp 21252 4212 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 14:11:32,778 basehttp 21252 4212 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-18 14:11:33,606 basehttp 21252 4212 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:11:34,169 basehttp 21252 4212 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 14:11:34,506 basehttp 21252 4212 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-18 14:12:03,112 basehttp 21252 4212 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:12:04,289 basehttp 21252 4212 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 14:17:54,572 basehttp 21252 8724 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-18 14:18:49,352 basehttp 21252 8724 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 14:18:55,897 basehttp 21252 8724 "GET /aves/vacunacion/ HTTP/1.1" 200 19517
+INFO 2025-09-18 14:18:59,529 basehttp 21252 8724 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:19:00,063 basehttp 21252 8724 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 14:19:01,183 basehttp 21252 8724 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:19:02,226 basehttp 21252 8724 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 14:19:02,659 basehttp 21252 8724 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:19:02,938 basehttp 21252 8724 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:19:03,521 basehttp 21252 8724 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 14:19:04,445 basehttp 21252 8724 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-18 14:19:04,953 basehttp 21252 8724 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-18 14:19:05,371 basehttp 21252 8724 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 14:19:05,888 basehttp 21252 8724 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:19:06,690 basehttp 21252 8724 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 14:19:07,530 basehttp 21252 8724 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:19:08,414 basehttp 21252 8724 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 14:19:12,816 basehttp 21252 8724 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-18 14:19:13,995 basehttp 21252 8724 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 14:19:14,585 basehttp 21252 8724 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:19:16,022 basehttp 21252 8724 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 14:19:16,978 basehttp 21252 8724 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:19:17,850 basehttp 21252 8724 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 14:19:18,715 basehttp 21252 8724 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:19:19,203 basehttp 21252 8724 "GET /aves/bitacora/ HTTP/1.1" 200 24648
+INFO 2025-09-18 14:28:18,482 autoreload 15172 13504 Watching for file changes with StatReloader
+INFO 2025-09-18 14:28:20,164 basehttp 15172 15672 "GET / HTTP/1.1" 200 33230
+INFO 2025-09-18 14:28:22,269 basehttp 15172 15672 "GET / HTTP/1.1" 200 33229
+INFO 2025-09-18 14:28:22,288 basehttp 15172 21492 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-18 14:28:22,289 basehttp 15172 15672 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-18 14:28:22,701 basehttp 15172 21492 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-18 14:28:22,706 basehttp 15172 21492 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-18 14:28:23,103 log 15172 21492 Not Found: /favicon.ico
+WARNING 2025-09-18 14:28:23,104 basehttp 15172 21492 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-18 14:28:23,993 basehttp 15172 21492 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:28:25,411 basehttp 15172 21492 "GET /aves/bitacora/ HTTP/1.1" 200 23710
+INFO 2025-09-18 14:28:30,728 basehttp 15172 21492 "GET /aves/bitacora/1/ HTTP/1.1" 200 22460
+INFO 2025-09-18 14:28:38,834 basehttp 15172 21492 "GET /aves/bitacora/ HTTP/1.1" 200 23710
+INFO 2025-09-18 14:28:42,784 basehttp 15172 21492 "GET /aves/bitacora/1/ HTTP/1.1" 200 22460
+INFO 2025-09-18 14:28:54,525 basehttp 15172 21492 "GET /aves/bitacora/1/editar/ HTTP/1.1" 200 24793
+INFO 2025-09-18 14:29:18,219 basehttp 15172 21492 "POST /aves/bitacora/1/editar/ HTTP/1.1" 302 0
+INFO 2025-09-18 14:29:18,261 basehttp 15172 21492 "GET /aves/bitacora/1/ HTTP/1.1" 200 22458
+INFO 2025-09-18 14:29:23,339 basehttp 15172 21492 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-18 14:29:24,826 basehttp 15172 21492 "GET /aves/bitacora/ HTTP/1.1" 200 23710
+INFO 2025-09-18 14:29:27,561 basehttp 15172 21492 "GET /aves/bitacora/1/editar/ HTTP/1.1" 200 25090
+INFO 2025-09-18 14:30:02,241 basehttp 15172 21492 "GET /aves/bitacora/ HTTP/1.1" 200 23710
+INFO 2025-09-18 14:30:03,066 basehttp 15172 21492 "GET /aves/reportes/ HTTP/1.1" 200 21688
+INFO 2025-09-18 14:30:05,666 basehttp 15172 21492 "GET / HTTP/1.1" 200 33229
+ERROR 2025-09-18 14:30:07,032 log 15172 21492 Internal Server Error: /reportes/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\reportes\views.py", line 29, in lista_reportes
+    return render(request, 'reportes/lista_reportes.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: reportes/lista_reportes.html
+ERROR 2025-09-18 14:30:07,115 basehttp 15172 21492 "GET /reportes/ HTTP/1.1" 500 108442
+INFO 2025-09-18 14:30:09,278 basehttp 15172 21492 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:30:10,253 basehttp 15172 21492 "GET /aves/reportes/ HTTP/1.1" 200 21688
+INFO 2025-09-18 14:30:12,012 basehttp 15172 21492 "GET /aves/reportes/produccion/ HTTP/1.1" 200 20302
+INFO 2025-09-18 14:30:14,227 basehttp 15172 21492 "GET /aves/reportes/ HTTP/1.1" 200 21688
+INFO 2025-09-18 14:30:17,861 basehttp 15172 21492 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:30:19,951 basehttp 15172 21492 "GET /aves/reportes/ HTTP/1.1" 200 21688
+INFO 2025-09-18 14:30:22,330 basehttp 15172 21492 "GET /aves/reportes/produccion/ HTTP/1.1" 200 20302
+INFO 2025-09-18 14:30:43,877 basehttp 15172 21492 "GET /aves/reportes/produccion/?lote=&fecha_desde=2025-09-17&fecha_hasta=2025-09-19 HTTP/1.1" 200 20382
+INFO 2025-09-18 14:30:45,301 basehttp 15172 21492 "GET /aves/reportes/produccion/?lote=&fecha_desde=2025-09-17&fecha_hasta=2025-09-19 HTTP/1.1" 200 20382
+INFO 2025-09-18 14:31:21,655 autoreload 15172 13504 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-09-18 14:31:22,576 autoreload 10480 8576 Watching for file changes with StatReloader
+INFO 2025-09-18 14:32:19,964 autoreload 10480 8576 C:\Users\bp877\TRAE\AgroSmart\apps\aves\forms.py changed, reloading.
+INFO 2025-09-18 14:32:20,877 autoreload 2652 18000 Watching for file changes with StatReloader
+INFO 2025-09-18 14:32:43,483 autoreload 2652 18000 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-09-18 14:32:44,377 autoreload 10208 12620 Watching for file changes with StatReloader
+INFO 2025-09-18 14:33:05,375 basehttp 10208 10920 "GET / HTTP/1.1" 200 33230
+INFO 2025-09-18 14:33:07,659 basehttp 10208 10920 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:35:35,041 basehttp 10208 10920 "GET /aves/bitacora/ HTTP/1.1" 200 23710
+INFO 2025-09-18 14:35:49,501 basehttp 10208 10920 "GET /aves/bitacora/1/ HTTP/1.1" 200 22458
+INFO 2025-09-18 14:35:52,530 basehttp 10208 10920 "GET /aves/bitacora/ HTTP/1.1" 200 23710
+INFO 2025-09-18 14:35:53,347 basehttp 10208 10920 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-18 14:35:54,627 basehttp 10208 10920 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-18 14:35:58,129 basehttp 10208 10920 "GET /aves/vacunacion/ HTTP/1.1" 200 19517
+ERROR 2025-09-18 14:35:59,430 log 10208 10920 Internal Server Error: /aves/alertas/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 30, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 325, in alertas_list
+    return render(request, 'aves/alertas_list.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 320, in render
+    if match:
+       ^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\paginator.py", line 174, in __len__
+    return len(self.object_list)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 380, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1881, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 1549, in execute_sql
+    sql, params = self.as_sql()
+                  ~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 736, in as_sql
+    extra_select, order_by, group_by = self.pre_sql_setup(
+                                       ~~~~~~~~~~~~~~~~~~^
+        with_col_aliases=with_col_aliases or bool(combinator),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 84, in pre_sql_setup
+    self.setup_query(with_col_aliases=with_col_aliases)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 73, in setup_query
+    self.select, self.klass_info, self.annotation_col_map = self.get_select(
+                                                            ~~~~~~~~~~~~~~~^
+        with_col_aliases=with_col_aliases,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 279, in get_select
+    related_klass_infos = self.get_related_selections(select, select_mask)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 1367, in get_related_selections
+    raise FieldError(
+    ...<6 lines>...
+    )
+django.core.exceptions.FieldError: Invalid field name(s) given in select_related: 'galpon'. Choices are: lote, usuario_destinatario
+ERROR 2025-09-18 14:35:59,541 basehttp 10208 10920 "GET /aves/alertas/ HTTP/1.1" 500 245032
+INFO 2025-09-18 14:36:06,913 basehttp 10208 10920 "GET /aves/bitacora/ HTTP/1.1" 200 23710
+INFO 2025-09-18 14:36:08,897 basehttp 10208 10920 "GET /aves/bitacora/1/ HTTP/1.1" 200 22458
+INFO 2025-09-18 14:36:10,741 basehttp 10208 10920 "GET /aves/bitacora/ HTTP/1.1" 200 23710
+INFO 2025-09-18 14:36:11,907 basehttp 10208 10920 "GET /aves/bitacora/1/editar/ HTTP/1.1" 200 26087
+INFO 2025-09-18 14:36:50,701 basehttp 10208 10920 "POST /aves/bitacora/1/editar/ HTTP/1.1" 302 0
+INFO 2025-09-18 14:36:50,746 basehttp 10208 10920 "GET /aves/bitacora/1/ HTTP/1.1" 200 22458
+INFO 2025-09-18 14:36:55,085 basehttp 10208 10920 "GET /aves/bitacora/ HTTP/1.1" 200 23710
+INFO 2025-09-18 14:37:04,393 basehttp 10208 10920 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-18 14:37:05,507 basehttp 10208 10920 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-18 14:37:06,425 basehttp 10208 10920 "GET /aves/vacunacion/ HTTP/1.1" 200 19517
+ERROR 2025-09-18 14:37:07,045 log 10208 10920 Internal Server Error: /aves/alertas/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 30, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 325, in alertas_list
+    return render(request, 'aves/alertas_list.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 320, in render
+    if match:
+       ^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\paginator.py", line 174, in __len__
+    return len(self.object_list)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 380, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1881, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 1549, in execute_sql
+    sql, params = self.as_sql()
+                  ~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 736, in as_sql
+    extra_select, order_by, group_by = self.pre_sql_setup(
+                                       ~~~~~~~~~~~~~~~~~~^
+        with_col_aliases=with_col_aliases or bool(combinator),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 84, in pre_sql_setup
+    self.setup_query(with_col_aliases=with_col_aliases)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 73, in setup_query
+    self.select, self.klass_info, self.annotation_col_map = self.get_select(
+                                                            ~~~~~~~~~~~~~~~^
+        with_col_aliases=with_col_aliases,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 279, in get_select
+    related_klass_infos = self.get_related_selections(select, select_mask)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 1367, in get_related_selections
+    raise FieldError(
+    ...<6 lines>...
+    )
+django.core.exceptions.FieldError: Invalid field name(s) given in select_related: 'galpon'. Choices are: lote, usuario_destinatario
+ERROR 2025-09-18 14:37:07,149 basehttp 10208 10920 "GET /aves/alertas/ HTTP/1.1" 500 245313
+INFO 2025-09-18 14:43:28,837 basehttp 10208 15544 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-18 14:43:29,277 basehttp 10208 15544 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-18 14:43:30,004 basehttp 10208 15544 "GET /aves/bitacora/ HTTP/1.1" 200 23710
+INFO 2025-09-18 14:43:31,090 basehttp 10208 15544 "GET /aves/ HTTP/1.1" 200 26996
+INFO 2025-09-18 14:43:31,896 basehttp 10208 15544 "GET /aves/bitacora/ HTTP/1.1" 200 23710
+INFO 2025-09-18 14:43:33,054 basehttp 10208 15544 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:43:35,207 basehttp 10208 15544 "GET /aves/bitacora/ HTTP/1.1" 200 23710
+INFO 2025-09-18 14:44:44,535 basehttp 10208 15544 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-18 14:44:45,195 basehttp 10208 15544 "GET /aves/bitacora/ HTTP/1.1" 200 23710
+INFO 2025-09-18 14:44:49,825 basehttp 10208 15544 "GET /aves/bitacora/1/editar/ HTTP/1.1" 200 26087
+INFO 2025-09-18 14:44:52,469 basehttp 10208 15544 "GET /aves/bitacora/ HTTP/1.1" 200 23710
+INFO 2025-09-18 14:45:03,103 basehttp 10208 15544 "GET /aves/reportes/ HTTP/1.1" 200 21688
+INFO 2025-09-18 14:45:03,661 basehttp 10208 15544 "GET /aves/ HTTP/1.1" 200 26694
+INFO 2025-09-18 14:45:46,321 basehttp 10208 15544 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-18 14:45:48,951 basehttp 10208 15544 "GET /aves/bitacora/ HTTP/1.1" 200 23710
+INFO 2025-09-18 14:45:55,401 basehttp 10208 15544 "GET /aves/bitacora/1/ HTTP/1.1" 200 22458
+INFO 2025-09-18 14:46:02,053 basehttp 10208 15544 "GET /aves/bitacora/ HTTP/1.1" 200 23710
+INFO 2025-09-18 14:46:04,035 basehttp 10208 15544 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172

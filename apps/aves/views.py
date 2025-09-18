@@ -387,3 +387,69 @@ def reporte_produccion(request):
     }
     
     return render(request, 'aves/reporte_produccion.html', context)
+
+
+@login_required
+@role_required(['superusuario', 'admin_aves', 'solo_vista'])
+def bitacora_detail(request, pk):
+    """Ver detalle de una bitácora diaria."""
+    bitacora = get_object_or_404(BitacoraDiaria, pk=pk)
+    
+    context = {
+        'bitacora': bitacora,
+    }
+    return render(request, 'aves/bitacora_detail.html', context)
+
+
+@login_required
+@role_required(['superusuario', 'admin_aves'])
+def bitacora_edit(request, pk):
+    """Editar bitácora diaria."""
+    bitacora = get_object_or_404(BitacoraDiaria, pk=pk)
+    
+    if request.method == 'POST':
+        form = BitacoraDiariaEditForm(request.POST, instance=bitacora)
+        
+        if form.is_valid():
+            # Verificar si realmente hay cambios
+            changed_data = [field for field in form.changed_data if field != 'justificacion']
+            
+            if not changed_data:
+                messages.info(request, 'No se detectaron cambios en la bitácora.')
+                return redirect('aves:bitacora_detail', pk=bitacora.id)
+            
+            # Registrar modificación antes de guardar
+            valores_anteriores = {}
+            valores_nuevos = {}
+            
+            for field in changed_data:
+                valores_anteriores[field] = getattr(bitacora, field)
+                valores_nuevos[field] = form.cleaned_data[field]
+            
+            bitacora_actualizada = form.save()
+            
+            # Crear registro de modificación
+            RegistroModificacion.objects.create(
+                usuario=request.user,
+                modelo='BitacoraDiaria',
+                objeto_id=bitacora.id,
+                accion='UPDATE',
+                campos_modificados=changed_data,
+                valores_anteriores=valores_anteriores,
+                valores_nuevos=valores_nuevos,
+                justificacion=form.cleaned_data['justificacion']
+            )
+            
+            messages.success(request, 'Bitácora actualizada exitosamente.')
+            return redirect('aves:bitacora_detail', pk=bitacora.id)
+        else:
+            messages.error(request, 'Error al actualizar la bitácora. Verifique los datos.')
+    else:
+        form = BitacoraDiariaEditForm(instance=bitacora)
+    
+    context = {
+        'form': form,
+        'bitacora': bitacora,
+        'is_edit': True,
+    }
+    return render(request, 'aves/bitacora_form.html', context)

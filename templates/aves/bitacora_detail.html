@@ -1,0 +1,126 @@
+{% extends 'aves/base.html' %}
+
+{% block title %}Detalle Bitácora - AgroSmart{% endblock %}
+
+{% block page_title %}Detalle de Bitácora{% endblock %}
+
+{% block breadcrumb_items %}
+    <li class="breadcrumb-item"><a href="{% url 'aves:bitacora_list' %}">Bitácoras</a></li>
+    <li class="breadcrumb-item active">{{ bitacora.fecha|date:"d/m/Y" }}</li>
+{% endblock %}
+
+{% block page_actions %}
+    <a href="{% url 'aves:bitacora_edit' bitacora.id %}" class="btn btn-warning">
+        <i class="fas fa-edit me-2"></i>Editar
+    </a>
+    <a href="{% url 'aves:bitacora_list' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Volver
+    </a>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Información General</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Fecha:</strong> {{ bitacora.fecha|date:"d/m/Y" }}</p>
+                        <p><strong>Lote:</strong> {{ bitacora.lote.codigo }}</p>
+                        <p><strong>Galpón:</strong> {{ bitacora.lote.galpon }}</p>
+                        <p><strong>Semana de Vida:</strong> {{ bitacora.semana_vida|default:"No especificada" }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Mortalidad:</strong> {{ bitacora.mortalidad }}</p>
+                        <p><strong>Causa Mortalidad:</strong> {{ bitacora.causa_mortalidad|default:"N/A" }}</p>
+                        <p><strong>Consumo Concentrado:</strong> {{ bitacora.consumo_concentrado }} kg</p>
+                        <p><strong>Registrado por:</strong> {{ bitacora.usuario_registro.get_full_name|default:bitacora.usuario_registro.username }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-egg me-2"></i>Producción por Categoría</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="text-center">
+                            <h4 class="text-success">{{ bitacora.produccion_aaa }}</h4>
+                            <small>AAA</small>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="text-center">
+                            <h4 class="text-info">{{ bitacora.produccion_aa }}</h4>
+                            <small>AA</small>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="text-center">
+                            <h4 class="text-primary">{{ bitacora.produccion_a }}</h4>
+                            <small>A</small>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="text-center">
+                            <h4 class="text-warning">{{ bitacora.produccion_b }}</h4>
+                            <small>B</small>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="text-center">
+                            <h4 class="text-danger">{{ bitacora.produccion_c }}</h4>
+                            <small>C</small>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="text-center">
+                            <h4 class="text-dark">{{ bitacora.produccion_total }}</h4>
+                            <small><strong>TOTAL</strong></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if bitacora.observaciones %}
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-comment me-2"></i>Observaciones</h5>
+            </div>
+            <div class="card-body">
+                <p>{{ bitacora.observaciones }}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-history me-2"></i>Historial de Modificaciones</h5>
+            </div>
+            <div class="card-body">
+                {% for registro in bitacora.registromodificacion_set.all %}
+                <div class="border-bottom pb-2 mb-2">
+                    <small class="text-muted">{{ registro.fecha_modificacion|date:"d/m/Y H:i" }}</small>
+                    <p class="mb-1"><strong>{{ registro.usuario.get_full_name|default:registro.usuario.username }}</strong></p>
+                    <p class="mb-1">{{ registro.get_accion_display }}</p>
+                    {% if registro.justificacion %}
+                    <p class="mb-0"><em>{{ registro.justificacion }}</em></p>
+                    {% endif %}
+                </div>
+                {% empty %}
+                <p class="text-muted">No hay modificaciones registradas</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

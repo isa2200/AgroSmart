@@ -20,6 +20,30 @@
         padding: 20px;
         margin-bottom: 20px;
     }
+    
+    /* Estilos para campos obligatorios */
+    .text-danger {
+        font-weight: bold;
+    }
+    
+    /* Estilos para el campo de justificación */
+    #justificacion.is-invalid {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+    
+    #justificacion.is-valid {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+    
+    .alert-justificacion {
+        background-color: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 5px;
+        padding: 10px;
+        margin-top: 10px;
+    }
 </style>
 {% endblock %}
 
@@ -151,6 +175,26 @@
                                     <div class="text-danger small">{{ form.observaciones.errors.0 }}</div>
                                 {% endif %}
                             </div>
+                            
+                            {% if is_edit %}
+                            <div class="mb-3">
+                                <label for="justificacion" class="form-label">
+                                    Justificación de la modificación <span class="text-danger">*</span>
+                                </label>
+                                <textarea 
+                                    name="justificacion" 
+                                    id="justificacion"
+                                    class="form-control" 
+                                    rows="3" 
+                                    placeholder="Explique detalladamente el motivo de la modificación..."
+                                    required
+                                >{{ request.POST.justificacion|default:"" }}</textarea>
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Este campo es obligatorio para registrar cualquier modificación.
+                                </small>
+                            </div>
+                            {% endif %}
                         </div>
                         
                         <!-- Botones -->
@@ -159,7 +203,7 @@
                                 <i class="fas fa-arrow-left me-2"></i>Cancelar
                             </a>
                             <button type="submit" class="btn btn-success">
-                                <i class="fas fa-save me-2"></i>Guardar Bitácora
+                                <i class="fas fa-save me-2"></i>{% if is_edit %}Actualizar{% else %}Guardar{% endif %} Bitácora
                             </button>
                         </div>
                     </form>
@@ -172,48 +216,53 @@
 
 {% block extra_js %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Calcular total de producción automáticamente
-    const produccionInputs = ['produccion_aaa', 'produccion_aa', 'produccion_a', 'produccion_b', 'produccion_c'];
-    const totalInput = document.getElementById('totalProduccion');
-    
-    function calcularTotal() {
-        let total = 0;
-        produccionInputs.forEach(function(inputId) {
-            const input = document.getElementById('id_' + inputId);
-            if (input && input.value) {
-                total += parseInt(input.value) || 0;
-            }
-        });
-        totalInput.value = total;
-    }
-    
-    // Agregar event listeners
-    produccionInputs.forEach(function(inputId) {
-        const input = document.getElementById('id_' + inputId);
-        if (input) {
-            input.addEventListener('input', calcularTotal);
+$(document).ready(function() {
+    // Validación de mortalidad
+    $('#id_mortalidad').on('input', function() {
+        const mortalidad = parseInt($(this).val()) || 0;
+        const causaInput = $('#id_causa_mortalidad')[0];
+        
+        if (mortalidad > 0) {
+            causaInput.required = true;
+            causaInput.parentElement.querySelector('label').innerHTML = 'Causa *';
+        } else {
+            causaInput.required = false;
+            causaInput.parentElement.querySelector('label').innerHTML = 'Causa';
         }
     });
     
-    // Calcular total inicial
-    calcularTotal();
+    // Validación adicional para justificación en edición
+    {% if is_edit %}
+    $('#bitacoraForm').on('submit', function(e) {
+        const justificacion = $('#justificacion').val().trim();
+        
+        if (!justificacion) {
+            e.preventDefault();
+            alert('La justificación de la modificación es obligatoria.');
+            $('#justificacion').focus();
+            return false;
+        }
+        
+        if (justificacion.length < 10) {
+            e.preventDefault();
+            alert('La justificación debe tener al menos 10 caracteres.');
+            $('#justificacion').focus();
+            return false;
+        }
+    });
     
-    // Validación de mortalidad y causa
-    const mortalidadInput = document.getElementById('id_mortalidad');
-    const causaInput = document.getElementById('id_causa_mortalidad');
-    
-    if (mortalidadInput && causaInput) {
-        mortalidadInput.addEventListener('input', function() {
-            if (parseInt(this.value) > 0) {
-                causaInput.required = true;
-                causaInput.parentElement.querySelector('label').innerHTML = 'Causa *';
-            } else {
-                causaInput.required = false;
-                causaInput.parentElement.querySelector('label').innerHTML = 'Causa';
-            }
-        });
-    }
+    // Resaltar el campo de justificación si está vacío
+    $('#justificacion').on('blur', function() {
+        const valor = $(this).val().trim();
+        if (!valor) {
+            $(this).addClass('is-invalid');
+        } else if (valor.length < 10) {
+            $(this).addClass('is-invalid');
+        } else {
+            $(this).removeClass('is-invalid').addClass('is-valid');
+        }
+    });
+    {% endif %}
 });
 </script>
 {% endblock %}
