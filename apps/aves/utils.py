@@ -25,28 +25,7 @@ def generar_alertas(bitacora):
             titulo=f'Mortalidad alta en lote {bitacora.lote.codigo}',
             mensaje=f'Se registró una mortalidad del {porcentaje_mortalidad_diario:.1f}% en el día {bitacora.fecha}',
             lote=bitacora.lote,
-            galpon=bitacora.lote.galpon
-        )
-    
-    # Alerta por temperatura fuera de rango
-    if bitacora.temperatura_min and bitacora.temperatura_min < 18:
-        AlertaSistema.objects.create(
-            tipo_alerta='temperatura_fuera_rango',
-            nivel='warning',
-            titulo=f'Temperatura baja en {bitacora.lote.galpon.nombre}',
-            mensaje=f'Temperatura mínima de {bitacora.temperatura_min}°C registrada el {bitacora.fecha}',
-            lote=bitacora.lote,
-            galpon=bitacora.lote.galpon
-        )
-    
-    if bitacora.temperatura_max and bitacora.temperatura_max > 30:
-        AlertaSistema.objects.create(
-            tipo_alerta='temperatura_fuera_rango',
-            nivel='warning',
-            titulo=f'Temperatura alta en {bitacora.lote.galpon.nombre}',
-            mensaje=f'Temperatura máxima de {bitacora.temperatura_max}°C registrada el {bitacora.fecha}',
-            lote=bitacora.lote,
-            galpon=bitacora.lote.galpon
+            galpon_nombre=bitacora.lote.galpon
         )
     
     # Alerta por producción baja (menos del 70% en aves en postura)
@@ -59,8 +38,10 @@ def generar_alertas(bitacora):
                 titulo=f'Producción baja en lote {bitacora.lote.codigo}',
                 mensaje=f'Porcentaje de postura del {porcentaje_postura:.1f}% el {bitacora.fecha}',
                 lote=bitacora.lote,
-                galpon=bitacora.lote.galpon
+                galpon_nombre=bitacora.lote.galpon
             )
+
+    # Nota: Se eliminaron las alertas de temperatura ya que no se desean agregar esos campos
 
 
 def actualizar_inventario_huevos(bitacora):

@@ -99,8 +99,6 @@ class BitacoraProduccionModelTest(TestCase):
             huevos_producidos=850,
             mortalidad=2,
             consumo_concentrado=Decimal('120.5'),
-            temperatura_promedio=Decimal('22.5'),
-            humedad_promedio=Decimal('65.0'),
             registrado_por=self.user
         )
         
@@ -242,8 +240,6 @@ class GestorProduccionTest(TestCase):
             'huevos_producidos': 800,
             'mortalidad': 2,
             'consumo_concentrado': Decimal('120.0'),
-            'temperatura_promedio': Decimal('22.5'),
-            'humedad_promedio': Decimal('65.0')
         }
         
         resultado = self.gestor.registrar_produccion_diaria(datos, self.user)
@@ -417,8 +413,6 @@ class FormsTest(TestCase):
             'huevos_producidos': 800,
             'mortalidad': 2,
             'consumo_concentrado': '120.5',
-            'temperatura_promedio': '22.5',
-            'humedad_promedio': '65.0'
         }
         
         form = BitacoraProduccionForm(data=form_data)
@@ -458,8 +452,6 @@ class IntegrationTest(TestCase):
             'huevos_producidos': 800,
             'mortalidad': 2,
             'consumo_concentrado': Decimal('120.0'),
-            'temperatura_promedio': Decimal('22.5'),
-            'humedad_promedio': Decimal('65.0')
         }
         
         resultado_produccion = gestor_produccion.registrar_produccion_diaria(

@@ -443,8 +443,8 @@ def generar_excel_comparativo_periodos(datos_comparacion, lote_id):
         # Encabezados
         encabezados = [
             'Período', 'Fecha Inicio', 'Fecha Fin', 'Total Huevos', 'Huevos Buenos',
-            'Huevos Rotos', 'Huevos Sucios', 'Mortalidad', 'Temp. Promedio',
-            'Humedad Promedio', 'Promedio Huevos/Día'
+            'Huevos Rotos', 'Huevos Sucios', 'Mortalidad',
+            'Promedio Huevos/Día'
         ]
         
         for i, encabezado in enumerate(encabezados, start=1):
@@ -462,8 +462,6 @@ def generar_excel_comparativo_periodos(datos_comparacion, lote_id):
             ws.cell(row=i, column=6, value=dato['huevos_rotos'])
             ws.cell(row=i, column=7, value=dato['huevos_sucios'])
             ws.cell(row=i, column=8, value=dato['total_mortalidad'])
-            ws.cell(row=i, column=9, value=dato['promedio_temperatura'])
-            ws.cell(row=i, column=10, value=dato['promedio_humedad'])
             ws.cell(row=i, column=11, value=dato['promedio_huevos_dia'])
         
         # Crear gráfico de evolución

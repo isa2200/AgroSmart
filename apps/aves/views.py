@@ -291,7 +291,7 @@ def plan_vacunacion_create(request):
 @role_required(['superusuario', 'admin_aves', 'solo_vista'])
 def alertas_list(request):
     """Lista de alertas del sistema."""
-    alertas = AlertaSistema.objects.select_related('lote', 'galpon', 'usuario_destinatario').order_by('-fecha_generacion')
+    alertas = AlertaSistema.objects.select_related('lote', 'usuario_destinatario').order_by('-fecha_generacion')
     
     # Filtros
     tipo_alerta = request.GET.get('tipo')

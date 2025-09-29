@@ -85,9 +85,6 @@ class ReporteAvicola:
                 'total_huevos': bitacora.huevos_buenos + bitacora.huevos_rotos + bitacora.huevos_sucios,
                 'porcentaje_postura': round(porcentaje_postura, 2),
                 'mortalidad': bitacora.mortalidad,
-                'temperatura_max': bitacora.temperatura_maxima,
-                'temperatura_min': bitacora.temperatura_minima,
-                'humedad': bitacora.humedad_promedio,
                 'observaciones': bitacora.observaciones
             })
             
@@ -114,9 +111,6 @@ class ReporteAvicola:
             total_huevos_rotos=Sum('huevos_rotos'),
             total_huevos_sucios=Sum('huevos_sucios'),
             total_mortalidad=Sum('mortalidad'),
-            promedio_temperatura_max=Avg('temperatura_maxima'),
-            promedio_temperatura_min=Avg('temperatura_minima'),
-            promedio_humedad=Avg('humedad_promedio'),
             dias_registrados=Count('id')
         )
         
@@ -137,9 +131,6 @@ class ReporteAvicola:
             'porcentaje_rotos': round(porcentaje_rotos, 2),
             'porcentaje_sucios': round(porcentaje_sucios, 2),
             'total_mortalidad': resumen['total_mortalidad'] or 0,
-            'promedio_temperatura_max': round(resumen['promedio_temperatura_max'] or 0, 1),
-            'promedio_temperatura_min': round(resumen['promedio_temperatura_min'] or 0, 1),
-            'promedio_humedad': round(resumen['promedio_humedad'] or 0, 1),
             'dias_registrados': resumen['dias_registrados']
         }
     
@@ -284,9 +275,6 @@ class ReporteAvicola:
             ['Huevos rotos', f"{resumen['huevos_rotos']:,} ({resumen['porcentaje_rotos']}%)"],
             ['Huevos sucios', f"{resumen['huevos_sucios']:,} ({resumen['porcentaje_sucios']}%)"],
             ['Total mortalidad', f"{resumen['total_mortalidad']:,}"],
-            ['Temperatura promedio máx.', f"{resumen['promedio_temperatura_max']}°C"],
-            ['Temperatura promedio mín.', f"{resumen['promedio_temperatura_min']}°C"],
-            ['Humedad promedio', f"{resumen['promedio_humedad']}%"],
             ['Días registrados', f"{resumen['dias_registrados']}"],
         ]
         
@@ -382,9 +370,6 @@ class ReporteAvicola:
             ['Huevos rotos', f"{resumen['huevos_rotos']} ({resumen['porcentaje_rotos']}%)"],
             ['Huevos sucios', f"{resumen['huevos_sucios']} ({resumen['porcentaje_sucios']}%)"],
             ['Total mortalidad', resumen['total_mortalidad']],
-            ['Temperatura promedio máx.', f"{resumen['promedio_temperatura_max']}°C"],
-            ['Temperatura promedio mín.', f"{resumen['promedio_temperatura_min']}°C"],
-            ['Humedad promedio', f"{resumen['promedio_humedad']}%"],
             ['Días registrados', resumen['dias_registrados']],
         ]
         
@@ -401,7 +386,7 @@ class ReporteAvicola:
         
         # Encabezados
         encabezados = ['Fecha', 'Lote', 'Galpón', 'Huevos Buenos', 'Huevos Rotos', 'Huevos Sucios', 
-                      'Total Huevos', '% Postura', 'Mortalidad', 'Temp. Máx', 'Temp. Mín', 'Humedad', 'Observaciones']
+                      'Total Huevos', '% Postura', 'Mortalidad', 'Observaciones']
         
         for i, encabezado in enumerate(encabezados, start=1):
             celda = ws_produccion.cell(row=1, column=i, value=encabezado)
@@ -419,9 +404,6 @@ class ReporteAvicola:
             ws_produccion.cell(row=i, column=7, value=dato['total_huevos'])
             ws_produccion.cell(row=i, column=8, value=dato['porcentaje_postura'])
             ws_produccion.cell(row=i, column=9, value=dato['mortalidad'])
-            ws_produccion.cell(row=i, column=10, value=dato['temperatura_max'])
-            ws_produccion.cell(row=i, column=11, value=dato['temperatura_min'])
-            ws_produccion.cell(row=i, column=12, value=dato['humedad'])
             ws_produccion.cell(row=i, column=13, value=dato['observaciones'])
         
         # Ajustar ancho de columnas
@@ -515,7 +497,7 @@ class ReporteAvicola:
         # Encabezados
         writer.writerow([
             'Fecha', 'Lote', 'Galpón', 'Huevos Buenos', 'Huevos Rotos', 'Huevos Sucios',
-            'Total Huevos', '% Postura', 'Mortalidad', 'Temp. Máx', 'Temp. Mín', 'Humedad', 'Observaciones'
+            'Total Huevos', '% Postura', 'Mortalidad', 'Observaciones'
         ])
         
         # Datos
@@ -531,9 +513,6 @@ class ReporteAvicola:
                 dato['total_huevos'],
                 dato['porcentaje_postura'],
                 dato['mortalidad'],
-                dato['temperatura_max'],
-                dato['temperatura_min'],
-                dato['humedad'],
                 dato['observaciones']
             ])
         
@@ -614,8 +593,6 @@ class ReporteComparativo:
                 total_huevos_rotos=Sum('huevos_rotos'),
                 total_huevos_sucios=Sum('huevos_sucios'),
                 total_mortalidad=Sum('mortalidad'),
-                promedio_temperatura=Avg('temperatura_maxima'),
-                promedio_humedad=Avg('humedad_promedio'),
                 dias_registrados=Count('id')
             )
             
@@ -630,8 +607,6 @@ class ReporteComparativo:
                 'huevos_rotos': resumen['total_huevos_rotos'] or 0,
                 'huevos_sucios': resumen['total_huevos_sucios'] or 0,
                 'total_mortalidad': resumen['total_mortalidad'] or 0,
-                'promedio_temperatura': round(resumen['promedio_temperatura'] or 0, 1),
-                'promedio_humedad': round(resumen['promedio_humedad'] or 0, 1),
                 'dias_registrados': resumen['dias_registrados'],
                 'promedio_huevos_dia': round(total_huevos / resumen['dias_registrados'], 1) if resumen['dias_registrados'] > 0 else 0
             })

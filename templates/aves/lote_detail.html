@@ -138,7 +138,6 @@
                                     <th>Producción</th>
                                     <th>Mortalidad</th>
                                     <th>Consumo</th>
-                                    <th>Temperatura</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -155,7 +154,6 @@
                                         {% endif %}
                                     </td>
                                     <td>{{ bitacora.consumo_concentrado|default:"-" }} kg</td>
-                                    <td>{{ bitacora.temperatura_promedio|default:"-" }}°C</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

@@ -5,10 +5,10 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.http import HttpResponse
-from django.db.models import Sum, Avg, Count, Q
+from django.db.models import Sum, Avg, Count, Q, F
 from django.utils import timezone
 
-# Importaciones para PDF y Excel
+# Importaciones opcionales para reportes avanzados
 try:
     from reportlab.lib import colors
     from reportlab.lib.pagesizes import letter, A4
@@ -31,223 +31,212 @@ from apps.aves.models import LoteAves, BitacoraDiaria
 
 class GeneradorReportes:
     """
-    Clase principal para generar reportes en diferentes formatos
+    Clase para generar reportes en diferentes formatos.
     """
     
     def __init__(self, tipo_reporte, parametros=None):
         self.tipo_reporte = tipo_reporte
         self.parametros = parametros or {}
-        self.fecha_inicio = self.parametros.get('fecha_inicio')
-        self.fecha_fin = self.parametros.get('fecha_fin')
         
     def obtener_datos_produccion(self):
         """
-        Obtiene datos de producción según los parámetros
+        Obtiene datos de producción según los parámetros especificados.
         """
-        datos = {
-            'lotes': [],
-            'resumen': {}
-        }
-        
-        # Filtros de fecha
         filtros_fecha = {}
-        if self.fecha_inicio:
-            filtros_fecha['fecha__gte'] = self.fecha_inicio
-        if self.fecha_fin:
-            filtros_fecha['fecha__lte'] = self.fecha_fin
+        if 'fecha_inicio' in self.parametros:
+            filtros_fecha['fecha__gte'] = self.parametros['fecha_inicio']
+        if 'fecha_fin' in self.parametros:
+            filtros_fecha['fecha__lte'] = self.parametros['fecha_fin']
         
-        # Datos de producción por lote usando BitacoraDiaria
+        # Usar BitacoraDiaria como fuente principal
         produccion_lotes = BitacoraDiaria.objects.filter(**filtros_fecha).select_related('lote')
+        datos = {}
+        
+        # Datos por lote
         datos['lotes'] = list(produccion_lotes.values(
             'lote__codigo',
             'lote__nombre_lote',
             'lote__linea',
-            'huevos_recolectados',
-            'peso_promedio_huevo',
+            'produccion_aaa',
+            'produccion_aa', 
+            'produccion_a',
+            'produccion_b',
+            'produccion_c',
             'fecha'
         ))
         
+        # Calcular totales de producción para cada registro
+        for item in datos['lotes']:
+            item['total_produccion'] = (
+                (item['produccion_aaa'] or 0) +
+                (item['produccion_aa'] or 0) +
+                (item['produccion_a'] or 0) +
+                (item['produccion_b'] or 0) +
+                (item['produccion_c'] or 0)
+            )
+        
         # Resumen estadístico
         datos['resumen'] = {
-            'total_huevos': produccion_lotes.aggregate(total=Sum('huevos_recolectados'))['total'] or 0,
-            'promedio_huevos_lote': produccion_lotes.aggregate(promedio=Avg('huevos_recolectados'))['promedio'] or 0,
-        }
-        
-        return datos
-    
-    def obtener_datos_inventario(self):
-        """
-        Obtiene datos de inventario de lotes
-        """
-        datos = {
-            'lotes': {
-                'total': LoteAves.objects.filter(estado='activo').count(),
-                'por_linea': list(LoteAves.objects.filter(estado='activo')
-                                .values('linea')
-                                .annotate(cantidad=Count('id'))
-                                .order_by('linea')),
-                'total_aves': LoteAves.objects.filter(estado='activo')
-                            .aggregate(total=Sum('cantidad_actual'))['total'] or 0
-            },
+            'total_huevos': sum(item['total_produccion'] for item in datos['lotes']),
+            'promedio_huevos_lote': sum(item['total_produccion'] for item in datos['lotes']) / len(datos['lotes']) if datos['lotes'] else 0,
         }
         
         return datos
     
     def obtener_datos_produccion(self):
         """
-        Obtiene datos de producción según los parámetros
+        Obtiene datos de producción de aves según los parámetros especificados.
         """
-        datos = {
-            'aves': [],
-            'resumen': {}
-        }
-        
-        # Filtros de fecha
         filtros_fecha = {}
-        if self.fecha_inicio:
-            filtros_fecha['fecha__gte'] = self.fecha_inicio
-        if self.fecha_fin:
-            filtros_fecha['fecha__lte'] = self.fecha_fin
+        if 'fecha_inicio' in self.parametros:
+            filtros_fecha['fecha__gte'] = self.parametros['fecha_inicio']
+        if 'fecha_fin' in self.parametros:
+            filtros_fecha['fecha__lte'] = self.parametros['fecha_fin']
         
-        # Datos de aves usando BitacoraDiaria
+        # Usar BitacoraDiaria como fuente principal
         produccion_aves = BitacoraDiaria.objects.filter(**filtros_fecha).select_related('lote')
+        datos = {}
+        
+        # Datos por ave/lote
         datos['aves'] = list(produccion_aves.values(
             'lote__codigo',
+            'lote__raza',
             'lote__linea',
-            'huevos_recolectados',
-            'peso_promedio_huevo',
+            'produccion_aaa',
+            'produccion_aa',
+            'produccion_a', 
+            'produccion_b',
+            'produccion_c',
             'fecha'
         ))
         
+        # Calcular totales de producción para cada registro
+        for item in datos['aves']:
+            item['total_produccion'] = (
+                (item['produccion_aaa'] or 0) +
+                (item['produccion_aa'] or 0) +
+                (item['produccion_a'] or 0) +
+                (item['produccion_b'] or 0) +
+                (item['produccion_c'] or 0)
+            )
+        
         # Resumen estadístico
         datos['resumen'] = {
-            'total_huevos': produccion_aves.aggregate(total=Sum('huevos_recolectados'))['total'] or 0,
-            'promedio_huevos_ave': produccion_aves.aggregate(promedio=Avg('huevos_recolectados'))['promedio'] or 0,
+            'total_huevos': sum(item['total_produccion'] for item in datos['aves']),
+            'promedio_huevos_ave': sum(item['total_produccion'] for item in datos['aves']) / len(datos['aves']) if datos['aves'] else 0,
         }
         
         return datos
-    
+
     def obtener_datos_inventario(self):
         """
-        Obtiene datos de inventario de animales
+        Obtiene datos de inventario de lotes
         """
-        datos = {
-            'aves': {
-                'total': LoteAves.objects.filter(estado='activo').count(),
-                'por_linea': list(LoteAves.objects.filter(estado='activo')
-                                .values('linea')
-                                .annotate(cantidad=Count('id'))
-                                .order_by('linea')),
-                'por_sexo': list(LoteAves.objects.filter(estado='activo')
-                                .values('sexo')
-                                .annotate(cantidad=Count('id'))
-                                .order_by('sexo'))
-            },
+        lotes = LoteAves.objects.filter(is_active=True)
+        datos = {}
+        
+        datos['lotes'] = list(lotes.values(
+            'codigo', 'nombre_lote', 'raza', 'linea', 'numero_aves_actual', 
+            'estado', 'fecha_ingreso'
+        ))
+        
+        datos['resumen'] = {
+            'total_lotes': lotes.count(),
+            'total_aves': lotes.aggregate(total=Sum('numero_aves_actual'))['total'] or 0,
         }
         
         return datos
-    
+
     def generar_pdf(self, datos, nombre_archivo):
         """
-        Genera reporte en formato PDF
+        Genera un reporte en formato PDF.
         """
         if not REPORTLAB_AVAILABLE:
-            raise ImportError("ReportLab no está instalado. Ejecute: pip install reportlab")
+            raise ImportError("ReportLab no está instalado. Instala con: pip install reportlab")
         
         buffer = io.BytesIO()
-        doc = SimpleDocTemplate(buffer, pagesize=A4)
+        doc = SimpleDocTemplate(buffer, pagesize=letter)
         story = []
         styles = getSampleStyleSheet()
         
-        # Título del reporte
-        title_style = ParagraphStyle(
-            'CustomTitle',
-            parent=styles['Heading1'],
-            fontSize=18,
-            spaceAfter=30,
-            alignment=1  # Centrado
-        )
-        story.append(Paragraph(f"Reporte: {self.tipo_reporte}", title_style))
+        # Título
+        titulo = Paragraph(f"Reporte de {self.tipo_reporte.title()}", styles['Title'])
+        story.append(titulo)
         story.append(Spacer(1, 12))
         
-        # Información del reporte
-        info_data = [
-            ['Fecha de generación:', datetime.now().strftime('%d/%m/%Y %H:%M')],
-            ['Período:', f"{self.fecha_inicio or 'N/A'} - {self.fecha_fin or 'N/A'}"],
-        ]
-        info_table = Table(info_data, colWidths=[2*inch, 3*inch])
-        info_table.setStyle(TableStyle([
-            ('BACKGROUND', (0, 0), (0, -1), colors.grey),
-            ('TEXTCOLOR', (0, 0), (0, -1), colors.whitesmoke),
-            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-            ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
-            ('FONTSIZE', (0, 0), (-1, -1), 10),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 12),
-        ]))
-        story.append(info_table)
-        story.append(Spacer(1, 20))
+        # Fecha de generación
+        fecha_generacion = Paragraph(
+            f"Generado el: {timezone.now().strftime('%d/%m/%Y %H:%M')}",
+            styles['Normal']
+        )
+        story.append(fecha_generacion)
+        story.append(Spacer(1, 12))
         
-        # Contenido según el tipo de reporte
-        if 'produccion' in self.tipo_reporte.lower():
+        # Contenido según tipo de reporte
+        if self.tipo_reporte == 'produccion':
             self._agregar_tabla_produccion_pdf(story, datos, styles)
-        elif 'inventario' in self.tipo_reporte.lower():
+        elif self.tipo_reporte == 'inventario':
             self._agregar_tabla_inventario_pdf(story, datos, styles)
         
         # Construir PDF
         doc.build(story)
         buffer.seek(0)
         
-        return buffer
+        # Crear respuesta HTTP
+        response = HttpResponse(buffer, content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}.pdf"'
+        
+        return response
     
     def _agregar_tabla_produccion_pdf(self, story, datos, styles):
-        """
-        Agrega tabla de producción al PDF
-        """
-        # Resumen
-        story.append(Paragraph("Resumen de Producción", styles['Heading2']))
-        resumen_data = [
-            ['Tipo', 'Total Producido', 'Unidad'],
-            ['Huevos', f"{datos['resumen']['total_huevos']}", 'unidades'],
-        ]
-        
-        resumen_table = Table(resumen_data, colWidths=[2*inch, 2*inch, 1*inch])
-        resumen_table.setStyle(TableStyle([
-            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-            ('FONTSIZE', (0, 0), (-1, -1), 10),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 12),
-            ('GRID', (0, 0), (-1, -1), 1, colors.black)
-        ]))
-        story.append(resumen_table)
-        story.append(Spacer(1, 20))
-    
+        """Agrega tabla de producción al PDF."""
+        if 'lotes' in datos and datos['lotes']:
+            # Encabezados
+            encabezados = ['Lote', 'Fecha', 'Total Producción', 'AAA', 'AA', 'A', 'B', 'C']
+            tabla_datos = [encabezados]
+            
+            # Datos
+            for item in datos['lotes']:
+                fila = [
+                    item.get('lote__codigo', ''),
+                    item.get('fecha', ''),
+                    str(item.get('total_produccion', 0)),
+                    str(item.get('produccion_aaa', 0)),
+                    str(item.get('produccion_aa', 0)),
+                    str(item.get('produccion_a', 0)),
+                    str(item.get('produccion_b', 0)),
+                    str(item.get('produccion_c', 0)),
+                ]
+                tabla_datos.append(fila)
+            
+            # Crear tabla
+            tabla = Table(tabla_datos)
+            tabla.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 14),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black)
+            ]))
+            
+            story.append(tabla)
+
     def generar_excel(self, datos, nombre_archivo):
         """
-        Genera reporte en formato Excel
+        Genera un reporte en formato Excel.
         """
         if not OPENPYXL_AVAILABLE:
-            raise ImportError("openpyxl no está instalado. Ejecute: pip install openpyxl")
+            raise ImportError("openpyxl no está instalado. Instala con: pip install openpyxl")
         
         wb = openpyxl.Workbook()
         
-        # Hoja de resumen
-        ws_resumen = wb.active
-        ws_resumen.title = "Resumen"
-        
-        # Estilos
-        header_font = Font(bold=True, color="FFFFFF")
-        header_fill = PatternFill(start_color="366092", end_color="366092", fill_type="solid")
-        
-        # Título
-        ws_resumen['A1'] = f"Reporte: {self.tipo_reporte}"
-        ws_resumen['A1'].font = Font(bold=True, size=16)
-        ws_resumen['A2'] = f"Generado: {datetime.now().strftime('%d/%m/%Y %H:%M')}"
-        
-        if 'produccion' in self.tipo_reporte.lower():
+        # Crear hojas según tipo de reporte
+        if self.tipo_reporte == 'produccion':
             self._crear_hoja_produccion_excel(wb, datos)
-        elif 'inventario' in self.tipo_reporte.lower():
+        elif self.tipo_reporte == 'inventario':
             self._crear_hoja_inventario_excel(wb, datos)
         
         # Guardar en buffer
@@ -255,128 +244,135 @@ class GeneradorReportes:
         wb.save(buffer)
         buffer.seek(0)
         
-        return buffer
+        # Crear respuesta HTTP
+        response = HttpResponse(
+            buffer,
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}.xlsx"'
+        
+        return response
     
     def _crear_hoja_produccion_excel(self, wb, datos):
-        """
-        Crea hoja de producción en Excel
-        """
-        if datos['lotes']:
-            ws_lotes = wb.create_sheet("Producción Lotes")
-            headers = ['Código', 'Nombre Lote', 'Línea', 'Huevos Totales', 'Peso Prom. (g)', 'Fecha']
-            ws_lotes.append(headers)
-            
-            for item in datos['lotes']:
-                ws_lotes.append([
-                    item['lote__codigo'],
-                    item['lote__nombre_lote'],
-                    item['lote__linea'],
-                    item['total_huevos'],
-                    item['peso_promedio_huevo'],
-                    item['fecha'].strftime('%d/%m/%Y') if item['fecha'] else ''
-                ])
-        if datos['aves']:
-            ws_aves = wb.create_sheet("Producción Aves")
-            headers = ['Identificación', 'Línea', 'Huevos', 'Peso Prom. (g)', 'Fecha', 'Calidad']
-            ws_aves.append(headers)
-            
-            for item in datos['aves']:
-                ws_aves.append([
-                    item['ave__identificacion'],
-                    item['ave__linea'],
-                    item['huevos_recolectados'],
-                    item['peso_promedio_huevo'],
-                    item['fecha'].strftime('%d/%m/%Y') if item['fecha'] else '',
-                    item['calidad']
-                ])
-    
+        """Crea hoja de producción en Excel."""
+        ws = wb.active
+        ws.title = "Producción"
+        
+        # Encabezados
+        encabezados = ['Lote', 'Fecha', 'Total Producción', 'AAA', 'AA', 'A', 'B', 'C']
+        for col, encabezado in enumerate(encabezados, 1):
+            cell = ws.cell(row=1, column=col, value=encabezado)
+            cell.font = Font(bold=True)
+            cell.fill = PatternFill(start_color="CCCCCC", end_color="CCCCCC", fill_type="solid")
+        
+        # Datos
+        if 'lotes' in datos:
+            for row, item in enumerate(datos['lotes'], 2):
+                ws.cell(row=row, column=1, value=item.get('lote__codigo', ''))
+                ws.cell(row=row, column=2, value=str(item.get('fecha', '')))
+                ws.cell(row=row, column=3, value=item.get('total_produccion', 0))
+                ws.cell(row=row, column=4, value=item.get('produccion_aaa', 0))
+                ws.cell(row=row, column=5, value=item.get('produccion_aa', 0))
+                ws.cell(row=row, column=6, value=item.get('produccion_a', 0))
+                ws.cell(row=row, column=7, value=item.get('produccion_b', 0))
+                ws.cell(row=row, column=8, value=item.get('produccion_c', 0))
+
     def generar_csv(self, datos, nombre_archivo):
         """
-        Genera reporte en formato CSV
+        Genera un reporte en formato CSV.
         """
-        buffer = io.StringIO()
-        writer = csv.writer(buffer)
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}.csv"'
         
-        # Escribir encabezado
-        writer.writerow([f"Reporte: {self.tipo_reporte}"])
-        writer.writerow([f"Generado: {datetime.now().strftime('%d/%m/%Y %H:%M')}"])
-        writer.writerow([])  # Línea vacía
+        writer = csv.writer(response)
         
-        if 'produccion' in self.tipo_reporte.lower():
-            # Resumen
-            writer.writerow(['RESUMEN DE PRODUCCIÓN'])
-            writer.writerow(['Tipo', 'Total Producido', 'Unidad'])
-            writer.writerow(['Huevos', f"{datos['resumen']['total_huevos']}", 'unidades'])
-            writer.writerow([])
+        # Escribir según tipo de reporte
+        if self.tipo_reporte == 'produccion' and 'lotes' in datos:
+            # Encabezados
+            writer.writerow(['Lote', 'Fecha', 'Total Producción', 'AAA', 'AA', 'A', 'B', 'C'])
+            
+            # Datos
+            for item in datos['lotes']:
+                writer.writerow([
+                    item.get('lote__codigo', ''),
+                    item.get('fecha', ''),
+                    item.get('total_produccion', 0),
+                    item.get('produccion_aaa', 0),
+                    item.get('produccion_aa', 0),
+                    item.get('produccion_a', 0),
+                    item.get('produccion_b', 0),
+                    item.get('produccion_c', 0),
+                ])
         
-        buffer.seek(0)
-        return buffer
+        return response
+
 
 class ReportePersonalizado:
     """
-    Clase para crear reportes personalizados con filtros avanzados
+    Clase para crear reportes personalizados con filtros dinámicos.
     """
     
     def __init__(self, usuario):
         self.usuario = usuario
-        self.filtros = {}
+        self.filtros = []
         self.campos_seleccionados = []
-        self.agrupaciones = []
+        self.agrupacion = []
         self.ordenamiento = []
     
     def agregar_filtro(self, campo, operador, valor):
         """
-        Agrega un filtro al reporte
-        """
-        if campo not in self.filtros:
-            self.filtros[campo] = []
+        Agrega un filtro al reporte.
         
-        self.filtros[campo].append({
+        Args:
+            campo: Campo del modelo a filtrar
+            operador: Operador de comparación ('eq', 'gt', 'lt', 'contains', etc.)
+            valor: Valor a comparar
+        """
+        self.filtros.append({
+            'campo': campo,
             'operador': operador,
             'valor': valor
         })
     
     def seleccionar_campos(self, campos):
-        """
-        Selecciona los campos a incluir en el reporte
-        """
+        """Selecciona los campos a incluir en el reporte."""
         self.campos_seleccionados = campos
     
     def agrupar_por(self, campos):
-        """
-        Agrupa los resultados por los campos especificados
-        """
-        self.agrupaciones = campos
+        """Define campos para agrupar los resultados."""
+        self.agrupacion = campos
     
     def ordenar_por(self, campos):
-        """
-        Ordena los resultados por los campos especificados
-        """
+        """Define el orden de los resultados."""
         self.ordenamiento = campos
     
     def generar_consulta(self, modelo):
         """
-        Genera la consulta Django basada en los filtros
+        Genera la consulta Django basada en los filtros y parámetros.
         """
         queryset = modelo.objects.all()
         
         # Aplicar filtros
-        for campo, filtros_campo in self.filtros.items():
-            for filtro in filtros_campo:
-                operador = filtro['operador']
-                valor = filtro['valor']
-                
-                if operador == 'igual':
-                    queryset = queryset.filter(**{campo: valor})
-                elif operador == 'contiene':
-                    queryset = queryset.filter(**{f"{campo}__icontains": valor})
-                elif operador == 'mayor_que':
-                    queryset = queryset.filter(**{f"{campo}__gt": valor})
-                elif operador == 'menor_que':
-                    queryset = queryset.filter(**{f"{campo}__lt": valor})
-                elif operador == 'entre':
-                    if isinstance(valor, list) and len(valor) == 2:
-                        queryset = queryset.filter(**{f"{campo}__range": valor})
+        for filtro in self.filtros:
+            campo = filtro['campo']
+            operador = filtro['operador']
+            valor = filtro['valor']
+            
+            if operador == 'eq':
+                queryset = queryset.filter(**{campo: valor})
+            elif operador == 'gt':
+                queryset = queryset.filter(**{f"{campo}__gt": valor})
+            elif operador == 'lt':
+                queryset = queryset.filter(**{f"{campo}__lt": valor})
+            elif operador == 'contains':
+                queryset = queryset.filter(**{f"{campo}__icontains": valor})
+            elif operador == 'range':
+                if isinstance(valor, (list, tuple)) and len(valor) == 2:
+                    queryset = queryset.filter(**{f"{campo}__range": valor})
+        
+        # Aplicar selección de campos
+        if self.campos_seleccionados:
+            queryset = queryset.values(*self.campos_seleccionados)
         
         # Aplicar ordenamiento
         if self.ordenamiento:
@@ -384,122 +380,130 @@ class ReportePersonalizado:
         
         return queryset
 
+
 def generar_reporte_automatico(reporte_programado):
     """
-    Función para generar reportes automáticos programados
+    Genera un reporte automático basado en la configuración programada.
+    
+    Args:
+        reporte_programado: Instancia del modelo ReporteProgramado
+    
+    Returns:
+        dict: Resultado de la generación del reporte
     """
     try:
+        # Obtener parámetros del reporte
+        parametros = {
+            'fecha_inicio': reporte_programado.fecha_inicio,
+            'fecha_fin': reporte_programado.fecha_fin,
+        }
+        
+        # Crear generador de reportes
         generador = GeneradorReportes(
-            reporte_programado.tipo_reporte.nombre,
-            reporte_programado.parametros
+            tipo_reporte=reporte_programado.tipo_reporte,
+            parametros=parametros
         )
         
-        # Obtener datos según el tipo de reporte
-        if 'produccion' in reporte_programado.tipo_reporte.nombre.lower():
+        # Obtener datos según el tipo
+        if reporte_programado.tipo_reporte == 'produccion':
             datos = generador.obtener_datos_produccion()
-        elif 'inventario' in reporte_programado.tipo_reporte.nombre.lower():
+        elif reporte_programado.tipo_reporte == 'inventario':
             datos = generador.obtener_datos_inventario()
         else:
-            datos = {}
+            raise ValueError(f"Tipo de reporte no soportado: {reporte_programado.tipo_reporte}")
         
-        # Generar archivo según el formato
-        nombre_archivo = f"{reporte_programado.nombre}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        # Generar archivo según formato
+        nombre_archivo = f"{reporte_programado.tipo_reporte}_{timezone.now().strftime('%Y%m%d_%H%M%S')}"
         
-        if reporte_programado.formato_salida == 'pdf':
-            buffer = generador.generar_pdf(datos, nombre_archivo)
-            extension = '.pdf'
-        elif reporte_programado.formato_salida == 'excel':
-            buffer = generador.generar_excel(datos, nombre_archivo)
-            extension = '.xlsx'
-        elif reporte_programado.formato_salida == 'csv':
-            buffer = generador.generar_csv(datos, nombre_archivo)
-            extension = '.csv'
+        if reporte_programado.formato == 'pdf':
+            archivo = generador.generar_pdf(datos, nombre_archivo)
+        elif reporte_programado.formato == 'excel':
+            archivo = generador.generar_excel(datos, nombre_archivo)
+        elif reporte_programado.formato == 'csv':
+            archivo = generador.generar_csv(datos, nombre_archivo)
+        else:
+            raise ValueError(f"Formato no soportado: {reporte_programado.formato}")
         
-        # Crear registro del reporte generado
-        from .models import ReporteGenerado
-        reporte_generado = ReporteGenerado.objects.create(
-            tipo_reporte=reporte_programado.tipo_reporte,
-            usuario=reporte_programado.usuario,
-            nombre_archivo=nombre_archivo + extension,
-            formato=reporte_programado.formato_salida,
-            parametros=reporte_programado.parametros,
-            estado='completado'
-        )
-        
-        # Guardar archivo
-        reporte_generado.archivo.save(
-            nombre_archivo + extension,
-            buffer,
-            save=True
-        )
-        
-        # Actualizar fechas del reporte programado
-        reporte_programado.ultima_ejecucion = timezone.now()
-        # Calcular próxima ejecución según frecuencia
-        if reporte_programado.frecuencia == 'diario':
-            reporte_programado.proxima_ejecucion = timezone.now() + timedelta(days=1)
-        elif reporte_programado.frecuencia == 'semanal':
-            reporte_programado.proxima_ejecucion = timezone.now() + timedelta(weeks=1)
-        elif reporte_programado.frecuencia == 'mensual':
-            reporte_programado.proxima_ejecucion = timezone.now() + timedelta(days=30)
-        elif reporte_programado.frecuencia == 'trimestral':
-            reporte_programado.proxima_ejecucion = timezone.now() + timedelta(days=90)
-        
-        reporte_programado.save()
+        # Guardar archivo si es necesario
+        if reporte_programado.guardar_archivo:
+            ruta_archivo = os.path.join(
+                settings.MEDIA_ROOT, 
+                'reportes', 
+                f"{nombre_archivo}.{reporte_programado.formato}"
+            )
+            
+            # Crear directorio si no existe
+            os.makedirs(os.path.dirname(ruta_archivo), exist_ok=True)
+            
+            # Guardar archivo
+            with open(ruta_archivo, 'wb') as f:
+                f.write(archivo.content)
         
         # Enviar por email si está configurado
         if reporte_programado.enviar_email and reporte_programado.emails_destino:
-            enviar_reporte_por_email(reporte_generado, reporte_programado.emails_destino)
+            emails = [email.strip() for email in reporte_programado.emails_destino.split(',')]
+            enviar_reporte_por_email(archivo, emails)
         
-        return reporte_generado
+        return {
+            'exito': True,
+            'mensaje': 'Reporte generado exitosamente',
+            'archivo': archivo,
+            'datos': datos
+        }
         
     except Exception as e:
-        # Registrar error
-        from .models import ReporteGenerado
-        ReporteGenerado.objects.create(
-            tipo_reporte=reporte_programado.tipo_reporte,
-            usuario=reporte_programado.usuario,
-            nombre_archivo=f"ERROR_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
-            formato=reporte_programado.formato_salida,
-            parametros=reporte_programado.parametros,
-            estado='error',
-            mensaje_error=str(e)
-        )
-        raise e
+        return {
+            'exito': False,
+            'mensaje': f'Error generando reporte: {str(e)}',
+            'error': str(e)
+        }
+
 
 def enviar_reporte_por_email(reporte_generado, emails_destino):
     """
-    Envía el reporte generado por email
-    """
-    from django.core.mail import EmailMessage
-    from django.conf import settings
+    Envía un reporte por email.
     
+    Args:
+        reporte_generado: Archivo del reporte generado
+        emails_destino: Lista de emails destino
+    """
     try:
-        subject = f"Reporte Automático: {reporte_generado.tipo_reporte.nombre}"
-        message = f"""
-        Se ha generado automáticamente el reporte: {reporte_generado.tipo_reporte.nombre}
+        from django.core.mail import EmailMessage
+        from django.conf import settings
         
-        Fecha de generación: {reporte_generado.fecha_generacion.strftime('%d/%m/%Y %H:%M')}
-        Formato: {reporte_generado.get_formato_display()}
+        # Crear mensaje de email
+        asunto = f"Reporte AgroSmart - {timezone.now().strftime('%d/%m/%Y')}"
+        mensaje = """
+        Estimado usuario,
         
-        El archivo se encuentra adjunto a este correo.
+        Se adjunta el reporte solicitado generado automáticamente por el sistema AgroSmart.
+        
+        Fecha de generación: {}
         
         Saludos,
         Sistema AgroSmart
-        """
+        """.format(timezone.now().strftime('%d/%m/%Y %H:%M'))
         
+        # Crear email
         email = EmailMessage(
-            subject=subject,
-            body=message,
+            subject=asunto,
+            body=mensaje,
             from_email=settings.DEFAULT_FROM_EMAIL,
             to=emails_destino
         )
         
-        # Adjuntar archivo
-        if reporte_generado.archivo:
-            email.attach_file(reporte_generado.archivo.path)
+        # Adjuntar reporte
+        email.attach(
+            f"reporte_{timezone.now().strftime('%Y%m%d')}.pdf",
+            reporte_generado.content,
+            'application/pdf'
+        )
         
+        # Enviar
         email.send()
+        
+        return True
         
     except Exception as e:
         print(f"Error enviando email: {e}")
+        return False

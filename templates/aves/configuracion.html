@@ -96,33 +96,6 @@
                     </div>
                 </div>
 
-                <div class="config-item">
-                    <div>
-                        <strong>Temperatura Óptima</strong>
-                        <small class="text-muted d-block">Rango de temperatura ideal</small>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <span class="config-value me-3">{{ config.temp_min|default:"18" }}°C - {{ config.temp_max|default:"24" }}°C</span>
-                        <button class="btn btn-outline-primary btn-config" onclick="editarConfig('temperatura')">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="config-item">
-                    <div>
-                        <strong>Humedad Óptima</strong>
-                        <small class="text-muted d-block">Rango de humedad ideal</small>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <span class="config-value me-3">{{ config.humedad_min|default:"60" }}% - {{ config.humedad_max|default:"70" }}%</span>
-                        <button class="btn btn-outline-primary btn-config" onclick="editarConfig('humedad')">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
             <!-- Configuraciones de Alertas -->
             <div class="config-section">
                 <div class="config-header">
@@ -375,8 +348,6 @@ function editarConfig(configName) {
     const descriptions = {
         'capacidad_maxima_galpon': 'Número máximo de aves que puede albergar un galpón',
         'dias_vida_util_huevos': 'Días máximos de almacenamiento de huevos',
-        'temperatura': 'Rango de temperatura óptima (mín-máx en °C)',
-        'humedad': 'Rango de humedad óptima (mín-máx en %)',
         'mortalidad_critica': 'Porcentaje de mortalidad que activa alerta crítica',
         'stock_minimo_huevos': 'Cantidad mínima de huevos antes de generar alerta',
         'consumo_critico': 'Variación porcentual en consumo que genera alerta',
@@ -418,15 +389,6 @@ function toggleConfig(configName) {
 document.getElementById('formEditarConfig').addEventListener('submit', function(e) {
     const valor = document.getElementById('nuevo_valor').value;
     const configId = document.getElementById('config_id').value;
-    
-    // Validaciones específicas
-    if (configId.includes('temperatura') || configId.includes('humedad')) {
-        if (!valor.includes('-')) {
-            e.preventDefault();
-            alert('Para rangos, use el formato: mínimo-máximo (ej: 18-24)');
-            return;
-        }
-    }
     
     if (configId.includes('porcentaje') || configId.includes('critica') || configId.includes('esperada')) {
         const num = parseFloat(valor);
