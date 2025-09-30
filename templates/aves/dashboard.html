@@ -1,13 +1,17 @@
-{% extends 'base.html' %}
+{% extends 'aves/base.html' %}
 {% load static %}
 
 {% block title %}Dashboard Avícola - AgroSmart{% endblock %}
 
+{% block page_title %}Dashboard Avícola{% endblock %}
+
+{% block breadcrumb_items %}
+    <li class="breadcrumb-item active">Dashboard</li>
+{% endblock %}
+
 {% block extra_css %}
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 <style>
     :root {
-        --sidebar-width: 280px;
         --primary-color: #2c3e50;
         --secondary-color: #34495e;
         --accent-color: #3498db;
@@ -16,128 +20,6 @@
         --danger-color: #e74c3c;
         --light-bg: #f8f9fa;
         --border-color: #dee2e6;
-    }
-
-    body {
-        background-color: var(--light-bg);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        margin: 0;
-        padding: 0;
-    }
-
-    .dashboard-container {
-        display: flex;
-        min-height: 100vh;
-    }
-
-    /* Sidebar Styles */
-    .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        width: var(--sidebar-width);
-        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-        color: white;
-        z-index: 1000;
-        transition: all 0.3s ease;
-        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-        overflow-y: auto;
-    }
-
-    .sidebar-header {
-        padding: 2rem 1.5rem;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-        text-align: center;
-    }
-
-    .sidebar-header h6 {
-        margin: 0;
-        font-weight: 600;
-        font-size: 1.2rem;
-        color: white;
-    }
-
-    .sidebar-nav {
-        padding: 1rem 0;
-    }
-
-    .nav-section {
-        margin-bottom: 1.5rem;
-    }
-
-    .nav-item {
-        margin: 0.2rem 1rem;
-    }
-
-    .nav-link {
-        display: flex;
-        align-items: center;
-        padding: 0.8rem 1rem;
-        color: rgba(255,255,255,0.8);
-        text-decoration: none;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-        position: relative;
-    }
-
-    .nav-link:hover {
-        background-color: rgba(255,255,255,0.1);
-        color: white;
-        transform: translateX(5px);
-    }
-
-    .nav-link.active {
-        background-color: var(--accent-color);
-        color: white;
-        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
-    }
-
-    .nav-link i {
-        width: 20px;
-        margin-right: 1rem;
-        font-size: 1.1rem;
-    }
-
-    /* Main Content */
-    .main-content {
-        margin-left: var(--sidebar-width);
-        min-height: 100vh;
-        padding: 2rem;
-        transition: all 0.3s ease;
-        width: calc(100% - var(--sidebar-width));
-    }
-
-    .dashboard-header {
-        background: white;
-        border-radius: 15px;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
-        border: 1px solid var(--border-color);
-    }
-
-    .dashboard-header h2 {
-        margin: 0;
-        color: var(--primary-color);
-        font-weight: 700;
-        font-size: 2rem;
-    }
-
-    /* Breadcrumb */
-    .breadcrumb {
-        background: transparent;
-        padding: 0;
-        margin-bottom: 1rem;
-    }
-
-    .breadcrumb-item a {
-        color: var(--accent-color);
-        text-decoration: none;
-    }
-
-    .breadcrumb-item.active {
-        color: #6c757d;
     }
 
     /* Metric Cards */
@@ -317,15 +199,6 @@
 
     /* Responsive Design */
     @media (max-width: 768px) {
-        .sidebar {
-            transform: translateX(-100%);
-        }
-        
-        .main-content {
-            margin-left: 0;
-            width: 100%;
-        }
-        
         .metrics-grid {
             grid-template-columns: 1fr;
         }
@@ -334,244 +207,170 @@
 {% endblock %}
 
 {% block content %}
-<div class="dashboard-container">
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h6>
-                <i class="fas fa-egg me-2"></i>Módulo Avícola
-            </h6>
-        </div>
-        <div class="sidebar-nav">
-            <div class="nav-section">
-                <div class="nav-item">
-                    <a class="nav-link active" href="{% url 'aves:dashboard' %}">
-                        <i class="fas fa-tachometer-alt"></i>Dashboard
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a class="nav-link" href="{% url 'aves:bitacora_list' %}">
-                        <i class="fas fa-clipboard-list"></i>Bitácora Diaria
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a class="nav-link" href="{% url 'aves:lote_create' %}">
-                        <i class="fas fa-layer-group"></i>Lotes
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a class="nav-link" href="{% url 'aves:inventario_huevos' %}">
-                        <i class="fas fa-boxes"></i>Inventario Huevos
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a class="nav-link" href="{% url 'aves:plan_vacunacion_list' %}">
-                        <i class="fas fa-syringe"></i>Vacunación
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a class="nav-link" href="{% url 'aves:alertas_list' %}">
-                        <i class="fas fa-bell"></i>Alertas
-                    </a>
-                </div>
-                <div class="nav-item">
-                    <a class="nav-link" href="{% url 'aves:reportes' %}">
-                        <i class="fas fa-chart-bar"></i>Reportes
-                    </a>
-                </div>
+<!-- Métricas Principales -->
+<div class="metrics-grid">
+    <div class="metric-card">
+        <div class="metric-header">
+            <div>
+                <h3 class="metric-value">{{ total_lotes }}</h3>
+                <p class="metric-label">Lotes Activos</p>
             </div>
-            
-            <div class="nav-section">
-                <div class="nav-item">
-                    <a class="nav-link" href="{% url 'dashboard:principal' %}">
-                        <i class="fas fa-home"></i>Volver al Dashboard
-                    </a>
+            <div class="metric-icon">
+                <i class="fas fa-layer-group"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="metric-card success">
+        <div class="metric-header">
+            <div>
+                <h3 class="metric-value">{{ total_aves|floatformat:0 }}</h3>
+                <p class="metric-label">Total Aves</p>
+            </div>
+            <div class="metric-icon success">
+                <i class="fas fa-dove"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="metric-card warning">
+        <div class="metric-header">
+            <div>
+                <h3 class="metric-value">{{ produccion_total|floatformat:0 }}</h3>
+                <p class="metric-label">Producción Total</p>
+            </div>
+            <div class="metric-icon warning">
+                <i class="fas fa-egg"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="metric-card danger">
+        <div class="metric-header">
+            <div>
+                <h3 class="metric-value">{{ alertas_pendientes }}</h3>
+                <p class="metric-label">Alertas Pendientes</p>
+            </div>
+            <div class="metric-icon danger">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Gráficos y Datos -->
+<div class="row">
+    <!-- Inventario de Huevos -->
+    <div class="col-md-6">
+        <div class="content-card">
+            <div class="content-card-header">
+                <h5><i class="fas fa-boxes"></i>Inventario de Huevos</h5>
+            </div>
+            <div class="content-card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Cantidad</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for inventario in inventario_huevos %}
+                            <tr>
+                                <td>{{ inventario.categoria }}</td>
+                                <td>{{ inventario.cantidad_actual }}</td>
+                                <td>
+                                    {% if inventario.necesita_reposicion %}
+                                        <span class="badge bg-danger">Stock Bajo</span>
+                                    {% elif inventario.cantidad_actual <= inventario.cantidad_minima|add:100 %}
+                                        <span class="badge bg-warning">Stock Medio</span>
+                                    {% else %}
+                                        <span class="badge bg-success">Stock Alto</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">No hay datos disponibles</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Breadcrumb -->
-        <nav aria-label="breadcrumb" class="mb-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'dashboard:principal' %}">Inicio</a></li>
-                <li class="breadcrumb-item active">Dashboard Avícola</li>
-            </ol>
-        </nav>
-
-        <!-- Page Header -->
-        <div class="dashboard-header">
-            <h2>Dashboard Avícola</h2>
-        </div>
-
-        <!-- Métricas Principales -->
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-header">
-                    <div>
-                        <h3 class="metric-value">{{ total_lotes }}</h3>
-                        <p class="metric-label">Lotes Activos</p>
-                    </div>
-                    <div class="metric-icon">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="metric-card success">
-                <div class="metric-header">
-                    <div>
-                        <h3 class="metric-value">{{ total_aves|floatformat:0 }}</h3>
-                        <p class="metric-label">Total Aves</p>
-                    </div>
-                    <div class="metric-icon success">
-                        <i class="fas fa-dove"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="metric-card warning">
-                <div class="metric-header">
-                    <div>
-                        <h3 class="metric-value">{{ produccion_total|floatformat:0 }}</h3>
-                        <p class="metric-label">Producción Total</p>
-                    </div>
-                    <div class="metric-icon warning">
-                        <i class="fas fa-egg"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="metric-card danger">
-                <div class="metric-header">
-                    <div>
-                        <h3 class="metric-value">{{ alertas_pendientes }}</h3>
-                        <p class="metric-label">Alertas Pendientes</p>
-                    </div>
-                    <div class="metric-icon danger">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Gráficos y Datos -->
-        <div class="row">
-            <!-- Inventario de Huevos -->
-            <div class="col-md-6">
-                <div class="content-card">
-                    <div class="content-card-header">
-                        <h5><i class="fas fa-boxes"></i>Inventario de Huevos</h5>
-                    </div>
-                    <div class="content-card-body">
-                        <div class="table-responsive">
-                            <table class="table table-sm">
-                                <thead>
-                                    <tr>
-                                        <th>Tipo</th>
-                                        <th>Cantidad</th>
-                                        <th>Estado</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for inventario in inventario_huevos %}
-                                    <tr>
-                                        <td>{{ inventario.categoria }}</td>
-                                        <td>{{ inventario.cantidad_actual }}</td>
-                                        <td>
-                                            {% if inventario.cantidad_actual > 100 %}
-                                                <span class="badge bg-success">Bueno</span>
-                                            {% elif inventario.cantidad_actual > 50 %}
-                                                <span class="badge bg-warning">Medio</span>
-                                            {% else %}
-                                                <span class="badge bg-danger">Bajo</span>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% empty %}
-                                    <tr>
-                                        <td colspan="3" class="text-center text-muted">No hay datos disponibles</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Vacunas Pendientes -->
-            <div class="col-md-6">
-                <div class="content-card">
-                    <div class="content-card-header">
-                        <h5><i class="fas fa-syringe"></i>Vacunación</h5>
-                    </div>
-                    <div class="content-card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span>Vacunas Pendientes (próximos 7 días)</span>
-                            <span class="badge bg-warning fs-6">{{ vacunas_pendientes }}</span>
-                        </div>
-                        
-                        {% if vacunas_pendientes > 0 %}
-                            <div class="alert alert-warning">
-                                <i class="fas fa-exclamation-triangle me-2"></i>
-                                Hay {{ vacunas_pendientes }} vacuna{{ vacunas_pendientes|pluralize }} pendiente{{ vacunas_pendientes|pluralize }} para aplicar.
-                                <a href="{% url 'aves:plan_vacunacion_list' %}" class="alert-link">Ver detalles</a>
-                            </div>
-                        {% else %}
-                            <div class="alert alert-success">
-                                <i class="fas fa-check-circle me-2"></i>
-                                No hay vacunas pendientes para los próximos 7 días.
-                            </div>
-                        {% endif %}
-                        
-                        <div class="d-grid">
-                            <a href="{% url 'aves:plan_vacunacion_create' %}" class="btn btn-primary">
-                                <i class="fas fa-plus me-2"></i>Programar Vacuna
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Acciones Rápidas -->
+    <!-- Vacunas Pendientes -->
+    <div class="col-md-6">
         <div class="content-card">
             <div class="content-card-header">
-                <h5><i class="fas fa-bolt"></i>Acciones Rápidas</h5>
+                <h5><i class="fas fa-syringe"></i>Vacunación</h5>
             </div>
             <div class="content-card-body">
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <div class="d-grid">
-                            <a href="{% url 'aves:bitacora_create' %}" class="btn btn-outline-primary">
-                                <i class="fas fa-plus me-2"></i>Nueva Bitácora
-                            </a>
-                        </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span>Vacunas Pendientes (próximos 7 días)</span>
+                    <span class="badge bg-warning fs-6">{{ vacunas_pendientes }}</span>
+                </div>
+                
+                {% if vacunas_pendientes > 0 %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Hay {{ vacunas_pendientes }} vacuna{{ vacunas_pendientes|pluralize }} pendiente{{ vacunas_pendientes|pluralize }} para aplicar.
+                        <a href="{% url 'aves:plan_vacunacion_list' %}" class="alert-link">Ver detalles</a>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="d-grid">
-                            <a href="{% url 'aves:lote_create' %}" class="btn btn-outline-success">
-                                <i class="fas fa-layer-group me-2"></i>Nuevo Lote
-                            </a>
-                        </div>
+                {% else %}
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        No hay vacunas pendientes para los próximos 7 días.
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="d-grid">
-                            <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-outline-warning">
-                                <i class="fas fa-exchange-alt me-2"></i>Movimiento Huevos
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="d-grid">
-                            <a href="{% url 'aves:reportes' %}" class="btn btn-outline-info">
-                                <i class="fas fa-chart-bar me-2"></i>Ver Reportes
-                            </a>
-                        </div>
-                    </div>
+                {% endif %}
+                
+                <div class="d-grid">
+                    <a href="{% url 'aves:plan_vacunacion_create' %}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Programar Vacuna
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Acciones Rápidas -->
+<div class="content-card">
+    <div class="content-card-header">
+        <h5><i class="fas fa-bolt"></i>Acciones Rápidas</h5>
+    </div>
+    <div class="content-card-body">
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="d-grid">
+                    <a href="{% url 'aves:bitacora_create' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-plus me-2"></i>Nueva Bitácora
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="d-grid">
+                    <a href="{% url 'aves:lote_create' %}" class="btn btn-outline-success">
+                        <i class="fas fa-layer-group me-2"></i>Nuevo Lote
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="d-grid">
+                    <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-outline-warning">
+                        <i class="fas fa-exchange-alt me-2"></i>Movimiento Huevos
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="d-grid">
+                    <a href="{% url 'aves:reportes' %}" class="btn btn-outline-info">
+                        <i class="fas fa-chart-bar me-2"></i>Ver Reportes
+                    </a>
                 </div>
             </div>
         </div>

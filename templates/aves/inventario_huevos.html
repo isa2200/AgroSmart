@@ -21,15 +21,15 @@
     <div class="col-md-2">
         <div class="card text-center">
             <div class="card-body">
-                <h4 class="card-title text-primary">{{ inventario.cantidad_disponible|floatformat:0 }}</h4>
-                <p class="card-text">{{ inventario.tipo_huevo }}</p>
+                <h4 class="card-title text-primary">{{ inventario.cantidad_actual|floatformat:0 }}</h4>
+                <p class="card-text">{{ inventario.categoria }}</p>
                 <small class="text-muted">
-                    {% if inventario.cantidad_disponible > 500 %}
-                        <span class="badge bg-success">Stock Alto</span>
-                    {% elif inventario.cantidad_disponible > 200 %}
+                    {% if inventario.necesita_reposicion %}
+                        <span class="badge bg-danger">Stock Bajo</span>
+                    {% elif inventario.cantidad_actual < inventario.cantidad_minima|add:100 %}
                         <span class="badge bg-warning">Stock Medio</span>
                     {% else %}
-                        <span class="badge bg-danger">Stock Bajo</span>
+                        <span class="badge bg-success">Stock Alto</span>
                     {% endif %}
                 </small>
             </div>
@@ -65,9 +65,10 @@
             </div>
             <div class="card-body">
                 {% for inventario in inventarios %}
-                    {% if inventario.cantidad_disponible < 200 %}
+                    {% if inventario.necesita_reposicion %}
                         <div class="alert alert-warning alert-sm">
-                            <strong>{{ inventario.tipo_huevo }}:</strong> Stock bajo ({{ inventario.cantidad_disponible }} unidades)
+                            <strong>{{ inventario.categoria }}:</strong> Stock bajo ({{ inventario.cantidad_actual }} unidades)
+                            <br><small>Mínimo requerido: {{ inventario.cantidad_minima }}</small>
                         </div>
                     {% endif %}
                 {% empty %}
@@ -101,9 +102,9 @@
                                 <tr>
                                     <th>Fecha</th>
                                     <th>Tipo</th>
-                                    <th>Tipo Huevo</th>
+                                    <th>Categoría Huevo</th>
                                     <th>Cantidad</th>
-                                    <th>Origen/Destino</th>
+                                    <th>Cliente/Destino</th>
                                     <th>Usuario</th>
                                     <th>Estado</th>
                                 </tr>
@@ -113,25 +114,13 @@
                                 <tr data-tipo="{{ movimiento.tipo_movimiento }}">
                                     <td>{{ movimiento.fecha|date:"d/m/Y H:i" }}</td>
                                     <td>
-                                        {% if movimiento.tipo_movimiento == 'entrada' %}
-                                            <span class="badge bg-success">
-                                                <i class="fas fa-arrow-down me-1"></i>Entrada
-                                            </span>
-                                        {% else %}
-                                            <span class="badge bg-danger">
-                                                <i class="fas fa-arrow-up me-1"></i>Salida
-                                            </span>
-                                        {% endif %}
+                                        <span class="badge bg-primary">
+                                            <i class="fas fa-arrow-up me-1"></i>{{ movimiento.get_tipo_movimiento_display }}
+                                        </span>
                                     </td>
-                                    <td>{{ movimiento.tipo_huevo }}</td>
+                                    <td>{{ movimiento.categoria_huevo }}</td>
                                     <td><strong>{{ movimiento.cantidad|floatformat:0 }}</strong></td>
-                                    <td>
-                                        {% if movimiento.tipo_movimiento == 'entrada' %}
-                                            {{ movimiento.lote_origen|default:"Producción" }}
-                                        {% else %}
-                                            {{ movimiento.destino|default:"Venta" }}
-                                        {% endif %}
-                                    </td>
+                                    <td>{{ movimiento.cliente|default:"N/A" }}</td>
                                     <td>{{ movimiento.usuario_registro.get_full_name|default:movimiento.usuario_registro.username }}</td>
                                     <td>
                                         <span class="badge bg-info">Procesado</span>
@@ -165,14 +154,14 @@ $(document).ready(function() {
     const inventarioData = {
         labels: [
             {% for inventario in inventarios %}
-                '{{ inventario.tipo_huevo }}'{% if not forloop.last %},{% endif %}
+                '{{ inventario.categoria }}'{% if not forloop.last %},{% endif %}
             {% endfor %}
         ],
         datasets: [{
             label: 'Cantidad en Stock',
             data: [
                 {% for inventario in inventarios %}
-                    {{ inventario.cantidad_disponible }}{% if not forloop.last %},{% endif %}
+                    {{ inventario.cantidad_actual }}{% if not forloop.last %},{% endif %}
                 {% endfor %}
             ],
             backgroundColor: [
