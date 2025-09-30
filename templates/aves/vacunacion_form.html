@@ -1,169 +1,170 @@
 {% extends 'aves/base.html' %}
-{% load static %}
 
-{% block title %}Registro de Vacunación - AgroSmart{% endblock %}
+{% block title %}Plan de Vacunación - AgroSmart{% endblock %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'aves/css/vacunacion.css' %}">
+{% block page_title %}Plan de Vacunación{% endblock %}
+
+{% block breadcrumb_items %}
+    <li class="breadcrumb-item"><a href="{% url 'aves:plan_vacunacion_list' %}">Vacunación</a></li>
+    <li class="breadcrumb-item active">{% if object %}Editar Plan{% else %}Nuevo Plan{% endif %}</li>
+{% endblock %}
+
+{% block page_actions %}
+    <a href="{% url 'aves:plan_vacunacion_list' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Volver
+    </a>
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header bg-success text-white">
-                    <h4 class="mb-0">
-                        <i class="fas fa-syringe me-2"></i>
-                        {% if object %}Editar Vacunación{% else %}Nueva Vacunación{% endif %}
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <form method="post" id="vacunacionForm">
-                        {% csrf_token %}
-                        
-                        <div class="row">
-                            <!-- Información del Lote -->
-                            <div class="col-md-6">
-                                <div class="card mb-3">
-                                    <div class="card-header">
-                                        <h6 class="mb-0">Información del Lote</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="mb-3">
-                                            <label for="{{ form.lote.id_for_label }}" class="form-label">Lote *</label>
-                                            {{ form.lote }}
-                                            {% if form.lote.errors %}
-                                                <div class="text-danger">{{ form.lote.errors }}</div>
-                                            {% endif %}
-                                        </div>
-                                        
-                                        <div id="loteInfo" class="alert alert-info d-none">
-                                            <h6>Información del Lote:</h6>
-                                            <p class="mb-1"><strong>Galpón:</strong> <span id="galponInfo"></span></p>
-                                            <p class="mb-1"><strong>Aves Actuales:</strong> <span id="avesInfo"></span></p>
-                                            <p class="mb-0"><strong>Edad:</strong> <span id="edadInfo"></span> días</p>
-                                        </div>
-                                    </div>
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-syringe me-2"></i>
+                    {% if object %}Editar Plan de Vacunación{% else %}Nuevo Plan de Vacunación{% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post" id="vacunacionForm">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <!-- Información del Lote -->
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Información del Lote</h6>
                                 </div>
-                            </div>
-                            
-                            <!-- Información de la Vacuna -->
-                            <div class="col-md-6">
-                                <div class="card mb-3">
-                                    <div class="card-header">
-                                        <h6 class="mb-0">Información de la Vacuna</h6>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="{{ form.lote.id_for_label }}" class="form-label">Lote *</label>
+                                        {{ form.lote }}
+                                        {% if form.lote.errors %}
+                                            <div class="text-danger">{{ form.lote.errors }}</div>
+                                        {% endif %}
                                     </div>
-                                    <div class="card-body">
-                                        <div class="mb-3">
-                                            <label for="{{ form.vacuna.id_for_label }}" class="form-label">Vacuna *</label>
-                                            {{ form.vacuna }}
-                                            {% if form.vacuna.errors %}
-                                                <div class="text-danger">{{ form.vacuna.errors }}</div>
-                                            {% endif %}
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label for="{{ form.fecha_aplicacion.id_for_label }}" class="form-label">Fecha de Aplicación *</label>
-                                            {{ form.fecha_aplicacion }}
-                                            {% if form.fecha_aplicacion.errors %}
-                                                <div class="text-danger">{{ form.fecha_aplicacion.errors }}</div>
-                                            {% endif %}
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label for="{{ form.dosis_aplicada.id_for_label }}" class="form-label">Dosis Aplicada (ml) *</label>
-                                            {{ form.dosis_aplicada }}
-                                            {% if form.dosis_aplicada.errors %}
-                                                <div class="text-danger">{{ form.dosis_aplicada.errors }}</div>
-                                            {% endif %}
-                                        </div>
+                                    
+                                    <div id="loteInfo" class="alert alert-info d-none">
+                                        <h6>Información del Lote:</h6>
+                                        <p class="mb-1"><strong>Galpón:</strong> <span id="galponInfo"></span></p>
+                                        <p class="mb-1"><strong>Aves Actuales:</strong> <span id="avesInfo"></span></p>
+                                        <p class="mb-0"><strong>Edad:</strong> <span id="edadInfo"></span> días</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Detalles Adicionales -->
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card mb-3">
-                                    <div class="card-header">
-                                        <h6 class="mb-0">Detalles Adicionales</h6>
+                        <!-- Información de la Vacuna -->
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Información de la Vacuna</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="{{ form.tipo_vacuna.id_for_label }}" class="form-label">Tipo de Vacuna *</label>
+                                        {{ form.tipo_vacuna }}
+                                        {% if form.tipo_vacuna.errors %}
+                                            <div class="text-danger">{{ form.tipo_vacuna.errors }}</div>
+                                        {% endif %}
                                     </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label for="{{ form.veterinario_responsable.id_for_label }}" class="form-label">Veterinario Responsable</label>
-                                                    {{ form.veterinario_responsable }}
-                                                    {% if form.veterinario_responsable.errors %}
-                                                        <div class="text-danger">{{ form.veterinario_responsable.errors }}</div>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label for="{{ form.lote_vacuna.id_for_label }}" class="form-label">Lote de Vacuna</label>
-                                                    {{ form.lote_vacuna }}
-                                                    {% if form.lote_vacuna.errors %}
-                                                        <div class="text-danger">{{ form.lote_vacuna.errors }}</div>
-                                                    {% endif %}
-                                                </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="{{ form.fecha_programada.id_for_label }}" class="form-label">Fecha Programada *</label>
+                                        {{ form.fecha_programada }}
+                                        {% if form.fecha_programada.errors %}
+                                            <div class="text-danger">{{ form.fecha_programada.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="{{ form.fecha_aplicada.id_for_label }}" class="form-label">Fecha de Aplicación</label>
+                                        {{ form.fecha_aplicada }}
+                                        {% if form.fecha_aplicada.errors %}
+                                            <div class="text-danger">{{ form.fecha_aplicada.errors }}</div>
+                                        {% endif %}
+                                        <div class="form-text">Dejar vacío si aún no se ha aplicado</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Detalles de Aplicación -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Detalles de Aplicación</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="{{ form.numero_aves_vacunadas.id_for_label }}" class="form-label">Número de Aves Vacunadas</label>
+                                                {{ form.numero_aves_vacunadas }}
+                                                {% if form.numero_aves_vacunadas.errors %}
+                                                    <div class="text-danger">{{ form.numero_aves_vacunadas.errors }}</div>
+                                                {% endif %}
                                             </div>
                                         </div>
                                         
-                                        <div class="mb-3">
-                                            <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
-                                            {{ form.observaciones }}
-                                            {% if form.observaciones.errors %}
-                                                <div class="text-danger">{{ form.observaciones.errors }}</div>
-                                            {% endif %}
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="{{ form.lote_vacuna.id_for_label }}" class="form-label">Lote de Vacuna</label>
+                                                {{ form.lote_vacuna }}
+                                                {% if form.lote_vacuna.errors %}
+                                                    <div class="text-danger">{{ form.lote_vacuna.errors }}</div>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Botones de Acción -->
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="d-flex justify-content-between">
-                                    <a href="{% url 'aves:vacunacion_list' %}" class="btn btn-secondary">
-                                        <i class="fas fa-arrow-left me-1"></i>Volver
-                                    </a>
-                                    <div>
-                                        <button type="button" class="btn btn-outline-primary me-2" id="btnPreview">
-                                            <i class="fas fa-eye me-1"></i>Vista Previa
-                                        </button>
-                                        <button type="submit" class="btn btn-success">
-                                            <i class="fas fa-save me-1"></i>
-                                            {% if object %}Actualizar{% else %}Registrar{% endif %} Vacunación
-                                        </button>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <div class="form-check">
+                                                    {{ form.aplicada }}
+                                                    <label class="form-check-label" for="{{ form.aplicada.id_for_label }}">
+                                                        Vacuna Aplicada
+                                                    </label>
+                                                </div>
+                                                {% if form.aplicada.errors %}
+                                                    <div class="text-danger">{{ form.aplicada.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
+                                        {{ form.observaciones }}
+                                        {% if form.observaciones.errors %}
+                                            <div class="text-danger">{{ form.observaciones.errors }}</div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal de Vista Previa -->
-<div class="modal fade" id="previewModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Vista Previa - Registro de Vacunación</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body" id="previewContent">
-                <!-- Contenido generado dinámicamente -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                    
+                    <!-- Botones de Acción -->
+                    <div class="row">
+                        <div class="col-12">
+                            <hr>
+                            <div class="d-flex justify-content-end gap-2">
+                                <a href="{% url 'aves:plan_vacunacion_list' %}" class="btn btn-secondary">
+                                    <i class="fas fa-times me-2"></i>Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save me-2"></i>
+                                    {% if object %}Actualizar{% else %}Guardar{% endif %} Plan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -171,57 +172,64 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'aves/js/vacunacion.js' %}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const loteSelect = document.getElementById('{{ form.lote.id_for_label }}');
     const loteInfo = document.getElementById('loteInfo');
     
-    // Cargar información del lote
-    loteSelect.addEventListener('change', function() {
-        if (this.value) {
-            fetch(`/aves/api/lote/${this.value}/info/`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('galponInfo').textContent = data.galpon;
-                    document.getElementById('avesInfo').textContent = data.aves_actuales;
-                    document.getElementById('edadInfo').textContent = data.edad_dias;
-                    loteInfo.classList.remove('d-none');
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    loteInfo.classList.add('d-none');
-                });
-        } else {
-            loteInfo.classList.add('d-none');
-        }
-    });
+    // Cargar información del lote cuando se selecciona
+    if (loteSelect) {
+        loteSelect.addEventListener('change', function() {
+            if (this.value) {
+                // Aquí puedes agregar una llamada AJAX para obtener información del lote
+                // Por ahora, solo mostramos el div de información
+                loteInfo.classList.remove('d-none');
+                
+                // Ejemplo de cómo podrías obtener la información del lote
+                fetch(`/aves/api/lote/${this.value}/info/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('galponInfo').textContent = data.galpon || 'N/A';
+                        document.getElementById('avesInfo').textContent = data.numero_aves_actual || 'N/A';
+                        document.getElementById('edadInfo').textContent = data.edad_dias || 'N/A';
+                    })
+                    .catch(error => {
+                        console.log('Error al cargar información del lote:', error);
+                        // Mostrar información básica si no hay API
+                        const selectedOption = this.options[this.selectedIndex];
+                        document.getElementById('galponInfo').textContent = selectedOption.text.split(' - ')[1] || 'N/A';
+                        document.getElementById('avesInfo').textContent = 'Consultar en detalle';
+                        document.getElementById('edadInfo').textContent = 'Consultar en detalle';
+                    });
+            } else {
+                loteInfo.classList.add('d-none');
+            }
+        });
+    }
     
-    // Vista previa
-    document.getElementById('btnPreview').addEventListener('click', function() {
-        const formData = new FormData(document.getElementById('vacunacionForm'));
-        const previewContent = document.getElementById('previewContent');
-        
-        let html = '<div class="row">';
-        html += '<div class="col-md-6">';
-        html += '<h6>Información del Lote</h6>';
-        html += `<p><strong>Lote:</strong> ${loteSelect.options[loteSelect.selectedIndex]?.text || 'No seleccionado'}</p>`;
-        html += '</div>';
-        html += '<div class="col-md-6">';
-        html += '<h6>Información de la Vacuna</h6>';
-        html += `<p><strong>Vacuna:</strong> ${document.getElementById('{{ form.vacuna.id_for_label }}').options[document.getElementById('{{ form.vacuna.id_for_label }}').selectedIndex]?.text || 'No seleccionada'}</p>`;
-        html += `<p><strong>Fecha:</strong> ${formData.get('fecha_aplicacion') || 'No especificada'}</p>`;
-        html += `<p><strong>Dosis:</strong> ${formData.get('dosis_aplicada') || '0'} ml</p>`;
-        html += '</div>';
-        html += '</div>';
-        
-        if (formData.get('observaciones')) {
-            html += `<div class="mt-3"><h6>Observaciones</h6><p>${formData.get('observaciones')}</p></div>`;
-        }
-        
-        previewContent.innerHTML = html;
-        new bootstrap.Modal(document.getElementById('previewModal')).show();
-    });
+    // Validación del formulario
+    const form = document.getElementById('vacunacionForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const fechaProgramada = document.getElementById('{{ form.fecha_programada.id_for_label }}').value;
+            const fechaAplicada = document.getElementById('{{ form.fecha_aplicada.id_for_label }}').value;
+            const aplicada = document.getElementById('{{ form.aplicada.id_for_label }}').checked;
+            
+            // Si está marcada como aplicada, debe tener fecha de aplicación
+            if (aplicada && !fechaAplicada) {
+                e.preventDefault();
+                alert('Si la vacuna está marcada como aplicada, debe especificar la fecha de aplicación.');
+                return false;
+            }
+            
+            // La fecha de aplicación no puede ser anterior a la programada
+            if (fechaAplicada && fechaProgramada && fechaAplicada < fechaProgramada) {
+                e.preventDefault();
+                alert('La fecha de aplicación no puede ser anterior a la fecha programada.');
+                return false;
+            }
+        });
+    }
 });
 </script>
 {% endblock %}

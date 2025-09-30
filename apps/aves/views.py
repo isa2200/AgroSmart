@@ -10,6 +10,7 @@ from django.db.models import Sum, Avg, Count, Q
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
+from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
 import json
 
@@ -205,30 +206,132 @@ def inventario_huevos(request):
 @login_required
 @role_required(['superusuario', 'admin_aves'])
 def movimiento_huevos_create(request):
-    """Crear movimiento de huevos."""
+    """Crear movimiento de huevos con múltiples detalles."""
+    from django.forms import formset_factory
+    from django.db import transaction
+    import json
+    import logging
+    
+    logger = logging.getLogger(__name__)
+    
+    DetalleMovimientoHuevosFormSet = formset_factory(
+        DetalleMovimientoHuevosForm,
+        extra=1,
+        min_num=1,
+        validate_min=True,
+        can_delete=True
+    )
+    
     if request.method == 'POST':
+        logger.info(f"POST data received: {request.POST}")
+        
         form = MovimientoHuevosForm(request.POST)
-        if form.is_valid():
-            movimiento = form.save(commit=False)
-            movimiento.usuario_registro = request.user
-            movimiento.save()
-            
-            # Actualizar inventario
-            inventario = InventarioHuevos.objects.get(categoria=movimiento.categoria_huevo)
-            if movimiento.tipo_movimiento in ['venta', 'autoconsumo', 'baja']:
-                inventario.cantidad_actual -= movimiento.cantidad
-            else:  # devolución
-                inventario.cantidad_actual += movimiento.cantidad
-            inventario.save()
-            
-            messages.success(request, 'Movimiento de huevos registrado exitosamente.')
-            return redirect('aves:inventario_huevos')
+        formset = DetalleMovimientoHuevosFormSet(request.POST)
+        
+        logger.info(f"Form valid: {form.is_valid()}")
+        logger.info(f"Formset valid: {formset.is_valid()}")
+        
+        if not form.is_valid():
+            logger.error(f"Form errors: {form.errors}")
+            messages.error(request, f'Errores en el formulario principal: {form.errors}')
+        
+        if not formset.is_valid():
+            logger.error(f"Formset errors: {formset.errors}")
+            logger.error(f"Formset non_form_errors: {formset.non_form_errors()}")
+            for i, form_errors in enumerate(formset.errors):
+                if form_errors:
+                    logger.error(f"Form {i} errors: {form_errors}")
+            for i, form in enumerate(formset.forms):
+                if hasattr(form, 'non_field_errors') and form.non_field_errors():
+                    logger.error(f"Form {i} non_field_errors: {form.non_field_errors()}")
+            messages.error(request, f'Errores en los detalles del movimiento. Verifique los datos ingresados.')
+        
+        if form.is_valid() and formset.is_valid():
+            try:
+                with transaction.atomic():
+                    # Guardar el movimiento principal
+                    movimiento = form.save(commit=False)
+                    movimiento.usuario_registro = request.user
+                    movimiento.save()
+                    logger.info(f"Movimiento guardado con ID: {movimiento.id}")
+                    
+                    # Contar detalles válidos
+                    detalles_guardados = 0
+                    
+                    # Guardar los detalles y actualizar inventario
+                    for i, detalle_form in enumerate(formset):
+                        if detalle_form.cleaned_data and not detalle_form.cleaned_data.get('DELETE', False):
+                            logger.info(f"Procesando detalle {i}: {detalle_form.cleaned_data}")
+                            
+                            detalle = detalle_form.save(commit=False)
+                            detalle.movimiento = movimiento
+                            detalle.save()
+                            detalles_guardados += 1
+                            logger.info(f"Detalle {i} guardado con ID: {detalle.id}")
+                            
+                            # Actualizar inventario
+                            try:
+                                inventario, created = InventarioHuevos.objects.get_or_create(
+                                    categoria=detalle.categoria_huevo,
+                                    defaults={
+                                        'cantidad_actual': 0,
+                                        'cantidad_minima': 100
+                                    }
+                                )
+                                
+                                if created:
+                                    logger.info(f"Inventario creado para categoría {detalle.categoria_huevo}")
+                                
+                                cantidad_anterior = inventario.cantidad_actual
+                                
+                                if movimiento.tipo_movimiento in ['venta', 'autoconsumo', 'baja']:
+                                    if inventario.cantidad_actual >= detalle.cantidad:
+                                        inventario.cantidad_actual -= detalle.cantidad
+                                    else:
+                                        raise ValidationError(f'No hay suficiente stock de huevos {detalle.categoria_huevo}. Disponible: {inventario.cantidad_actual}')
+                                else:  # devolución
+                                    inventario.cantidad_actual += detalle.cantidad
+                                
+                                inventario.save()
+                                logger.info(f"Inventario actualizado para {detalle.categoria_huevo}: {cantidad_anterior} -> {inventario.cantidad_actual}")
+                                
+                            except Exception as e:
+                                logger.error(f"Error actualizando inventario: {str(e)}")
+                                raise
+                    
+                    if detalles_guardados == 0:
+                        raise ValidationError("Debe agregar al menos un detalle al movimiento.")
+                    
+                    logger.info(f"Movimiento completado. Detalles guardados: {detalles_guardados}")
+                
+                messages.success(request, f'Movimiento de huevos registrado exitosamente con {detalles_guardados} detalles.')
+                return redirect('aves:inventario_huevos')
+                
+            except ValidationError as e:
+                logger.error(f"ValidationError: {str(e)}")
+                messages.error(request, str(e))
+            except Exception as e:
+                logger.error(f"Error inesperado: {str(e)}")
+                messages.error(request, f'Error al registrar el movimiento: {str(e)}')
         else:
-            messages.error(request, 'Error al registrar el movimiento. Verifique los datos.')
+            messages.error(request, 'Error al registrar el movimiento. Verifique los datos ingresados.')
     else:
         form = MovimientoHuevosForm()
+        formset = DetalleMovimientoHuevosFormSet()
     
-    return render(request, 'aves/movimiento_huevos_form.html', {'form': form})
+    # Obtener inventarios para mostrar stock disponible
+    inventarios = InventarioHuevos.objects.all()
+    inventarios_dict = {inv.categoria: inv.cantidad_actual for inv in inventarios}
+    
+    context = {
+        'form': form,
+        'formset': formset,
+        'inventarios': inventarios_dict,
+        'inventario_json': json.dumps(inventarios_dict),
+        'title': 'Nuevo Movimiento de Huevos',
+    }
+    
+    return render(request, 'aves/movimiento_huevos_form.html', context)
 
 
 @login_required
@@ -401,7 +504,7 @@ def bitacora_detail(request, pk):
 
 
 @login_required
-@role_required(['superusuario', 'admin_aves'])
+@role_required(['superusuario', 'admin_aves', 'solo_vista'])
 def bitacora_edit(request, pk):
     """Editar bitácora diaria."""
     bitacora = get_object_or_404(BitacoraDiaria, pk=pk)
@@ -452,3 +555,33 @@ def bitacora_edit(request, pk):
         'is_edit': True,
     }
     return render(request, 'aves/bitacora_form.html', context)
+
+
+@login_required
+@role_required(['superusuario', 'admin_aves', 'solo_vista'])
+def movimiento_huevos_list(request):
+    """Lista de movimientos de huevos."""
+    movimientos = MovimientoHuevos.objects.select_related('usuario_registro').prefetch_related('detalles').order_by('-fecha')
+    
+    # Filtros
+    tipo_movimiento = request.GET.get('tipo_movimiento')
+    fecha_desde = request.GET.get('fecha_desde')
+    fecha_hasta = request.GET.get('fecha_hasta')
+    
+    if tipo_movimiento:
+        movimientos = movimientos.filter(tipo_movimiento=tipo_movimiento)
+    if fecha_desde:
+        movimientos = movimientos.filter(fecha__gte=fecha_desde)
+    if fecha_hasta:
+        movimientos = movimientos.filter(fecha__lte=fecha_hasta)
+    
+    paginator = Paginator(movimientos, 20)
+    page = request.GET.get('page')
+    movimientos = paginator.get_page(page)
+    
+    context = {
+        'movimientos': movimientos,
+        'tipos_movimiento': MovimientoHuevos.TIPOS_MOVIMIENTO,
+    }
+    
+    return render(request, 'aves/movimiento_huevos_list.html', context)

@@ -1,0 +1,200 @@
+{% extends 'aves/base.html' %}
+
+{% block title %}Movimientos de Huevos - AgroSmart{% endblock %}
+
+{% block page_title %}Movimientos de Huevos{% endblock %}
+
+{% block breadcrumb_items %}
+    <li class="breadcrumb-item active">Movimientos de Huevos</li>
+{% endblock %}
+
+{% block page_actions %}
+    <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Nuevo Movimiento
+    </a>
+{% endblock %}
+
+{% block content %}
+<!-- Filtros -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Tipo de Movimiento</label>
+                <select name="tipo_movimiento" class="form-select">
+                    <option value="">Todos los tipos</option>
+                    {% for value, label in tipos_movimiento %}
+                        <option value="{{ value }}" {% if request.GET.tipo_movimiento == value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Fecha Desde</label>
+                <input type="date" name="fecha_desde" class="form-control" value="{{ request.GET.fecha_desde }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Fecha Hasta</label>
+                <input type="date" name="fecha_hasta" class="form-control" value="{{ request.GET.fecha_hasta }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">&nbsp;</label>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="fas fa-search me-2"></i>Filtrar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Lista de movimientos -->
+<div class="card">
+    <div class="card-body">
+        {% if movimientos %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th>Cantidad Total</th>
+                            <th>Valor Total</th>
+                            <th>Usuario</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for movimiento in movimientos %}
+                            <tr>
+                                <td>{{ movimiento.fecha|date:"d/m/Y H:i" }}</td>
+                                <td>
+                                    <span class="badge bg-{% if movimiento.tipo_movimiento == 'venta' %}success{% elif movimiento.tipo_movimiento == 'autoconsumo' %}warning{% elif movimiento.tipo_movimiento == 'baja' %}danger{% else %}info{% endif %}">
+                                        {{ movimiento.get_tipo_movimiento_display }}
+                                    </span>
+                                </td>
+                                <td>{{ movimiento.descripcion|default:"-" }}</td>
+                                <td>{{ movimiento.cantidad_total }} unidades</td>
+                                <td>${{ movimiento.valor_total|floatformat:0 }}</td>
+                                <td>{{ movimiento.usuario_registro.get_full_name|default:movimiento.usuario_registro.username }}</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#detalleModal{{ movimiento.id }}">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginación -->
+            {% if movimientos.has_other_pages %}
+                <nav aria-label="Paginación">
+                    <ul class="pagination justify-content-center">
+                        {% if movimientos.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ movimientos.previous_page_number }}{% if request.GET.tipo_movimiento %}&tipo_movimiento={{ request.GET.tipo_movimiento }}{% endif %}{% if request.GET.fecha_desde %}&fecha_desde={{ request.GET.fecha_desde }}{% endif %}{% if request.GET.fecha_hasta %}&fecha_hasta={{ request.GET.fecha_hasta }}{% endif %}">Anterior</a>
+                            </li>
+                        {% endif %}
+
+                        {% for num in movimientos.paginator.page_range %}
+                            {% if movimientos.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > movimientos.number|add:'-3' and num < movimientos.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}{% if request.GET.tipo_movimiento %}&tipo_movimiento={{ request.GET.tipo_movimiento }}{% endif %}{% if request.GET.fecha_desde %}&fecha_desde={{ request.GET.fecha_desde }}{% endif %}{% if request.GET.fecha_hasta %}&fecha_hasta={{ request.GET.fecha_hasta }}{% endif %}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if movimientos.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ movimientos.next_page_number }}{% if request.GET.tipo_movimiento %}&tipo_movimiento={{ request.GET.tipo_movimiento }}{% endif %}{% if request.GET.fecha_desde %}&fecha_desde={{ request.GET.fecha_desde }}{% endif %}{% if request.GET.fecha_hasta %}&fecha_hasta={{ request.GET.fecha_hasta }}{% endif %}">Siguiente</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-egg fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">No hay movimientos registrados</h5>
+                <p class="text-muted">Comienza registrando tu primer movimiento de huevos.</p>
+                <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Nuevo Movimiento
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modales de detalle -->
+{% for movimiento in movimientos %}
+    <div class="modal fade" id="detalleModal{{ movimiento.id }}" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalle del Movimiento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Fecha:</strong> {{ movimiento.fecha|date:"d/m/Y H:i" }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Tipo:</strong> {{ movimiento.get_tipo_movimiento_display }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <strong>Descripción:</strong> {{ movimiento.descripcion|default:"Sin descripción" }}
+                        </div>
+                    </div>
+                    
+                    <h6>Detalles por Categoría:</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Categoría</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for detalle in movimiento.detalles.all %}
+                                    <tr>
+                                        <td>{{ detalle.categoria_huevo.nombre }}</td>
+                                        <td>{{ detalle.cantidad }} unidades</td>
+                                        <td>${{ detalle.precio_unitario|floatformat:0 }}</td>
+                                        <td>${{ detalle.subtotal|floatformat:0 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr class="table-active">
+                                    <th colspan="3">Total:</th>
+                                    <th>${{ movimiento.valor_total|floatformat:0 }}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}

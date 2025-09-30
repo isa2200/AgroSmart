@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 from .models import (
     LoteAves, BitacoraDiaria, TipoConcentrado,
     ControlConcentrado, TipoVacuna, PlanVacunacion,
-    MovimientoHuevos, InventarioHuevos, AlertaSistema,
+    MovimientoHuevos, DetalleMovimientoHuevos, InventarioHuevos, AlertaSistema,
     RegistroModificacion
 )
 
@@ -130,12 +130,59 @@ class PlanVacunacionAdmin(admin.ModelAdmin):
     search_fields = ['lote__codigo', 'tipo_vacuna__nombre']
     ordering = ['fecha_programada']
 
+class DetalleMovimientoHuevosInline(admin.TabularInline):
+    """Inline para los detalles de movimiento de huevos."""
+    model = DetalleMovimientoHuevos
+    extra = 1
+    fields = ['categoria_huevo', 'cantidad', 'precio_unitario']
+    
+    def get_readonly_fields(self, request, obj=None):
+        if obj and obj.pk:  # Si el objeto ya existe
+            return ['categoria_huevo']  # No permitir cambiar la categoría
+        return []
+
 @admin.register(MovimientoHuevos)
 class MovimientoHuevosAdmin(admin.ModelAdmin):
-    list_display = ['fecha', 'tipo_movimiento', 'categoria_huevo', 'cantidad', 'cliente']
-    list_filter = ['tipo_movimiento', 'categoria_huevo', 'fecha']
-    search_fields = ['cliente', 'conductor', 'observaciones']
+    list_display = ['fecha', 'tipo_movimiento', 'cantidad_total', 'valor_total', 'cliente']
+    list_filter = ['tipo_movimiento', 'fecha']
+    search_fields = ['cliente', 'conductor', 'observaciones', 'numero_comprobante']
     ordering = ['-fecha']
+    inlines = [DetalleMovimientoHuevosInline]
+    
+    fieldsets = (
+        ('Información del Movimiento', {
+            'fields': ('fecha', 'tipo_movimiento')
+        }),
+        ('Información del Cliente/Transporte', {
+            'fields': ('cliente', 'conductor', 'numero_comprobante')
+        }),
+        ('Observaciones', {
+            'fields': ('observaciones',)
+        }),
+    )
+    
+    readonly_fields = ['cantidad_total', 'valor_total']
+    
+    def get_readonly_fields(self, request, obj=None):
+        readonly = list(self.readonly_fields)
+        if obj and obj.pk:  # Si el objeto ya existe
+            readonly.extend(['cantidad_total', 'valor_total'])
+        return readonly
+
+@admin.register(DetalleMovimientoHuevos)
+class DetalleMovimientoHuevosAdmin(admin.ModelAdmin):
+    list_display = ['movimiento', 'categoria_huevo', 'cantidad', 'precio_unitario', 'subtotal']
+    list_filter = ['categoria_huevo', 'movimiento__tipo_movimiento', 'movimiento__fecha']
+    search_fields = ['movimiento__cliente', 'movimiento__numero_comprobante']
+    ordering = ['-movimiento__fecha', 'categoria_huevo']
+    
+    def subtotal(self, obj):
+        return obj.subtotal
+    subtotal.short_description = 'Subtotal'
+    
+    def has_add_permission(self, request):
+        # Preferir agregar detalles a través del inline en MovimientoHuevos
+        return False
 
 @admin.register(InventarioHuevos)
 class InventarioHuevosAdmin(admin.ModelAdmin):

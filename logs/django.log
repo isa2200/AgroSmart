@@ -7857,3 +7857,500 @@ INFO 2025-09-30 09:32:27,146 basehttp 20860 25972 "GET /aves/bitacora/ HTTP/1.1"
 INFO 2025-09-30 09:32:30,567 basehttp 20860 25972 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30179
 INFO 2025-09-30 09:32:31,857 basehttp 20860 25972 "GET /aves/inventario-huevos/ HTTP/1.1" 200 26259
 INFO 2025-09-30 09:32:53,758 basehttp 20860 25972 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 29582
+INFO 2025-09-30 09:37:52,204 basehttp 20860 11128 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 33620
+INFO 2025-09-30 09:37:52,226 basehttp 20860 2776 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-30 09:37:52,226 basehttp 20860 11128 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-30 09:37:52,589 basehttp 20860 2776 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-30 09:37:52,600 basehttp 20860 2776 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-30 09:37:53,145 log 20860 2776 Not Found: /favicon.ico
+WARNING 2025-09-30 09:37:53,146 basehttp 20860 2776 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-30 09:46:00,764 autoreload 20860 2560 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-30 09:46:01,799 autoreload 11452 5792 Watching for file changes with StatReloader
+INFO 2025-09-30 09:54:33,576 autoreload 16636 25788 Watching for file changes with StatReloader
+INFO 2025-09-30 09:54:35,228 basehttp 16636 10000 "GET / HTTP/1.1" 200 33121
+INFO 2025-09-30 09:54:37,231 basehttp 16636 10000 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 09:54:42,064 basehttp 16636 10000 "GET /aves/bitacora/ HTTP/1.1" 200 25314
+INFO 2025-09-30 09:54:43,630 basehttp 16636 10000 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30179
+INFO 2025-09-30 09:54:46,229 basehttp 16636 10000 "GET /aves/inventario-huevos/ HTTP/1.1" 200 26259
+ERROR 2025-09-30 09:54:50,712 log 16636 10000 Internal Server Error: /aves/movimiento-huevos/nuevo/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 30, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 231, in movimiento_huevos_create
+    return render(request, 'aves/movimiento_huevos_form.html', {'form': form})
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'movimiento_huevos_list' not found. 'movimiento_huevos_list' is not a valid view function or pattern name.
+ERROR 2025-09-30 09:54:50,767 basehttp 16636 10000 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 500 197162
+INFO 2025-09-30 09:56:43,353 autoreload 16636 25788 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-09-30 09:56:44,077 autoreload 26152 20412 Watching for file changes with StatReloader
+ERROR 2025-09-30 09:56:54,191 log 26152 18304 Internal Server Error: /aves/movimiento-huevos/nuevo/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 30, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 281, in movimiento_huevos_create
+    return render(request, 'aves/movimiento_huevos_form.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'movimiento_huevos_list' not found. 'movimiento_huevos_list' is not a valid view function or pattern name.
+ERROR 2025-09-30 09:56:54,250 basehttp 26152 18304 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 500 203024
+INFO 2025-09-30 09:56:54,270 basehttp 26152 27468 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-30 09:56:54,270 basehttp 26152 18304 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-30 09:56:54,304 basehttp 26152 18304 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-30 09:56:54,337 basehttp 26152 18304 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-30 09:56:54,386 log 26152 18304 Not Found: /favicon.ico
+WARNING 2025-09-30 09:56:54,387 basehttp 26152 18304 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-30 09:57:06,271 autoreload 9612 17296 Watching for file changes with StatReloader
+INFO 2025-09-30 09:57:07,563 basehttp 9612 17684 "GET / HTTP/1.1" 200 33121
+INFO 2025-09-30 09:57:09,168 basehttp 9612 17684 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 09:57:10,152 basehttp 9612 17684 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30179
+INFO 2025-09-30 09:57:10,570 basehttp 9612 17684 "GET /aves/inventario-huevos/ HTTP/1.1" 200 26259
+ERROR 2025-09-30 09:57:11,532 log 9612 17684 Internal Server Error: /aves/movimiento-huevos/nuevo/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 30, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 281, in movimiento_huevos_create
+    return render(request, 'aves/movimiento_huevos_form.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'movimiento_huevos_list' not found. 'movimiento_huevos_list' is not a valid view function or pattern name.
+ERROR 2025-09-30 09:57:11,601 basehttp 9612 17684 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 500 202759
+INFO 2025-09-30 10:27:40,281 autoreload 9612 17296 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-09-30 10:27:41,089 autoreload 19212 2212 Watching for file changes with StatReloader
+INFO 2025-09-30 10:28:28,173 autoreload 19212 2212 C:\Users\bp877\TRAE\AgroSmart\apps\aves\urls.py changed, reloading.
+INFO 2025-09-30 10:28:28,952 autoreload 17344 7700 Watching for file changes with StatReloader
+INFO 2025-09-30 10:28:38,935 autoreload 17344 7700 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-09-30 10:28:39,707 autoreload 12324 23268 Watching for file changes with StatReloader
+INFO 2025-09-30 10:29:29,014 autoreload 25244 27864 Watching for file changes with StatReloader
+INFO 2025-09-30 10:29:30,353 basehttp 25244 15828 "GET / HTTP/1.1" 200 33121
+INFO 2025-09-30 10:29:32,664 basehttp 25244 15828 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 10:29:38,682 basehttp 25244 15828 "GET /aves/inventario-huevos/ HTTP/1.1" 200 26259
+INFO 2025-09-30 10:29:40,597 basehttp 25244 15828 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 39448
+INFO 2025-09-30 10:33:08,815 autoreload 25244 27864 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-09-30 10:33:09,605 autoreload 24716 13068 Watching for file changes with StatReloader
+INFO 2025-09-30 10:33:57,006 autoreload 25968 6644 Watching for file changes with StatReloader
+INFO 2025-09-30 10:33:58,577 basehttp 25968 2400 "GET / HTTP/1.1" 200 33121
+INFO 2025-09-30 10:34:00,921 basehttp 25968 2400 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 10:34:03,416 basehttp 25968 2400 "GET /aves/bitacora/ HTTP/1.1" 200 25314
+INFO 2025-09-30 10:34:04,754 basehttp 25968 2400 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30179
+INFO 2025-09-30 10:34:06,652 basehttp 25968 2400 "GET /aves/inventario-huevos/ HTTP/1.1" 200 26259
+INFO 2025-09-30 10:34:10,175 basehttp 25968 2400 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 39067
+INFO 2025-09-30 10:34:53,765 basehttp 25968 2400 "POST /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 41956
+INFO 2025-09-30 10:35:27,751 basehttp 25968 2400 "POST /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 41770
+INFO 2025-09-30 10:35:47,160 basehttp 25968 2400 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 10:35:51,270 basehttp 25968 2400 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 10:35:54,867 basehttp 25968 2400 "GET /aves/inventario-huevos/ HTTP/1.1" 200 26259
+INFO 2025-09-30 10:37:18,455 basehttp 25968 2400 "GET /aves/vacunacion/ HTTP/1.1" 200 19524
+INFO 2025-09-30 10:37:19,594 basehttp 25968 2400 "GET /aves/inventario-huevos/ HTTP/1.1" 200 26259
+INFO 2025-09-30 10:37:23,123 basehttp 25968 2400 "GET /aves/vacunacion/ HTTP/1.1" 200 19524
+INFO 2025-09-30 10:37:24,156 basehttp 25968 2400 "GET /aves/vacunacion/nuevo/ HTTP/1.1" 200 21855
+INFO 2025-09-30 10:37:26,948 basehttp 25968 2400 "GET /aves/alertas/ HTTP/1.1" 200 30476
+WARNING 2025-09-30 10:37:26,982 basehttp 25968 2400 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+WARNING 2025-09-30 10:37:26,982 basehttp 25968 11344 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+INFO 2025-09-30 10:37:27,680 basehttp 25968 21240 "GET /aves/reportes/ HTTP/1.1" 200 21695
+INFO 2025-09-30 10:37:28,166 basehttp 25968 21240 "GET /aves/vacunacion/ HTTP/1.1" 200 19524
+INFO 2025-09-30 10:38:30,819 autoreload 25968 6644 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-09-30 10:38:31,758 autoreload 14244 12156 Watching for file changes with StatReloader
+INFO 2025-09-30 10:38:54,068 autoreload 14244 12156 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-09-30 10:38:54,738 autoreload 12488 2148 Watching for file changes with StatReloader
+INFO 2025-09-30 10:39:24,694 basehttp 12488 6976 "GET /aves/inventario-huevos/ HTTP/1.1" 200 26260
+INFO 2025-09-30 10:39:27,413 basehttp 12488 6976 "GET /aves/inventario-huevos/ HTTP/1.1" 200 26259
+INFO 2025-09-30 10:39:27,436 basehttp 12488 6976 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-30 10:39:27,437 basehttp 12488 16008 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-30 10:39:27,654 basehttp 12488 6976 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-30 10:39:27,665 basehttp 12488 6976 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-30 10:39:28,104 log 12488 6976 Not Found: /favicon.ico
+WARNING 2025-09-30 10:39:28,105 basehttp 12488 6976 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-30 10:39:29,032 basehttp 12488 6976 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 39067
+INFO 2025-09-30 10:48:27,893 autoreload 12488 2148 C:\Users\bp877\TRAE\AgroSmart\apps\aves\forms.py changed, reloading.
+INFO 2025-09-30 10:48:28,789 autoreload 5092 3916 Watching for file changes with StatReloader
+INFO 2025-09-30 10:50:17,044 basehttp 5092 7356 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 37002
+INFO 2025-09-30 10:50:17,065 basehttp 5092 17068 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-30 10:50:17,065 basehttp 5092 7356 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-30 10:50:17,227 basehttp 5092 7356 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-30 10:50:17,238 basehttp 5092 7356 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-30 10:50:17,562 log 5092 7356 Not Found: /favicon.ico
+WARNING 2025-09-30 10:50:17,562 basehttp 5092 7356 "GET /favicon.ico HTTP/1.1" 404 16809
+ERROR 2025-09-30 10:51:19,588 log 5092 7356 Internal Server Error: /aves/movimiento-huevos/nuevo/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\forms\boundfield.py", line 69, in __getitem__
+    raise TypeError(
+    ...<2 lines>...
+    )
+TypeError: BoundField indices must be integers or slices, not str.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 30, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 285, in movimiento_huevos_create
+    return render(request, 'aves/movimiento_huevos_form.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+                    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 314, in render
+    match = condition.eval(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 877, in eval
+    return self.value.resolve(context, ignore_failures=True)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 715, in resolve
+    obj = self.var.resolve(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 847, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 890, in _resolve_lookup
+    current = getattr(current, bit)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\forms\boundfield.py", line 80, in errors
+    return self.form.errors.get(
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\forms\forms.py", line 196, in errors
+    self.full_clean()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\forms\forms.py", line 435, in full_clean
+    self._post_clean()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\forms\models.py", line 486, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\base.py", line 1477, in full_clean
+    self.clean()
+    ~~~~~~~~~~^^
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py", line 312, in clean
+    if self.cantidad > inventario.cantidad_actual:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '>' not supported between instances of 'NoneType' and 'int'
+ERROR 2025-09-30 10:51:19,662 basehttp 5092 7356 "POST /aves/movimiento-huevos/nuevo/ HTTP/1.1" 500 269530
+INFO 2025-09-30 10:52:41,639 autoreload 5092 3916 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-30 10:52:42,399 autoreload 18048 20864 Watching for file changes with StatReloader
+INFO 2025-09-30 10:52:57,848 basehttp 18048 28436 "POST /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 48020
+INFO 2025-09-30 10:53:11,352 basehttp 18048 28436 "POST /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 48019
+INFO 2025-09-30 10:53:11,373 basehttp 18048 8344 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-30 10:53:11,374 basehttp 18048 28436 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-30 10:53:11,601 basehttp 18048 28436 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-30 10:53:11,614 basehttp 18048 28436 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-30 10:53:11,953 log 18048 28436 Not Found: /favicon.ico
+WARNING 2025-09-30 10:53:11,953 basehttp 18048 28436 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-30 10:53:28,122 autoreload 26576 3220 Watching for file changes with StatReloader
+INFO 2025-09-30 10:53:30,313 basehttp 26576 18324 "GET / HTTP/1.1" 200 34613
+INFO 2025-09-30 10:53:35,467 basehttp 26576 18324 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 10:53:37,249 basehttp 26576 18324 "GET /aves/inventario-huevos/ HTTP/1.1" 200 26259
+INFO 2025-09-30 10:53:43,125 basehttp 26576 18324 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 37001
+INFO 2025-09-30 10:54:08,417 basehttp 26576 18324 "POST /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 37471
+INFO 2025-09-30 10:54:25,667 basehttp 26576 18324 "POST /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 37269
+INFO 2025-09-30 10:54:32,474 basehttp 26576 18324 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 10:54:33,906 basehttp 26576 18324 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 10:59:33,986 basehttp 26576 1816 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 11:04:34,070 basehttp 26576 22848 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 11:09:35,058 basehttp 26576 20096 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 11:11:28,696 basehttp 26576 20096 "GET / HTTP/1.1" 200 33730
+ERROR 2025-09-30 11:11:31,610 log 26576 20096 Internal Server Error: /usuarios/perfil/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: usuarios/perfil.html
+ERROR 2025-09-30 11:11:31,652 basehttp 26576 20096 "GET /usuarios/perfil/ HTTP/1.1" 500 100415
+INFO 2025-09-30 11:11:40,329 basehttp 26576 20096 "GET / HTTP/1.1" 200 33120
+INFO 2025-09-30 11:12:25,462 basehttp 26576 20096 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 11:12:39,279 basehttp 26576 20096 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 11:13:11,414 basehttp 26576 20096 "GET /aves/bitacora/ HTTP/1.1" 200 25314
+INFO 2025-09-30 11:13:25,221 basehttp 26576 20096 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 23961
+INFO 2025-09-30 11:13:36,668 basehttp 26576 20096 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30179
+INFO 2025-09-30 11:15:07,654 basehttp 26576 20096 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 11:15:12,151 basehttp 26576 20096 "GET /aves/inventario-huevos/ HTTP/1.1" 200 26259
+INFO 2025-09-30 11:15:29,343 basehttp 26576 20096 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 11:16:38,068 basehttp 26576 20096 "GET /aves/bitacora/ HTTP/1.1" 200 25314
+INFO 2025-09-30 11:16:39,297 basehttp 26576 20096 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 11:21:40,049 basehttp 26576 3880 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 11:25:35,293 basehttp 26576 3880 "GET /aves/bitacora/ HTTP/1.1" 200 25314
+INFO 2025-09-30 11:25:36,341 basehttp 26576 3880 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30179
+INFO 2025-09-30 11:25:36,929 basehttp 26576 3880 "GET /aves/inventario-huevos/ HTTP/1.1" 200 26259
+INFO 2025-09-30 11:25:38,698 basehttp 26576 3880 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 37001
+INFO 2025-09-30 11:25:45,333 basehttp 26576 3880 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 11:30:45,424 basehttp 26576 12272 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 11:31:59,208 autoreload 26576 3220 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-30 11:31:59,972 autoreload 13536 12204 Watching for file changes with StatReloader
+INFO 2025-09-30 11:32:25,533 autoreload 13536 12204 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-09-30 11:32:26,353 autoreload 3348 15104 Watching for file changes with StatReloader
+INFO 2025-09-30 11:33:35,288 autoreload 3348 15104 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-30 11:33:36,156 autoreload 8568 24448 Watching for file changes with StatReloader
+INFO 2025-09-30 11:33:53,446 autoreload 8568 24448 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-09-30 11:33:54,344 autoreload 20428 23668 Watching for file changes with StatReloader
+INFO 2025-09-30 11:34:31,255 autoreload 20428 23668 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-30 11:34:32,195 autoreload 19652 9908 Watching for file changes with StatReloader
+INFO 2025-09-30 11:34:59,128 autoreload 19652 9908 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-09-30 11:35:00,072 autoreload 10980 17808 Watching for file changes with StatReloader
+INFO 2025-09-30 11:35:45,797 basehttp 10980 17000 "GET /aves/ HTTP/1.1" 200 30108
+INFO 2025-09-30 11:37:26,409 autoreload 23792 16256 Watching for file changes with StatReloader
+INFO 2025-09-30 11:37:28,184 basehttp 23792 15336 "GET / HTTP/1.1" 200 33121
+INFO 2025-09-30 11:37:40,989 basehttp 23792 15336 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 11:37:43,327 basehttp 23792 15336 "GET /aves/bitacora/ HTTP/1.1" 200 25314
+INFO 2025-09-30 11:37:43,901 basehttp 23792 15336 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30179
+INFO 2025-09-30 11:37:44,788 basehttp 23792 15336 "GET /aves/inventario-huevos/ HTTP/1.1" 200 26259
+INFO 2025-09-30 11:37:45,989 basehttp 23792 15336 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 37039
+INFO 2025-09-30 11:42:08,297 views 23792 15336 POST data received: <QueryDict: {'csrfmiddlewaretoken': ['cdv7L2FXcplPwo3jx6cwXcrHJwHhNoK4p42jXZOXWPFySG6BezyvdW8WWREXpNsf'], 'fecha': ['2025-09-30'], 'tipo_movimiento': ['venta'], 'cliente': ['Punto Blanco'], 'numero_comprobante': ['32765'], 'conductor': ['Carlitos'], 'form-TOTAL_FORMS': ['2'], 'form-INITIAL_FORMS': ['0'], 'form-MIN_NUM_FORMS': ['1'], 'form-MAX_NUM_FORMS': ['1000'], 'form-0-categoria_huevo': ['AAA'], 'form-0-cantidad': ['12'], 'form-0-precio_unitario': ['345'], 'form-1-categoria_huevo': ['AAA'], 'form-1-cantidad': [''], 'form-1-precio_unitario': [''], 'observaciones': ['']}>
+INFO 2025-09-30 11:42:08,300 views 23792 15336 Form valid: True
+INFO 2025-09-30 11:42:08,304 views 23792 15336 Formset valid: False
+ERROR 2025-09-30 11:42:08,304 views 23792 15336 Formset errors: [{}, {'cantidad': ['Este campo es obligatorio.'], '__all__': ['La cantidad debe ser mayor a 0.']}]
+ERROR 2025-09-30 11:42:08,326 views 23792 15336 Form 1 errors: <ul class="errorlist"><li>cantidad<ul class="errorlist"><li>Este campo es obligatorio.</li></ul></li><li>__all__<ul class="errorlist nonfield"><li>La cantidad debe ser mayor a 0.</li></ul></li></ul>
+INFO 2025-09-30 11:42:08,354 basehttp 23792 15336 "POST /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 37306
+INFO 2025-09-30 11:51:56,568 autoreload 23792 16256 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-30 11:51:57,331 autoreload 1880 23980 Watching for file changes with StatReloader
+INFO 2025-09-30 11:53:56,222 autoreload 1880 23980 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-09-30 11:53:57,102 autoreload 18620 20692 Watching for file changes with StatReloader
+INFO 2025-09-30 12:00:53,020 autoreload 18620 20692 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-30 12:00:53,860 autoreload 26392 20112 Watching for file changes with StatReloader
+INFO 2025-09-30 12:01:51,433 autoreload 26392 20112 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-30 12:01:52,277 autoreload 9224 26592 Watching for file changes with StatReloader
+INFO 2025-09-30 12:03:12,737 autoreload 9224 26592 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-09-30 12:03:13,664 autoreload 26772 16752 Watching for file changes with StatReloader
+INFO 2025-09-30 12:04:11,295 basehttp 26772 5172 "GET / HTTP/1.1" 200 33851
+INFO 2025-09-30 12:04:47,970 basehttp 26772 5172 "GET / HTTP/1.1" 200 33120
+INFO 2025-09-30 12:04:47,990 basehttp 26772 20296 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-30 12:04:47,990 basehttp 26772 5172 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-30 12:04:48,207 basehttp 26772 20296 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-30 12:04:48,214 basehttp 26772 20296 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-30 12:04:48,865 log 26772 20296 Not Found: /favicon.ico
+WARNING 2025-09-30 12:04:48,865 basehttp 26772 20296 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-30 12:04:50,042 basehttp 26772 20296 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 12:04:52,418 basehttp 26772 20296 "GET /aves/bitacora/ HTTP/1.1" 200 25314
+INFO 2025-09-30 12:04:53,146 basehttp 26772 20296 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30179
+INFO 2025-09-30 12:04:54,906 basehttp 26772 20296 "GET /aves/inventario-huevos/ HTTP/1.1" 200 26259
+INFO 2025-09-30 12:04:56,478 basehttp 26772 20296 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 37039
+INFO 2025-09-30 12:05:06,325 views 26772 20296 POST data received: <QueryDict: {'csrfmiddlewaretoken': ['PYRwuyjEP7AfWh2UuY6yr8OzzNzZyXZh2PoIGvsEzxUYiz5cbrsxHSvOM8wFamHs'], 'fecha': [''], 'tipo_movimiento': [''], 'cliente': [''], 'numero_comprobante': [''], 'conductor': [''], 'form-TOTAL_FORMS': ['2'], 'form-INITIAL_FORMS': ['0'], 'form-MIN_NUM_FORMS': ['1'], 'form-MAX_NUM_FORMS': ['1000'], 'form-0-categoria_huevo': ['AAA'], 'form-0-cantidad': ['34'], 'form-0-precio_unitario': ['12'], 'form-0-DELETE': ['on'], 'form-1-categoria_huevo': ['AAA'], 'form-1-cantidad': [''], 'form-1-precio_unitario': [''], 'observaciones': ['']}>
+INFO 2025-09-30 12:05:06,326 views 26772 20296 Form valid: False
+INFO 2025-09-30 12:05:06,329 views 26772 20296 Formset valid: False
+ERROR 2025-09-30 12:05:06,331 views 26772 20296 Form errors: <ul class="errorlist"><li>fecha<ul class="errorlist"><li>Este campo es obligatorio.</li></ul></li><li>tipo_movimiento<ul class="errorlist"><li>Este campo es obligatorio.</li></ul></li></ul>
+ERROR 2025-09-30 12:05:06,331 views 26772 20296 Formset errors: [{'cantidad': ['Este campo es obligatorio.'], '__all__': ['La cantidad debe ser mayor a 0.']}]
+ERROR 2025-09-30 12:05:06,331 views 26772 20296 Formset non_form_errors: 
+ERROR 2025-09-30 12:05:06,332 views 26772 20296 Form 0 errors: <ul class="errorlist"><li>cantidad<ul class="errorlist"><li>Este campo es obligatorio.</li></ul></li><li>__all__<ul class="errorlist nonfield"><li>La cantidad debe ser mayor a 0.</li></ul></li></ul>
+ERROR 2025-09-30 12:05:06,332 views 26772 20296 Form 1 non_field_errors: <ul class="errorlist nonfield"><li>La cantidad debe ser mayor a 0.</li></ul>
+INFO 2025-09-30 12:05:06,358 basehttp 26772 20296 "POST /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 36474
+INFO 2025-09-30 12:14:25,671 autoreload 2220 1904 Watching for file changes with StatReloader
+INFO 2025-09-30 12:14:27,615 basehttp 2220 16512 "GET / HTTP/1.1" 200 34338
+INFO 2025-09-30 12:35:19,928 autoreload 2220 1904 C:\Users\bp877\TRAE\AgroSmart\config\settings\base.py changed, reloading.
+INFO 2025-09-30 12:35:21,000 autoreload 10096 15008 Watching for file changes with StatReloader
+INFO 2025-09-30 12:35:27,767 autoreload 10096 15008 C:\Users\bp877\TRAE\AgroSmart\apps\core\models.py changed, reloading.
+INFO 2025-09-30 12:35:28,504 autoreload 12332 13744 Watching for file changes with StatReloader
+INFO 2025-09-30 12:35:54,105 autoreload 23156 20696 Watching for file changes with StatReloader
+INFO 2025-09-30 12:35:58,198 basehttp 23156 24920 "GET / HTTP/1.1" 200 33121
+INFO 2025-09-30 12:36:01,491 basehttp 23156 24920 "GET /aves/ HTTP/1.1" 200 30107
+INFO 2025-09-30 12:36:05,406 basehttp 23156 24920 "GET /aves/bitacora/ HTTP/1.1" 200 25314
+INFO 2025-09-30 12:36:06,332 basehttp 23156 24920 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30179
+INFO 2025-09-30 12:36:08,204 basehttp 23156 24920 "GET /aves/inventario-huevos/ HTTP/1.1" 200 26259
+INFO 2025-09-30 12:36:13,796 basehttp 23156 24920 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 30298

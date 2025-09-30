@@ -16,6 +16,13 @@ class TimeStampedModel(models.Model):
     
     class Meta:
         abstract = True
+    
+    def save(self, *args, **kwargs):
+        """Override save para asegurar que los timestamps usen timezone aware datetimes."""
+        if not self.pk and not self.created_at:
+            self.created_at = timezone.now()
+        self.updated_at = timezone.now()
+        super().save(*args, **kwargs)
 
 
 class ActiveModel(models.Model):
@@ -55,11 +62,11 @@ class Lote(BaseModel):
     
     @property
     def esta_activo(self):
-        """Verifica si el lote está actualmente activo."""
+        """
+        Determina si el lote está activo basado en las fechas.
+        """
         hoy = timezone.now().date()
-        if self.fecha_fin:
-            return self.fecha_inicio <= hoy <= self.fecha_fin
-        return self.fecha_inicio <= hoy
+        return self.fecha_inicio <= hoy and (self.fecha_fin is None or self.fecha_fin >= hoy)
 
 
 class Categoria(BaseModel):

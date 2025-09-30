@@ -91,6 +91,15 @@ TIME_ZONE = 'America/Bogota'
 USE_I18N = True
 USE_TZ = True
 
+# Configuración adicional para evitar warnings de timezone
+import warnings
+warnings.filterwarnings(
+    'ignore',
+    message='DateTimeField .* received a naive datetime',
+    category=RuntimeWarning,
+    module='django.db.models.fields'
+)
+
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'

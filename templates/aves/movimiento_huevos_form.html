@@ -1,285 +1,267 @@
 {% extends 'aves/base.html' %}
-{% load widget_tweaks %}
 
-{% block title %}Nuevo Movimiento de Huevos - AgroSmart{% endblock %}
+{% block title %}{{ title }} - AgroSmart{% endblock %}
 
-{% block page_title %}Nuevo Movimiento de Huevos{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
 
 {% block breadcrumb_items %}
-    <li class="breadcrumb-item"><a href="{% url 'aves:inventario_huevos' %}">Inventario</a></li>
-    <li class="breadcrumb-item active">Nuevo Movimiento</li>
-{% endblock %}
-
-{% block page_actions %}
-    <a href="{% url 'aves:inventario_huevos' %}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left me-2"></i>Volver
-    </a>
+    <li class="breadcrumb-item"><a href="{% url 'aves:inventario_huevos' %}">Inventario de Huevos</a></li>
+    <li class="breadcrumb-item active">{{ title }}</li>
 {% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card">
+<div class="container-fluid">
+    <form method="post" novalidate id="movimiento-form">
+        {% csrf_token %}
+        
+        <!-- Información del Movimiento -->
+        <div class="card mb-4">
             <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-exchange-alt me-2"></i>Registrar Movimiento de Huevos</h5>
+                <h5 class="mb-0"><i class="fas fa-info-circle"></i> Información del Movimiento</h5>
             </div>
             <div class="card-body">
-                <form method="post" id="movimientoForm">
-                    {% csrf_token %}
-                    
-                    <div class="row">
-                        <!-- Tipo de Movimiento -->
-                        <div class="col-md-6">
-                            <h6 class="text-primary mb-3">Tipo de Movimiento</h6>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.tipo_movimiento.id_for_label }}" class="form-label">Tipo *</label>
-                                {{ form.tipo_movimiento|add_class:"form-select" }}
-                                {% if form.tipo_movimiento.errors %}
-                                    <div class="text-danger small">{{ form.tipo_movimiento.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.fecha.id_for_label }}" class="form-label">Fecha *</label>
-                                {{ form.fecha|add_class:"form-control" }}
-                                {% if form.fecha.errors %}
-                                    <div class="text-danger small">{{ form.fecha.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-                        
-                        <!-- Detalles del Huevo -->
-                        <div class="col-md-6">
-                            <h6 class="text-success mb-3">Detalles del Producto</h6>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.tipo_huevo.id_for_label }}" class="form-label">Tipo de Huevo *</label>
-                                {{ form.tipo_huevo|add_class:"form-select" }}
-                                {% if form.tipo_huevo.errors %}
-                                    <div class="text-danger small">{{ form.tipo_huevo.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.cantidad.id_for_label }}" class="form-label">Cantidad *</label>
-                                <div class="input-group">
-                                    {{ form.cantidad|add_class:"form-control" }}
-                                    <span class="input-group-text">unidades</span>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="{{ form.fecha.id_for_label }}">{{ form.fecha.label }}</label>
+                            {{ form.fecha }}
+                            {% if form.fecha.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.fecha.errors %}
+                                        {{ error }}
+                                    {% endfor %}
                                 </div>
-                                {% if form.cantidad.errors %}
-                                    <div class="text-danger small">{{ form.cantidad.errors.0 }}</div>
-                                {% endif %}
-                                <div id="stockDisponible" class="form-text"></div>
-                            </div>
+                            {% endif %}
                         </div>
                     </div>
-                    
-                    <!-- Origen/Destino según tipo -->
-                    <div class="row">
-                        <div class="col-md-6" id="origenSection">
-                            <h6 class="text-info mb-3">Origen</h6>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.lote_origen.id_for_label }}" class="form-label">Lote de Origen</label>
-                                {{ form.lote_origen|add_class:"form-select" }}
-                                {% if form.lote_origen.errors %}
-                                    <div class="text-danger small">{{ form.lote_origen.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6" id="destinoSection">
-                            <h6 class="text-warning mb-3">Destino</h6>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.destino.id_for_label }}" class="form-label">Destino</label>
-                                {{ form.destino|add_class:"form-control" }}
-                                {% if form.destino.errors %}
-                                    <div class="text-danger small">{{ form.destino.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.precio_unitario.id_for_label }}" class="form-label">Precio Unitario</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    {{ form.precio_unitario|add_class:"form-control" }}
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="{{ form.tipo_movimiento.id_for_label }}">{{ form.tipo_movimiento.label }}</label>
+                            {{ form.tipo_movimiento }}
+                            {% if form.tipo_movimiento.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.tipo_movimiento.errors %}
+                                        {{ error }}
+                                    {% endfor %}
                                 </div>
-                                {% if form.precio_unitario.errors %}
-                                    <div class="text-danger small">{{ form.precio_unitario.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="{{ form.cliente.id_for_label }}">{{ form.cliente.label }}</label>
+                            {{ form.cliente }}
+                            {% if form.cliente.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.cliente.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="{{ form.numero_comprobante.id_for_label }}">{{ form.numero_comprobante.label }}</label>
+                            {{ form.numero_comprobante }}
+                            {% if form.numero_comprobante.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.numero_comprobante.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Información de transporte (solo para ventas) -->
+                <div id="info-transporte" style="display: none;">
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="{{ form.conductor.id_for_label }}">{{ form.conductor.label }}</label>
+                                {{ form.conductor }}
+                                {% if form.conductor.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.conductor.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
                                 {% endif %}
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Observaciones -->
-                    <div class="row">
-                        <div class="col-12">
-                            <h6 class="text-secondary mb-3">Información Adicional</h6>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
-                                {{ form.observaciones|add_class:"form-control" }}
-                                {% if form.observaciones.errors %}
-                                    <div class="text-danger small">{{ form.observaciones.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Resumen -->
-                    <div class="row" id="resumenMovimiento" style="display: none;">
-                        <div class="col-12">
-                            <div class="alert alert-info">
-                                <h6><i class="fas fa-info-circle me-2"></i>Resumen del Movimiento</h6>
-                                <div id="resumenContent"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Botones -->
-                    <div class="row">
-                        <div class="col-12">
-                            <hr>
-                            <div class="d-flex justify-content-end gap-2">
-                                <a href="{% url 'aves:inventario_huevos' %}" class="btn btn-secondary">
-                                    <i class="fas fa-times me-2"></i>Cancelar
-                                </a>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save me-2"></i>Registrar Movimiento
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-{% endblock %}
 
-{% block extra_js %}
+        <!-- Detalles del Movimiento -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-list"></i> Detalles del Movimiento</h5>
+                <button type="button" id="agregar-detalle" class="btn btn-success btn-sm">
+                    <i class="fas fa-plus"></i> Agregar Categoría
+                </button>
+            </div>
+            <div class="card-body">
+                {{ formset.management_form }}
+                
+                <div id="detalles-container">
+                    {% for form in formset %}
+                        <div class="detalle-item" data-form-index="{{ forloop.counter0 }}">
+                            <div class="detalle-header">
+                                <span class="detalle-numero">Categoría {{ forloop.counter }}</span>
+                                {% if not forloop.first %}
+                                    <button type="button" class="btn btn-danger btn-sm btn-eliminar-detalle">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Categoría de Huevo</label>
+                                    {{ form.categoria_huevo }}
+                                    <div class="stock-info" id="stock-info-{{ forloop.counter0 }}"></div>
+                                    {% if form.categoria_huevo.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.categoria_huevo.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Cantidad</label>
+                                    {{ form.cantidad }}
+                                    {% if form.cantidad.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.cantidad.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Precio Unitario</label>
+                                    {{ form.precio_unitario }}
+                                    {% if form.precio_unitario.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.precio_unitario.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="subtotal-detalle" id="subtotal-{{ forloop.counter0 }}">
+                                Subtotal: $0.00
+                            </div>
+                            
+                            <!-- Campos ocultos del formset -->
+                            {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Totales -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-calculator"></i> Totales</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="total-info">
+                            <strong>Total de Huevos: <span id="total-huevos">0</span></strong>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="total-info">
+                            <strong>Valor Total: $<span id="total-valor">0.00</span></strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Observaciones -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-comment"></i> Observaciones</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    {{ form.observaciones }}
+                    {% if form.observaciones.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.observaciones.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="card">
+            <div class="card-body text-center">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-save"></i> Guardar Movimiento
+                </button>
+                <a href="{% url 'aves:inventario_huevos' %}" class="btn btn-secondary btn-lg ml-2">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+
 <script>
-$(document).ready(function() {
-    // Establecer fecha actual por defecto
-    if (!$('#id_fecha').val()) {
-        let today = new Date().toISOString().split('T')[0];
-        $('#id_fecha').val(today);
-    }
+document.addEventListener('DOMContentLoaded', function() {
+    const inventarios = {{ inventario_json|safe }};
+    let formIndex = {{ formset.total_form_count }};
     
-    // Manejar cambio de tipo de movimiento
-    $('#id_tipo_movimiento').on('change', function() {
-        const tipo = $(this).val();
+    // Función para validar el formulario antes del envío
+    function validarFormulario() {
+        const detalles = document.querySelectorAll('.detalle-item');
+        let detallesValidos = 0;
         
-        if (tipo === 'entrada') {
-            $('#origenSection').show();
-            $('#destinoSection').hide();
-            $('#id_destino').prop('required', false);
-            $('#id_lote_origen').prop('required', true);
-        } else if (tipo === 'salida') {
-            $('#origenSection').hide();
-            $('#destinoSection').show();
-            $('#id_destino').prop('required', true);
-            $('#id_lote_origen').prop('required', false);
-        } else {
-            $('#origenSection').hide();
-            $('#destinoSection').hide();
-        }
-        
-        actualizarResumen();
-    });
-    
-    // Mostrar stock disponible
-    $('#id_tipo_huevo').on('change', function() {
-        const tipoHuevo = $(this).val();
-        if (tipoHuevo) {
-            // Aquí harías una llamada AJAX para obtener el stock
-            // Por ahora simulamos los datos
-            const stockSimulado = {
-                'AAA': 1500,
-                'AA': 2300,
-                'A': 1800,
-                'B': 900,
-                'C': 450
-            };
+        detalles.forEach(function(detalle) {
+            const categoria = detalle.querySelector('select[name$="-categoria_huevo"]');
+            const cantidad = detalle.querySelector('input[name$="-cantidad"]');
             
-            const stock = stockSimulado[tipoHuevo] || 0;
-            $('#stockDisponible').html(`<i class="fas fa-info-circle me-1"></i>Stock disponible: <strong>${stock}</strong> unidades`);
-        }
-        
-        actualizarResumen();
-    });
-    
-    // Actualizar resumen en tiempo real
-    $('input, select').on('change input', actualizarResumen);
-    
-    function actualizarResumen() {
-        const tipo = $('#id_tipo_movimiento').val();
-        const tipoHuevo = $('#id_tipo_huevo option:selected').text();
-        const cantidad = $('#id_cantidad').val();
-        const precio = $('#id_precio_unitario').val();
-        
-        if (tipo && tipoHuevo && cantidad) {
-            let resumen = `<strong>Tipo:</strong> ${tipo === 'entrada' ? 'Entrada' : 'Salida'}<br>`;
-            resumen += `<strong>Producto:</strong> ${tipoHuevo}<br>`;
-            resumen += `<strong>Cantidad:</strong> ${cantidad} unidades<br>`;
-            
-            if (tipo === 'salida' && precio) {
-                const total = parseFloat(cantidad) * parseFloat(precio);
-                resumen += `<strong>Precio Unitario:</strong> $${precio}<br>`;
-                resumen += `<strong>Total:</strong> $${total.toFixed(2)}`;
+            if (categoria && cantidad && categoria.value && cantidad.value && parseInt(cantidad.value) > 0) {
+                detallesValidos++;
             }
-            
-            $('#resumenContent').html(resumen);
-            $('#resumenMovimiento').show();
-        } else {
-            $('#resumenMovimiento').hide();
+        });
+        
+        if (detallesValidos === 0) {
+            alert('Debe agregar al menos un detalle válido al movimiento.');
+            return false;
         }
+        
+        return true;
     }
     
-    // Validación del formulario
-    $('#movimientoForm').on('submit', function(e) {
-        let valid = true;
-        let errors = [];
-        
-        // Validar campos obligatorios
-        if (!$('#id_tipo_movimiento').val()) {
-            errors.push('Debe seleccionar el tipo de movimiento');
-            valid = false;
-        }
-        
-        if (!$('#id_tipo_huevo').val()) {
-            errors.push('Debe seleccionar el tipo de huevo');
-            valid = false;
-        }
-        
-        const cantidad = parseFloat($('#id_cantidad').val());
-        if (!cantidad || cantidad <= 0) {
-            errors.push('La cantidad debe ser mayor a 0');
-            valid = false;
-        }
-        
-        // Validar según tipo de movimiento
-        const tipo = $('#id_tipo_movimiento').val();
-        if (tipo === 'entrada' && !$('#id_lote_origen').val()) {
-            errors.push('Debe seleccionar el lote de origen para entradas');
-            valid = false;
-        }
-        
-        if (tipo === 'salida' && !$('#id_destino').val().trim()) {
-            errors.push('Debe especificar el destino para salidas');
-            valid = false;
-        }
-        
-        if (!valid) {
+    // Validar antes de enviar el formulario
+    document.getElementById('movimiento-form').addEventListener('submit', function(e) {
+        if (!validarFormulario()) {
             e.preventDefault();
-            alert('Errores encontrados:\n' + errors.join('\n'));
         }
     });
     
-    // Inicializar vista
-    $('#id_tipo_movimiento').trigger('change');
+    // Resto del JavaScript para manejo dinámico del formset...
+    // (agregar detalles, eliminar, calcular totales, etc.)
 });
 </script>
 {% endblock %}

@@ -222,7 +222,7 @@ class PlanVacunacion(BaseModel):
 
 
 class MovimientoHuevos(BaseModel):
-    """Movimientos de huevos (despachos, ventas, autoconsumo)."""
+    """Movimientos de huevos (despachos, ventas, autoconsumo) - Encabezado."""
     TIPOS_MOVIMIENTO = [
         ('venta', 'Venta'),
         ('autoconsumo', 'Autoconsumo'),
@@ -240,9 +240,6 @@ class MovimientoHuevos(BaseModel):
     
     fecha = models.DateField('Fecha')
     tipo_movimiento = models.CharField('Tipo de movimiento', max_length=15, choices=TIPOS_MOVIMIENTO)
-    categoria_huevo = models.CharField('Categoría', max_length=3, choices=CATEGORIAS_HUEVO)
-    cantidad = models.PositiveIntegerField('Cantidad')
-    precio_unitario = models.DecimalField('Precio unitario', max_digits=10, decimal_places=2, null=True, blank=True)
     cliente = models.CharField('Cliente/Destino', max_length=200, blank=True)
     conductor = models.CharField('Conductor', max_length=200, blank=True)
     numero_comprobante = models.CharField('Número de comprobante', max_length=100, blank=True)
@@ -255,14 +252,83 @@ class MovimientoHuevos(BaseModel):
         ordering = ['-fecha']
     
     def __str__(self):
-        return f"{self.get_tipo_movimiento_display()} - {self.categoria_huevo} - {self.cantidad} - {self.fecha}"
+        return f"{self.get_tipo_movimiento_display()} - {self.fecha} - {self.cliente}"
+    
+    @property
+    def cantidad_total(self):
+        """Calcula la cantidad total de huevos en el movimiento."""
+        return sum(detalle.cantidad for detalle in self.detalles.all())
     
     @property
     def valor_total(self):
         """Calcula el valor total del movimiento."""
+        return sum(detalle.subtotal for detalle in self.detalles.all())
+
+
+class DetalleMovimientoHuevos(BaseModel):
+    """Detalle de movimiento de huevos por categoría."""
+    movimiento = models.ForeignKey(
+        MovimientoHuevos, 
+        on_delete=models.CASCADE, 
+        related_name='detalles',
+        verbose_name='Movimiento'
+    )
+    categoria_huevo = models.CharField(
+        'Categoría', 
+        max_length=3, 
+        choices=MovimientoHuevos.CATEGORIAS_HUEVO
+    )
+    cantidad = models.PositiveIntegerField('Cantidad')
+    precio_unitario = models.DecimalField(
+        'Precio unitario', 
+        max_digits=10, 
+        decimal_places=2, 
+        null=True, 
+        blank=True
+    )
+    
+    class Meta:
+        verbose_name = 'Detalle de Movimiento de Huevos'
+        verbose_name_plural = 'Detalles de Movimientos de Huevos'
+        unique_together = ['movimiento', 'categoria_huevo']
+    
+    def __str__(self):
+        return f"{self.movimiento} - {self.categoria_huevo} - {self.cantidad}"
+    
+    @property
+    def subtotal(self):
+        """Calcula el subtotal del detalle."""
         if self.precio_unitario:
             return self.cantidad * self.precio_unitario
         return 0
+    
+    def clean(self):
+        """Validaciones del modelo."""
+        from django.core.exceptions import ValidationError
+        
+        # Validar que los campos requeridos tengan valores
+        if not self.categoria_huevo:
+            raise ValidationError('La categoría de huevo es requerida.')
+        
+        if self.cantidad is None or self.cantidad <= 0:
+            raise ValidationError('La cantidad debe ser mayor a 0.')
+        
+        # Validar que hay stock suficiente solo para movimientos que requieren stock
+        # Solo validar si tenemos un movimiento válido y cantidad válida
+        if (hasattr(self, 'movimiento') and self.movimiento and 
+            self.movimiento.tipo_movimiento in ['venta', 'autoconsumo', 'baja'] and
+            self.cantidad is not None and self.cantidad > 0):
+            try:
+                inventario = InventarioHuevos.objects.get(categoria=self.categoria_huevo)
+                if self.cantidad > inventario.cantidad_actual:
+                    raise ValidationError(
+                        f'No hay suficiente stock de huevos {self.categoria_huevo}. '
+                        f'Stock disponible: {inventario.cantidad_actual}'
+                    )
+            except InventarioHuevos.DoesNotExist:
+                raise ValidationError(
+                    f'No existe inventario para la categoría {self.categoria_huevo}'
+                )
 
 
 class InventarioHuevos(BaseModel):

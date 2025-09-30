@@ -5,6 +5,7 @@ Formularios para el módulo avícola.
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.forms import formset_factory
 from .models import *
 
 
@@ -134,48 +135,88 @@ class LoteAvesForm(forms.ModelForm):
 
 
 class MovimientoHuevosForm(forms.ModelForm):
-    """Formulario para movimiento de huevos."""
+    """Formulario para el encabezado del movimiento de huevos."""
     
     class Meta:
         model = MovimientoHuevos
         fields = [
-            'fecha', 'tipo_movimiento', 'categoria_huevo', 'cantidad',
-            'precio_unitario', 'cliente', 'conductor', 'numero_comprobante',
-            'observaciones'
+            'fecha', 'tipo_movimiento', 'cliente', 'conductor', 
+            'numero_comprobante', 'observaciones'
         ]
         widgets = {
             'fecha': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'tipo_movimiento': forms.Select(attrs={'class': 'form-control'}),
-            'categoria_huevo': forms.Select(attrs={'class': 'form-control'}),
-            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'}),
-            'precio_unitario': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0'}),
             'cliente': forms.TextInput(attrs={'class': 'form-control'}),
             'conductor': forms.TextInput(attrs={'class': 'form-control'}),
             'numero_comprobante': forms.TextInput(attrs={'class': 'form-control'}),
             'observaciones': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
     
+    def clean_fecha(self):
+        fecha = self.cleaned_data.get('fecha')
+        if fecha and fecha > timezone.now().date():
+            raise ValidationError("No se puede registrar movimientos en fechas futuras.")
+        return fecha
+
+
+class DetalleMovimientoHuevosForm(forms.ModelForm):
+    """Formulario para cada detalle del movimiento de huevos."""
+    
+    class Meta:
+        model = DetalleMovimientoHuevos
+        fields = ['categoria_huevo', 'cantidad', 'precio_unitario']
+        widgets = {
+            'categoria_huevo': forms.Select(attrs={
+                'class': 'form-control categoria-select'
+            }),
+            'cantidad': forms.NumberInput(attrs={
+                'class': 'form-control cantidad-input',
+                'min': '1'
+            }),
+            'precio_unitario': forms.NumberInput(attrs={
+                'class': 'form-control precio-input',
+                'step': '0.01',
+                'min': '0'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Configurar choices para categoria_huevo
+        self.fields['categoria_huevo'].choices = MovimientoHuevos.CATEGORIAS_HUEVO
+    
     def clean(self):
+        """Validación personalizada del formulario."""
         cleaned_data = super().clean()
-        tipo_movimiento = cleaned_data.get('tipo_movimiento')
-        categoria_huevo = cleaned_data.get('categoria_huevo')
+        categoria = cleaned_data.get('categoria_huevo')
         cantidad = cleaned_data.get('cantidad')
+        precio = cleaned_data.get('precio_unitario')
         
-        # Aplicar reglas de negocio
-        if tipo_movimiento == 'venta':
-            if categoria_huevo in ['B', 'C']:
-                raise ValidationError("Los huevos categoría B y C no pueden venderse, solo autoconsumo.")
-        
-        # Validar stock disponible
-        if categoria_huevo and cantidad:
+        if categoria and cantidad:
+            # Verificar stock disponible (solo para movimientos de salida)
             try:
-                inventario = InventarioHuevos.objects.get(categoria=categoria_huevo)
-                if cantidad > inventario.cantidad_actual:
-                    raise ValidationError(f"No hay suficiente stock. Disponible: {inventario.cantidad_actual}")
+                inventario = InventarioHuevos.objects.get(categoria=categoria)
+                # Esta validación se hará en la vista ya que necesitamos el tipo de movimiento
             except InventarioHuevos.DoesNotExist:
-                raise ValidationError("No existe inventario para esta categoría.")
+                pass  # Se creará el inventario si no existe
+        
+        if cantidad and cantidad <= 0:
+            raise ValidationError('La cantidad debe ser mayor a 0.')
+        
+        if precio is not None and precio < 0:
+            raise ValidationError('El precio no puede ser negativo.')
         
         return cleaned_data
+
+
+# Crear el formset para manejar múltiples detalles
+DetalleMovimientoHuevosFormSet = formset_factory(
+    DetalleMovimientoHuevosForm,
+    extra=1,
+    min_num=1,
+    validate_min=True,
+    can_delete=True
+)
 
 
 class ControlConcentradoForm(forms.ModelForm):
