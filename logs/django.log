@@ -7470,3 +7470,241 @@ INFO 2025-09-29 07:41:31,722 basehttp 14296 8084 "GET /aves/lotes/nuevo/ HTTP/1.
 INFO 2025-09-29 07:41:36,962 basehttp 14296 8084 "GET /aves/bitacora/ HTTP/1.1" 200 25307
 INFO 2025-09-29 07:41:38,908 basehttp 14296 8084 "GET /aves/ HTTP/1.1" 200 26692
 INFO 2025-09-29 07:41:41,001 basehttp 14296 8084 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-29 07:43:15,380 basehttp 14296 8084 "GET /aves/alertas/ HTTP/1.1" 200 30469
+WARNING 2025-09-29 07:43:15,412 basehttp 14296 8084 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+WARNING 2025-09-29 07:43:15,412 basehttp 14296 19828 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+INFO 2025-09-29 07:43:22,167 basehttp 14296 7780 "GET /aves/ HTTP/1.1" 200 26692
+INFO 2025-09-29 08:03:14,184 basehttp 14296 11208 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 08:03:14,215 basehttp 14296 11208 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-29 08:03:14,233 basehttp 14296 21524 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-29 08:03:14,488 basehttp 14296 21524 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-29 08:03:14,506 basehttp 14296 11208 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-29 08:03:14,897 log 14296 11208 Not Found: /favicon.ico
+WARNING 2025-09-29 08:03:14,897 basehttp 14296 11208 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-29 08:03:16,654 basehttp 14296 11208 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-29 08:03:17,728 basehttp 14296 11208 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 08:03:18,649 basehttp 14296 11208 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-29 08:03:19,369 basehttp 14296 11208 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 08:03:20,204 basehttp 14296 11208 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-29 08:03:21,130 basehttp 14296 11208 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 08:03:26,201 basehttp 14296 11208 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-29 08:03:26,970 basehttp 14296 11208 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 08:03:27,844 basehttp 14296 11208 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-29 08:03:28,547 basehttp 14296 11208 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 08:03:29,298 basehttp 14296 11208 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-29 08:03:29,805 basehttp 14296 11208 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 08:03:30,463 basehttp 14296 11208 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-29 08:03:31,177 basehttp 14296 11208 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 08:03:31,878 basehttp 14296 11208 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-29 08:03:32,546 basehttp 14296 11208 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 08:05:06,775 basehttp 14296 11208 "GET /aves/vacunacion/nuevo/ HTTP/1.1" 200 21848
+INFO 2025-09-29 08:05:33,658 basehttp 14296 11208 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 08:05:35,703 basehttp 14296 11208 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-29 08:05:36,473 basehttp 14296 11208 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 08:05:37,213 basehttp 14296 11208 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-29 08:06:01,322 basehttp 14296 11208 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 08:06:02,091 basehttp 14296 11208 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-29 08:06:03,166 basehttp 14296 11208 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 08:06:14,648 basehttp 14296 11208 "GET /aves/vacunacion/nuevo/ HTTP/1.1" 200 21848
+INFO 2025-09-29 08:07:47,998 basehttp 14296 11208 "GET / HTTP/1.1" 200 33120
+ERROR 2025-09-29 08:08:13,045 log 14296 11208 Internal Server Error: /usuarios/lista/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: usuarios/lista_usuarios.html, auth/user_list.html
+ERROR 2025-09-29 08:08:13,074 basehttp 14296 11208 "GET /usuarios/lista/ HTTP/1.1" 500 103591
+ERROR 2025-09-29 08:08:15,378 log 14296 11208 Internal Server Error: /reportes/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\reportes\views.py", line 29, in lista_reportes
+    return render(request, 'reportes/lista_reportes.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: reportes/lista_reportes.html
+ERROR 2025-09-29 08:08:15,411 basehttp 14296 11208 "GET /reportes/ HTTP/1.1" 500 108744
+INFO 2025-09-29 08:09:56,113 basehttp 14296 11208 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 08:09:57,424 basehttp 14296 11208 "GET /aves/vacunacion/ HTTP/1.1" 200 19517
+INFO 2025-09-29 08:09:58,992 basehttp 14296 11208 "GET /aves/vacunacion/nuevo/ HTTP/1.1" 200 21848
+INFO 2025-09-29 08:10:00,827 basehttp 14296 11208 "GET /aves/alertas/ HTTP/1.1" 200 30469
+WARNING 2025-09-29 08:10:00,859 basehttp 14296 11208 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+WARNING 2025-09-29 08:10:00,860 basehttp 14296 21992 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+INFO 2025-09-29 08:10:03,591 basehttp 14296 1572 "GET /aves/reportes/ HTTP/1.1" 200 21688
+INFO 2025-09-29 08:10:06,057 basehttp 14296 1572 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-29 08:10:07,467 basehttp 14296 1572 "GET /aves/reportes/ HTTP/1.1" 200 21688
+INFO 2025-09-29 08:10:08,868 basehttp 14296 1572 "GET /aves/reportes/produccion/ HTTP/1.1" 200 20302
+INFO 2025-09-29 08:10:36,555 basehttp 14296 1572 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 08:10:38,430 basehttp 14296 1572 "GET / HTTP/1.1" 200 33120
+ERROR 2025-09-29 08:10:57,181 log 14296 1572 Internal Server Error: /reportes/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\reportes\views.py", line 29, in lista_reportes
+    return render(request, 'reportes/lista_reportes.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: reportes/lista_reportes.html
+ERROR 2025-09-29 08:10:57,215 basehttp 14296 1572 "GET /reportes/ HTTP/1.1" 500 108744
+INFO 2025-09-29 08:11:28,951 basehttp 14296 1572 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 08:11:46,723 basehttp 14296 1572 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-29 08:12:38,625 basehttp 14296 1572 "GET /aves/alertas/ HTTP/1.1" 200 30469
+WARNING 2025-09-29 08:12:38,659 basehttp 14296 1572 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+WARNING 2025-09-29 08:12:38,661 basehttp 14296 26872 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+INFO 2025-09-29 08:13:33,221 basehttp 14296 8040 "GET /aves/reportes/ HTTP/1.1" 200 21688
+INFO 2025-09-29 08:15:03,196 basehttp 14296 8040 "GET /aves/reportes/produccion/ HTTP/1.1" 200 20302
+INFO 2025-09-29 08:15:04,976 basehttp 14296 8040 "GET /aves/reportes/produccion/?lote=&fecha_desde=&fecha_hasta= HTTP/1.1" 200 20342
+INFO 2025-09-29 08:15:11,598 basehttp 14296 8040 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-29 08:15:13,120 basehttp 14296 8040 "GET /aves/reportes/ HTTP/1.1" 200 21688
+INFO 2025-09-29 08:15:24,576 basehttp 14296 8040 "GET /aves/reportes/produccion/ HTTP/1.1" 200 20302
+INFO 2025-09-29 08:15:57,046 basehttp 14296 8040 "GET /aves/reportes/produccion/?lote=&fecha_desde=2025-08-10&fecha_hasta=2025-11-07 HTTP/1.1" 200 20382
+INFO 2025-09-29 08:15:58,553 basehttp 14296 8040 "GET /aves/reportes/produccion/?lote=&fecha_desde=2025-08-10&fecha_hasta=2025-11-07 HTTP/1.1" 200 20382
+INFO 2025-09-29 08:15:58,747 basehttp 14296 8040 "GET /aves/reportes/produccion/?lote=&fecha_desde=2025-08-10&fecha_hasta=2025-11-07 HTTP/1.1" 200 20382
+INFO 2025-09-29 08:15:58,927 basehttp 14296 8040 "GET /aves/reportes/produccion/?lote=&fecha_desde=2025-08-10&fecha_hasta=2025-11-07 HTTP/1.1" 200 20382
+INFO 2025-09-29 08:15:59,086 basehttp 14296 8040 "GET /aves/reportes/produccion/?lote=&fecha_desde=2025-08-10&fecha_hasta=2025-11-07 HTTP/1.1" 200 20382
+INFO 2025-09-29 08:16:13,146 basehttp 14296 8040 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-29 08:16:36,553 basehttp 14296 8040 "GET /aves/bitacora/2/ HTTP/1.1" 200 22174
+INFO 2025-09-29 08:16:43,264 basehttp 14296 8040 "GET /aves/bitacora/2/editar/ HTTP/1.1" 200 26082
+INFO 2025-09-29 08:51:49,627 basehttp 14296 12764 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-29 09:48:39,007 autoreload 19028 9392 Watching for file changes with StatReloader
+INFO 2025-09-29 09:48:40,845 basehttp 19028 6452 "GET / HTTP/1.1" 200 33121
+INFO 2025-09-29 09:48:45,289 basehttp 19028 6452 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 09:49:15,944 basehttp 19028 6452 "GET / HTTP/1.1" 200 33120
+INFO 2025-09-29 09:49:47,871 basehttp 19028 6452 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 09:49:50,478 basehttp 19028 6452 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-29 09:49:52,673 basehttp 19028 6452 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 23962
+INFO 2025-09-29 09:50:41,271 basehttp 19028 6452 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-29 09:50:42,589 basehttp 19028 6452 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-29 09:51:15,432 basehttp 19028 6452 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 09:51:18,616 basehttp 19028 6452 "GET /aves/vacunacion/ HTTP/1.1" 200 19517
+INFO 2025-09-29 09:51:23,099 basehttp 19028 6452 "GET /aves/vacunacion/nuevo/ HTTP/1.1" 200 21848
+INFO 2025-09-29 09:51:50,401 basehttp 19028 6452 "GET /aves/alertas/ HTTP/1.1" 200 30469
+WARNING 2025-09-29 09:51:50,439 basehttp 19028 6452 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+WARNING 2025-09-29 09:51:50,441 basehttp 19028 24500 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+INFO 2025-09-29 09:52:16,326 basehttp 19028 3912 "GET /aves/reportes/ HTTP/1.1" 200 21688
+INFO 2025-09-29 09:52:47,766 basehttp 19028 3912 "GET / HTTP/1.1" 200 33120
+INFO 2025-09-29 09:53:32,167 basehttp 19028 3912 "GET /admin HTTP/1.1" 301 0
+INFO 2025-09-29 09:53:32,358 basehttp 19028 8920 "GET /admin/ HTTP/1.1" 200 25794
+INFO 2025-09-29 09:53:32,387 basehttp 19028 9276 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2025-09-29 09:53:32,387 basehttp 19028 17844 "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2025-09-29 09:53:32,389 basehttp 19028 22820 "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2025-09-29 09:53:32,390 basehttp 19028 16704 "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2025-09-29 09:53:32,391 basehttp 19028 16012 "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2025-09-29 09:53:32,398 basehttp 19028 8920 "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2025-09-29 09:53:32,427 basehttp 19028 8920 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2025-09-29 09:53:32,445 basehttp 19028 16012 "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2025-09-29 09:53:32,445 basehttp 19028 16704 "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2025-09-29 09:53:32,449 basehttp 19028 8920 "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-09-29 09:53:37,328 basehttp 19028 8920 "GET /admin/auth/user/add/ HTTP/1.1" 200 42969
+INFO 2025-09-29 09:53:37,367 basehttp 19028 8920 "GET /static/admin/css/forms.css HTTP/1.1" 200 9090
+INFO 2025-09-29 09:53:37,387 basehttp 19028 9276 "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+INFO 2025-09-29 09:53:37,388 basehttp 19028 17844 "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2025-09-29 09:53:37,389 basehttp 19028 22820 "GET /static/admin/js/calendar.js HTTP/1.1" 200 8466
+INFO 2025-09-29 09:53:37,409 basehttp 19028 9276 "GET /static/admin/css/widgets.css HTTP/1.1" 200 11921
+INFO 2025-09-29 09:53:37,426 basehttp 19028 16704 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-09-29 09:53:37,434 basehttp 19028 17844 "GET /static/admin/js/inlines.js HTTP/1.1" 200 15526
+INFO 2025-09-29 09:53:37,436 basehttp 19028 8920 "GET /static/admin/js/core.js HTTP/1.1" 200 5682
+INFO 2025-09-29 09:53:37,453 basehttp 19028 16012 "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 292458
+INFO 2025-09-29 09:53:37,453 basehttp 19028 9276 "GET /static/admin/js/actions.js HTTP/1.1" 200 7872
+INFO 2025-09-29 09:53:37,465 basehttp 19028 17844 "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2025-09-29 09:53:37,487 basehttp 19028 22820 "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 8943
+INFO 2025-09-29 09:53:37,500 basehttp 19028 16704 "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2025-09-29 09:53:37,507 basehttp 19028 16012 "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2025-09-29 09:53:37,535 basehttp 19028 16012 "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2025-09-29 09:53:37,535 basehttp 19028 8920 "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 232381
+INFO 2025-09-29 09:53:37,597 basehttp 19028 8920 "GET /static/admin/img/inline-delete.svg HTTP/1.1" 200 560
+INFO 2025-09-29 09:53:37,617 basehttp 19028 8920 "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2025-09-29 09:54:38,934 basehttp 19028 8920 "GET /admin/ HTTP/1.1" 200 25792
+INFO 2025-09-29 09:54:41,713 basehttp 19028 8920 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 09:54:54,109 basehttp 19028 8920 "GET /admin/ HTTP/1.1" 200 25792
+INFO 2025-09-29 09:55:37,119 basehttp 19028 8920 "GET /admin/auth/user/add/ HTTP/1.1" 200 42968
+INFO 2025-09-29 09:55:37,162 basehttp 19028 8920 "GET /admin/jsi18n/ HTTP/1.1" 200 8006
+INFO 2025-09-29 11:15:41,983 autoreload 22492 24904 Watching for file changes with StatReloader
+INFO 2025-09-29 11:15:44,453 basehttp 22492 24312 "GET / HTTP/1.1" 200 33121
+INFO 2025-09-29 12:02:11,722 basehttp 22492 13576 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-29 12:02:19,606 basehttp 22492 13576 "GET /aves/alertas/ HTTP/1.1" 200 30469
+WARNING 2025-09-29 12:02:19,643 basehttp 22492 19572 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+WARNING 2025-09-29 12:02:19,644 basehttp 22492 13576 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+INFO 2025-09-29 12:02:20,388 basehttp 22492 21340 "GET /aves/reportes/ HTTP/1.1" 200 21688
+INFO 2025-09-29 12:02:21,173 basehttp 22492 21340 "GET /aves/alertas/ HTTP/1.1" 200 30469
+WARNING 2025-09-29 12:02:21,207 basehttp 22492 21340 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+WARNING 2025-09-29 12:02:21,209 basehttp 22492 23496 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+INFO 2025-09-29 12:03:00,953 basehttp 22492 18768 "GET /aves/vacunacion/ HTTP/1.1" 200 19517
+INFO 2025-09-29 12:03:01,555 basehttp 22492 18768 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-29 12:05:02,146 basehttp 22492 18768 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-29 12:07:03,143 basehttp 22492 18768 "GET /aves/inventario-huevos/ HTTP/1.1" 200 23385
+INFO 2025-09-29 12:07:42,003 basehttp 22492 18768 "GET /aves/alertas/ HTTP/1.1" 200 30469
+WARNING 2025-09-29 12:07:42,040 basehttp 22492 18768 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+WARNING 2025-09-29 12:07:42,040 basehttp 22492 17496 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+INFO 2025-09-29 12:07:51,323 basehttp 22492 26160 "GET /aves/vacunacion/ HTTP/1.1" 200 19517
+INFO 2025-09-29 12:09:49,027 basehttp 22492 26160 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-30 07:03:24,258 autoreload 22640 12380 Watching for file changes with StatReloader
+INFO 2025-09-30 07:03:26,614 basehttp 22640 22356 "GET / HTTP/1.1" 200 33121
+WARNING 2025-09-30 07:03:27,243 log 22640 22356 Not Found: /favicon.ico
+WARNING 2025-09-30 07:03:27,244 basehttp 22640 22356 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-30 07:03:32,095 basehttp 22640 22356 "GET /aves/ HTTP/1.1" 200 30602
+INFO 2025-09-30 07:06:53,146 autoreload 22640 12380 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-09-30 07:06:53,919 autoreload 13940 20104 Watching for file changes with StatReloader
+INFO 2025-09-30 07:08:03,142 basehttp 13940 11164 "GET /aves/ HTTP/1.1" 200 30605
+INFO 2025-09-30 07:08:03,173 basehttp 13940 11164 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-09-30 07:08:03,188 basehttp 13940 11532 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-09-30 07:08:03,398 basehttp 13940 11532 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-09-30 07:08:03,413 basehttp 13940 11164 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-09-30 07:08:03,698 log 13940 11164 Not Found: /favicon.ico
+WARNING 2025-09-30 07:08:03,699 basehttp 13940 11164 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-09-30 07:08:18,834 basehttp 13940 11164 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-30 07:08:21,247 basehttp 13940 11164 "GET /aves/ HTTP/1.1" 200 30604
+INFO 2025-09-30 07:08:33,997 autoreload 18048 22076 Watching for file changes with StatReloader
+INFO 2025-09-30 07:08:38,208 basehttp 18048 26420 "GET / HTTP/1.1" 200 33121
+INFO 2025-09-30 07:08:49,298 basehttp 18048 26420 "GET /aves/ HTTP/1.1" 200 30604
+INFO 2025-09-30 07:22:33,669 autoreload 11868 8416 Watching for file changes with StatReloader
+INFO 2025-09-30 07:22:35,152 basehttp 11868 3904 "GET / HTTP/1.1" 200 33121
+INFO 2025-09-30 07:22:37,270 basehttp 11868 3904 "GET /aves/ HTTP/1.1" 200 32853
+INFO 2025-09-30 07:23:04,046 basehttp 11868 3904 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-30 07:23:05,341 basehttp 11868 3904 "GET /aves/ HTTP/1.1" 200 32853
+INFO 2025-09-30 07:23:06,429 basehttp 11868 3904 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-30 07:23:07,216 basehttp 11868 3904 "GET /aves/ HTTP/1.1" 200 32853
+INFO 2025-09-30 07:23:08,208 basehttp 11868 3904 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-30 07:23:09,130 basehttp 11868 3904 "GET /aves/ HTTP/1.1" 200 32853
+INFO 2025-09-30 07:23:10,271 basehttp 11868 3904 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-30 07:23:10,972 basehttp 11868 3904 "GET /aves/ HTTP/1.1" 200 32853
+INFO 2025-09-30 07:23:13,052 basehttp 11868 3904 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-30 07:23:23,062 basehttp 11868 3904 "GET /aves/ HTTP/1.1" 200 32853
+INFO 2025-09-30 07:23:30,265 basehttp 11868 3904 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-30 07:23:32,752 basehttp 11868 3904 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-30 07:23:35,051 basehttp 11868 3904 "GET /aves/vacunacion/ HTTP/1.1" 200 19517
+INFO 2025-09-30 07:23:36,571 basehttp 11868 3904 "GET /aves/vacunacion/nuevo/ HTTP/1.1" 200 21848
+INFO 2025-09-30 07:25:41,602 basehttp 11868 3904 "GET /aves/inventario-huevos/ HTTP/1.1" 200 25678
+INFO 2025-09-30 07:27:41,664 basehttp 11868 3904 "GET /aves/inventario-huevos/ HTTP/1.1" 200 25678
+INFO 2025-09-30 07:29:41,744 basehttp 11868 3904 "GET /aves/inventario-huevos/ HTTP/1.1" 200 25678
+INFO 2025-09-30 07:29:47,398 basehttp 11868 3904 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-30 07:29:48,996 basehttp 11868 3904 "GET /aves/ HTTP/1.1" 200 32853
+INFO 2025-09-30 07:29:49,901 basehttp 11868 3904 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30172
+INFO 2025-09-30 07:29:50,896 basehttp 11868 3904 "GET /aves/bitacora/ HTTP/1.1" 200 25307
+INFO 2025-09-30 07:29:51,727 basehttp 11868 3904 "GET /aves/ HTTP/1.1" 200 32853

@@ -28,16 +28,15 @@ def dashboard_aves(request):
     total_aves = LoteAves.objects.filter(is_active=True).aggregate(
         total=Sum('numero_aves_actual'))['total'] or 0
     
-    # Producción del día
-    hoy = timezone.now().date()
-    produccion_hoy = BitacoraDiaria.objects.filter(fecha=hoy).aggregate(
-        total=Sum('produccion_aaa') + Sum('produccion_aa') + Sum('produccion_a') + 
-              Sum('produccion_b') + Sum('produccion_c'))['total'] or 0
+    # Producción total (inventario de huevos)
+    produccion_total = InventarioHuevos.objects.aggregate(
+        total=Sum('cantidad_actual'))['total'] or 0
     
     # Alertas pendientes
     alertas_pendientes = AlertaSistema.objects.filter(leida=False).count()
     
     # Vacunas pendientes
+    hoy = timezone.now().date()
     vacunas_pendientes = PlanVacunacion.objects.filter(
         aplicada=False, 
         fecha_programada__lte=hoy + timedelta(days=7)
@@ -49,7 +48,7 @@ def dashboard_aves(request):
     context = {
         'total_lotes': total_lotes,
         'total_aves': total_aves,
-        'produccion_hoy': produccion_hoy,
+        'produccion_total': produccion_total,
         'alertas_pendientes': alertas_pendientes,
         'vacunas_pendientes': vacunas_pendientes,
         'inventario_huevos': inventario_huevos,
