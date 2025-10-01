@@ -435,7 +435,25 @@ def plan_vacunacion_create(request):
     else:
         form = PlanVacunacionForm()
     
-    return render(request, 'aves/plan_vacunacion_form.html', {'form': form})
+    # Obtener todas las vacunas para el JavaScript
+    vacunas = TipoVacuna.objects.all()
+    vacunas_data = {}
+    for vacuna in vacunas:
+        vacunas_data[vacuna.id] = {
+            'nombre': vacuna.nombre,
+            'laboratorio': vacuna.laboratorio,
+            'dosis_por_ave': str(vacuna.dosis_por_ave),
+            'via_aplicacion': vacuna.via_aplicacion,
+            'enfermedad_previene': vacuna.enfermedad_previene,
+            'intervalo_dias': vacuna.intervalo_dias
+        }
+    
+    context = {
+        'form': form,
+        'vacunas_data': json.dumps(vacunas_data)
+    }
+    
+    return render(request, 'aves/plan_vacunacion_form.html', context)
 
 
 @login_required

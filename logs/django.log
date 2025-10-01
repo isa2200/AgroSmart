@@ -8524,3 +8524,50 @@ INFO 2025-09-30 15:22:33,030 basehttp 15828 7328 "GET /aves/vacunacion/nuevo/ HT
 INFO 2025-09-30 15:33:26,198 basehttp 15828 22928 "GET /aves/vacunacion/nuevo/ HTTP/1.1" 200 21855
 INFO 2025-09-30 15:33:26,221 basehttp 15828 22928 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
 INFO 2025-09-30 15:33:26,356 basehttp 15828 22928 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-01 07:24:08,238 autoreload 19404 1752 Watching for file changes with StatReloader
+INFO 2025-10-01 07:24:11,565 basehttp 19404 21408 "GET / HTTP/1.1" 200 33119
+INFO 2025-10-01 07:24:11,702 basehttp 19404 21408 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-01 07:24:12,000 basehttp 19404 21408 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-01 07:24:16,888 basehttp 19404 21408 "GET /aves/ HTTP/1.1" 200 30106
+INFO 2025-10-01 07:24:24,927 basehttp 19404 21408 "GET /aves/bitacora/ HTTP/1.1" 200 25314
+INFO 2025-10-01 07:24:27,359 basehttp 19404 21408 "GET /aves/ HTTP/1.1" 200 30106
+INFO 2025-10-01 07:24:34,155 basehttp 19404 21408 "GET /aves/bitacora/ HTTP/1.1" 200 25314
+INFO 2025-10-01 07:24:39,467 basehttp 19404 21408 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30179
+INFO 2025-10-01 07:24:41,541 basehttp 19404 21408 "GET /aves/inventario-huevos/ HTTP/1.1" 200 27429
+INFO 2025-10-01 07:24:44,241 basehttp 19404 21408 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 37316
+INFO 2025-10-01 07:25:32,301 views 19404 21408 POST data received: <QueryDict: {'csrfmiddlewaretoken': ['iG3xZXl24lDAVWvctewG4PeWMDnmAc7SvxAJbUu2OLXjheyuaHSFkzVbZYk2cBP3'], 'fecha': [''], 'tipo_movimiento': [''], 'cliente': [''], 'numero_comprobante': [''], 'conductor': [''], 'form-TOTAL_FORMS': ['1'], 'form-INITIAL_FORMS': ['0'], 'form-MIN_NUM_FORMS': ['1'], 'form-MAX_NUM_FORMS': ['1000'], 'form-0-categoria_huevo': ['AA'], 'form-0-cantidad': ['80'], 'form-0-precio_unitario': ['450'], 'observaciones': ['']}>
+INFO 2025-10-01 07:25:32,302 views 19404 21408 Form valid: False
+INFO 2025-10-01 07:25:32,304 views 19404 21408 Formset valid: True
+ERROR 2025-10-01 07:25:32,321 views 19404 21408 Form errors: <ul class="errorlist"><li>fecha<ul class="errorlist"><li>Este campo es obligatorio.</li></ul></li><li>tipo_movimiento<ul class="errorlist"><li>Este campo es obligatorio.</li></ul></li></ul>
+INFO 2025-10-01 07:25:32,344 basehttp 19404 21408 "POST /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 35466
+INFO 2025-10-01 07:25:47,129 views 19404 21408 POST data received: <QueryDict: {'csrfmiddlewaretoken': ['nn9kDSS8yKiauY2UbL1ukJmJiRzrHdVXAeGwPP18iaCTQg5cSentAt3Yvcw7jCD8'], 'fecha': ['2025-10-01'], 'tipo_movimiento': ['venta'], 'cliente': ['Punto Blanco'], 'numero_comprobante': ['32768'], 'conductor': ['Carlitos'], 'form-TOTAL_FORMS': ['1'], 'form-INITIAL_FORMS': ['0'], 'form-MIN_NUM_FORMS': ['1'], 'form-MAX_NUM_FORMS': ['1000'], 'form-0-categoria_huevo': ['AA'], 'form-0-cantidad': ['80'], 'form-0-precio_unitario': ['450'], 'observaciones': ['']}>
+INFO 2025-10-01 07:25:47,133 views 19404 21408 Form valid: True
+INFO 2025-10-01 07:25:47,133 views 19404 21408 Formset valid: True
+INFO 2025-10-01 07:25:47,156 views 19404 21408 Movimiento guardado con ID: 2
+INFO 2025-10-01 07:25:47,156 views 19404 21408 Procesando detalle 0: {'categoria_huevo': 'AA', 'cantidad': 80, 'precio_unitario': Decimal('450'), 'DELETE': False}
+INFO 2025-10-01 07:25:47,160 views 19404 21408 Detalle 0 guardado con ID: 2
+INFO 2025-10-01 07:25:47,202 views 19404 21408 Inventario actualizado para AA: 91 -> 11
+INFO 2025-10-01 07:25:47,202 views 19404 21408 Movimiento completado. Detalles guardados: 1
+INFO 2025-10-01 07:25:47,220 basehttp 19404 21408 "POST /aves/movimiento-huevos/nuevo/ HTTP/1.1" 302 0
+INFO 2025-10-01 07:25:47,256 basehttp 19404 21408 "GET /aves/inventario-huevos/ HTTP/1.1" 200 28297
+INFO 2025-10-01 07:26:17,936 basehttp 19404 21408 "GET /aves/vacunacion/ HTTP/1.1" 200 19524
+INFO 2025-10-01 07:26:19,216 basehttp 19404 21408 "GET /aves/vacunacion/nuevo/ HTTP/1.1" 200 21856
+INFO 2025-10-01 07:32:56,491 autoreload 19404 1752 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-01 07:32:57,212 autoreload 18692 784 Watching for file changes with StatReloader
+INFO 2025-10-01 07:33:59,808 basehttp 18692 11212 "GET /aves/vacunacion/nuevo/ HTTP/1.1" 200 25743
+INFO 2025-10-01 07:33:59,829 basehttp 18692 11212 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-01 07:33:59,854 basehttp 18692 2404 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-01 07:34:00,045 basehttp 18692 2404 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-01 07:34:00,082 basehttp 18692 2404 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-01 07:34:00,473 log 18692 2404 Not Found: /favicon.ico
+WARNING 2025-10-01 07:34:00,474 basehttp 18692 2404 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-10-01 07:41:59,377 autoreload 11216 3040 Watching for file changes with StatReloader
+INFO 2025-10-01 07:42:02,437 basehttp 11216 19320 "GET / HTTP/1.1" 200 34314
+INFO 2025-10-01 07:42:09,315 basehttp 11216 19320 "GET /aves/ HTTP/1.1" 200 30106
+INFO 2025-10-01 07:42:28,425 basehttp 11216 19320 "GET /aves/vacunacion/ HTTP/1.1" 200 19524
+INFO 2025-10-01 07:42:29,781 basehttp 11216 19320 "GET /aves/vacunacion/nuevo/ HTTP/1.1" 200 27414
+INFO 2025-10-01 07:43:03,349 basehttp 11216 19320 "POST /aves/vacunacion/nuevo/ HTTP/1.1" 302 0
+INFO 2025-10-01 07:43:03,377 basehttp 11216 19320 "GET /aves/vacunacion/ HTTP/1.1" 200 20987
+INFO 2025-10-01 07:43:08,579 basehttp 11216 19320 "GET /aves/bitacora/ HTTP/1.1" 200 25314
+INFO 2025-10-01 07:43:09,048 basehttp 11216 19320 "GET /aves/ HTTP/1.1" 200 30106
+INFO 2025-10-01 07:43:11,709 basehttp 11216 19320 "GET /aves/ HTTP/1.1" 200 30106
