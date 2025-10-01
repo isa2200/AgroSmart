@@ -91,7 +91,7 @@ TIME_ZONE = 'America/Bogota'
 USE_I18N = True
 USE_TZ = True
 
-# Configuración adicional para evitar warnings de timezone
+# Configuración de warnings para ignorar el warning de DateTimeField naive
 import warnings
 warnings.filterwarnings(
     'ignore',

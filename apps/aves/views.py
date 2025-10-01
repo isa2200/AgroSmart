@@ -192,8 +192,10 @@ def inventario_huevos(request):
     """Vista de inventario de huevos."""
     inventarios = InventarioHuevos.objects.all()
     
-    # Movimientos recientes
-    movimientos_recientes = MovimientoHuevos.objects.select_related('usuario_registro').order_by('-fecha')[:20]
+    # Movimientos recientes - obtener detalles en lugar de movimientos principales
+    movimientos_recientes = DetalleMovimientoHuevos.objects.select_related(
+        'movimiento__usuario_registro', 'movimiento'
+    ).order_by('-movimiento__fecha')[:20]
     
     context = {
         'inventarios': inventarios,
@@ -231,20 +233,29 @@ def movimiento_huevos_create(request):
         logger.info(f"Form valid: {form.is_valid()}")
         logger.info(f"Formset valid: {formset.is_valid()}")
         
+        # Validar formulario principal
         if not form.is_valid():
             logger.error(f"Form errors: {form.errors}")
-            messages.error(request, f'Errores en el formulario principal: {form.errors}')
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'Error en {field}: {error}')
         
+        # Validar formset
         if not formset.is_valid():
             logger.error(f"Formset errors: {formset.errors}")
             logger.error(f"Formset non_form_errors: {formset.non_form_errors()}")
+            
+            # Mostrar errores específicos de cada formulario
             for i, form_errors in enumerate(formset.errors):
                 if form_errors:
                     logger.error(f"Form {i} errors: {form_errors}")
-            for i, form in enumerate(formset.forms):
-                if hasattr(form, 'non_field_errors') and form.non_field_errors():
-                    logger.error(f"Form {i} non_field_errors: {form.non_field_errors()}")
-            messages.error(request, f'Errores en los detalles del movimiento. Verifique los datos ingresados.')
+                    for field, errors in form_errors.items():
+                        for error in errors:
+                            messages.error(request, f'Error en detalle {i+1}, campo {field}: {error}')
+            
+            # Mostrar errores no relacionados con campos específicos
+            for error in formset.non_form_errors():
+                messages.error(request, f'Error en detalles: {error}')
         
         if form.is_valid() and formset.is_valid():
             try:
@@ -257,50 +268,78 @@ def movimiento_huevos_create(request):
                     
                     # Contar detalles válidos
                     detalles_guardados = 0
+                    errores_stock = []
                     
                     # Guardar los detalles y actualizar inventario
                     for i, detalle_form in enumerate(formset):
                         if detalle_form.cleaned_data and not detalle_form.cleaned_data.get('DELETE', False):
                             logger.info(f"Procesando detalle {i}: {detalle_form.cleaned_data}")
                             
-                            detalle = detalle_form.save(commit=False)
-                            detalle.movimiento = movimiento
-                            detalle.save()
-                            detalles_guardados += 1
-                            logger.info(f"Detalle {i} guardado con ID: {detalle.id}")
-                            
-                            # Actualizar inventario
                             try:
-                                inventario, created = InventarioHuevos.objects.get_or_create(
-                                    categoria=detalle.categoria_huevo,
-                                    defaults={
-                                        'cantidad_actual': 0,
-                                        'cantidad_minima': 100
-                                    }
-                                )
+                                detalle = detalle_form.save(commit=False)
+                                detalle.movimiento = movimiento
                                 
-                                if created:
-                                    logger.info(f"Inventario creado para categoría {detalle.categoria_huevo}")
-                                
-                                cantidad_anterior = inventario.cantidad_actual
-                                
+                                # Validar stock antes de guardar
                                 if movimiento.tipo_movimiento in ['venta', 'autoconsumo', 'baja']:
-                                    if inventario.cantidad_actual >= detalle.cantidad:
+                                    try:
+                                        inventario = InventarioHuevos.objects.get(categoria=detalle.categoria_huevo)
+                                        if detalle.cantidad > inventario.cantidad_actual:
+                                            errores_stock.append(
+                                                f'Detalle {i+1}: No hay suficiente stock de huevos {detalle.categoria_huevo}. '
+                                                f'Disponible: {inventario.cantidad_actual}, Solicitado: {detalle.cantidad}'
+                                            )
+                                            continue
+                                    except InventarioHuevos.DoesNotExist:
+                                        errores_stock.append(
+                                            f'Detalle {i+1}: No existe inventario para la categoría {detalle.categoria_huevo}'
+                                        )
+                                        continue
+                                
+                                # Guardar el detalle
+                                detalle.save()
+                                detalles_guardados += 1
+                                logger.info(f"Detalle {i} guardado con ID: {detalle.id}")
+                                
+                                # Actualizar inventario
+                                try:
+                                    inventario, created = InventarioHuevos.objects.get_or_create(
+                                        categoria=detalle.categoria_huevo,
+                                        defaults={
+                                            'cantidad_actual': 0,
+                                            'cantidad_minima': 100
+                                        }
+                                    )
+                                    
+                                    if created:
+                                        logger.info(f"Inventario creado para categoría {detalle.categoria_huevo}")
+                                    
+                                    cantidad_anterior = inventario.cantidad_actual
+                                    
+                                    if movimiento.tipo_movimiento in ['venta', 'autoconsumo', 'baja']:
                                         inventario.cantidad_actual -= detalle.cantidad
-                                    else:
-                                        raise ValidationError(f'No hay suficiente stock de huevos {detalle.categoria_huevo}. Disponible: {inventario.cantidad_actual}')
-                                else:  # devolución
-                                    inventario.cantidad_actual += detalle.cantidad
-                                
-                                inventario.save()
-                                logger.info(f"Inventario actualizado para {detalle.categoria_huevo}: {cantidad_anterior} -> {inventario.cantidad_actual}")
-                                
-                            except Exception as e:
-                                logger.error(f"Error actualizando inventario: {str(e)}")
-                                raise
+                                    else:  # devolución
+                                        inventario.cantidad_actual += detalle.cantidad
+                                    
+                                    inventario.save()
+                                    logger.info(f"Inventario actualizado para {detalle.categoria_huevo}: {cantidad_anterior} -> {inventario.cantidad_actual}")
+                                    
+                                except Exception as e:
+                                    logger.error(f"Error actualizando inventario: {str(e)}")
+                                    raise ValidationError(f"Error actualizando inventario: {str(e)}")
+                                    
+                            except ValidationError as e:
+                                logger.error(f"ValidationError en detalle {i}: {str(e)}")
+                                errores_stock.append(f'Detalle {i+1}: {str(e)}')
+                                continue
+                    
+                    # Verificar si hubo errores de stock
+                    if errores_stock:
+                        for error in errores_stock:
+                            messages.error(request, error)
+                        raise ValidationError("Errores de validación de stock")
                     
                     if detalles_guardados == 0:
-                        raise ValidationError("Debe agregar al menos un detalle al movimiento.")
+                        raise ValidationError("Debe agregar al menos un detalle válido al movimiento.")
                     
                     logger.info(f"Movimiento completado. Detalles guardados: {detalles_guardados}")
                 
@@ -309,19 +348,29 @@ def movimiento_huevos_create(request):
                 
             except ValidationError as e:
                 logger.error(f"ValidationError: {str(e)}")
-                messages.error(request, str(e))
+                if hasattr(e, 'message_dict'):
+                    for field, errors in e.message_dict.items():
+                        for error in errors:
+                            messages.error(request, f'Error en {field}: {error}')
+                else:
+                    messages.error(request, str(e))
             except Exception as e:
                 logger.error(f"Error inesperado: {str(e)}")
                 messages.error(request, f'Error al registrar el movimiento: {str(e)}')
         else:
-            messages.error(request, 'Error al registrar el movimiento. Verifique los datos ingresados.')
+            messages.error(request, 'Por favor corrija los errores indicados en el formulario.')
     else:
         form = MovimientoHuevosForm()
         formset = DetalleMovimientoHuevosFormSet()
     
     # Obtener inventarios para mostrar stock disponible
-    inventarios = InventarioHuevos.objects.all()
-    inventarios_dict = {inv.categoria: inv.cantidad_actual for inv in inventarios}
+    try:
+        inventarios = InventarioHuevos.objects.all()
+        inventarios_dict = {inv.categoria: inv.cantidad_actual for inv in inventarios}
+    except Exception as e:
+        logger.error(f"Error obteniendo inventarios: {str(e)}")
+        inventarios_dict = {}
+        messages.warning(request, 'No se pudo cargar la información de inventarios.')
     
     context = {
         'form': form,

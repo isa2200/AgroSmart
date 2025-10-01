@@ -110,18 +110,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for movimiento in movimientos_recientes %}
-                                <tr data-tipo="{{ movimiento.tipo_movimiento }}">
-                                    <td>{{ movimiento.fecha|date:"d/m/Y H:i" }}</td>
+                                {% for detalle in movimientos_recientes %}
+                                <tr data-tipo="{{ detalle.movimiento.tipo_movimiento }}">
+                                    <td>{{ detalle.movimiento.fecha|date:"d/m/Y" }}</td>
                                     <td>
                                         <span class="badge bg-primary">
-                                            <i class="fas fa-arrow-up me-1"></i>{{ movimiento.get_tipo_movimiento_display }}
+                                            <i class="fas fa-arrow-up me-1"></i>{{ detalle.movimiento.get_tipo_movimiento_display }}
                                         </span>
                                     </td>
-                                    <td>{{ movimiento.categoria_huevo }}</td>
-                                    <td><strong>{{ movimiento.cantidad|floatformat:0 }}</strong></td>
-                                    <td>{{ movimiento.cliente|default:"N/A" }}</td>
-                                    <td>{{ movimiento.usuario_registro.get_full_name|default:movimiento.usuario_registro.username }}</td>
+                                    <td>{{ detalle.categoria_huevo }}</td>
+                                    <td><strong>{{ detalle.cantidad|floatformat:0 }}</strong></td>
+                                    <td>{{ detalle.movimiento.cliente|default:"N/A" }}</td>
+                                    <td>{{ detalle.movimiento.usuario_registro.get_full_name|default:detalle.movimiento.usuario_registro.username }}</td>
                                     <td>
                                         <span class="badge bg-info">Procesado</span>
                                     </td>

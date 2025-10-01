@@ -306,29 +306,50 @@ class DetalleMovimientoHuevos(BaseModel):
         """Validaciones del modelo."""
         from django.core.exceptions import ValidationError
         
-        # Validar que los campos requeridos tengan valores
+        # Validar que los campos requeridos tengan valores válidos
         if not self.categoria_huevo:
-            raise ValidationError('La categoría de huevo es requerida.')
+            raise ValidationError({'categoria_huevo': 'La categoría de huevo es requerida.'})
         
         if self.cantidad is None or self.cantidad <= 0:
-            raise ValidationError('La cantidad debe ser mayor a 0.')
+            raise ValidationError({'cantidad': 'La cantidad debe ser mayor a 0.'})
         
-        # Validar que hay stock suficiente solo para movimientos que requieren stock
-        # Solo validar si tenemos un movimiento válido y cantidad válida
+        # Validar precio unitario si está presente
+        if self.precio_unitario is not None and self.precio_unitario < 0:
+            raise ValidationError({'precio_unitario': 'El precio unitario no puede ser negativo.'})
+        
+        # Validar stock solo para movimientos que requieren validación de stock
+        # Solo validar si tenemos un movimiento válido, cantidad válida y es un movimiento de salida
         if (hasattr(self, 'movimiento') and self.movimiento and 
             self.movimiento.tipo_movimiento in ['venta', 'autoconsumo', 'baja'] and
-            self.cantidad is not None and self.cantidad > 0):
+            self.cantidad is not None and self.cantidad > 0 and
+            self.categoria_huevo):
+            
             try:
                 inventario = InventarioHuevos.objects.get(categoria=self.categoria_huevo)
-                if self.cantidad > inventario.cantidad_actual:
-                    raise ValidationError(
-                        f'No hay suficiente stock de huevos {self.categoria_huevo}. '
-                        f'Stock disponible: {inventario.cantidad_actual}'
-                    )
+                
+                # Si estamos editando un detalle existente, considerar la cantidad anterior
+                cantidad_a_validar = self.cantidad
+                if self.pk:  # Si es una edición
+                    try:
+                        detalle_anterior = DetalleMovimientoHuevos.objects.get(pk=self.pk)
+                        # Restaurar la cantidad anterior al stock para validar correctamente
+                        stock_disponible = inventario.cantidad_actual + detalle_anterior.cantidad
+                    except DetalleMovimientoHuevos.DoesNotExist:
+                        stock_disponible = inventario.cantidad_actual
+                else:
+                    stock_disponible = inventario.cantidad_actual
+                
+                if cantidad_a_validar > stock_disponible:
+                    raise ValidationError({
+                        'cantidad': f'No hay suficiente stock de huevos {self.categoria_huevo}. '
+                                   f'Stock disponible: {stock_disponible}'
+                    })
+                    
             except InventarioHuevos.DoesNotExist:
-                raise ValidationError(
-                    f'No existe inventario para la categoría {self.categoria_huevo}'
-                )
+                raise ValidationError({
+                    'categoria_huevo': f'No existe inventario para la categoría {self.categoria_huevo}. '
+                                      f'Debe crear el inventario primero.'
+                })
 
 
 class InventarioHuevos(BaseModel):

@@ -183,29 +183,44 @@ class DetalleMovimientoHuevosForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Configurar choices para categoria_huevo
-        self.fields['categoria_huevo'].choices = MovimientoHuevos.CATEGORIAS_HUEVO
+        self.fields['categoria_huevo'].choices = [('', '---------')] + list(MovimientoHuevos.CATEGORIAS_HUEVO)
+        
+        # Hacer campos requeridos
+        self.fields['categoria_huevo'].required = True
+        self.fields['cantidad'].required = True
+    
+    def clean_categoria_huevo(self):
+        """Validar categoría de huevo."""
+        categoria = self.cleaned_data.get('categoria_huevo')
+        if not categoria:
+            raise ValidationError('Debe seleccionar una categoría de huevo.')
+        return categoria
+    
+    def clean_cantidad(self):
+        """Validar cantidad."""
+        cantidad = self.cleaned_data.get('cantidad')
+        if cantidad is None or cantidad <= 0:
+            raise ValidationError('La cantidad debe ser mayor a 0.')
+        return cantidad
+    
+    def clean_precio_unitario(self):
+        """Validar precio unitario."""
+        precio = self.cleaned_data.get('precio_unitario')
+        if precio is not None and precio < 0:
+            raise ValidationError('El precio unitario no puede ser negativo.')
+        return precio
     
     def clean(self):
         """Validación personalizada del formulario."""
         cleaned_data = super().clean()
         categoria = cleaned_data.get('categoria_huevo')
         cantidad = cleaned_data.get('cantidad')
-        precio = cleaned_data.get('precio_unitario')
         
+        # Validaciones adicionales si es necesario
         if categoria and cantidad:
-            # Verificar stock disponible (solo para movimientos de salida)
-            try:
-                inventario = InventarioHuevos.objects.get(categoria=categoria)
-                # Esta validación se hará en la vista ya que necesitamos el tipo de movimiento
-            except InventarioHuevos.DoesNotExist:
-                pass  # Se creará el inventario si no existe
-        
-        if cantidad and cantidad <= 0:
-            raise ValidationError('La cantidad debe ser mayor a 0.')
-        
-        if precio is not None and precio < 0:
-            raise ValidationError('El precio no puede ser negativo.')
-        
+            # La validación de stock se realizará en el modelo y en la vista
+            pass
+            
         return cleaned_data
 
 

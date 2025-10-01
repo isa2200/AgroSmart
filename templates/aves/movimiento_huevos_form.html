@@ -231,6 +231,156 @@ document.addEventListener('DOMContentLoaded', function() {
     const inventarios = {{ inventario_json|safe }};
     let formIndex = {{ formset.total_form_count }};
     
+    // Función para mostrar/ocultar información de transporte
+    function toggleInfoTransporte() {
+        const tipoMovimiento = document.getElementById('id_tipo_movimiento');
+        const infoTransporte = document.getElementById('info-transporte');
+        
+        if (tipoMovimiento && infoTransporte) {
+            if (tipoMovimiento.value === 'venta') {
+                infoTransporte.style.display = 'block';
+            } else {
+                infoTransporte.style.display = 'none';
+            }
+        }
+    }
+    
+    // Función para actualizar información de stock
+    function actualizarStockInfo(categoriaSelect, stockInfoDiv) {
+        const categoria = categoriaSelect.value;
+        if (categoria && inventarios[categoria] !== undefined) {
+            stockInfoDiv.innerHTML = `<small class="text-info">Stock disponible: ${inventarios[categoria]} unidades</small>`;
+        } else {
+            stockInfoDiv.innerHTML = '';
+        }
+    }
+    
+    // Función para calcular subtotal
+    function calcularSubtotal(detalleItem) {
+        const cantidadInput = detalleItem.querySelector('input[name$="-cantidad"]');
+        const precioInput = detalleItem.querySelector('input[name$="-precio_unitario"]');
+        const subtotalDiv = detalleItem.querySelector('.subtotal-detalle');
+        
+        if (cantidadInput && precioInput && subtotalDiv) {
+            const cantidad = parseFloat(cantidadInput.value) || 0;
+            const precio = parseFloat(precioInput.value) || 0;
+            const subtotal = cantidad * precio;
+            subtotalDiv.innerHTML = `Subtotal: $${subtotal.toFixed(2)}`;
+        }
+    }
+    
+    // Función para calcular totales generales
+    function calcularTotales() {
+        let totalHuevos = 0;
+        let totalValor = 0;
+        
+        document.querySelectorAll('.detalle-item').forEach(function(detalle) {
+            const cantidadInput = detalle.querySelector('input[name$="-cantidad"]');
+            const precioInput = detalle.querySelector('input[name$="-precio_unitario"]');
+            
+            if (cantidadInput && precioInput) {
+                const cantidad = parseFloat(cantidadInput.value) || 0;
+                const precio = parseFloat(precioInput.value) || 0;
+                
+                totalHuevos += cantidad;
+                totalValor += cantidad * precio;
+            }
+        });
+        
+        document.getElementById('total-huevos').textContent = totalHuevos;
+        document.getElementById('total-valor').textContent = totalValor.toFixed(2);
+    }
+    
+    // Función para agregar nuevo detalle
+    function agregarDetalle() {
+        const container = document.getElementById('detalles-container');
+        const totalForms = document.getElementById('id_form-TOTAL_FORMS');
+        const newFormIndex = parseInt(totalForms.value);
+        
+        // Crear nuevo detalle basado en el primer detalle
+        const firstDetalle = container.querySelector('.detalle-item');
+        if (firstDetalle) {
+            const newDetalle = firstDetalle.cloneNode(true);
+            
+            // Actualizar índices y limpiar valores
+            newDetalle.setAttribute('data-form-index', newFormIndex);
+            newDetalle.querySelector('.detalle-numero').textContent = `Categoría ${newFormIndex + 1}`;
+            
+            // Actualizar nombres de campos
+            newDetalle.querySelectorAll('input, select').forEach(function(field) {
+                const name = field.getAttribute('name');
+                if (name) {
+                    field.setAttribute('name', name.replace(/form-\d+/, `form-${newFormIndex}`));
+                    field.setAttribute('id', field.getAttribute('id').replace(/form-\d+/, `form-${newFormIndex}`));
+                    field.value = '';
+                }
+            });
+            
+            // Agregar botón de eliminar
+            if (!newDetalle.querySelector('.btn-eliminar-detalle')) {
+                const header = newDetalle.querySelector('.detalle-header');
+                const deleteBtn = document.createElement('button');
+                deleteBtn.type = 'button';
+                deleteBtn.className = 'btn btn-danger btn-sm btn-eliminar-detalle';
+                deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                header.appendChild(deleteBtn);
+            }
+            
+            // Limpiar errores
+            newDetalle.querySelectorAll('.invalid-feedback').forEach(function(error) {
+                error.remove();
+            });
+            
+            // Resetear subtotal
+            newDetalle.querySelector('.subtotal-detalle').innerHTML = 'Subtotal: $0.00';
+            
+            container.appendChild(newDetalle);
+            totalForms.value = newFormIndex + 1;
+            
+            // Configurar eventos para el nuevo detalle
+            configurarEventosDetalle(newDetalle);
+        }
+    }
+    
+    // Función para configurar eventos de un detalle
+    function configurarEventosDetalle(detalle) {
+        const categoriaSelect = detalle.querySelector('select[name$="-categoria_huevo"]');
+        const cantidadInput = detalle.querySelector('input[name$="-cantidad"]');
+        const precioInput = detalle.querySelector('input[name$="-precio_unitario"]');
+        const stockInfoDiv = detalle.querySelector('.stock-info');
+        const deleteBtn = detalle.querySelector('.btn-eliminar-detalle');
+        
+        if (categoriaSelect) {
+            categoriaSelect.addEventListener('change', function() {
+                actualizarStockInfo(categoriaSelect, stockInfoDiv);
+            });
+        }
+        
+        if (cantidadInput) {
+            cantidadInput.addEventListener('input', function() {
+                calcularSubtotal(detalle);
+                calcularTotales();
+            });
+        }
+        
+        if (precioInput) {
+            precioInput.addEventListener('input', function() {
+                calcularSubtotal(detalle);
+                calcularTotales();
+            });
+        }
+        
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', function() {
+                detalle.remove();
+                calcularTotales();
+                // Actualizar contador de formularios
+                const totalForms = document.getElementById('id_form-TOTAL_FORMS');
+                totalForms.value = parseInt(totalForms.value) - 1;
+            });
+        }
+    }
+    
     // Función para validar el formulario antes del envío
     function validarFormulario() {
         const detalles = document.querySelectorAll('.detalle-item');
@@ -253,6 +403,19 @@ document.addEventListener('DOMContentLoaded', function() {
         return true;
     }
     
+    // Configurar eventos iniciales
+    const tipoMovimientoSelect = document.getElementById('id_tipo_movimiento');
+    if (tipoMovimientoSelect) {
+        tipoMovimientoSelect.addEventListener('change', toggleInfoTransporte);
+        toggleInfoTransporte(); // Ejecutar al cargar
+    }
+    
+    // Configurar eventos para detalles existentes
+    document.querySelectorAll('.detalle-item').forEach(configurarEventosDetalle);
+    
+    // Configurar botón agregar detalle
+    document.getElementById('agregar-detalle').addEventListener('click', agregarDetalle);
+    
     // Validar antes de enviar el formulario
     document.getElementById('movimiento-form').addEventListener('submit', function(e) {
         if (!validarFormulario()) {
@@ -260,8 +423,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Resto del JavaScript para manejo dinámico del formset...
-    // (agregar detalles, eliminar, calcular totales, etc.)
+    // Calcular totales iniciales
+    calcularTotales();
 });
 </script>
 {% endblock %}
