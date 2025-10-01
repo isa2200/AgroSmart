@@ -652,3 +652,51 @@ def movimiento_huevos_list(request):
     }
     
     return render(request, 'aves/movimiento_huevos_list.html', context)
+
+
+@login_required
+@role_required(['superusuario', 'veterinario', 'solo_vista'])
+def plan_vacunacion_detail(request, pk):
+    """Detalle del plan de vacunación."""
+    plan = get_object_or_404(PlanVacunacion.objects.select_related('lote', 'tipo_vacuna', 'veterinario'), pk=pk)
+    
+    context = {
+        'plan': plan,
+    }
+    
+    return render(request, 'aves/plan_vacunacion_detail.html', context)
+
+
+@login_required
+@role_required(['superusuario', 'veterinario'])
+@require_http_methods(["POST"])
+def plan_vacunacion_aplicar(request, pk):
+    """Marcar plan de vacunación como aplicado."""
+    plan = get_object_or_404(PlanVacunacion, pk=pk)
+    
+    try:
+        fecha_aplicada = request.POST.get('fecha_aplicada')
+        numero_aves_vacunadas = request.POST.get('numero_aves_vacunadas')
+        lote_vacuna = request.POST.get('lote_vacuna', '')
+        observaciones = request.POST.get('observaciones', '')
+        
+        if not fecha_aplicada or not numero_aves_vacunadas:
+            return JsonResponse({'success': False, 'error': 'Fecha y número de aves son requeridos'})
+        
+        # Convertir fecha
+        from datetime import datetime
+        fecha_aplicada = datetime.strptime(fecha_aplicada, '%Y-%m-%d').date()
+        
+        # Actualizar el plan
+        plan.fecha_aplicada = fecha_aplicada
+        plan.numero_aves_vacunadas = int(numero_aves_vacunadas)
+        plan.lote_vacuna = lote_vacuna
+        plan.observaciones = observaciones
+        plan.aplicada = True
+        plan.save()
+        
+        messages.success(request, f'Vacuna {plan.tipo_vacuna.nombre} marcada como aplicada exitosamente.')
+        return JsonResponse({'success': True})
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})

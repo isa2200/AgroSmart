@@ -8571,3 +8571,28 @@ INFO 2025-10-01 07:43:03,377 basehttp 11216 19320 "GET /aves/vacunacion/ HTTP/1.
 INFO 2025-10-01 07:43:08,579 basehttp 11216 19320 "GET /aves/bitacora/ HTTP/1.1" 200 25314
 INFO 2025-10-01 07:43:09,048 basehttp 11216 19320 "GET /aves/ HTTP/1.1" 200 30106
 INFO 2025-10-01 07:43:11,709 basehttp 11216 19320 "GET /aves/ HTTP/1.1" 200 30106
+INFO 2025-10-01 07:44:24,713 basehttp 11216 19320 "GET /aves/vacunacion/nuevo/ HTTP/1.1" 200 27414
+INFO 2025-10-01 07:44:55,089 basehttp 11216 19320 "GET /aves/vacunacion/nuevo/ HTTP/1.1" 200 27414
+INFO 2025-10-01 07:45:23,749 basehttp 11216 19320 "POST /aves/vacunacion/nuevo/ HTTP/1.1" 302 0
+INFO 2025-10-01 07:45:23,781 basehttp 11216 19320 "GET /aves/vacunacion/ HTTP/1.1" 200 22287
+INFO 2025-10-01 07:45:25,529 basehttp 11216 19320 "GET /aves/ HTTP/1.1" 200 30185
+INFO 2025-10-01 07:45:28,085 basehttp 11216 19320 "GET /aves/vacunacion/ HTTP/1.1" 200 22287
+INFO 2025-10-01 07:50:43,440 autoreload 11216 3040 C:\Users\bp877\TRAE\AgroSmart\apps\aves\urls.py changed, reloading.
+INFO 2025-10-01 07:50:44,302 autoreload 11248 2776 Watching for file changes with StatReloader
+INFO 2025-10-01 07:51:13,968 autoreload 11248 2776 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-01 07:51:14,891 autoreload 8132 22864 Watching for file changes with StatReloader
+INFO 2025-10-01 07:51:40,104 basehttp 8132 8124 "GET / HTTP/1.1" 200 33705
+INFO 2025-10-01 07:51:43,624 basehttp 8132 8124 "GET /aves/ HTTP/1.1" 200 30185
+INFO 2025-10-01 07:51:46,600 basehttp 8132 8124 "GET /aves/vacunacion/ HTTP/1.1" 200 26090
+INFO 2025-10-01 07:51:47,897 basehttp 8132 8124 "GET /aves/vacunacion/2/ HTTP/1.1" 200 26496
+INFO 2025-10-01 07:52:23,040 basehttp 8132 8124 "GET /aves/vacunacion/ HTTP/1.1" 200 26090
+INFO 2025-10-01 07:52:49,497 basehttp 8132 8124 "GET /aves/inventario-huevos/ HTTP/1.1" 200 28297
+INFO 2025-10-01 07:52:51,371 basehttp 8132 8124 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30179
+INFO 2025-10-01 07:52:52,578 basehttp 8132 8124 "GET /aves/bitacora/ HTTP/1.1" 200 25314
+INFO 2025-10-01 07:52:56,365 basehttp 8132 8124 "GET /aves/inventario-huevos/ HTTP/1.1" 200 28297
+INFO 2025-10-01 07:52:57,945 basehttp 8132 8124 "GET /aves/vacunacion/ HTTP/1.1" 200 26090
+INFO 2025-10-01 07:52:59,479 basehttp 8132 8124 "GET /aves/alertas/ HTTP/1.1" 200 30476
+WARNING 2025-10-01 07:52:59,515 basehttp 8132 8124 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+WARNING 2025-10-01 07:52:59,515 basehttp 8132 12836 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+INFO 2025-10-01 07:53:04,451 basehttp 8132 26700 "GET /aves/reportes/ HTTP/1.1" 200 21695
+INFO 2025-10-01 07:53:09,867 basehttp 8132 26700 "GET /aves/reportes/produccion/ HTTP/1.1" 200 20309

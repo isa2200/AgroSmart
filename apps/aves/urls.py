@@ -29,6 +29,8 @@ urlpatterns = [
     # Plan de vacunación
     path('vacunacion/', views.plan_vacunacion_list, name='plan_vacunacion_list'),
     path('vacunacion/nuevo/', views.plan_vacunacion_create, name='plan_vacunacion_create'),
+    path('vacunacion/<int:pk>/', views.plan_vacunacion_detail, name='plan_vacunacion_detail'),
+    path('vacunacion/<int:pk>/aplicar/', views.plan_vacunacion_aplicar, name='plan_vacunacion_aplicar'),
     
     # Alertas
     path('alertas/', views.alertas_list, name='alertas_list'),
