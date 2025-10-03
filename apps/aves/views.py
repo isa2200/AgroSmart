@@ -23,36 +23,268 @@ from .utils import generar_alertas, actualizar_inventario_huevos, exportar_repor
 @login_required
 @role_required(['superusuario', 'admin_aves', 'veterinario', 'solo_vista'])
 def dashboard_aves(request):
-    """Dashboard principal del módulo avícola."""
+    """Dashboard principal del módulo avícola mejorado."""
+    from django.db.models import F
+    
+    hoy = timezone.now().date()
+    hace_30_dias = hoy - timedelta(days=30)
+    fecha_30d_atras = hace_30_dias
+    
+    # Filtros opcionales
+    galpon_filtro = request.GET.get('galpon')
+    lote_filtro = request.GET.get('lote')
+    
+    # Query base para lotes activos
+    lotes_query = LoteAves.objects.filter(is_active=True)
+    if galpon_filtro:
+        lotes_query = lotes_query.filter(galpon__icontains=galpon_filtro)
+    if lote_filtro:
+        lotes_query = lotes_query.filter(id=lote_filtro)
+    
     # Estadísticas generales
-    total_lotes = LoteAves.objects.filter(is_active=True).count()
-    total_aves = LoteAves.objects.filter(is_active=True).aggregate(
-        total=Sum('numero_aves_actual'))['total'] or 0
+    total_lotes = lotes_query.count()
+    total_aves = lotes_query.aggregate(total=Sum('numero_aves_actual'))['total'] or 0
     
-    # Producción total (inventario de huevos)
-    produccion_total = InventarioHuevos.objects.aggregate(
-        total=Sum('cantidad_actual'))['total'] or 0
+    # Separar lotes por tipo (ponedoras vs engorde)
+    lotes_ponedoras = lotes_query.filter(estado='postura')
+    lotes_engorde = lotes_query.filter(estado='levante')
     
-    # Alertas pendientes
-    alertas_pendientes = AlertaSistema.objects.filter(leida=False).count()
+    # INDICADORES PONEDORAS
+    # Producción de huevos
+    bitacoras_ponedoras_hoy = BitacoraDiaria.objects.filter(
+        lote__in=lotes_ponedoras, fecha=hoy
+    )
+    bitacoras_ponedoras_30d = BitacoraDiaria.objects.filter(
+        lote__in=lotes_ponedoras, fecha__gte=hace_30_dias, fecha__lte=hoy
+    )
+    
+    # Producción diaria y mensual - CORREGIDO
+    produccion_hoy = bitacoras_ponedoras_hoy.aggregate(
+        total=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + 
+                 F('produccion_b') + F('produccion_c'))
+    )['total'] or 0
+    
+    produccion_30d = bitacoras_ponedoras_30d.aggregate(
+        total=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + 
+                 F('produccion_b') + F('produccion_c'))
+    )['total'] or 0
+    
+    # Porcentaje de postura
+    aves_ponedoras = lotes_ponedoras.aggregate(total=Sum('numero_aves_actual'))['total'] or 0
+    porcentaje_postura_hoy = (produccion_hoy / aves_ponedoras * 100) if aves_ponedoras > 0 else 0
+    porcentaje_postura_30d = (produccion_30d / (aves_ponedoras * 30) * 100) if aves_ponedoras > 0 else 0
+    
+    # Producción ideal vs real (asumiendo 85% como ideal)
+    produccion_ideal_hoy = aves_ponedoras * 0.85
+    produccion_ideal_30d = aves_ponedoras * 0.85 * 30
+    diferencia_ideal_hoy = produccion_hoy - produccion_ideal_hoy
+    diferencia_ideal_30d = produccion_30d - produccion_ideal_30d
+    
+    # INDICADORES ENGORDE
+    # Peso promedio y consumo
+    bitacoras_engorde_hoy = BitacoraDiaria.objects.filter(
+        lote__in=lotes_engorde, fecha=hoy
+    )
+    bitacoras_engorde_30d = BitacoraDiaria.objects.filter(
+        lote__in=lotes_engorde, fecha__gte=hace_30_dias, fecha__lte=hoy
+    )
+    
+    # Consumo de alimento
+    consumo_total_hoy = bitacoras_engorde_hoy.aggregate(total=Sum('consumo_concentrado'))['total'] or 0
+    consumo_total_30d = bitacoras_engorde_30d.aggregate(total=Sum('consumo_concentrado'))['total'] or 0
+    aves_engorde = lotes_engorde.aggregate(total=Sum('numero_aves_actual'))['total'] or 0
+    consumo_por_ave_hoy = (consumo_total_hoy / aves_engorde) if aves_engorde > 0 else 0
+    consumo_promedio_30d = (consumo_total_30d / (aves_engorde * 30)) if aves_engorde > 0 else 0
+    
+    # MORTALIDAD - CORREGIDO
+    mortalidad_hoy = BitacoraDiaria.objects.filter(
+        fecha=hoy, lote__in=lotes_query
+    ).aggregate(total=Sum('mortalidad'))['total'] or 0
+    
+    mortalidad_30d = BitacoraDiaria.objects.filter(
+        fecha__gte=hace_30_dias, fecha__lte=hoy, lote__in=lotes_query
+    ).aggregate(total=Sum('mortalidad'))['total'] or 0
+    
+    porcentaje_mortalidad_hoy = (mortalidad_hoy / total_aves * 100) if total_aves > 0 else 0
+    porcentaje_mortalidad_30d = (mortalidad_30d / total_aves * 100) if total_aves > 0 else 0
+    
+    # GRÁFICOS DE TENDENCIA - CAMBIADO A MENSUAL (30 DÍAS)
+    # Evolución producción últimos 30 días
+    evolucion_produccion = []
+    for i in range(30):
+        fecha = hoy - timedelta(days=29-i)
+        prod_dia = BitacoraDiaria.objects.filter(
+            fecha=fecha, lote__in=lotes_ponedoras
+        ).aggregate(
+            total=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + 
+                     F('produccion_b') + F('produccion_c'))
+        )['total'] or 0
+        evolucion_produccion.append({
+            'fecha': fecha.strftime('%d/%m'),
+            'produccion': prod_dia,
+            'porcentaje': (prod_dia / aves_ponedoras * 100) if aves_ponedoras > 0 else 0
+        })
+    
+    # Evolución mortalidad últimos 30 días
+    evolucion_mortalidad = []
+    for i in range(30):
+        fecha = hoy - timedelta(days=29-i)
+        mort_dia = BitacoraDiaria.objects.filter(
+            fecha=fecha, lote__in=lotes_query
+        ).aggregate(total=Sum('mortalidad'))['total'] or 0
+        evolucion_mortalidad.append({
+            'fecha': fecha.strftime('%d/%m'),
+            'mortalidad': mort_dia
+        })
+    
+    # COMPARACIÓN ENTRE GALPONES - CAMBIADO A MENSUAL
+    comparacion_galpones = []
+    galpones = lotes_query.values_list('galpon', flat=True).distinct()
+    for galpon in galpones:
+        lotes_galpon = lotes_query.filter(galpon=galpon)
+        aves_galpon = lotes_galpon.aggregate(total=Sum('numero_aves_actual'))['total'] or 0
+        
+        # Producción del galpón (últimos 30 días)
+        prod_galpon = BitacoraDiaria.objects.filter(
+            lote__in=lotes_galpon, fecha__gte=hace_30_dias, fecha__lte=hoy
+        ).aggregate(
+            total=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + 
+                     F('produccion_b') + F('produccion_c'))
+        )['total'] or 0
+        
+        # Mortalidad del galpón (últimos 30 días)
+        mort_galpon = BitacoraDiaria.objects.filter(
+            lote__in=lotes_galpon, fecha__gte=hace_30_dias, fecha__lte=hoy
+        ).aggregate(total=Sum('mortalidad'))['total'] or 0
+        
+        comparacion_galpones.append({
+            'galpon': galpon,
+            'aves': aves_galpon,
+            'produccion_30d': prod_galpon,
+            'mortalidad_30d': mort_galpon,
+            'porcentaje_postura': (prod_galpon / (aves_galpon * 30) * 100) if aves_galpon > 0 else 0,
+            'porcentaje_mortalidad': (mort_galpon / aves_galpon * 100) if aves_galpon > 0 else 0
+        })
+    
+    # ALERTAS Y NOTIFICACIONES
+    alertas_activas = AlertaSistema.objects.filter(leida=False).count()
+    alertas_criticas_count = AlertaSistema.objects.filter(leida=False, nivel='critica').count()
+    
+    # Generar alertas automáticas
+    alertas_criticas = []
+    
+    # Alerta baja postura
+    if porcentaje_postura_hoy < 70:
+        nivel = 'critica' if porcentaje_postura_hoy < 50 else 'normal'
+        alertas_criticas.append({
+            'tipo': 'danger' if nivel == 'critica' else 'warning',
+            'mensaje': f'Postura {"crítica" if nivel == "critica" else "baja"}: {porcentaje_postura_hoy:.1f}% (objetivo: 85%)',
+            'icono': 'fas fa-egg'
+        })
+    
+    # Alerta mortalidad alta
+    if porcentaje_mortalidad_hoy > 2:
+        nivel = 'critica' if porcentaje_mortalidad_hoy > 5 else 'normal'
+        alertas_criticas.append({
+            'tipo': 'danger' if nivel == 'critica' else 'warning',
+            'mensaje': f'Mortalidad {"crítica" if nivel == "critica" else "elevada"}: {porcentaje_mortalidad_hoy:.1f}% hoy',
+            'icono': 'fas fa-skull-crossbones'
+        })
+    
+    # Alerta consumo anormal
+    if consumo_por_ave_hoy > 0.15 or (consumo_por_ave_hoy < 0.08 and consumo_por_ave_hoy > 0):
+        alertas_criticas.append({
+            'tipo': 'warning',  # Consumo anormal siempre es normal, no crítico
+            'mensaje': f'Consumo anormal: {consumo_por_ave_hoy*1000:.0f}g por ave',
+            'icono': 'fas fa-utensils'
+        })
     
     # Vacunas pendientes
-    hoy = timezone.now().date()
     vacunas_pendientes = PlanVacunacion.objects.filter(
-        aplicada=False, 
-        fecha_programada__lte=hoy + timedelta(days=7)
+        aplicada=False,
+        fecha_programada__lte=timezone.now().date() + timedelta(days=3)
     ).count()
     
     # Inventario de huevos
-    inventario_huevos = InventarioHuevos.objects.all()
+    inventario_huevos = []
+    for categoria in ['AAA', 'AA', 'A', 'B', 'C']:
+        inventario, created = InventarioHuevos.objects.get_or_create(
+            categoria=categoria,
+            defaults={'cantidad_actual': 0, 'cantidad_minima': 100}
+        )
+        inventario_huevos.append(inventario)
+    
+    # Top 5 lotes por rendimiento (30 días)
+    top_lotes = []
+    for lote in lotes_query[:5]:  # Cambiar lotes_activos por lotes_query
+        produccion_30d = BitacoraDiaria.objects.filter(
+            lote=lote,
+            fecha__gte=fecha_30d_atras
+        ).aggregate(total=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + F('produccion_b') + F('produccion_c')))['total'] or 0
+        
+        porcentaje_postura = (produccion_30d / (lote.numero_aves_actual * 30) * 100) if lote.numero_aves_actual > 0 else 0
+        
+        top_lotes.append({
+            'lote': lote,
+            'edad_dias': lote.edad_dias,
+            'porcentaje_postura': porcentaje_postura,
+            'produccion_30d': produccion_30d
+        })
+    
+    # Ordenar por porcentaje de postura
+    top_lotes.sort(key=lambda x: x['porcentaje_postura'], reverse=True)
     
     context = {
+        # Estadísticas generales
         'total_lotes': total_lotes,
         'total_aves': total_aves,
-        'produccion_total': produccion_total,
-        'alertas_pendientes': alertas_pendientes,
+        'aves_ponedoras': aves_ponedoras,
+        'aves_engorde': aves_engorde,
+        
+        # Indicadores ponedoras
+        'produccion_hoy': produccion_hoy,
+        'produccion_30d': produccion_30d,
+        'porcentaje_postura_hoy': round(porcentaje_postura_hoy, 1),
+        'porcentaje_postura_30d': round(porcentaje_postura_30d, 1),
+        'produccion_ideal_hoy': round(produccion_ideal_hoy),
+        'diferencia_ideal_hoy': round(diferencia_ideal_hoy),
+        'diferencia_ideal_30d': round(diferencia_ideal_30d),
+        
+        # Indicadores engorde
+        'consumo_total_hoy': round(consumo_total_hoy, 1),
+        'consumo_por_ave_hoy': round(consumo_por_ave_hoy * 1000),  # En gramos
+        'consumo_promedio_30d': round(consumo_promedio_30d * 1000),  # En gramos
+        
+        # Mortalidad
+        'mortalidad_hoy': mortalidad_hoy,
+        'mortalidad_30d': mortalidad_30d,
+        'porcentaje_mortalidad_hoy': round(porcentaje_mortalidad_hoy, 2),
+        'porcentaje_mortalidad_30d': round(porcentaje_mortalidad_30d, 2),
+        
+        # Gráficos
+        'evolucion_produccion': evolucion_produccion,
+        'evolucion_mortalidad': evolucion_mortalidad,
+        'comparacion_galpones': comparacion_galpones,
+        
+        # Alertas
+        'alertas_pendientes': alertas_activas,
+        'alertas_criticas': alertas_criticas,
         'vacunas_pendientes': vacunas_pendientes,
+        
+        # Otros datos
         'inventario_huevos': inventario_huevos,
+        'top_lotes': top_lotes[:5],
+        
+        # Para filtros
+        'galpones_disponibles': list(galpones),
+        'lotes_disponibles': lotes_query.values('id', 'codigo'),
+        'galpon_filtro': galpon_filtro,
+        'lote_filtro': lote_filtro,
+        
+        # JSON para gráficos
+        'evolucion_produccion_json': json.dumps(evolucion_produccion),
+        'evolucion_mortalidad_json': json.dumps(evolucion_mortalidad),
+        'comparacion_galpones_json': json.dumps(comparacion_galpones),
     }
     
     return render(request, 'aves/dashboard.html', context)
@@ -476,6 +708,14 @@ def alertas_list(request):
     elif leida == 'false':
         alertas = alertas.filter(leida=False)
     
+    # Estadísticas para el dashboard de alertas
+    stats = {
+        'criticas': AlertaSistema.objects.filter(leida=False, nivel='critica').count(),
+        'normales': AlertaSistema.objects.filter(leida=False, nivel='normal').count(),
+        'total_no_leidas': AlertaSistema.objects.filter(leida=False).count(),
+        'total': AlertaSistema.objects.count(),
+    }
+    
     paginator = Paginator(alertas, 20)
     page = request.GET.get('page')
     alertas = paginator.get_page(page)
@@ -484,6 +724,7 @@ def alertas_list(request):
         'alertas': alertas,
         'tipos_alerta': AlertaSistema.TIPOS_ALERTA,
         'niveles': AlertaSistema.NIVELES,
+        'stats': stats,
         'filtros': {
             'tipo': tipo_alerta,
             'nivel': nivel,

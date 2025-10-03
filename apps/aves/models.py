@@ -382,10 +382,8 @@ class AlertaSistema(BaseModel):
     ]
     
     NIVELES = [
-        ('info', 'Información'),
-        ('warning', 'Advertencia'),
-        ('error', 'Error'),
-        ('critical', 'Crítico'),
+        ('critica', 'Crítica'),
+        ('normal', 'Normal'),
     ]
     
     tipo_alerta = models.CharField('Tipo de alerta', max_length=30, choices=TIPOS_ALERTA)
@@ -411,6 +409,27 @@ class AlertaSistema(BaseModel):
     
     def __str__(self):
         return f"{self.titulo} - {self.fecha_generacion.strftime('%d/%m/%Y %H:%M')}"
+    
+    @property
+    def es_critica(self):
+        """Determina si la alerta es crítica basándose en el tipo y contenido."""
+        return self.nivel == 'critica'
+    
+    @property
+    def icono(self):
+        """Retorna el icono apropiado según el tipo de alerta."""
+        iconos = {
+            'mortalidad_alta': 'fas fa-skull-crossbones',
+            'produccion_baja': 'fas fa-egg',
+            'vacuna_pendiente': 'fas fa-syringe',
+            'stock_bajo': 'fas fa-boxes',
+        }
+        return iconos.get(self.tipo_alerta, 'fas fa-bell')
+    
+    @property
+    def color_clase(self):
+        """Retorna la clase CSS apropiada según el nivel."""
+        return 'danger' if self.nivel == 'critica' else 'warning'
 
 
 class RegistroModificacion(BaseModel):

@@ -8596,3 +8596,301 @@ WARNING 2025-10-01 07:52:59,515 basehttp 8132 8124 "GET /static/aves/css/alertas
 WARNING 2025-10-01 07:52:59,515 basehttp 8132 12836 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
 INFO 2025-10-01 07:53:04,451 basehttp 8132 26700 "GET /aves/reportes/ HTTP/1.1" 200 21695
 INFO 2025-10-01 07:53:09,867 basehttp 8132 26700 "GET /aves/reportes/produccion/ HTTP/1.1" 200 20309
+INFO 2025-10-01 07:56:50,596 basehttp 8132 26700 "GET /aves/bitacora/ HTTP/1.1" 200 25314
+INFO 2025-10-01 07:56:51,616 basehttp 8132 26700 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30179
+INFO 2025-10-01 08:01:53,245 basehttp 8132 14000 "GET /aves/ HTTP/1.1" 200 30185
+INFO 2025-10-01 08:06:53,393 basehttp 8132 17624 "GET /aves/ HTTP/1.1" 200 30185
+INFO 2025-10-01 08:09:27,906 autoreload 8132 22864 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-01 08:09:28,741 autoreload 26184 6808 Watching for file changes with StatReloader
+ERROR 2025-10-01 08:11:54,672 log 26184 18984 Internal Server Error: /aves/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 30, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 289, in dashboard_aves
+    return render(request, 'aves/dashboard.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'dashboard_aves' not found. 'dashboard_aves' is not a valid view function or pattern name.
+ERROR 2025-10-01 08:11:54,736 basehttp 26184 18984 "GET /aves/ HTTP/1.1" 500 283171
+ERROR 2025-10-01 08:33:36,563 log 26184 5964 Internal Server Error: /aves/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 30, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 289, in dashboard_aves
+    return render(request, 'aves/dashboard.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'dashboard_aves' not found. 'dashboard_aves' is not a valid view function or pattern name.
+ERROR 2025-10-01 08:33:36,622 basehttp 26184 5964 "GET /aves/ HTTP/1.1" 500 283177
+INFO 2025-10-01 08:39:42,596 basehttp 26184 1296 "GET /aves/ HTTP/1.1" 200 41119
+INFO 2025-10-01 08:40:00,992 basehttp 26184 1296 "GET /aves/?galpon=%231&lote=1 HTTP/1.1" 200 41158
+INFO 2025-10-01 08:40:28,981 basehttp 26184 1296 "GET /aves/?galpon=&lote=1 HTTP/1.1" 200 41146
+INFO 2025-10-01 08:42:16,471 basehttp 26184 1296 "GET /aves/bitacora/ HTTP/1.1" 200 25314
+INFO 2025-10-01 08:42:17,230 basehttp 26184 1296 "GET /aves/ HTTP/1.1" 200 41119
+INFO 2025-10-01 08:47:17,366 basehttp 26184 21324 "GET /aves/ HTTP/1.1" 200 46550
+INFO 2025-10-01 08:47:59,421 autoreload 26184 6808 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-01 08:48:00,227 autoreload 14944 17728 Watching for file changes with StatReloader
+INFO 2025-10-01 08:48:42,424 autoreload 14944 17728 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-01 08:48:44,130 autoreload 20724 17852 Watching for file changes with StatReloader
+INFO 2025-10-01 08:48:45,946 autoreload 20724 17852 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-01 08:48:47,456 autoreload 22184 21268 Watching for file changes with StatReloader
+INFO 2025-10-01 08:49:28,024 autoreload 1736 26792 Watching for file changes with StatReloader
+INFO 2025-10-01 08:49:39,826 basehttp 1736 20748 "GET / HTTP/1.1" 200 33119
+INFO 2025-10-01 08:49:42,770 basehttp 1736 20748 "GET /aves/ HTTP/1.1" 200 46550
+INFO 2025-10-01 08:50:08,947 basehttp 1736 20748 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 30271
+INFO 2025-10-01 08:50:10,245 basehttp 1736 20748 "GET /aves/bitacora/ HTTP/1.1" 200 25406
+INFO 2025-10-01 08:50:13,174 basehttp 1736 20748 "GET /aves/ HTTP/1.1" 200 46550
+WARNING 2025-10-01 08:50:16,450 basehttp 1736 20748 "GET /static/img/logo.png HTTP/1.1" 404 1896
+WARNING 2025-10-01 08:50:17,444 basehttp 1736 10096 "GET /static/img/logo.png HTTP/1.1" 404 1896
+INFO 2025-10-01 08:50:38,187 basehttp 1736 1980 "GET /aves/alertas/ HTTP/1.1" 200 30568
+WARNING 2025-10-01 08:50:38,219 basehttp 1736 1980 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+WARNING 2025-10-01 08:50:38,222 basehttp 1736 28572 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+INFO 2025-10-01 08:50:41,196 basehttp 1736 22572 "GET /aves/ HTTP/1.1" 200 46550
+WARNING 2025-10-01 08:50:42,281 basehttp 1736 22572 "GET /static/img/logo.png HTTP/1.1" 404 1896
+WARNING 2025-10-01 08:50:43,291 basehttp 1736 752 "GET /static/img/logo.png HTTP/1.1" 404 1896
+INFO 2025-10-01 08:54:03,131 autoreload 1736 26792 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-01 08:54:03,900 autoreload 12792 27004 Watching for file changes with StatReloader
+INFO 2025-10-01 08:55:11,668 basehttp 12792 14564 "GET / HTTP/1.1" 200 33119
+INFO 2025-10-01 08:55:13,926 basehttp 12792 14564 "GET / HTTP/1.1" 200 33118
+INFO 2025-10-01 08:55:13,942 basehttp 12792 14804 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-01 08:55:13,943 basehttp 12792 14564 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-01 08:55:14,169 basehttp 12792 14564 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-01 08:55:14,175 basehttp 12792 14564 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-01 08:55:14,501 log 12792 14564 Not Found: /favicon.ico
+WARNING 2025-10-01 08:55:14,501 basehttp 12792 14564 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-10-01 08:55:15,499 basehttp 12792 14564 "GET /aves/ HTTP/1.1" 200 48971
+WARNING 2025-10-01 08:55:16,662 basehttp 12792 14564 "GET /static/img/logo.png HTTP/1.1" 404 1896
+INFO 2025-10-01 09:00:15,802 basehttp 12792 18692 "GET /aves/ HTTP/1.1" 200 48978
+WARNING 2025-10-01 09:00:16,905 basehttp 12792 18692 "GET /static/img/logo.png HTTP/1.1" 404 1896
+INFO 2025-10-01 09:05:16,035 basehttp 12792 14500 "GET /aves/ HTTP/1.1" 200 48984
+WARNING 2025-10-01 09:05:17,115 basehttp 12792 14500 "GET /static/img/logo.png HTTP/1.1" 404 1896
+INFO 2025-10-01 09:10:16,246 basehttp 12792 22184 "GET /aves/ HTTP/1.1" 200 48984
+WARNING 2025-10-01 09:10:17,333 basehttp 12792 22184 "GET /static/img/logo.png HTTP/1.1" 404 1896
+INFO 2025-10-01 09:37:47,167 autoreload 26276 21308 Watching for file changes with StatReloader
+INFO 2025-10-01 09:37:49,041 basehttp 26276 24688 "GET / HTTP/1.1" 200 33119
+INFO 2025-10-01 09:37:49,186 basehttp 26276 24688 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-01 09:37:49,204 basehttp 26276 21136 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-01 09:37:49,558 basehttp 26276 24688 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-01 09:37:49,566 basehttp 26276 21136 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-01 09:37:51,303 basehttp 26276 21136 "GET /aves/ HTTP/1.1" 200 48984
+WARNING 2025-10-01 09:37:52,492 basehttp 26276 21136 "GET /static/img/logo.png HTTP/1.1" 404 1896
+INFO 2025-10-01 09:38:01,097 basehttp 26276 24688 "GET /aves/ HTTP/1.1" 200 48984
+INFO 2025-10-01 09:38:01,119 basehttp 26276 27600 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-01 09:38:01,120 basehttp 26276 24688 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-01 09:38:01,277 basehttp 26276 27600 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-01 09:38:01,288 basehttp 26276 27600 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-01 09:38:01,499 log 26276 27600 Not Found: /favicon.ico
+WARNING 2025-10-01 09:38:01,500 basehttp 26276 27600 "GET /favicon.ico HTTP/1.1" 404 16809
+WARNING 2025-10-01 09:38:02,325 basehttp 26276 27600 "GET /static/img/logo.png HTTP/1.1" 404 1896
+INFO 2025-10-02 11:36:10,539 autoreload 17332 23440 Watching for file changes with StatReloader
+INFO 2025-10-02 11:36:14,268 basehttp 17332 13720 "GET / HTTP/1.1" 200 33120
+INFO 2025-10-02 11:36:14,448 basehttp 17332 13720 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-02 11:36:14,469 basehttp 17332 26044 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-02 11:36:14,834 basehttp 17332 26044 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-02 11:36:14,854 basehttp 17332 13720 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-02 11:36:16,557 basehttp 17332 13720 "GET /aves/ HTTP/1.1" 200 48984
+WARNING 2025-10-02 11:36:17,843 basehttp 17332 13720 "GET /static/img/logo.png HTTP/1.1" 404 1896
+INFO 2025-10-02 11:36:19,073 basehttp 17332 26044 "GET /aves/vacunacion/ HTTP/1.1" 200 26182
+INFO 2025-10-02 11:36:21,574 basehttp 17332 26044 "GET /aves/vacunacion/2/ HTTP/1.1" 200 26588
+INFO 2025-10-02 11:36:23,068 basehttp 17332 26044 "GET /aves/vacunacion/ HTTP/1.1" 200 26182
+INFO 2025-10-02 11:36:28,781 basehttp 17332 26044 "GET /aves/ HTTP/1.1" 200 48984
+INFO 2025-10-02 11:36:29,501 basehttp 17332 26044 "GET /aves/ HTTP/1.1" 200 48984
+WARNING 2025-10-02 11:36:30,623 basehttp 17332 26044 "GET /static/img/logo.png HTTP/1.1" 404 1896
+INFO 2025-10-02 11:36:38,051 basehttp 17332 11384 "GET /aves/vacunacion/ HTTP/1.1" 200 26182
+INFO 2025-10-02 11:36:39,344 basehttp 17332 11384 "GET /aves/vacunacion/2/ HTTP/1.1" 200 26588
+INFO 2025-10-02 11:36:58,348 basehttp 17332 11384 "GET /aves/vacunacion/ HTTP/1.1" 200 26182
+INFO 2025-10-02 11:37:03,060 basehttp 17332 11384 "GET /aves/inventario-huevos/ HTTP/1.1" 200 28389
+INFO 2025-10-02 11:37:07,652 basehttp 17332 11384 "GET /aves/ HTTP/1.1" 200 48984
+WARNING 2025-10-02 11:37:08,769 basehttp 17332 11384 "GET /static/img/logo.png HTTP/1.1" 404 1896
+INFO 2025-10-02 11:37:09,526 basehttp 17332 12260 "GET /aves/inventario-huevos/ HTTP/1.1" 200 28389
+INFO 2025-10-02 11:37:37,516 basehttp 17332 12260 "GET /aves/alertas/ HTTP/1.1" 200 30568
+WARNING 2025-10-02 11:37:37,598 basehttp 17332 18564 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+WARNING 2025-10-02 11:37:37,603 basehttp 17332 12260 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+INFO 2025-10-02 11:37:39,093 basehttp 17332 4548 "GET /aves/inventario-huevos/ HTTP/1.1" 200 28389
+INFO 2025-10-02 11:39:39,262 basehttp 17332 4548 "GET /aves/inventario-huevos/ HTTP/1.1" 200 28389
+INFO 2025-10-02 11:41:39,423 basehttp 17332 4548 "GET /aves/inventario-huevos/ HTTP/1.1" 200 28389
+INFO 2025-10-02 11:42:27,721 basehttp 17332 4548 "GET /aves/vacunacion/ HTTP/1.1" 200 26182
+INFO 2025-10-02 11:42:36,171 basehttp 17332 4548 "GET /aves/ HTTP/1.1" 200 48984
+WARNING 2025-10-02 11:42:37,306 basehttp 17332 4548 "GET /static/img/logo.png HTTP/1.1" 404 1896
+INFO 2025-10-02 11:47:36,780 basehttp 17332 20604 "GET /aves/ HTTP/1.1" 200 48984
+WARNING 2025-10-02 11:47:37,911 basehttp 17332 20604 "GET /static/img/logo.png HTTP/1.1" 404 1896
+INFO 2025-10-02 14:09:16,948 autoreload 20228 19696 Watching for file changes with StatReloader
+INFO 2025-10-02 14:09:19,026 basehttp 20228 13352 "GET / HTTP/1.1" 200 33120
+INFO 2025-10-02 14:09:19,147 basehttp 20228 13352 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-02 14:09:19,165 basehttp 20228 3600 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-02 14:09:19,482 basehttp 20228 3600 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-02 14:09:19,505 basehttp 20228 13352 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-02 14:09:19,887 log 20228 13352 Not Found: /favicon.ico
+WARNING 2025-10-02 14:09:19,887 basehttp 20228 13352 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-10-02 14:09:27,915 basehttp 20228 13352 "GET /aves/ HTTP/1.1" 200 48984
+WARNING 2025-10-02 14:09:29,129 basehttp 20228 13352 "GET /static/img/logo.png HTTP/1.1" 404 1896
+INFO 2025-10-02 14:09:48,333 basehttp 20228 3600 "GET /aves/alertas/ HTTP/1.1" 200 30568
+WARNING 2025-10-02 14:09:48,367 basehttp 20228 9508 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+WARNING 2025-10-02 14:09:48,372 basehttp 20228 3600 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+INFO 2025-10-02 14:09:51,611 basehttp 20228 18716 "GET /aves/alertas/ HTTP/1.1" 200 30568
+WARNING 2025-10-02 14:09:51,636 basehttp 20228 18716 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+WARNING 2025-10-02 14:09:51,636 basehttp 20228 20356 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+INFO 2025-10-02 14:14:06,872 autoreload 20228 19696 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-10-02 14:14:07,712 autoreload 10540 19524 Watching for file changes with StatReloader
+INFO 2025-10-02 14:14:39,402 autoreload 10540 19524 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-02 14:14:40,193 autoreload 8152 6552 Watching for file changes with StatReloader
+INFO 2025-10-02 14:15:14,084 autoreload 8152 6552 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-02 14:15:15,038 autoreload 11712 18756 Watching for file changes with StatReloader
+INFO 2025-10-02 14:15:42,585 autoreload 11712 18756 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-02 14:15:43,424 autoreload 6656 17820 Watching for file changes with StatReloader
+INFO 2025-10-02 14:46:08,152 basehttp 6656 7556 "GET /aves/alertas/ HTTP/1.1" 200 30571
+INFO 2025-10-02 14:46:08,172 basehttp 6656 7556 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+WARNING 2025-10-02 14:46:08,179 basehttp 6656 6852 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+WARNING 2025-10-02 14:46:08,179 basehttp 6656 19960 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+INFO 2025-10-02 14:46:08,257 basehttp 6656 7556 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-02 14:46:14,031 basehttp 6656 7556 "GET /aves/alertas/ HTTP/1.1" 200 30569
+WARNING 2025-10-02 14:46:14,062 basehttp 6656 7556 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+WARNING 2025-10-02 14:46:14,062 basehttp 6656 19092 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914
+ERROR 2025-10-02 14:46:15,631 log 6656 18624 Internal Server Error: /aves/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 30, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 218, in dashboard_aves
+    for lote in lotes_activos[:5]:
+                ^^^^^^^^^^^^^
+NameError: name 'lotes_activos' is not defined. Did you mean: 'alertas_activas'?
+ERROR 2025-10-02 14:46:15,669 basehttp 6656 18624 "GET /aves/ HTTP/1.1" 500 109821
+INFO 2025-10-03 08:03:39,580 autoreload 20976 13980 Watching for file changes with StatReloader
+INFO 2025-10-03 08:03:41,355 basehttp 20976 24468 "GET / HTTP/1.1" 200 33120
+INFO 2025-10-03 08:03:41,469 basehttp 20976 24468 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-03 08:03:41,470 basehttp 20976 8436 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-03 08:03:41,788 basehttp 20976 8436 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-03 08:03:41,793 basehttp 20976 8436 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+ERROR 2025-10-03 08:03:43,305 log 20976 8436 Internal Server Error: /aves/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 30, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 218, in dashboard_aves
+    for lote in lotes_activos[:5]:
+                ^^^^^^^^^^^^^
+NameError: name 'lotes_activos' is not defined. Did you mean: 'alertas_activas'?
+ERROR 2025-10-03 08:03:43,344 basehttp 20976 8436 "GET /aves/ HTTP/1.1" 500 109808
+INFO 2025-10-03 08:07:43,405 autoreload 20976 13980 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-03 08:07:45,193 autoreload 5436 16784 Watching for file changes with StatReloader
+INFO 2025-10-03 08:08:04,351 autoreload 5436 16784 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-03 08:08:05,112 autoreload 25456 19292 Watching for file changes with StatReloader
+INFO 2025-10-03 08:08:08,602 basehttp 25456 21992 "GET / HTTP/1.1" 200 33119
+INFO 2025-10-03 08:08:11,067 basehttp 25456 21992 "GET /aves/ HTTP/1.1" 200 49525
+WARNING 2025-10-03 08:08:13,529 basehttp 25456 21992 "GET /static/img/logo.png HTTP/1.1" 404 1896
+INFO 2025-10-03 08:08:32,249 basehttp 25456 20104 "GET /aves/alertas/ HTTP/1.1" 200 30570
+WARNING 2025-10-03 08:08:32,285 basehttp 25456 20104 "GET /static/aves/css/alertas.css HTTP/1.1" 404 1920
+WARNING 2025-10-03 08:08:32,285 basehttp 25456 20012 "GET /static/aves/js/alertas.js HTTP/1.1" 404 1914

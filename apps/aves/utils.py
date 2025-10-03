@@ -19,10 +19,12 @@ def generar_alertas(bitacora):
     # Alerta por mortalidad alta (más del 2% diario)
     porcentaje_mortalidad_diario = (bitacora.mortalidad / bitacora.lote.numero_aves_actual) * 100
     if porcentaje_mortalidad_diario > 2:
+        # Crítica si es mayor al 5%, normal si es entre 2-5%
+        nivel = 'critica' if porcentaje_mortalidad_diario > 5 else 'normal'
         AlertaSistema.objects.create(
             tipo_alerta='mortalidad_alta',
-            nivel='warning',
-            titulo=f'Mortalidad alta en lote {bitacora.lote.codigo}',
+            nivel=nivel,
+            titulo=f'Mortalidad {"crítica" if nivel == "critica" else "elevada"} en lote {bitacora.lote.codigo}',
             mensaje=f'Se registró una mortalidad del {porcentaje_mortalidad_diario:.1f}% en el día {bitacora.fecha}',
             lote=bitacora.lote,
             galpon_nombre=bitacora.lote.galpon
@@ -32,10 +34,12 @@ def generar_alertas(bitacora):
     if bitacora.lote.estado == 'postura':
         porcentaje_postura = bitacora.porcentaje_postura
         if porcentaje_postura < 70:
+            # Crítica si es menor al 50%, normal si es entre 50-70%
+            nivel = 'critica' if porcentaje_postura < 50 else 'normal'
             AlertaSistema.objects.create(
                 tipo_alerta='produccion_baja',
-                nivel='warning',
-                titulo=f'Producción baja en lote {bitacora.lote.codigo}',
+                nivel=nivel,
+                titulo=f'Producción {"crítica" if nivel == "critica" else "baja"} en lote {bitacora.lote.codigo}',
                 mensaje=f'Porcentaje de postura del {porcentaje_postura:.1f}% el {bitacora.fecha}',
                 lote=bitacora.lote,
                 galpon_nombre=bitacora.lote.galpon
@@ -117,13 +121,17 @@ def verificar_vacunas_pendientes():
     )
     
     for vacuna in vacunas_pendientes:
+        dias_restantes = (vacuna.fecha_programada - timezone.now().date()).days
+        # Crítica si debe aplicarse hoy o ya pasó la fecha, normal si faltan 1-3 días
+        nivel = 'critica' if dias_restantes <= 0 else 'normal'
+        
         AlertaSistema.objects.get_or_create(
             tipo_alerta='vacuna_pendiente',
             lote=vacuna.lote,
             defaults={
-                'nivel': 'warning',
-                'titulo': f'Vacuna pendiente para lote {vacuna.lote.codigo}',
-                'mensaje': f'La vacuna {vacuna.tipo_vacuna.nombre} debe aplicarse el {vacuna.fecha_programada}',
+                'nivel': nivel,
+                'titulo': f'Vacuna {"urgente" if nivel == "critica" else "pendiente"} para lote {vacuna.lote.codigo}',
+                'mensaje': f'La vacuna {vacuna.tipo_vacuna.nombre} {"debe aplicarse HOY" if dias_restantes <= 0 else f"debe aplicarse en {dias_restantes} días"}',
                 'usuario_destinatario': vacuna.veterinario
             }
         )

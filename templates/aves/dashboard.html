@@ -1,7 +1,7 @@
 {% extends 'aves/base.html' %}
 {% load static %}
 
-{% block title %}Dashboard Avícola - AgroSmart{% endblock %}
+{% block title %}Dashboard Avícola Avanzado - AgroSmart{% endblock %}
 
 {% block page_title %}Dashboard Avícola{% endblock %}
 
@@ -18,14 +18,34 @@
         --success-color: #27ae60;
         --warning-color: #f39c12;
         --danger-color: #e74c3c;
+        --info-color: #17a2b8;
         --light-bg: #f8f9fa;
         --border-color: #dee2e6;
+        --shadow: 0 2px 20px rgba(0,0,0,0.08);
+        --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
     }
 
-    /* Metric Cards */
+    /* Layout mejorado */
+    .dashboard-container {
+        padding: 1rem;
+        background: var(--light-bg);
+        min-height: 100vh;
+    }
+
+    /* Filtros */
+    .filters-section {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+    }
+
+    /* Métricas principales mejoradas */
     .metrics-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 1.5rem;
         margin-bottom: 2rem;
     }
@@ -34,7 +54,7 @@
         background: white;
         border-radius: 15px;
         padding: 2rem;
-        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        box-shadow: var(--shadow);
         border: 1px solid var(--border-color);
         position: relative;
         overflow: hidden;
@@ -54,10 +74,11 @@
     .metric-card.success::before { background: var(--success-color); }
     .metric-card.warning::before { background: var(--warning-color); }
     .metric-card.danger::before { background: var(--danger-color); }
+    .metric-card.info::before { background: var(--info-color); }
 
     .metric-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        box-shadow: var(--shadow-hover);
     }
 
     .metric-header {
@@ -82,6 +103,7 @@
     .metric-icon.success { background: var(--success-color); }
     .metric-icon.warning { background: var(--warning-color); }
     .metric-icon.danger { background: var(--danger-color); }
+    .metric-icon.info { background: var(--info-color); }
 
     .metric-value {
         font-size: 2.5rem;
@@ -96,23 +118,48 @@
         margin: 0.5rem 0 0 0;
     }
 
-    /* Content Cards */
-    .content-card {
+    .metric-subtitle {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-top: 0.5rem;
+    }
+
+    .metric-comparison {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .comparison-positive {
+        color: var(--success-color);
+    }
+
+    .comparison-negative {
+        color: var(--danger-color);
+    }
+
+    /* Secciones del dashboard */
+    .dashboard-section {
         background: white;
         border-radius: 15px;
-        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        box-shadow: var(--shadow);
         border: 1px solid var(--border-color);
         overflow: hidden;
         margin-bottom: 2rem;
     }
 
-    .content-card-header {
+    .section-header {
         padding: 1.5rem 2rem;
         border-bottom: 1px solid var(--border-color);
         background: #f8f9fa;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
-    .content-card-header h5 {
+    .section-title {
         margin: 0;
         color: var(--primary-color);
         font-weight: 600;
@@ -121,256 +168,560 @@
         gap: 0.5rem;
     }
 
-    .content-card-body {
+    .section-body {
         padding: 2rem;
     }
 
-    /* Table Styles */
-    .table {
+    /* Gráficos */
+    .chart-container {
+        position: relative;
+        height: 300px;
+        margin-bottom: 1rem;
+    }
+
+    .chart-small {
+        height: 200px;
+    }
+
+    /* Alertas mejoradas */
+    .alerts-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .alert-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        border-radius: 10px;
+        border-left: 4px solid;
+    }
+
+    .alert-item.warning {
+        background: #fff8e1;
+        border-left-color: var(--warning-color);
+        color: #f57c00;
+    }
+
+    .alert-item.danger {
+        background: #ffebee;
+        border-left-color: var(--danger-color);
+        color: #c62828;
+    }
+
+    .alert-item.success {
+        background: #f1f8e9;
+        border-left-color: var(--success-color);
+        color: #388e3c;
+    }
+
+    /* Tablas mejoradas */
+    .table-modern {
         margin-bottom: 0;
     }
 
-    .table th {
+    .table-modern th {
         border-top: none;
         font-weight: 600;
         color: var(--primary-color);
+        background: #f8f9fa;
     }
 
-    /* Badge Styles */
-    .badge {
+    .table-modern td {
+        vertical-align: middle;
+    }
+
+    /* Badges mejorados */
+    .badge-modern {
         font-size: 0.75rem;
         padding: 0.5rem 0.75rem;
         border-radius: 6px;
+        font-weight: 500;
     }
 
-    /* Button Styles */
-    .btn {
+    /* Botones mejorados */
+    .btn-modern {
         border-radius: 8px;
         font-weight: 500;
         padding: 0.75rem 1.5rem;
         transition: all 0.3s ease;
-    }
-
-    .btn-primary {
-        background: var(--accent-color);
-        border-color: var(--accent-color);
-    }
-
-    .btn-primary:hover {
-        background: #2980b9;
-        border-color: #2980b9;
-        transform: translateY(-2px);
-    }
-
-    .btn-outline-primary:hover {
-        transform: translateY(-2px);
-    }
-
-    .btn-outline-success:hover {
-        transform: translateY(-2px);
-    }
-
-    .btn-outline-warning:hover {
-        transform: translateY(-2px);
-    }
-
-    .btn-outline-info:hover {
-        transform: translateY(-2px);
-    }
-
-    /* Alert Styles */
-    .alert {
-        border-radius: 10px;
         border: none;
-        padding: 1rem 1.5rem;
     }
 
-    .alert-warning {
-        background: #fff8e1;
-        color: #f57c00;
-        border-left: 4px solid var(--warning-color);
+    .btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
 
-    .alert-success {
-        background: #f1f8e9;
-        color: #388e3c;
-        border-left: 4px solid var(--success-color);
-    }
-
-    /* Responsive Design */
+    /* Responsive */
     @media (max-width: 768px) {
         .metrics-grid {
             grid-template-columns: 1fr;
         }
+        
+        .dashboard-container {
+            padding: 0.5rem;
+        }
+        
+        .section-body {
+            padding: 1rem;
+        }
+    }
+
+    /* Animaciones */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .metric-card {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .dashboard-section {
+        animation: fadeInUp 0.8s ease-out;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- Métricas Principales -->
-<div class="metrics-grid">
-    <div class="metric-card">
-        <div class="metric-header">
-            <div>
-                <h3 class="metric-value">{{ total_lotes }}</h3>
-                <p class="metric-label">Lotes Activos</p>
+<div class="dashboard-container">
+    <!-- Filtros -->
+    <div class="filters-section">
+        <h6 class="mb-3"><i class="fas fa-filter me-2"></i>Filtros</h6>
+        <form method="GET" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Galpón</label>
+                <select name="galpon" class="form-select">
+                    <option value="">Todos los galpones</option>
+                    {% for galpon in galpones_disponibles %}
+                        <option value="{{ galpon }}" {% if galpon_filtro == galpon %}selected{% endif %}>
+                            {{ galpon }}
+                        </option>
+                    {% endfor %}
+                </select>
             </div>
-            <div class="metric-icon">
-                <i class="fas fa-layer-group"></i>
+            <div class="col-md-4">
+                <label class="form-label">Lote</label>
+                <select name="lote" class="form-select">
+                    <option value="">Todos los lotes</option>
+                    {% for lote in lotes_disponibles %}
+                        <option value="{{ lote.id }}" {% if lote_filtro == lote.id|stringformat:"s" %}selected{% endif %}>
+                            {{ lote.codigo }}
+                        </option>
+                    {% endfor %}
+                </select>
             </div>
-        </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary btn-modern me-2">
+                    <i class="fas fa-search me-1"></i>Filtrar
+                </button>
+                <a href="{% url 'aves:dashboard' %}" class="btn btn-outline-secondary btn-modern">
+                    <i class="fas fa-times me-1"></i>Limpiar
+                </a>
+            </div>
+        </form>
     </div>
-    
-    <div class="metric-card success">
-        <div class="metric-header">
-            <div>
-                <h3 class="metric-value">{{ total_aves|floatformat:0 }}</h3>
-                <p class="metric-label">Total Aves</p>
-            </div>
-            <div class="metric-icon success">
-                <i class="fas fa-dove"></i>
-            </div>
-        </div>
-    </div>
-    
-    <div class="metric-card warning">
-        <div class="metric-header">
-            <div>
-                <h3 class="metric-value">{{ produccion_total|floatformat:0 }}</h3>
-                <p class="metric-label">Producción Total</p>
-            </div>
-            <div class="metric-icon warning">
-                <i class="fas fa-egg"></i>
-            </div>
-        </div>
-    </div>
-    
-    <div class="metric-card danger">
-        <div class="metric-header">
-            <div>
-                <h3 class="metric-value">{{ alertas_pendientes }}</h3>
-                <p class="metric-label">Alertas Pendientes</p>
-            </div>
-            <div class="metric-icon danger">
-                <i class="fas fa-exclamation-triangle"></i>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Gráficos y Datos -->
-<div class="row">
-    <!-- Inventario de Huevos -->
-    <div class="col-md-6">
-        <div class="content-card">
-            <div class="content-card-header">
-                <h5><i class="fas fa-boxes"></i>Inventario de Huevos</h5>
-            </div>
-            <div class="content-card-body">
-                <div class="table-responsive">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th>Tipo</th>
-                                <th>Cantidad</th>
-                                <th>Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for inventario in inventario_huevos %}
-                            <tr>
-                                <td>{{ inventario.categoria }}</td>
-                                <td>{{ inventario.cantidad_actual }}</td>
-                                <td>
-                                    {% if inventario.necesita_reposicion %}
-                                        <span class="badge bg-danger">Stock Bajo</span>
-                                    {% elif inventario.cantidad_actual <= inventario.cantidad_minima|add:100 %}
-                                        <span class="badge bg-warning">Stock Medio</span>
-                                    {% else %}
-                                        <span class="badge bg-success">Stock Alto</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="3" class="text-center text-muted">No hay datos disponibles</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+    <!-- Alertas Críticas -->
+    {% if alertas_criticas %}
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h5 class="section-title">
+                <i class="fas fa-exclamation-triangle text-warning"></i>
+                Alertas Críticas
+            </h5>
+        </div>
+        <div class="section-body">
+            <div class="alerts-container">
+                {% for alerta in alertas_criticas %}
+                <div class="alert-item {{ alerta.tipo }}">
+                    <i class="{{ alerta.icono }}"></i>
+                    <span>{{ alerta.mensaje }}</span>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>
-    
-    <!-- Vacunas Pendientes -->
-    <div class="col-md-6">
-        <div class="content-card">
-            <div class="content-card-header">
-                <h5><i class="fas fa-syringe"></i>Vacunación</h5>
-            </div>
-            <div class="content-card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span>Vacunas Pendientes (próximos 7 días)</span>
-                    <span class="badge bg-warning fs-6">{{ vacunas_pendientes }}</span>
-                </div>
-                
-                {% if vacunas_pendientes > 0 %}
-                    <div class="alert alert-warning">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        Hay {{ vacunas_pendientes }} vacuna{{ vacunas_pendientes|pluralize }} pendiente{{ vacunas_pendientes|pluralize }} para aplicar.
-                        <a href="{% url 'aves:plan_vacunacion_list' %}" class="alert-link">Ver detalles</a>
-                    </div>
-                {% else %}
-                    <div class="alert alert-success">
-                        <i class="fas fa-check-circle me-2"></i>
-                        No hay vacunas pendientes para los próximos 7 días.
-                    </div>
-                {% endif %}
-                
-                <div class="d-grid">
-                    <a href="{% url 'aves:plan_vacunacion_create' %}" class="btn btn-primary">
-                        <i class="fas fa-plus me-2"></i>Programar Vacuna
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+    {% endif %}
 
-<!-- Acciones Rápidas -->
-<div class="content-card">
-    <div class="content-card-header">
-        <h5><i class="fas fa-bolt"></i>Acciones Rápidas</h5>
+    <!-- Métricas Principales -->
+    <div class="metrics-grid">
+        <!-- Lotes Activos -->
+        <div class="metric-card info">
+            <div class="metric-header">
+                <div>
+                    <h3 class="metric-value">{{ total_lotes|default:0 }}</h3>
+                    <p class="metric-label">Lotes Activos</p>
+                    <div class="metric-subtitle">
+                        {{ aves_ponedoras|default:0 }} ponedoras | {{ aves_engorde|default:0 }} engorde
+                    </div>
+                </div>
+                <div class="metric-icon info">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Aves -->
+        <div class="metric-card success">
+            <div class="metric-header">
+                <div>
+                    <h3 class="metric-value">{{ total_aves|floatformat:0 }}</h3>
+                    <p class="metric-label">Total Aves</p>
+                    <div class="metric-subtitle">
+                        Mortalidad hoy: {{ mortalidad_hoy }} ({{ porcentaje_mortalidad_hoy }}%)
+                    </div>
+                </div>
+                <div class="metric-icon success">
+                    <i class="fas fa-dove"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Producción Hoy -->
+        <div class="metric-card {% if porcentaje_postura_hoy >= 80 %}success{% elif porcentaje_postura_hoy >= 70 %}warning{% else %}danger{% endif %}">
+            <div class="metric-header">
+                <div>
+                    <h3 class="metric-value">{{ produccion_hoy|floatformat:0 }}</h3>
+                    <p class="metric-label">Huevos Hoy</p>
+                    <div class="metric-subtitle">
+                        Postura: {{ porcentaje_postura_hoy }}%
+                    </div>
+                    <div class="metric-comparison">
+                        <span>vs Ideal ({{ produccion_ideal_hoy|floatformat:0 }}):</span>
+                        <span class="{% if diferencia_ideal_hoy >= 0 %}comparison-positive{% else %}comparison-negative{% endif %}">
+                            {% if diferencia_ideal_hoy >= 0 %}+{% endif %}{{ diferencia_ideal_hoy|floatformat:0 }}
+                        </span>
+                    </div>
+                </div>
+                <div class="metric-icon {% if porcentaje_postura_hoy >= 80 %}success{% elif porcentaje_postura_hoy >= 70 %}warning{% else %}danger{% endif %}">
+                    <i class="fas fa-egg"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Producción Semanal -->
+        <div class="metric-card {% if porcentaje_postura_7d >= 80 %}success{% elif porcentaje_postura_7d >= 70 %}warning{% else %}danger{% endif %}">
+            <div class="metric-header">
+                <div>
+                    <h3 class="metric-value">{{ produccion_7d|floatformat:0 }}</h3>
+                    <p class="metric-label">Huevos (7 días)</p>
+                    <div class="metric-subtitle">
+                        Promedio: {{ porcentaje_postura_7d }}%
+                    </div>
+                    <div class="metric-comparison">
+                        <span>vs Ideal:</span>
+                        <span class="{% if diferencia_ideal_7d >= 0 %}comparison-positive{% else %}comparison-negative{% endif %}">
+                            {% if diferencia_ideal_7d >= 0 %}+{% endif %}{{ diferencia_ideal_7d|floatformat:0 }}
+                        </span>
+                    </div>
+                </div>
+                <div class="metric-icon {% if porcentaje_postura_7d >= 80 %}success{% elif porcentaje_postura_7d >= 70 %}warning{% else %}danger{% endif %}">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Producción Mensual -->
+        <div class="metric-card {% if porcentaje_postura_30d >= 80 %}success{% elif porcentaje_postura_30d >= 70 %}warning{% else %}danger{% endif %}">
+            <div class="metric-header">
+                <div>
+                    <h3 class="metric-value">{{ produccion_30d|floatformat:0 }}</h3>
+                    <p class="metric-label">Huevos (30 días)</p>
+                    <div class="metric-subtitle">
+                        Promedio: {{ porcentaje_postura_30d }}%
+                    </div>
+                    <div class="metric-comparison">
+                        <span>vs Ideal:</span>
+                        <span class="{% if diferencia_ideal_30d >= 0 %}comparison-positive{% else %}comparison-negative{% endif %}">
+                            {% if diferencia_ideal_30d >= 0 %}+{% endif %}{{ diferencia_ideal_30d|floatformat:0 }}
+                        </span>
+                    </div>
+                </div>
+                <div class="metric-icon {% if porcentaje_postura_30d >= 80 %}success{% elif porcentaje_postura_30d >= 70 %}warning{% else %}danger{% endif %}">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Consumo de Alimento -->
+        {% if aves_engorde > 0 %}
+        <div class="metric-card {% if consumo_por_ave_hoy >= 80 and consumo_por_ave_hoy <= 150 %}success{% else %}warning{% endif %}">
+            <div class="metric-header">
+                <div>
+                    <h3 class="metric-value">{{ consumo_por_ave_hoy|floatformat:0 }}g</h3>
+                    <p class="metric-label">Consumo/Ave Hoy</p>
+                    <div class="metric-subtitle">
+                        Total: {{ consumo_total_hoy }}kg
+                    </div>
+                    <div class="metric-subtitle">
+                        Promedio 7d: {{ consumo_promedio_7d|floatformat:0 }}g
+                    </div>
+                </div>
+                <div class="metric-icon {% if consumo_por_ave_hoy >= 80 and consumo_por_ave_hoy <= 150 %}success{% else %}warning{% endif %}">
+                    <i class="fas fa-utensils"></i>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Alertas -->
+        <div class="metric-card {% if alertas_pendientes == 0 %}success{% elif alertas_pendientes <= 5 %}warning{% else %}danger{% endif %}">
+            <div class="metric-header">
+                <div>
+                    <h3 class="metric-value">{{ alertas_pendientes }}</h3>
+                    <p class="metric-label">Alertas Pendientes</p>
+                    <div class="metric-subtitle">
+                        Vacunas pendientes: {{ vacunas_pendientes }}
+                    </div>
+                </div>
+                <div class="metric-icon {% if alertas_pendientes == 0 %}success{% elif alertas_pendientes <= 5 %}warning{% else %}danger{% endif %}">
+                    <i class="fas fa-bell"></i>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="content-card-body">
-        <div class="row">
-            <div class="col-md-3 mb-3">
-                <div class="d-grid">
-                    <a href="{% url 'aves:bitacora_create' %}" class="btn btn-outline-primary">
-                        <i class="fas fa-plus me-2"></i>Nueva Bitácora
-                    </a>
+
+    <!-- Gráficos de Tendencia -->
+    <div class="row">
+        <!-- Evolución de Producción -->
+        <div class="col-lg-8">
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h5 class="section-title">
+                        <i class="fas fa-chart-line"></i>
+                        Evolución de Producción (30 días)
+                    </h5>
+                </div>
+                <div class="section-body">
+                    <div class="chart-container">
+                        <canvas id="produccionChart"></canvas>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-3">
-                <div class="d-grid">
-                    <a href="{% url 'aves:lote_create' %}" class="btn btn-outline-success">
-                        <i class="fas fa-layer-group me-2"></i>Nuevo Lote
-                    </a>
+        </div>
+
+        <!-- Evolución de Mortalidad -->
+        <div class="col-lg-4">
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h5 class="section-title">
+                        <i class="fas fa-skull-crossbones"></i>
+                        Mortalidad (30 días)
+                    </h5>
+                </div>
+                <div class="section-body">
+                    <div class="chart-container chart-small">
+                        <canvas id="mortalidadChart"></canvas>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-3">
-                <div class="d-grid">
-                    <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-outline-warning">
-                        <i class="fas fa-exchange-alt me-2"></i>Movimiento Huevos
-                    </a>
+        </div>
+    </div>
+
+    <!-- Comparación entre Galpones -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h5 class="section-title">
+                <i class="fas fa-balance-scale"></i>
+                Comparación entre Galpones (30 días)
+            </h5>
+        </div>
+        <div class="section-body">
+            <div class="table-responsive">
+                <table class="table table-modern">
+                    <thead>
+                        <tr>
+                            <th>Galpón</th>
+                            <th>Aves</th>
+                            <th>Producción</th>
+                            <th>% Postura</th>
+                            <th>Mortalidad</th>
+                            <th>% Mortalidad</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for galpon in comparacion_galpones %}
+                        <tr>
+                            <td><strong>{{ galpon.galpon }}</strong></td>
+                            <td>{{ galpon.aves }}</td>
+                            <td>{{ galpon.produccion_30d|floatformat:0 }}</td>
+                            <td>
+                                <span class="badge badge-modern {% if galpon.porcentaje_postura >= 80 %}bg-success{% elif galpon.porcentaje_postura >= 70 %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ galpon.porcentaje_postura|floatformat:1 }}%
+                                </span>
+                            </td>
+                            <td>{{ galpon.mortalidad_30d }}</td>
+                            <td>
+                                <span class="badge badge-modern {% if galpon.porcentaje_mortalidad <= 1 %}bg-success{% elif galpon.porcentaje_mortalidad <= 2 %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ galpon.porcentaje_mortalidad|floatformat:2 }}%
+                                </span>
+                            </td>
+                            <td>
+                                {% if galpon.porcentaje_postura >= 80 and galpon.porcentaje_mortalidad <= 1 %}
+                                    <i class="fas fa-check-circle text-success"></i> Excelente
+                                {% elif galpon.porcentaje_postura >= 70 and galpon.porcentaje_mortalidad <= 2 %}
+                                    <i class="fas fa-exclamation-triangle text-warning"></i> Bueno
+                                {% else %}
+                                    <i class="fas fa-times-circle text-danger"></i> Requiere atención
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">No hay datos disponibles</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Lotes y Inventario -->
+    <div class="row">
+        <!-- Top Lotes por Rendimiento -->
+        <div class="col-lg-6">
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h5 class="section-title">
+                        <i class="fas fa-trophy"></i>
+                        Top Lotes por Rendimiento
+                    </h5>
+                </div>
+                <div class="section-body">
+                    <div class="table-responsive">
+                        <table class="table table-modern">
+                            <thead>
+                                <tr>
+                                    <th>Lote</th>
+                                    <th>Edad</th>
+                                    <th>% Postura</th>
+                                    <th>Producción 30d</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for lote_data in top_lotes %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'aves:lote_detail' lote_data.lote.pk %}" class="text-decoration-none">
+                                            <strong>{{ lote_data.lote.codigo }}</strong>
+                                        </a>
+                                    </td>
+                                    <td>{{ lote_data.edad_dias }} días</td>
+                                    <td>
+                                        <span class="badge badge-modern {% if lote_data.porcentaje_postura >= 80 %}bg-success{% elif lote_data.porcentaje_postura >= 70 %}bg-warning{% else %}bg-danger{% endif %}">
+                                            {{ lote_data.porcentaje_postura|floatformat:1 }}%
+                                        </span>
+                                    </td>
+                                    <td>{{ lote_data.produccion_30d|floatformat:0 }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No hay lotes disponibles</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-3">
-                <div class="d-grid">
-                    <a href="{% url 'aves:reportes' %}" class="btn btn-outline-info">
-                        <i class="fas fa-chart-bar me-2"></i>Ver Reportes
-                    </a>
+        </div>
+
+        <!-- Inventario de Huevos -->
+        <div class="col-lg-6">
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h5 class="section-title">
+                        <i class="fas fa-boxes"></i>
+                        Inventario de Huevos
+                    </h5>
+                </div>
+                <div class="section-body">
+                    <div class="table-responsive">
+                        <table class="table table-modern">
+                            <thead>
+                                <tr>
+                                    <th>Categoría</th>
+                                    <th>Cantidad</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for inventario in inventario_huevos %}
+                                <tr>
+                                    <td><strong>{{ inventario.categoria }}</strong></td>
+                                    <td>{{ inventario.cantidad_actual|floatformat:0 }}</td>
+                                    <td>
+                                        {% if inventario.necesita_reposicion %}
+                                            <span class="badge badge-modern bg-danger">Stock Bajo</span>
+                                        {% elif inventario.cantidad_actual <= inventario.cantidad_minima|add:100 %}
+                                            <span class="badge badge-modern bg-warning">Stock Medio</span>
+                                        {% else %}
+                                            <span class="badge badge-modern bg-success">Stock Alto</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted">No hay inventario disponible</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acciones Rápidas -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h5 class="section-title">
+                <i class="fas fa-bolt"></i>
+                Acciones Rápidas
+            </h5>
+        </div>
+        <div class="section-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="d-grid">
+                        <a href="{% url 'aves:bitacora_create' %}" class="btn btn-primary btn-modern">
+                            <i class="fas fa-plus me-2"></i>Nueva Bitácora
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="d-grid">
+                        <a href="{% url 'aves:lote_create' %}" class="btn btn-success btn-modern">
+                            <i class="fas fa-layer-group me-2"></i>Nuevo Lote
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="d-grid">
+                        <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-warning btn-modern">
+                            <i class="fas fa-exchange-alt me-2"></i>Movimiento Huevos
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="d-grid">
+                        <a href="{% url 'aves:reportes' %}" class="btn btn-info btn-modern">
+                            <i class="fas fa-chart-bar me-2"></i>Ver Reportes
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -381,10 +732,151 @@
 {% block extra_js %}
 <script>
 $(document).ready(function() {
+    // Datos para gráficos desde el contexto
+    const evolucionProduccion = {{ evolucion_produccion_json|safe }};
+    const evolucionMortalidad = {{ evolucion_mortalidad_json|safe }};
+    
+    // Gráfico de Evolución de Producción
+    const ctxProduccion = document.getElementById('produccionChart').getContext('2d');
+    new Chart(ctxProduccion, {
+        type: 'line',
+        data: {
+            labels: evolucionProduccion.map(item => item.fecha),
+            datasets: [{
+                label: 'Huevos Producidos',
+                data: evolucionProduccion.map(item => item.produccion),
+                borderColor: '#3498db',
+                backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4
+            }, {
+                label: '% Postura',
+                data: evolucionProduccion.map(item => item.porcentaje),
+                borderColor: '#e74c3c',
+                backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                borderWidth: 2,
+                yAxisID: 'y1',
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: 'Huevos'
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: '% Postura'
+                    },
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Evolución de Producción (7 días)'
+                }
+            }
+        }
+    });
+
+    // Gráfico de Evolución de Mortalidad
+    const ctxMortalidad = document.getElementById('mortalidadChart').getContext('2d');
+    new Chart(ctxMortalidad, {
+        type: 'bar',
+        data: {
+            labels: evolucionMortalidad.map(item => item.fecha),
+            datasets: [{
+                label: 'Mortalidad',
+                data: evolucionMortalidad.map(item => item.mortalidad),
+                backgroundColor: 'rgba(231, 76, 60, 0.8)',
+                borderColor: '#e74c3c',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: 'Mortalidad (30 días)'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Aves'
+                    }
+                }
+            }
+        }
+    });
+
+    // Notificaciones del navegador para alertas críticas
+    {% if alertas_criticas %}
+    if ("Notification" in window) {
+        if (Notification.permission === "granted") {
+            showNotifications();
+        } else if (Notification.permission !== "denied") {
+            Notification.requestPermission().then(function (permission) {
+                if (permission === "granted") {
+                    showNotifications();
+                }
+            });
+        }
+    }
+
+    function showNotifications() {
+        {% for alerta in alertas_criticas %}
+        setTimeout(function() {
+            new Notification("AgroSmart - Alerta Avícola", {
+                body: "{{ alerta.mensaje }}",
+                icon: "/static/img/logo.png",
+                tag: "alerta-{{ forloop.counter }}"
+            });
+        }, {{ forloop.counter0|add:1 }}000);
+        {% endfor %}
+    }
+    {% endif %}
+
     // Auto-refresh cada 5 minutos
     setInterval(function() {
         location.reload();
     }, 300000);
+
+    // Tooltips de Bootstrap
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 });
 </script>
 {% endblock %}
