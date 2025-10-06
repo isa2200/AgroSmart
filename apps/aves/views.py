@@ -5,13 +5,13 @@ Vistas para el módulo avícola.
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import JsonResponse, HttpResponse
-from django.db.models import Sum, Avg, Count, Q
+from django.http import JsonResponse
+from django.db.models import Sum, Avg
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ValidationError
-from datetime import datetime, timedelta
+from datetime import timedelta
 import json
 
 from apps.usuarios.decorators import role_required
@@ -27,6 +27,7 @@ def dashboard_aves(request):
     from django.db.models import F
     
     hoy = timezone.now().date()
+    hace_7_dias = hoy - timedelta(days=7)
     hace_30_dias = hoy - timedelta(days=30)
     fecha_30d_atras = hace_30_dias
     
@@ -50,40 +51,58 @@ def dashboard_aves(request):
     lotes_engorde = lotes_query.filter(estado='levante')
     
     # INDICADORES PONEDORAS
-    # Producción de huevos
+    # Producción de huevos - AGREGADO: Consultas para 7 días
     bitacoras_ponedoras_hoy = BitacoraDiaria.objects.filter(
         lote__in=lotes_ponedoras, fecha=hoy
+    )
+    bitacoras_ponedoras_7d = BitacoraDiaria.objects.filter(
+        lote__in=lotes_ponedoras, fecha__gte=hace_7_dias, fecha__lte=hoy
     )
     bitacoras_ponedoras_30d = BitacoraDiaria.objects.filter(
         lote__in=lotes_ponedoras, fecha__gte=hace_30_dias, fecha__lte=hoy
     )
     
-    # Producción diaria y mensual - CORREGIDO
+    # Producción diaria, semanal y mensual - CORREGIDO
     produccion_hoy = bitacoras_ponedoras_hoy.aggregate(
         total=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + 
-                 F('produccion_b') + F('produccion_c'))
+                    F('produccion_b') + F('produccion_c'))
+    )['total'] or 0
+    
+    # AGREGADO: Producción de 7 días
+    produccion_7d = bitacoras_ponedoras_7d.aggregate(
+        total=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + 
+                    F('produccion_b') + F('produccion_c'))
     )['total'] or 0
     
     produccion_30d = bitacoras_ponedoras_30d.aggregate(
         total=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + 
-                 F('produccion_b') + F('produccion_c'))
+                    F('produccion_b') + F('produccion_c'))
     )['total'] or 0
     
     # Porcentaje de postura
     aves_ponedoras = lotes_ponedoras.aggregate(total=Sum('numero_aves_actual'))['total'] or 0
     porcentaje_postura_hoy = (produccion_hoy / aves_ponedoras * 100) if aves_ponedoras > 0 else 0
+    # AGREGADO: Porcentaje de postura 7 días
+    porcentaje_postura_7d = (produccion_7d / (aves_ponedoras * 7) * 100) if aves_ponedoras > 0 else 0
     porcentaje_postura_30d = (produccion_30d / (aves_ponedoras * 30) * 100) if aves_ponedoras > 0 else 0
     
     # Producción ideal vs real (asumiendo 85% como ideal)
     produccion_ideal_hoy = aves_ponedoras * 0.85
+    # AGREGADO: Producción ideal 7 días
+    produccion_ideal_7d = aves_ponedoras * 0.85 * 7
     produccion_ideal_30d = aves_ponedoras * 0.85 * 30
     diferencia_ideal_hoy = produccion_hoy - produccion_ideal_hoy
+    # AGREGADO: Diferencia ideal 7 días
+    diferencia_ideal_7d = produccion_7d - produccion_ideal_7d
     diferencia_ideal_30d = produccion_30d - produccion_ideal_30d
     
     # INDICADORES ENGORDE
-    # Peso promedio y consumo
+    # Peso promedio y consumo - AGREGADO: Consultas para 7 días
     bitacoras_engorde_hoy = BitacoraDiaria.objects.filter(
         lote__in=lotes_engorde, fecha=hoy
+    )
+    bitacoras_engorde_7d = BitacoraDiaria.objects.filter(
+        lote__in=lotes_engorde, fecha__gte=hace_7_dias, fecha__lte=hoy
     )
     bitacoras_engorde_30d = BitacoraDiaria.objects.filter(
         lote__in=lotes_engorde, fecha__gte=hace_30_dias, fecha__lte=hoy
@@ -91,10 +110,16 @@ def dashboard_aves(request):
     
     # Consumo de alimento
     consumo_total_hoy = bitacoras_engorde_hoy.aggregate(total=Sum('consumo_concentrado'))['total'] or 0
+    # AGREGADO: Consumo total 7 días
+    consumo_total_7d = bitacoras_engorde_7d.aggregate(total=Sum('consumo_concentrado'))['total'] or 0
     consumo_total_30d = bitacoras_engorde_30d.aggregate(total=Sum('consumo_concentrado'))['total'] or 0
     aves_engorde = lotes_engorde.aggregate(total=Sum('numero_aves_actual'))['total'] or 0
     consumo_por_ave_hoy = (consumo_total_hoy / aves_engorde) if aves_engorde > 0 else 0
+    # AGREGADO: Consumo promedio 7 días
+    consumo_promedio_7d = (consumo_total_7d / (aves_engorde * 7)) if aves_engorde > 0 else 0
     consumo_promedio_30d = (consumo_total_30d / (aves_engorde * 30)) if aves_engorde > 0 else 0
+    
+    # ... existing code ...
     
     # MORTALIDAD - CORREGIDO
     mortalidad_hoy = BitacoraDiaria.objects.filter(
@@ -243,16 +268,20 @@ def dashboard_aves(request):
         
         # Indicadores ponedoras
         'produccion_hoy': produccion_hoy,
+        'produccion_7d': produccion_7d,  # AGREGADO
         'produccion_30d': produccion_30d,
         'porcentaje_postura_hoy': round(porcentaje_postura_hoy, 1),
+        'porcentaje_postura_7d': round(porcentaje_postura_7d, 1),  # AGREGADO
         'porcentaje_postura_30d': round(porcentaje_postura_30d, 1),
         'produccion_ideal_hoy': round(produccion_ideal_hoy),
         'diferencia_ideal_hoy': round(diferencia_ideal_hoy),
+        'diferencia_ideal_7d': round(diferencia_ideal_7d),  # AGREGADO
         'diferencia_ideal_30d': round(diferencia_ideal_30d),
         
         # Indicadores engorde
         'consumo_total_hoy': round(consumo_total_hoy, 1),
         'consumo_por_ave_hoy': round(consumo_por_ave_hoy * 1000),  # En gramos
+        'consumo_promedio_7d': round(consumo_promedio_7d * 1000),  # AGREGADO - En gramos
         'consumo_promedio_30d': round(consumo_promedio_30d * 1000),  # En gramos
         
         # Mortalidad
