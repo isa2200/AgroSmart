@@ -859,7 +859,7 @@ $(document).ready(function() {
         setTimeout(function() {
             new Notification("AgroSmart - Alerta Avícola", {
                 body: "{{ alerta.mensaje }}",
-                icon: "/static/img/logo.png",
+                icon: "{% static 'img/logo-ico.ico' %}",
                 tag: "alerta-{{ forloop.counter }}"
             });
         }, {{ forloop.counter0|add:1 }}000);
