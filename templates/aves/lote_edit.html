@@ -1,30 +1,40 @@
 {% extends 'aves/base.html' %}
 {% load widget_tweaks %}
 
-{% block title %}Nuevo Lote - AgroSmart{% endblock %}
+{% block title %}Editar Lote - AgroSmart{% endblock %}
 
-{% block page_title %}Nuevo Lote de Aves{% endblock %}
+{% block page_title %}{{ titulo }}{% endblock %}
 
 {% block breadcrumb_items %}
     <li class="breadcrumb-item"><a href="{% url 'aves:lote_list' %}">Lotes</a></li>
-    <li class="breadcrumb-item active">Nuevo Lote</li>
+    <li class="breadcrumb-item"><a href="{% url 'aves:lote_detail' lote.pk %}">{{ lote.codigo }}</a></li>
+    <li class="breadcrumb-item active">Editar</li>
 {% endblock %}
 
 {% block page_actions %}
-    <a href="{% url 'aves:lote_list' %}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left me-2"></i>Volver a Lotes
+    <a href="{% url 'aves:lote_detail' lote.pk %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Volver al Lote
     </a>
 {% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-md-10">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-layer-group me-2"></i>Crear Nuevo Lote</h5>
+                <h5 class="mb-0">
+                    <i class="fas fa-edit me-2"></i>Editar Lote {{ lote.codigo }}
+                </h5>
             </div>
             <div class="card-body">
-                <form method="post" id="loteForm">
+                <!-- Alerta de información -->
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Importante:</strong> Cualquier modificación debe ser justificada. 
+                    Los cambios quedarán registrados en el sistema de auditoría.
+                </div>
+
+                <form method="post" id="loteEditForm">
                     {% csrf_token %}
                     
                     <div class="row">
@@ -37,6 +47,9 @@
                                 {{ form.codigo|add_class:"form-control" }}
                                 {% if form.codigo.errors %}
                                     <div class="text-danger small">{{ form.codigo.errors.0 }}</div>
+                                {% endif %}
+                                {% if form.codigo.help_text %}
+                                    <div class="form-text">{{ form.codigo.help_text }}</div>
                                 {% endif %}
                             </div>
                             
@@ -65,7 +78,8 @@
                                 <div class="form-text">
                                     <small>
                                         <strong>Levante:</strong> Pollas jóvenes en crecimiento<br>
-                                        <strong>Postura:</strong> Gallinas en producción de huevos
+                                        <strong>Postura:</strong> Gallinas en producción de huevos<br>
+                                        <strong>Finalizado:</strong> Lote terminado
                                     </small>
                                 </div>
                             </div>
@@ -85,6 +99,17 @@
                                     <div class="text-danger small">{{ form.fecha_llegada.errors.0 }}</div>
                                 {% endif %}
                             </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.fecha_inicio_postura.id_for_label }}" class="form-label">Fecha Inicio Postura</label>
+                                {{ form.fecha_inicio_postura|add_class:"form-control" }}
+                                {% if form.fecha_inicio_postura.errors %}
+                                    <div class="text-danger small">{{ form.fecha_inicio_postura.errors.0 }}</div>
+                                {% endif %}
+                                {% if form.fecha_inicio_postura.help_text %}
+                                    <div class="form-text">{{ form.fecha_inicio_postura.help_text }}</div>
+                                {% endif %}
+                            </div>
                         </div>
                         
                         <!-- Datos del Lote -->
@@ -96,6 +121,20 @@
                                 {{ form.numero_aves_inicial|add_class:"form-control" }}
                                 {% if form.numero_aves_inicial.errors %}
                                     <div class="text-danger small">{{ form.numero_aves_inicial.errors.0 }}</div>
+                                {% endif %}
+                                {% if form.numero_aves_inicial.help_text %}
+                                    <div class="form-text">{{ form.numero_aves_inicial.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.numero_aves_actual.id_for_label }}" class="form-label">Número de Aves Actual *</label>
+                                {{ form.numero_aves_actual|add_class:"form-control" }}
+                                {% if form.numero_aves_actual.errors %}
+                                    <div class="text-danger small">{{ form.numero_aves_actual.errors.0 }}</div>
+                                {% endif %}
+                                {% if form.numero_aves_actual.help_text %}
+                                    <div class="form-text">{{ form.numero_aves_actual.help_text }}</div>
                                 {% endif %}
                             </div>
                             
@@ -113,13 +152,9 @@
                                 {% if form.peso_promedio_llegada.errors %}
                                     <div class="text-danger small">{{ form.peso_promedio_llegada.errors.0 }}</div>
                                 {% endif %}
-                                {% if form.peso_promedio_llegada.help_text %}
-                                    <div class="form-text">{{ form.peso_promedio_llegada.help_text }}</div>
-                                {% endif %}
                             </div>
                         
-                    
-                    <div class="mb-3">
+                            <div class="mb-3">
                                 <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
                                 {{ form.observaciones|add_class:"form-control" }}
                                 {% if form.observaciones.errors %}
@@ -131,12 +166,33 @@
                     
                     <hr>
                     
+                    <!-- Justificación -->
+                    <div class="row">
+                        <div class="col-12">
+                            <h6 class="text-warning mb-3">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Justificación de la Modificación
+                            </h6>
+                            <div class="mb-3">
+                                <label for="{{ form.justificacion.id_for_label }}" class="form-label">{{ form.justificacion.label }} *</label>
+                                {{ form.justificacion|add_class:"form-control" }}
+                                {% if form.justificacion.errors %}
+                                    <div class="text-danger small">{{ form.justificacion.errors.0 }}</div>
+                                {% endif %}
+                                {% if form.justificacion.help_text %}
+                                    <div class="form-text">{{ form.justificacion.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
                     <div class="d-flex justify-content-between">
-                        <a href="{% url 'aves:lote_list' %}" class="btn btn-secondary">
+                        <a href="{% url 'aves:lote_detail' lote.pk %}" class="btn btn-secondary">
                             <i class="fas fa-times me-2"></i>Cancelar
                         </a>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-2"></i>Guardar Lote
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-save me-2"></i>Guardar Cambios
                         </button>
                     </div>
                 </form>
@@ -161,13 +217,25 @@ document.addEventListener('DOMContentLoaded', function() {
         if (pesoTotal > 0 && numeroAves > 0) {
             const pesoPromedio = (pesoTotal * 1000) / numeroAves;
             pesoPromedioInput.value = pesoPromedio.toFixed(2);
-        } else {
-            pesoPromedioInput.value = '';
         }
     }
     
-    pesoTotalInput.addEventListener('input', calcularPesoPromedio);
-    numeroAvesInput.addEventListener('input', calcularPesoPromedio);
+    if (pesoTotalInput && numeroAvesInput && pesoPromedioInput) {
+        pesoTotalInput.addEventListener('input', calcularPesoPromedio);
+        numeroAvesInput.addEventListener('input', calcularPesoPromedio);
+    }
+    
+    // Validación del formulario
+    const form = document.getElementById('loteEditForm');
+    form.addEventListener('submit', function(e) {
+        const justificacion = document.getElementById('{{ form.justificacion.id_for_label }}').value.trim();
+        
+        if (justificacion.length < 10) {
+            e.preventDefault();
+            alert('La justificación debe tener al menos 10 caracteres.');
+            return false;
+        }
+    });
 });
 </script>
 {% endblock %}

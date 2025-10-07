@@ -54,13 +54,13 @@ class BitacoraDiariaForm(forms.ModelForm):
 
 
 class LoteAvesForm(forms.ModelForm):
-    """Formulario para pollas de levante."""
+    """Formulario para lotes de aves."""
     
     class Meta:
         model = LoteAves
         fields = [
             'codigo', 'galpon', 'linea_genetica', 'procedencia', 'numero_aves_inicial',
-            'fecha_llegada', 'peso_total_llegada', 'peso_promedio_llegada', 'observaciones'
+            'fecha_llegada', 'peso_total_llegada', 'peso_promedio_llegada', 'estado', 'observaciones'
         ]
         widgets = {
             'codigo': forms.TextInput(attrs={'class': 'form-control'}),
@@ -71,6 +71,7 @@ class LoteAvesForm(forms.ModelForm):
             'fecha_llegada': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'peso_total_llegada': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0'}),
             'peso_promedio_llegada': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0'}),
+            'estado': forms.Select(attrs={'class': 'form-control'}),
             'observaciones': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
     
@@ -132,6 +133,97 @@ class LoteAvesForm(forms.ModelForm):
         if not linea_genetica:
             raise ValidationError('Debe seleccionar una línea genética.')
         return linea_genetica
+
+
+class LoteAvesEditForm(forms.ModelForm):
+    """Formulario para editar lotes de aves con justificación obligatoria."""
+    
+    justificacion = forms.CharField(
+        label='Justificación de la modificación',
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 3,
+            'placeholder': 'Explique detalladamente el motivo de la modificación...',
+            'required': True
+        }),
+        help_text='Este campo es obligatorio para registrar cualquier modificación.',
+        min_length=10,
+        error_messages={
+            'required': 'La justificación de la modificación es obligatoria.',
+            'min_length': 'La justificación debe tener al menos 10 caracteres.'
+        }
+    )
+    
+    class Meta:
+        model = LoteAves
+        fields = [
+            'codigo', 'galpon', 'linea_genetica', 'procedencia', 'numero_aves_inicial',
+            'numero_aves_actual', 'fecha_llegada', 'peso_total_llegada', 
+            'peso_promedio_llegada', 'estado', 'fecha_inicio_postura', 'observaciones'
+        ]
+        widgets = {
+            'codigo': forms.TextInput(attrs={'class': 'form-control'}),
+            'galpon': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: Galpón A, Nave 1, etc.'}),
+            'linea_genetica': forms.Select(attrs={'class': 'form-control'}),
+            'procedencia': forms.TextInput(attrs={'class': 'form-control'}),
+            'numero_aves_inicial': forms.NumberInput(attrs={'class': 'form-control', 'min': '1', 'readonly': True}),
+            'numero_aves_actual': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'fecha_llegada': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'peso_total_llegada': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0'}),
+            'peso_promedio_llegada': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0'}),
+            'estado': forms.Select(attrs={'class': 'form-control'}),
+            'fecha_inicio_postura': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'observaciones': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }
+        help_texts = {
+            'numero_aves_inicial': 'Este campo no se puede modificar después de la creación.',
+            'numero_aves_actual': 'Número actual de aves vivas en el lote.',
+            'fecha_inicio_postura': 'Solo para lotes en estado de postura.',
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Hacer que algunos campos sean de solo lectura si el lote ya existe
+        if self.instance and self.instance.pk:
+            self.fields['numero_aves_inicial'].widget.attrs['readonly'] = True
+            self.fields['codigo'].widget.attrs['readonly'] = True
+    
+    def clean_numero_aves_actual(self):
+        numero_aves_actual = self.cleaned_data.get('numero_aves_actual')
+        numero_aves_inicial = self.instance.numero_aves_inicial if self.instance else 0
+        
+        if numero_aves_actual > numero_aves_inicial:
+            raise forms.ValidationError(
+                f'El número de aves actual ({numero_aves_actual}) no puede ser mayor '
+                f'al número inicial ({numero_aves_inicial}).'
+            )
+        
+        if numero_aves_actual < 0:
+            raise forms.ValidationError('El número de aves actual no puede ser negativo.')
+        
+        return numero_aves_actual
+    
+    def clean_fecha_inicio_postura(self):
+        fecha_inicio_postura = self.cleaned_data.get('fecha_inicio_postura')
+        estado = self.cleaned_data.get('estado')
+        fecha_llegada = self.cleaned_data.get('fecha_llegada') or (self.instance.fecha_llegada if self.instance else None)
+        
+        if estado == 'postura' and not fecha_inicio_postura:
+            raise forms.ValidationError('La fecha de inicio de postura es obligatoria para lotes en estado de postura.')
+        
+        if fecha_inicio_postura and fecha_llegada and fecha_inicio_postura < fecha_llegada:
+            raise forms.ValidationError('La fecha de inicio de postura no puede ser anterior a la fecha de llegada.')
+        
+        return fecha_inicio_postura
+    
+    def clean_justificacion(self):
+        justificacion = self.cleaned_data.get('justificacion', '').strip()
+        if not justificacion:
+            raise forms.ValidationError('La justificación de la modificación es obligatoria.')
+        if len(justificacion) < 10:
+            raise forms.ValidationError('La justificación debe tener al menos 10 caracteres.')
+        return justificacion
 
 
 class MovimientoHuevosForm(forms.ModelForm):

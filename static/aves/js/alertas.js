@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnMarcarLeidas = document.getElementById('btnMarcarLeidas');
     const btnMarcarResueltas = document.getElementById('btnMarcarResueltas');
     const filtrosForm = document.getElementById('filtrosForm');
-    const checkboxes = document.querySelectorAll('.alert-checkbox');
+    const checkboxes = document.querySelectorAll('.alerta-checkbox'); // Corregido
     const selectAll = document.getElementById('selectAll');
 
     // Auto-refresh cada 30 segundos
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function updateBulkActions() {
-        const selectedCount = document.querySelectorAll('.alert-checkbox:checked').length;
+        const selectedCount = document.querySelectorAll('.alerta-checkbox:checked').length; // Corregido
         
         if (btnMarcarLeidas) {
             btnMarcarLeidas.disabled = selectedCount === 0;
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
         btnMarcarLeidas.addEventListener('click', function() {
             const selectedIds = getSelectedAlertIds();
             if (selectedIds.length > 0) {
-                marcarAlertasLeidas(selectedIds);
+                marcarAlertasMasivo('leida', selectedIds);
             }
         });
     }
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
         btnMarcarResueltas.addEventListener('click', function() {
             const selectedIds = getSelectedAlertIds();
             if (selectedIds.length > 0) {
-                marcarAlertasResueltas(selectedIds);
+                marcarAlertasMasivo('resuelta', selectedIds);
             }
         });
     }
@@ -148,54 +148,35 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Funciones AJAX
-    function marcarAlertasLeidas(alertIds) {
-        showLoading('Marcando alertas como leídas...');
+    // Función unificada para marcar alertas masivo
+    function marcarAlertasMasivo(accion, alertaIds) {
+        const mensaje = accion === 'leida' ? 'leídas' : 'resueltas';
         
-        fetch('/aves/alertas/marcar-leidas/', {
+        if (!confirm(`¿Marcar ${alertaIds.length} alertas como ${mensaje}?`)) {
+            return;
+        }
+        
+        showLoading(`Marcando alertas como ${mensaje}...`);
+        
+        fetch('/aves/alertas/marcar-masivo/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': getCsrfToken()
             },
-            body: JSON.stringify({ alert_ids: alertIds })
+            body: JSON.stringify({
+                'accion': accion,
+                'alertas_ids': alertaIds
+            })
         })
         .then(response => response.json())
         .then(data => {
             hideLoading();
             if (data.success) {
-                showNotification('Alertas marcadas como leídas', 'success');
+                showNotification(`${data.count} alertas marcadas como ${mensaje}`, 'success');
                 setTimeout(() => window.location.reload(), 1000);
             } else {
-                showNotification('Error al marcar alertas', 'error');
-            }
-        })
-        .catch(error => {
-            hideLoading();
-            showNotification('Error de conexión', 'error');
-            console.error('Error:', error);
-        });
-    }
-
-    function marcarAlertasResueltas(alertIds) {
-        showLoading('Marcando alertas como resueltas...');
-        
-        fetch('/aves/alertas/marcar-resueltas/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCsrfToken()
-            },
-            body: JSON.stringify({ alert_ids: alertIds })
-        })
-        .then(response => response.json())
-        .then(data => {
-            hideLoading();
-            if (data.success) {
-                showNotification('Alertas marcadas como resueltas', 'success');
-                setTimeout(() => window.location.reload(), 1000);
-            } else {
-                showNotification('Error al marcar alertas', 'error');
+                showNotification('Error al marcar alertas: ' + data.error, 'error');
             }
         })
         .catch(error => {
@@ -206,91 +187,86 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function marcarTodasLeidas() {
-        showLoading('Marcando todas las alertas como leídas...');
-        
-        fetch('/aves/alertas/marcar-todas-leidas/', {
+        fetch('/aves/alertas/marcar-masivo/', {
             method: 'POST',
             headers: {
-                'X-CSRFToken': getCsrfToken()
-            }
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                'accion': 'leida',
+                'alertas': 'todas'
+            })
         })
         .then(response => response.json())
         .then(data => {
-            hideLoading();
             if (data.success) {
                 showNotification('Todas las alertas han sido marcadas como leídas', 'success');
-                setTimeout(() => window.location.reload(), 1000);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
             } else {
-                showNotification('Error al marcar alertas', 'error');
+                showNotification('Error al marcar las alertas: ' + data.error, 'error');
             }
         })
         .catch(error => {
-            hideLoading();
-            showNotification('Error de conexión', 'error');
             console.error('Error:', error);
+            showNotification('Error de conexión', 'error');
         });
     }
 
     // Utilidades
-    function getCsrfToken() {
-        const token = document.querySelector('[name=csrfmiddlewaretoken]');
-        return token ? token.value : '';
-    }
-
-    function showLoading(message = 'Cargando...') {
-        // Crear overlay de loading si no existe
-        let overlay = document.getElementById('loadingOverlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.id = 'loadingOverlay';
-            overlay.innerHTML = `
-                <div class="d-flex justify-content-center align-items-center h-100">
-                    <div class="text-center">
-                        <div class="loading-spinner mb-2"></div>
-                        <div id="loadingMessage">${message}</div>
-                    </div>
-                </div>
-            `;
-            overlay.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.5);
-                z-index: 9999;
-                color: white;
-            `;
-            document.body.appendChild(overlay);
-        } else {
-            document.getElementById('loadingMessage').textContent = message;
-            overlay.style.display = 'block';
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
         }
+    }
+    return cookieValue;
+}
+
+    function showLoading(message) {
+        // Crear o mostrar indicador de carga
+        let loadingDiv = document.getElementById('loadingIndicator');
+        if (!loadingDiv) {
+            loadingDiv = document.createElement('div');
+            loadingDiv.id = 'loadingIndicator';
+            loadingDiv.className = 'alert alert-info position-fixed top-0 start-50 translate-middle-x mt-3';
+            loadingDiv.style.zIndex = '9999';
+            document.body.appendChild(loadingDiv);
+        }
+        loadingDiv.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i>${message}`;
+        loadingDiv.style.display = 'block';
     }
 
     function hideLoading() {
-        const overlay = document.getElementById('loadingOverlay');
-        if (overlay) {
-            overlay.style.display = 'none';
+        const loadingDiv = document.getElementById('loadingIndicator');
+        if (loadingDiv) {
+            loadingDiv.style.display = 'none';
         }
     }
 
-    function showNotification(message, type = 'info') {
+    function showNotification(message, type) {
         // Crear notificación toast
-        const toast = document.createElement('div');
-        toast.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show position-fixed`;
-        toast.style.cssText = 'top: 20px; right: 20px; z-index: 10000; min-width: 300px;';
-        toast.innerHTML = `
+        const toastDiv = document.createElement('div');
+        toastDiv.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'warning'} position-fixed top-0 end-0 mt-3 me-3`;
+        toastDiv.style.zIndex = '9999';
+        toastDiv.innerHTML = `
             ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <button type="button" class="btn-close ms-2" onclick="this.parentElement.remove()"></button>
         `;
+        document.body.appendChild(toastDiv);
         
-        document.body.appendChild(toast);
-        
-        // Auto-remove después de 5 segundos
+        // Auto-remover después de 5 segundos
         setTimeout(() => {
-            if (toast.parentNode) {
-                toast.parentNode.removeChild(toast);
+            if (toastDiv.parentElement) {
+                toastDiv.remove();
             }
         }, 5000);
     }
@@ -316,62 +292,107 @@ function marcarLeida(alertaId) {
     fetch(`/aves/alertas/${alertaId}/marcar-leida/`, {
         method: 'POST',
         headers: {
-            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
             'Content-Type': 'application/json',
-        },
+            'X-CSRFToken': getCookie('csrftoken')
+        }
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            location.reload();
+            showNotification('Alerta marcada como leída', 'success');
+            // Actualizar la fila en la tabla
+            const row = document.querySelector(`tr[data-id="${alertaId}"]`);
+            if (row) {
+                row.classList.remove('table-warning');
+                const estadoCell = row.querySelector('td:nth-child(7)');
+                if (estadoCell) {
+                    estadoCell.innerHTML = '<span class="badge bg-primary">Leída</span>';
+                }
+            }
         } else {
-            alert('Error al marcar la alerta como leída');
+            showNotification('Error al marcar la alerta: ' + data.error, 'error');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error de conexión');
+        showNotification('Error de conexión', 'error');
     });
 }
 
-function eliminarAlerta(alertaId) {
-    if (confirm('¿Está seguro de que desea eliminar esta alerta?')) {
-        fetch(`/aves/alertas/${alertaId}/eliminar/`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('Error al eliminar la alerta');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error de conexión');
-        });
+function marcarResuelta(alertaId) {
+    if (!confirm('¿Está seguro de marcar esta alerta como resuelta?')) {
+        return;
     }
-}
-
-function verDetalleAlerta(alertaId) {
-    // Abrir modal con detalles de la alerta
-    fetch(`/aves/alertas/${alertaId}/detalle/`)
+    
+    fetch(`/aves/alertas/${alertaId}/marcar-resuelta/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Mostrar modal con los detalles
-            const modal = new bootstrap.Modal(document.getElementById('detalleModal'));
-            document.getElementById('detalleModalContent').innerHTML = data.html;
-            modal.show();
+            showNotification('Alerta marcada como resuelta', 'success');
+            // Remover la fila o actualizar su estado
+            const row = document.querySelector(`tr[data-id="${alertaId}"]`);
+            if (row) {
+                row.style.opacity = '0.5';
+                const estadoCell = row.querySelector('td:nth-child(7)');
+                if (estadoCell) {
+                    estadoCell.innerHTML = '<span class="badge bg-success">Resuelta</span>';
+                }
+            }
+        } else {
+            showNotification('Error al resolver la alerta: ' + data.error, 'error');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error al cargar los detalles');
+        showNotification('Error de conexión', 'error');
+    });
+}
+
+// Función para marcar múltiples alertas
+function marcarAlertasMasivo(accion) {
+    const selectedCheckboxes = document.querySelectorAll('.alerta-checkbox:checked');
+    const alertaIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+    
+    if (alertaIds.length === 0) {
+        showNotification('Seleccione al menos una alerta', 'warning');
+        return;
+    }
+    
+    const mensaje = accion === 'leida' ? 'leídas' : 'resueltas';
+    if (!confirm(`¿Marcar ${alertaIds.length} alertas como ${mensaje}?`)) {
+        return;
+    }
+    
+    fetch('/aves/alertas/marcar-masivo/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            'accion': accion,
+            'alertas': alertaIds
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification(`${data.count} alertas marcadas como ${mensaje}`, 'success');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        } else {
+            showNotification('Error al procesar las alertas: ' + data.error, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Error de conexión', 'error');
     });
 }

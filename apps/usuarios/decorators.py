@@ -6,6 +6,7 @@ from functools import wraps
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseForbidden
 
 
 def role_required(allowed_roles):
@@ -16,16 +17,17 @@ def role_required(allowed_roles):
         @wraps(view_func)
         def _wrapped_view(request, *args, **kwargs):
             if not request.user.is_authenticated:
+                messages.error(request, 'Debe iniciar sesión para acceder a esta página.')
                 return redirect('usuarios:login')
             
             try:
                 perfil = request.user.perfilusuario
                 if perfil.rol not in allowed_roles:
-                    messages.error(request, 'No tiene permisos para acceder a esta sección.')
-                    raise PermissionDenied
-            except:
-                messages.error(request, 'Perfil de usuario no configurado.')
-                raise PermissionDenied
+                    messages.error(request, f'No tiene permisos para realizar esta acción. Roles permitidos: {", ".join(allowed_roles)}')
+                    return redirect('aves:lote_list')  # Redirigir a una página específica en lugar de lanzar excepción
+            except Exception as e:
+                messages.error(request, f'Error al verificar permisos: Perfil de usuario no configurado correctamente.')
+                return redirect('aves:lote_list')
             
             return view_func(request, *args, **kwargs)
         return _wrapped_view

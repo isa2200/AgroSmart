@@ -18,8 +18,11 @@ urlpatterns = [
     path('bitacora/<int:pk>/editar/', views.bitacora_edit, name='bitacora_edit'),
     
     # Lotes
+    path('lotes/', views.lote_list, name='lote_list'),
     path('lotes/nuevo/', views.lote_create, name='lote_create'),
     path('lotes/<int:pk>/', views.lote_detail, name='lote_detail'),
+    path('lotes/<int:pk>/editar/', views.lote_edit, name='lote_edit'),
+    path('lotes/<int:pk>/eliminar/', views.lote_delete, name='lote_delete'),
     
     # Inventario de huevos
     path('inventario-huevos/', views.inventario_huevos, name='inventario_huevos'),
@@ -35,6 +38,8 @@ urlpatterns = [
     # Alertas
     path('alertas/', views.alertas_list, name='alertas_list'),
     path('alertas/<int:pk>/marcar-leida/', views.marcar_alerta_leida, name='marcar_alerta_leida'),
+    path('alertas/<int:pk>/marcar-resuelta/', views.marcar_alerta_resuelta, name='marcar_alerta_resuelta'),
+    path('alertas/marcar-masivo/', views.marcar_alertas_masivo, name='marcar_alertas_masivo'),
     
     # Reportes
     path('reportes/', views.reportes, name='reportes'),
