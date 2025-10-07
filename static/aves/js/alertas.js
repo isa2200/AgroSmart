@@ -162,11 +162,11 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': getCsrfToken()
+                'X-CSRFToken': getCookie('csrftoken')
             },
             body: JSON.stringify({
                 'accion': accion,
-                'alertas_ids': alertaIds
+                'alertas': alertaIds
             })
         })
         .then(response => response.json())
@@ -187,6 +187,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function marcarTodasLeidas() {
+        showLoading('Marcando todas las alertas como leídas...');
+        
         fetch('/aves/alertas/marcar-masivo/', {
             method: 'POST',
             headers: {
@@ -200,6 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
+            hideLoading();
             if (data.success) {
                 showNotification('Todas las alertas han sido marcadas como leídas', 'success');
                 setTimeout(() => {
@@ -210,6 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         })
         .catch(error => {
+            hideLoading();
             console.error('Error:', error);
             showNotification('Error de conexión', 'error');
         });
@@ -354,45 +358,62 @@ function marcarResuelta(alertaId) {
     });
 }
 
-// Función para marcar múltiples alertas
-function marcarAlertasMasivo(accion) {
-    const selectedCheckboxes = document.querySelectorAll('.alerta-checkbox:checked');
-    const alertaIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+function verDetalle(alertaId) {
+    // Mostrar modal con detalles de la alerta
+    const modal = document.getElementById('modalDetalleAlerta');
+    const modalContent = document.getElementById('modalDetalleContent');
     
-    if (alertaIds.length === 0) {
-        showNotification('Seleccione al menos una alerta', 'warning');
-        return;
-    }
-    
-    const mensaje = accion === 'leida' ? 'leídas' : 'resueltas';
-    if (!confirm(`¿Marcar ${alertaIds.length} alertas como ${mensaje}?`)) {
-        return;
-    }
-    
-    fetch('/aves/alertas/marcar-masivo/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken')
-        },
-        body: JSON.stringify({
-            'accion': accion,
-            'alertas': alertaIds
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification(`${data.count} alertas marcadas como ${mensaje}`, 'success');
-            setTimeout(() => {
-                window.location.reload();
-            }, 1500);
-        } else {
-            showNotification('Error al procesar las alertas: ' + data.error, 'error');
+    if (modal && modalContent) {
+        // Buscar la fila de la alerta para obtener información
+        const row = document.querySelector(`tr[data-id="${alertaId}"]`);
+        if (row) {
+            const prioridad = row.querySelector('td:nth-child(2)').textContent.trim();
+            const tipo = row.querySelector('td:nth-child(3)').textContent.trim();
+            const mensaje = row.querySelector('td:nth-child(4)').innerHTML;
+            const lote = row.querySelector('td:nth-child(5)').textContent.trim();
+            const fecha = row.querySelector('td:nth-child(6)').textContent.trim();
+            const estado = row.querySelector('td:nth-child(7)').textContent.trim();
+            
+            modalContent.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Prioridad:</h6>
+                        <p>${prioridad}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Tipo:</h6>
+                        <p>${tipo}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Lote/Galpón:</h6>
+                        <p>${lote}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Fecha:</h6>
+                        <p>${fecha}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <h6>Mensaje:</h6>
+                        <div class="alert alert-light">${mensaje}</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <h6>Estado:</h6>
+                        <p>${estado}</p>
+                    </div>
+                </div>
+            `;
+            
+            // Mostrar el modal
+            if (typeof bootstrap !== 'undefined') {
+                const modalInstance = new bootstrap.Modal(modal);
+                modalInstance.show();
+            }
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showNotification('Error de conexión', 'error');
-    });
+    }
 }
