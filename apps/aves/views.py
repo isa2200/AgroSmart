@@ -477,17 +477,8 @@ def lote_edit(request, pk):
 @puede_eliminar_required
 @require_http_methods(["POST"])
 def lote_delete(request, pk):
-    """Eliminar lote (desactivar) con justificación obligatoria."""
+    """Eliminar lote y sus bitácoras asociadas con justificación obligatoria."""
     lote = get_object_or_404(LoteAves, pk=pk)
-    
-    # Verificar si el lote tiene bitácoras asociadas
-    tiene_bitacoras = BitacoraDiaria.objects.filter(lote=lote).exists()
-    
-    if tiene_bitacoras:
-        messages.error(request, 
-            f'No se puede eliminar el lote {lote.codigo} porque tiene registros de bitácora asociados. '
-            'Solo se puede desactivar.')
-        return redirect('aves:lote_list')
     
     justificacion = request.POST.get('justificacion', '').strip()
     
@@ -496,23 +487,35 @@ def lote_delete(request, pk):
         return redirect('aves:lote_list')
     
     try:
-        # Registrar la eliminación antes de desactivar
+        # Contar bitácoras que se eliminarán para informar al usuario
+        bitacoras_count = BitacoraDiaria.objects.filter(lote=lote).count()
+        
+        # Registrar la eliminación antes de eliminar
         RegistroModificacion.objects.create(
             usuario=request.user,
             modelo='LoteAves',
             objeto_id=lote.pk,
             accion='DELETE',
-            campos_modificados=['is_active'],
-            valores_anteriores={'is_active': 'True', 'codigo': lote.codigo},
-            valores_nuevos={'is_active': 'False'},
+            campos_modificados=['eliminado_fisicamente'],
+            valores_anteriores={
+                'is_active': 'True', 
+                'codigo': lote.codigo,
+                'bitacoras_asociadas': bitacoras_count
+            },
+            valores_nuevos={'eliminado_fisicamente': 'True'},
             justificacion=justificacion
         )
         
-        # Desactivar el lote en lugar de eliminarlo físicamente
-        lote.is_active = False
-        lote.save()
+        # Eliminar físicamente el lote (esto eliminará automáticamente las bitácoras por CASCADE)
+        codigo_lote = lote.codigo
+        lote.delete()
         
-        messages.success(request, f'Lote {lote.codigo} eliminado exitosamente.')
+        if bitacoras_count > 0:
+            messages.success(request, 
+                f'Lote {codigo_lote} eliminado exitosamente junto con {bitacoras_count} bitácora(s) asociada(s).')
+        else:
+            messages.success(request, f'Lote {codigo_lote} eliminado exitosamente.')
+            
     except Exception as e:
         messages.error(request, f'Error al eliminar el lote: {str(e)}')
     
