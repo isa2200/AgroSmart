@@ -25,8 +25,8 @@ urlpatterns = [
     path('usuarios/', include('apps.usuarios.urls')),
     path('aves/', include('apps.aves.urls')),
     path('reportes/', include('apps.reportes.urls')),
+    path('punto-blanco/', include('apps.punto_blanco.urls')),
 ]
-
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -31,7 +31,7 @@ class LoginView(CreateView):
             try:
                 perfil = request.user.perfilusuario
                 if perfil.rol == 'punto_blanco':
-                    return redirect('usuarios:punto_blanco_dashboard')
+                    return redirect('punto_blanco:dashboard')
                 elif perfil.rol in ['superusuario', 'admin_aves', 'solo_vista']:
                     return redirect('dashboard:principal')
                 elif perfil.rol == 'veterinario':
@@ -65,7 +65,7 @@ class LoginView(CreateView):
                 try:
                     perfil = user.perfilusuario
                     if perfil.rol == 'punto_blanco':
-                        return redirect('usuarios:punto_blanco_dashboard')
+                        return redirect('punto_blanco:dashboard')
                     elif perfil.rol in ['superusuario', 'admin_aves', 'solo_vista']:
                         return redirect('dashboard:principal')
                     elif perfil.rol == 'veterinario':
@@ -304,7 +304,7 @@ class PuntoBlancoDashboardView(LoginRequiredMixin, TemplateView):
     """
     Dashboard específico para usuarios de Punto Blanco.
     """
-    template_name = 'usuarios/punto_blanco_dashboard.html'
+    template_name = 'punto_blanco_dashboard.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

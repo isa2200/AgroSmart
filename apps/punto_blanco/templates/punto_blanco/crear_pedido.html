@@ -1,0 +1,492 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Crear Pedido - Punto Blanco{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+    .page-header {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+    .form-card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .section-header {
+        background: #f8f9fa;
+        padding: 15px 20px;
+        border-radius: 10px 10px 0 0;
+        border-bottom: 2px solid #dee2e6;
+        margin-bottom: 20px;
+    }
+    .formset-row {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 15px;
+        border: 1px solid #dee2e6;
+    }
+    .btn-add-item {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        border: none;
+        border-radius: 25px;
+        padding: 10px 25px;
+        color: white;
+        transition: all 0.3s ease;
+    }
+    .btn-add-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        color: white;
+    }
+    .btn-remove {
+        background: #dc3545;
+        border: none;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .inventory-info {
+        background: #e3f2fd;
+        border-radius: 8px;
+        padding: 10px;
+        margin-top: 10px;
+        font-size: 0.9em;
+    }
+    .total-section {
+        background: linear-gradient(135deg, #ffc107 0%, #ff8f00 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="page-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="display-5 mb-2">
+                    <i class="fas fa-plus-circle me-3"></i>Crear Nuevo Pedido
+                </h1>
+                <p class="lead mb-0">Registra un nuevo pedido de huevos</p>
+            </div>
+            <div class="text-end">
+                <a href="{% url 'punto_blanco:lista_pedidos' %}" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-arrow-left me-2"></i>Volver a Lista
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" id="pedido-form">
+        {% csrf_token %}
+        
+        <div class="row">
+            <!-- Información del Cliente -->
+            <div class="col-lg-6">
+                <div class="card form-card mb-4">
+                    <div class="section-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-user me-2"></i>Información del Cliente
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.cliente_nombre.id_for_label }}" class="form-label">
+                                    <i class="fas fa-user me-1"></i>Nombre del Cliente *
+                                </label>
+                                {{ form.cliente_nombre }}
+                                {% if form.cliente_nombre.errors %}
+                                    <div class="text-danger small">{{ form.cliente_nombre.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.cliente_telefono.id_for_label }}" class="form-label">
+                                    <i class="fas fa-phone me-1"></i>Teléfono *
+                                </label>
+                                {{ form.cliente_telefono }}
+                                {% if form.cliente_telefono.errors %}
+                                    <div class="text-danger small">{{ form.cliente_telefono.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.cliente_email.id_for_label }}" class="form-label">
+                                <i class="fas fa-envelope me-1"></i>Email
+                            </label>
+                            {{ form.cliente_email }}
+                            {% if form.cliente_email.errors %}
+                                <div class="text-danger small">{{ form.cliente_email.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.cliente_direccion.id_for_label }}" class="form-label">
+                                <i class="fas fa-map-marker-alt me-1"></i>Dirección
+                            </label>
+                            {{ form.cliente_direccion }}
+                            {% if form.cliente_direccion.errors %}
+                                <div class="text-danger small">{{ form.cliente_direccion.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información de Entrega -->
+            <div class="col-lg-6">
+                <div class="card form-card mb-4">
+                    <div class="section-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-truck me-2"></i>Información de Entrega
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.tipo_entrega.id_for_label }}" class="form-label">
+                                    <i class="fas fa-shipping-fast me-1"></i>Tipo de Entrega *
+                                </label>
+                                {{ form.tipo_entrega }}
+                                {% if form.tipo_entrega.errors %}
+                                    <div class="text-danger small">{{ form.tipo_entrega.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.fecha_entrega_estimada.id_for_label }}" class="form-label">
+                                    <i class="fas fa-calendar me-1"></i>Fecha de Entrega
+                                </label>
+                                {{ form.fecha_entrega_estimada }}
+                                {% if form.fecha_entrega_estimada.errors %}
+                                    <div class="text-danger small">{{ form.fecha_entrega_estimada.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.observaciones.id_for_label }}" class="form-label">
+                                <i class="fas fa-sticky-note me-1"></i>Observaciones
+                            </label>
+                            {{ form.observaciones }}
+                            {% if form.observaciones.errors %}
+                                <div class="text-danger small">{{ form.observaciones.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalles del Pedido -->
+        <div class="card form-card">
+            <div class="section-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list me-2"></i>Productos del Pedido
+                    </h5>
+                    <button type="button" class="btn btn-add-item" id="add-item">
+                        <i class="fas fa-plus me-2"></i>Agregar Producto
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                {{ formset.management_form }}
+                
+                <div id="formset-container">
+                    {% for form in formset %}
+                        <div class="formset-row" data-form-index="{{ forloop.counter0 }}">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h6 class="text-primary">
+                                    <i class="fas fa-egg me-2"></i>Producto #<span class="item-number">{{ forloop.counter }}</span>
+                                </h6>
+                                {% if not forloop.first %}
+                                    <button type="button" class="btn btn-remove remove-item">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-egg me-1"></i>Categoría de Huevos *
+                                    </label>
+                                    {{ form.inventario_huevos }}
+                                    {% if form.inventario_huevos.errors %}
+                                        <div class="text-danger small">{{ form.inventario_huevos.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-sort-numeric-up me-1"></i>Cantidad *
+                                    </label>
+                                    {{ form.cantidad }}
+                                    {% if form.cantidad.errors %}
+                                        <div class="text-danger small">{{ form.cantidad.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-dollar-sign me-1"></i>Precio Unitario *
+                                    </label>
+                                    {{ form.precio_unitario }}
+                                    {% if form.precio_unitario.errors %}
+                                        <div class="text-danger small">{{ form.precio_unitario.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-calculator me-1"></i>Subtotal
+                                    </label>
+                                    <input type="text" class="form-control subtotal" readonly value="$0.00">
+                                </div>
+                            </div>
+                            
+                            <!-- Información de inventario -->
+                            <div class="inventory-info" style="display: none;">
+                                <small>
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    <span class="stock-info">Selecciona una categoría para ver el stock disponible</span>
+                                </small>
+                            </div>
+                            
+                            {{ form.DELETE }}
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Total del Pedido -->
+                <div class="total-section">
+                    <h4 class="mb-0">
+                        <i class="fas fa-receipt me-2"></i>Total del Pedido: 
+                        <span id="total-pedido">$0.00</span>
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-success btn-lg me-3">
+                    <i class="fas fa-save me-2"></i>Crear Pedido
+                </button>
+                <a href="{% url 'punto_blanco:lista_pedidos' %}" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-times me-2"></i>Cancelar
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Inventario disponible para JavaScript -->
+<script type="application/json" id="inventarios-data">
+    [
+        {% for inventario in inventarios %}
+        {
+            "id": {{ inventario.id }},
+            "categoria": "{{ inventario.categoria }}",
+            "cantidad_actual": {{ inventario.cantidad_actual }},
+            "cantidad_minima": {{ inventario.cantidad_minima }}
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ]
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const inventarios = JSON.parse(document.getElementById('inventarios-data').textContent);
+    let formIndex = {{ formset.total_form_count }};
+    
+    // Función para actualizar información de inventario
+    function updateInventoryInfo(selectElement) {
+        const inventarioId = selectElement.value;
+        const formsetRow = selectElement.closest('.formset-row');
+        const inventoryInfo = formsetRow.querySelector('.inventory-info');
+        const stockInfo = formsetRow.querySelector('.stock-info');
+        
+        if (inventarioId) {
+            const inventario = inventarios.find(inv => inv.id == inventarioId);
+            if (inventario) {
+                stockInfo.innerHTML = `Stock disponible: <strong>${inventario.cantidad_actual}</strong> unidades (Mínimo: ${inventario.cantidad_minima})`;
+                inventoryInfo.style.display = 'block';
+                
+                // Actualizar el máximo de cantidad
+                const cantidadInput = formsetRow.querySelector('input[name$="-cantidad"]');
+                cantidadInput.setAttribute('max', inventario.cantidad_actual);
+            }
+        } else {
+            inventoryInfo.style.display = 'none';
+        }
+    }
+    
+    // Función para calcular subtotal
+    function calculateSubtotal(row) {
+        const cantidad = parseFloat(row.querySelector('input[name$="-cantidad"]').value) || 0;
+        const precio = parseFloat(row.querySelector('input[name$="-precio_unitario"]').value) || 0;
+        const subtotal = cantidad * precio;
+        
+        row.querySelector('.subtotal').value = `$${subtotal.toFixed(2)}`;
+        calculateTotal();
+    }
+    
+    // Función para calcular total
+    function calculateTotal() {
+        let total = 0;
+        document.querySelectorAll('.formset-row:not([style*="display: none"])').forEach(row => {
+            const cantidad = parseFloat(row.querySelector('input[name$="-cantidad"]').value) || 0;
+            const precio = parseFloat(row.querySelector('input[name$="-precio_unitario"]').value) || 0;
+            total += cantidad * precio;
+        });
+        
+        document.getElementById('total-pedido').textContent = `$${total.toFixed(2)}`;
+    }
+    
+    // Event listeners para selects de inventario existentes
+    document.querySelectorAll('select[name$="-inventario_huevos"]').forEach(select => {
+        updateInventoryInfo(select);
+        select.addEventListener('change', function() {
+            updateInventoryInfo(this);
+        });
+    });
+    
+    // Event listeners para cálculos
+    document.querySelectorAll('input[name$="-cantidad"], input[name$="-precio_unitario"]').forEach(input => {
+        input.addEventListener('input', function() {
+            calculateSubtotal(this.closest('.formset-row'));
+        });
+    });
+    
+    // Agregar nuevo item
+    document.getElementById('add-item').addEventListener('click', function() {
+        const container = document.getElementById('formset-container');
+        const totalForms = document.querySelector('input[name$="-TOTAL_FORMS"]');
+        const newFormHtml = `
+            <div class="formset-row" data-form-index="${formIndex}">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h6 class="text-primary">
+                        <i class="fas fa-egg me-2"></i>Producto #<span class="item-number">${formIndex + 1}</span>
+                    </h6>
+                    <button type="button" class="btn btn-remove remove-item">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-egg me-1"></i>Categoría de Huevos *
+                        </label>
+                        <select name="detallepedido_set-${formIndex}-inventario_huevos" class="form-control">
+                            <option value="">---------</option>
+                            ${inventarios.map(inv => `<option value="${inv.id}">Categoría ${inv.categoria}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-sort-numeric-up me-1"></i>Cantidad *
+                        </label>
+                        <input type="number" name="detallepedido_set-${formIndex}-cantidad" class="form-control" min="1">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-dollar-sign me-1"></i>Precio Unitario *
+                        </label>
+                        <input type="number" name="detallepedido_set-${formIndex}-precio_unitario" class="form-control" step="0.01" min="0">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-calculator me-1"></i>Subtotal
+                        </label>
+                        <input type="text" class="form-control subtotal" readonly value="$0.00">
+                    </div>
+                </div>
+                
+                <div class="inventory-info" style="display: none;">
+                    <small>
+                        <i class="fas fa-info-circle me-1"></i>
+                        <span class="stock-info">Selecciona una categoría para ver el stock disponible</span>
+                    </small>
+                </div>
+                
+                <input type="hidden" name="detallepedido_set-${formIndex}-id">
+            </div>
+        `;
+        
+        container.insertAdjacentHTML('beforeend', newFormHtml);
+        
+        // Actualizar contador de formularios
+        totalForms.value = parseInt(totalForms.value) + 1;
+        formIndex++;
+        
+        // Agregar event listeners al nuevo formulario
+        const newRow = container.lastElementChild;
+        const newSelect = newRow.querySelector('select[name$="-inventario_huevos"]');
+        const newInputs = newRow.querySelectorAll('input[name$="-cantidad"], input[name$="-precio_unitario"]');
+        
+        newSelect.addEventListener('change', function() {
+            updateInventoryInfo(this);
+        });
+        
+        newInputs.forEach(input => {
+            input.addEventListener('input', function() {
+                calculateSubtotal(this.closest('.formset-row'));
+            });
+        });
+        
+        updateItemNumbers();
+    });
+    
+    // Remover item
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-item')) {
+            const row = e.target.closest('.formset-row');
+            const deleteInput = row.querySelector('input[name$="-DELETE"]');
+            
+            if (deleteInput) {
+                deleteInput.checked = true;
+                row.style.display = 'none';
+            } else {
+                row.remove();
+                const totalForms = document.querySelector('input[name$="-TOTAL_FORMS"]');
+                totalForms.value = parseInt(totalForms.value) - 1;
+            }
+            
+            updateItemNumbers();
+            calculateTotal();
+        }
+    });
+    
+    // Actualizar numeración de items
+    function updateItemNumbers() {
+        let counter = 1;
+        document.querySelectorAll('.formset-row:not([style*="display: none"])').forEach(row => {
+            const itemNumber = row.querySelector('.item-number');
+            if (itemNumber) {
+                itemNumber.textContent = counter++;
+            }
+        });
+    }
+    
+    // Calcular total inicial
+    calculateTotal();
+});
+</script>
+{% endblock %}

@@ -12902,3 +12902,740 @@ ERROR 2025-10-07 23:11:46,567 basehttp 27708 26192 "GET /usuarios/punto-blanco/ 
 INFO 2025-10-07 23:13:32,554 basehttp 27708 26192 "GET /usuarios/punto-blanco/ HTTP/1.1" 200 31559
 INFO 2025-10-07 23:13:55,765 basehttp 27708 26192 "GET /usuarios/punto-blanco/inventario-huevos/ HTTP/1.1" 200 46884
 INFO 2025-10-07 23:14:08,048 basehttp 27708 26192 "GET /usuarios/punto-blanco/ HTTP/1.1" 200 31559
+INFO 2025-10-07 23:19:08,116 basehttp 27708 7388 "GET /usuarios/punto-blanco/ HTTP/1.1" 200 31559
+INFO 2025-10-07 23:20:29,165 autoreload 27708 13628 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\models.py changed, reloading.
+INFO 2025-10-07 23:20:29,934 autoreload 13592 24632 Watching for file changes with StatReloader
+INFO 2025-10-07 23:23:03,903 autoreload 13592 24632 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\urls.py changed, reloading.
+INFO 2025-10-07 23:23:04,721 autoreload 19116 17972 Watching for file changes with StatReloader
+INFO 2025-10-07 23:23:43,572 autoreload 19116 17972 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\models.py changed, reloading.
+INFO 2025-10-07 23:23:44,737 autoreload 27216 22724 Watching for file changes with StatReloader
+INFO 2025-10-07 23:24:08,429 basehttp 27216 2100 "GET /usuarios/punto-blanco/ HTTP/1.1" 200 31560
+INFO 2025-10-07 23:42:43,020 autoreload 4888 14664 Watching for file changes with StatReloader
+INFO 2025-10-07 23:42:44,837 basehttp 4888 348 "GET / HTTP/1.1" 302 0
+INFO 2025-10-07 23:42:45,129 basehttp 4888 348 "GET /aves/ HTTP/1.1" 200 53490
+INFO 2025-10-07 23:47:44,005 autoreload 4888 14664 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\views.py changed, reloading.
+INFO 2025-10-07 23:47:44,868 autoreload 25588 29180 Watching for file changes with StatReloader
+INFO 2025-10-07 23:47:45,898 basehttp 25588 11888 "GET /aves/ HTTP/1.1" 200 53490
+INFO 2025-10-07 23:47:51,958 basehttp 25588 11888 "GET /aves/ HTTP/1.1" 200 53490
+INFO 2025-10-07 23:47:55,054 basehttp 25588 11888 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-07 23:47:55,080 basehttp 25588 11888 "GET /usuarios/login/ HTTP/1.1" 200 21392
+INFO 2025-10-07 23:47:55,112 basehttp 25588 11888 "GET /static/dashboard/css/login.css HTTP/1.1" 304 0
+INFO 2025-10-07 23:47:55,123 basehttp 25588 11888 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 304 0
+INFO 2025-10-07 23:48:00,220 basehttp 25588 11888 "POST /usuarios/login/ HTTP/1.1" 302 0
+ERROR 2025-10-07 23:48:00,304 log 25588 11888 Internal Server Error: /punto-blanco/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py", line 56, in dashboard_punto_blanco
+    return render(request, 'punto_blanco/dashboard.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: punto_blanco/dashboard.html
+ERROR 2025-10-07 23:48:00,352 basehttp 25588 11888 "GET /punto-blanco/ HTTP/1.1" 500 114208
+INFO 2025-10-07 23:49:07,805 autoreload 25588 29180 C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py changed, reloading.
+INFO 2025-10-07 23:49:08,622 autoreload 27300 4664 Watching for file changes with StatReloader
+INFO 2025-10-07 23:49:43,107 basehttp 27300 4640 "GET /punto-blanco/ HTTP/1.1" 200 21954
+INFO 2025-10-07 23:54:43,179 basehttp 27300 25480 "GET /punto-blanco/ HTTP/1.1" 200 21664
+INFO 2025-10-07 23:59:43,245 basehttp 27300 9672 "GET /punto-blanco/ HTTP/1.1" 200 21664
+INFO 2025-10-08 00:04:43,310 basehttp 27300 3916 "GET /punto-blanco/ HTTP/1.1" 200 21664
+INFO 2025-10-08 00:09:43,382 basehttp 27300 7752 "GET /punto-blanco/ HTTP/1.1" 200 21664
+INFO 2025-10-08 00:10:33,484 autoreload 27300 4664 C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py changed, reloading.
+INFO 2025-10-08 00:10:34,323 autoreload 27808 5132 Watching for file changes with StatReloader
+INFO 2025-10-08 00:11:32,369 autoreload 27808 5132 C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py changed, reloading.
+INFO 2025-10-08 00:11:33,208 autoreload 29196 24200 Watching for file changes with StatReloader
+INFO 2025-10-08 00:12:52,212 autoreload 29196 24200 C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py changed, reloading.
+INFO 2025-10-08 00:12:53,099 autoreload 26956 7416 Watching for file changes with StatReloader
+ERROR 2025-10-08 00:13:04,153 log 26956 28484 Internal Server Error: /punto-blanco/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py", line 78, in dashboard_punto_blanco
+    return render(request, 'punto_blanco_dashboard.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+           ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+                    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1064, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 742, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaultfilters.py", line 785, in date
+    return formats.date_format(value, arg)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\formats.py", line 158, in date_format
+    return dateformat.format(
+           ~~~~~~~~~~~~~~~~~^
+        value, get_format(format or "DATE_FORMAT", use_l10n=use_l10n)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\dateformat.py", line 324, in format
+    return df.format(format_string)
+           ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\dateformat.py", line 44, in format
+    raise TypeError(
+    ...<2 lines>...
+    )
+TypeError: The format for date objects may not contain time-related format specifiers (found 'H').
+ERROR 2025-10-08 00:13:04,239 basehttp 26956 28484 "GET /punto-blanco/ HTTP/1.1" 500 218408
+INFO 2025-10-08 00:13:33,899 autoreload 26956 7416 C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py changed, reloading.
+INFO 2025-10-08 00:13:34,757 autoreload 29644 20248 Watching for file changes with StatReloader
+ERROR 2025-10-08 00:16:05,138 log 29644 25520 Internal Server Error: /punto-blanco/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 1026, in find_library
+    return parser.libraries[name]
+           ~~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'punto_blanco_extras'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py", line 72, in dashboard_punto_blanco
+    return render(request, 'punto_blanco_dashboard.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 1088, in load
+    lib = find_library(parser, name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 1028, in find_library
+    raise TemplateSyntaxError(
+    ...<5 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: 'punto_blanco_extras' is not a registered tag library. Must be one of:
+admin_list
+admin_modify
+admin_urls
+cache
+crispy_forms_field
+crispy_forms_filters
+crispy_forms_tags
+crispy_forms_utils
+debugger_tags
+highlighting
+i18n
+indent_text
+l10n
+log
+math_filters
+static
+syntax_color
+tz
+widget_tweaks
+widont
+ERROR 2025-10-08 00:16:05,226 basehttp 29644 25520 "GET /punto-blanco/ HTTP/1.1" 500 258305
+ERROR 2025-10-08 00:16:14,996 log 29644 25520 Internal Server Error: /punto-blanco/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py", line 72, in dashboard_punto_blanco
+    return render(request, 'punto_blanco_dashboard.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 953, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 853, in do_for
+    nodelist_loop = parser.parse(
+        (
+    ...<2 lines>...
+        )
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 1482, in do_with
+    extra_context = token_kwargs(remaining_bits, parser, support_legacy=True)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1116, in token_kwargs
+    kwargs[key] = parser.compile_filter(value)
+                  ~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 600, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 698, in __init__
+    filter_func = parser.find_filter(filter_name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 606, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'mul'
+ERROR 2025-10-08 00:16:15,097 basehttp 29644 25520 "GET /punto-blanco/ HTTP/1.1" 500 341606
+ERROR 2025-10-08 00:17:39,629 log 29644 25520 Internal Server Error: /punto-blanco/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 1026, in find_library
+    return parser.libraries[name]
+           ~~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'punto_blanco_extras'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py", line 72, in dashboard_punto_blanco
+    return render(request, 'punto_blanco_dashboard.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 1088, in load
+    lib = find_library(parser, name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 1028, in find_library
+    raise TemplateSyntaxError(
+    ...<5 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: 'punto_blanco_extras' is not a registered tag library. Must be one of:
+admin_list
+admin_modify
+admin_urls
+cache
+crispy_forms_field
+crispy_forms_filters
+crispy_forms_tags
+crispy_forms_utils
+debugger_tags
+highlighting
+i18n
+indent_text
+l10n
+log
+math_filters
+static
+syntax_color
+tz
+widget_tweaks
+widont
+ERROR 2025-10-08 00:17:39,704 basehttp 29644 25520 "GET /punto-blanco/ HTTP/1.1" 500 258304
+INFO 2025-10-08 00:20:49,753 autoreload 24148 21920 Watching for file changes with StatReloader
+INFO 2025-10-08 00:20:51,571 basehttp 24148 28788 "GET / HTTP/1.1" 302 0
+INFO 2025-10-08 00:20:51,826 basehttp 24148 28788 "GET /aves/ HTTP/1.1" 200 53490
+INFO 2025-10-08 00:21:04,730 basehttp 24148 28788 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 00:21:04,751 basehttp 24148 28788 "GET /usuarios/login/ HTTP/1.1" 200 21392
+INFO 2025-10-08 00:21:04,778 basehttp 24148 28788 "GET /static/dashboard/css/login.css HTTP/1.1" 304 0
+INFO 2025-10-08 00:21:04,791 basehttp 24148 28788 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 304 0
+INFO 2025-10-08 00:21:08,266 basehttp 24148 28788 "POST /usuarios/login/ HTTP/1.1" 302 0
+ERROR 2025-10-08 00:21:08,415 log 24148 28788 Internal Server Error: /punto-blanco/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py", line 72, in dashboard_punto_blanco
+    return render(request, 'punto_blanco_dashboard.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 194, in render
+    len_values = len(values)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 380, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1881, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 1549, in execute_sql
+    sql, params = self.as_sql()
+                  ~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 736, in as_sql
+    extra_select, order_by, group_by = self.pre_sql_setup(
+                                       ~~~~~~~~~~~~~~~~~~^
+        with_col_aliases=with_col_aliases or bool(combinator),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 84, in pre_sql_setup
+    self.setup_query(with_col_aliases=with_col_aliases)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 73, in setup_query
+    self.select, self.klass_info, self.annotation_col_map = self.get_select(
+                                                            ~~~~~~~~~~~~~~~^
+        with_col_aliases=with_col_aliases,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 279, in get_select
+    related_klass_infos = self.get_related_selections(select, select_mask)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 1367, in get_related_selections
+    raise FieldError(
+    ...<6 lines>...
+    )
+django.core.exceptions.FieldError: Invalid field name(s) given in select_related: 'cliente'. Choices are: usuario_punto_blanco
+ERROR 2025-10-08 00:21:08,504 basehttp 24148 28788 "GET /punto-blanco/ HTTP/1.1" 500 220356
+INFO 2025-10-08 00:23:43,867 autoreload 24148 21920 C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py changed, reloading.
+INFO 2025-10-08 00:23:44,668 autoreload 26568 16116 Watching for file changes with StatReloader
+INFO 2025-10-08 00:24:12,251 autoreload 26568 16116 C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py changed, reloading.
+INFO 2025-10-08 00:24:13,038 autoreload 20360 27192 Watching for file changes with StatReloader
+INFO 2025-10-08 00:24:53,301 autoreload 20360 27192 C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py changed, reloading.
+INFO 2025-10-08 00:24:54,072 autoreload 27708 2584 Watching for file changes with StatReloader
+INFO 2025-10-08 00:25:16,772 basehttp 27708 20580 "GET /punto-blanco/ HTTP/1.1" 200 32929
+ERROR 2025-10-08 00:25:41,720 log 27708 20580 Internal Server Error: /punto-blanco/inventario/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py", line 224, in inventario_punto_blanco
+    return render(request, 'punto_blanco/inventario.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: punto_blanco/inventario.html
+ERROR 2025-10-08 00:25:41,769 basehttp 27708 20580 "GET /punto-blanco/inventario/ HTTP/1.1" 500 113128
+INFO 2025-10-08 00:28:19,535 autoreload 27708 2584 C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py changed, reloading.
+INFO 2025-10-08 00:28:20,378 autoreload 12368 26616 Watching for file changes with StatReloader
+ERROR 2025-10-08 00:29:03,961 log 12368 26808 Internal Server Error: /punto-blanco/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py", line 79, in dashboard_punto_blanco
+    return render(request, 'punto_blanco_dashboard.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+                    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1064, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 742, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaultfilters.py", line 785, in date
+    return formats.date_format(value, arg)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\formats.py", line 158, in date_format
+    return dateformat.format(
+           ~~~~~~~~~~~~~~~~~^
+        value, get_format(format or "DATE_FORMAT", use_l10n=use_l10n)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\dateformat.py", line 324, in format
+    return df.format(format_string)
+           ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\dateformat.py", line 44, in format
+    raise TypeError(
+    ...<2 lines>...
+    )
+TypeError: The format for date objects may not contain time-related format specifiers (found 'H').
+ERROR 2025-10-08 00:29:04,035 basehttp 12368 26808 "GET /punto-blanco/ HTTP/1.1" 500 226895
+INFO 2025-10-08 00:29:04,057 basehttp 12368 26204 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-08 00:29:04,057 basehttp 12368 26808 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-08 00:29:04,114 basehttp 12368 26204 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-08 00:29:04,139 basehttp 12368 26204 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-08 00:29:04,187 log 12368 26204 Not Found: /favicon.ico
+WARNING 2025-10-08 00:29:04,187 basehttp 12368 26204 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-08 00:30:24,339 autoreload 12368 26616 C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py changed, reloading.
+INFO 2025-10-08 00:30:25,432 autoreload 17580 29104 Watching for file changes with StatReloader
+INFO 2025-10-08 00:30:57,575 basehttp 17580 9556 "GET /punto-blanco/ HTTP/1.1" 200 35894
+ERROR 2025-10-08 00:31:12,915 log 17580 9556 Internal Server Error: /punto-blanco/inventario/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py", line 232, in inventario_punto_blanco
+    return render(request, 'punto_blanco/inventario.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: punto_blanco/inventario.html
+ERROR 2025-10-08 00:31:12,963 basehttp 17580 9556 "GET /punto-blanco/inventario/ HTTP/1.1" 500 113128
+INFO 2025-10-08 00:33:00,971 autoreload 17580 29104 C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py changed, reloading.
+INFO 2025-10-08 00:33:01,852 autoreload 28368 27832 Watching for file changes with StatReloader
+INFO 2025-10-08 00:33:04,674 basehttp 28368 16148 "GET /punto-blanco/inventario/ HTTP/1.1" 200 46843
+INFO 2025-10-08 00:35:03,191 autoreload 28368 27832 C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py changed, reloading.
+INFO 2025-10-08 00:35:03,975 autoreload 21176 22624 Watching for file changes with StatReloader
+INFO 2025-10-08 00:35:04,958 basehttp 21176 9964 "GET /punto-blanco/inventario/ HTTP/1.1" 200 46853
+INFO 2025-10-08 00:35:12,229 basehttp 21176 9964 "GET /punto-blanco/inventario/ HTTP/1.1" 200 46851
+INFO 2025-10-08 00:35:13,968 basehttp 21176 9964 "GET /punto-blanco/inventario/ HTTP/1.1" 200 46851
+INFO 2025-10-08 00:35:16,816 basehttp 21176 9964 "GET /punto-blanco/inventario/ HTTP/1.1" 200 46851
+INFO 2025-10-08 00:35:16,835 basehttp 21176 22440 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-08 00:35:16,835 basehttp 21176 9964 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-08 00:35:17,340 basehttp 21176 9964 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-08 00:35:17,341 basehttp 21176 22440 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-08 00:35:18,073 basehttp 21176 9964 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+ERROR 2025-10-08 00:36:06,132 log 21176 9964 Internal Server Error: /usuarios/punto-blanco/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: usuarios/punto_blanco_dashboard.html
+ERROR 2025-10-08 00:36:06,170 basehttp 21176 9964 "GET /usuarios/punto-blanco/ HTTP/1.1" 500 101659
+WARNING 2025-10-08 00:36:06,296 log 21176 9964 Not Found: /favicon.ico
+WARNING 2025-10-08 00:36:06,297 basehttp 21176 9964 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-08 00:37:56,359 autoreload 21176 22624 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\views.py changed, reloading.
+INFO 2025-10-08 00:37:57,114 autoreload 24388 28908 Watching for file changes with StatReloader
+INFO 2025-10-08 00:38:12,677 basehttp 24388 22780 "GET /usuarios/punto-blanco/ HTTP/1.1" 200 32877
+INFO 2025-10-08 00:38:21,986 basehttp 24388 22780 "GET /usuarios/punto-blanco/ HTTP/1.1" 200 32876
+INFO 2025-10-08 00:38:23,876 basehttp 24388 22780 "GET /punto-blanco/inventario/ HTTP/1.1" 200 46851
+INFO 2025-10-08 00:38:25,692 basehttp 24388 22780 "GET /usuarios/punto-blanco/ HTTP/1.1" 200 32876
+INFO 2025-10-08 00:38:27,774 basehttp 24388 22780 "GET /punto-blanco/pedidos/ HTTP/1.1" 200 18110
+ERROR 2025-10-08 00:38:30,118 log 24388 22780 Internal Server Error: /punto-blanco/pedidos/crear/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\punto_blanco\views.py", line 172, in crear_pedido
+    return render(request, 'punto_blanco/crear_pedido.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: punto_blanco/crear_pedido.html
+ERROR 2025-10-08 00:38:30,155 basehttp 24388 22780 "GET /punto-blanco/pedidos/crear/ HTTP/1.1" 500 114537
+INFO 2025-10-08 00:40:54,911 basehttp 24388 22780 "GET /punto-blanco/pedidos/crear/ HTTP/1.1" 200 39227
+INFO 2025-10-08 00:42:30,980 basehttp 24388 22780 "GET /punto-blanco/pedidos/ HTTP/1.1" 200 18110
+INFO 2025-10-08 00:42:32,927 basehttp 24388 22780 "GET /punto-blanco/ HTTP/1.1" 200 35893
+INFO 2025-10-08 00:42:37,970 basehttp 24388 22780 "GET /punto-blanco/pedidos/crear/ HTTP/1.1" 200 39227
+INFO 2025-10-08 00:42:39,518 basehttp 24388 22780 "GET /punto-blanco/pedidos/ HTTP/1.1" 200 18110
+INFO 2025-10-08 00:42:47,632 basehttp 24388 22780 "GET /punto-blanco/ HTTP/1.1" 200 35893
+INFO 2025-10-08 00:46:43,364 basehttp 24388 22780 "GET /punto-blanco/ HTTP/1.1" 200 38684
+INFO 2025-10-08 00:46:43,385 basehttp 24388 21736 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-08 00:46:43,385 basehttp 24388 22780 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-08 00:46:43,654 basehttp 24388 21736 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-08 00:46:43,661 basehttp 24388 21736 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-08 00:46:44,158 basehttp 24388 21736 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-08 00:46:47,041 basehttp 24388 21736 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 00:46:47,070 basehttp 24388 21736 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-08 00:46:47,103 basehttp 24388 21736 "GET /static/dashboard/css/login.css HTTP/1.1" 304 0
+INFO 2025-10-08 00:46:47,134 basehttp 24388 21736 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 304 0
+INFO 2025-10-08 00:46:50,501 basehttp 24388 21736 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 00:46:50,585 basehttp 24388 21736 "GET /punto-blanco/ HTTP/1.1" 200 38974
+INFO 2025-10-08 00:46:55,799 basehttp 24388 21736 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 00:46:55,819 basehttp 24388 21736 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-08 00:47:01,496 basehttp 24388 21736 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 00:47:01,556 basehttp 24388 21736 "GET / HTTP/1.1" 200 35971
+INFO 2025-10-08 00:47:07,386 basehttp 24388 21736 "GET /aves/ HTTP/1.1" 200 53480
+INFO 2025-10-08 00:47:09,614 basehttp 24388 21736 "GET /aves/alertas/ HTTP/1.1" 200 40282
+INFO 2025-10-08 00:47:09,638 basehttp 24388 22780 "GET /static/aves/js/alertas.js HTTP/1.1" 304 0
+INFO 2025-10-08 00:47:09,639 basehttp 24388 21736 "GET /static/aves/css/alertas.css HTTP/1.1" 304 0
+INFO 2025-10-08 00:47:15,025 basehttp 24388 21736 "GET /aves/ HTTP/1.1" 200 53480
+INFO 2025-10-08 00:47:19,544 basehttp 24388 21736 "GET /aves/bitacora/ HTTP/1.1" 200 31060
+INFO 2025-10-08 00:47:21,865 basehttp 24388 21736 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29205
+INFO 2025-10-08 00:47:23,318 basehttp 24388 21736 "GET /aves/inventario-huevos/ HTTP/1.1" 200 42621
+INFO 2025-10-08 00:47:24,227 basehttp 24388 21736 "GET /aves/bitacora/ HTTP/1.1" 200 31060
+INFO 2025-10-08 00:47:25,276 basehttp 24388 21736 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 24104
+INFO 2025-10-08 00:47:28,122 basehttp 24388 21736 "GET /aves/bitacora/ HTTP/1.1" 200 31060
