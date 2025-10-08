@@ -357,6 +357,10 @@ class InventarioHuevos(BaseModel):
     categoria = models.CharField('Categoría', max_length=3, choices=MovimientoHuevos.CATEGORIAS_HUEVO, unique=True)
     cantidad_actual = models.PositiveIntegerField('Cantidad actual', default=0)
     cantidad_minima = models.PositiveIntegerField('Cantidad mínima', default=100)
+    # Nuevos campos para stock automático
+    stock_automatico = models.BooleanField('Stock automático', default=True, help_text='Si está activado, el stock mínimo se calcula automáticamente basado en la cantidad de gallinas')
+    factor_calculo = models.DecimalField('Factor de cálculo', max_digits=5, decimal_places=2, default=0.75, help_text='Factor multiplicador para calcular stock mínimo (ej: 0.75 = 75% de producción esperada)')
+    dias_stock = models.PositiveIntegerField('Días de stock', default=3, help_text='Número de días de stock mínimo a mantener')
     fecha_ultima_actualizacion = models.DateTimeField('Última actualización', auto_now=True)
     
     class Meta:
@@ -369,7 +373,62 @@ class InventarioHuevos(BaseModel):
     @property
     def necesita_reposicion(self):
         """Indica si el inventario está por debajo del mínimo."""
-        return self.cantidad_actual <= self.cantidad_minima
+        return self.cantidad_actual <= self.cantidad_minima_calculada
+    
+    @property
+    def cantidad_minima_calculada(self):
+        """Calcula la cantidad mínima basada en la configuración."""
+        if self.stock_automatico:
+            return self.calcular_stock_minimo_automatico()
+        return self.cantidad_minima
+    
+    def calcular_stock_minimo_automatico(self):
+        """Calcula el stock mínimo automáticamente basado en la cantidad de gallinas."""
+        from django.db.models import Sum
+        
+        # Obtener total de gallinas en postura (activas)
+        total_gallinas = LoteAves.objects.filter(
+            is_active=True,
+            estado='postura'
+        ).aggregate(total=Sum('numero_aves_actual'))['total'] or 0
+        
+        if total_gallinas == 0:
+            return self.cantidad_minima  # Fallback al valor manual
+        
+        # Calcular producción esperada por día para esta categoría
+        # Factores de distribución por categoría (basado en estándares avícolas)
+        factores_categoria = {
+            'AAA': 0.40,  # 40% de la producción
+            'AA': 0.35,   # 35% de la producción
+            'A': 0.15,    # 15% de la producción
+            'B': 0.08,    # 8% de la producción
+            'C': 0.02,    # 2% de la producción
+        }
+        
+        factor_categoria = factores_categoria.get(self.categoria, 0.20)
+        
+        # Cálculo: Total gallinas × Factor de producción × Factor de categoría × Días de stock
+        produccion_esperada_dia = total_gallinas * float(self.factor_calculo) * factor_categoria
+        stock_minimo = int(produccion_esperada_dia * self.dias_stock)
+        
+        # Asegurar un mínimo absoluto
+        return max(stock_minimo, 50)
+    
+    def actualizar_stock_minimo(self):
+        """Actualiza el stock mínimo si está en modo automático."""
+        if self.stock_automatico:
+            nuevo_minimo = self.calcular_stock_minimo_automatico()
+            if nuevo_minimo != self.cantidad_minima:
+                self.cantidad_minima = nuevo_minimo
+                self.save(update_fields=['cantidad_minima', 'fecha_ultima_actualizacion'])
+                return True
+        return False
+    
+    def save(self, *args, **kwargs):
+        """Override save para actualizar stock automático."""
+        if self.stock_automatico:
+            self.cantidad_minima = self.calcular_stock_minimo_automatico()
+        super().save(*args, **kwargs)
 
 
 class AlertaSistema(BaseModel):

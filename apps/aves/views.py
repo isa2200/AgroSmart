@@ -587,16 +587,31 @@ def lote_detail(request, pk):
 @role_required(['superusuario', 'punto_blanco', 'solo_vista'])
 def inventario_huevos(request):
     """Vista de inventario de huevos."""
+    from django.db.models import Sum
+    
     inventarios = InventarioHuevos.objects.all()
+    
+    # Calcular total de gallinas para mostrar en el contexto
+    total_gallinas = LoteAves.objects.filter(
+        is_active=True,
+        estado='postura'
+    ).aggregate(total=Sum('numero_aves_actual'))['total'] or 0
     
     # Movimientos recientes - obtener detalles en lugar de movimientos principales
     movimientos_recientes = DetalleMovimientoHuevos.objects.select_related(
         'movimiento__usuario_registro', 'movimiento'
     ).order_by('-movimiento__fecha')[:20]
     
+    # Estadísticas de stock automático
+    inventarios_automaticos = inventarios.filter(stock_automatico=True).count()
+    inventarios_manuales = inventarios.filter(stock_automatico=False).count()
+    
     context = {
         'inventarios': inventarios,
         'movimientos_recientes': movimientos_recientes,
+        'total_gallinas': total_gallinas,
+        'inventarios_automaticos': inventarios_automaticos,
+        'inventarios_manuales': inventarios_manuales,
     }
     
     return render(request, 'aves/inventario_huevos.html', context)
@@ -1110,6 +1125,69 @@ def bitacora_edit(request, pk):
         'is_edit': True,
     }
     return render(request, 'aves/bitacora_form.html', context)
+
+
+@login_required
+@role_required(['superusuario', 'punto_blanco'])
+def actualizar_stock_automatico(request):
+    """Vista AJAX para actualizar stocks mínimos automáticamente."""
+    if request.method == 'POST':
+        try:
+            inventarios_actualizados = 0
+            
+            for inventario in InventarioHuevos.objects.filter(stock_automatico=True):
+                if inventario.actualizar_stock_minimo():
+                    inventarios_actualizados += 1
+            
+            return JsonResponse({
+                'success': True,
+                'message': f'Se actualizaron {inventarios_actualizados} inventarios automáticamente.',
+                'inventarios_actualizados': inventarios_actualizados
+            })
+            
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': f'Error al actualizar stocks: {str(e)}'
+            })
+    
+    return JsonResponse({'success': False, 'message': 'Método no permitido'})
+
+
+@login_required
+@role_required(['superusuario', 'punto_blanco'])
+def configurar_stock_automatico(request, inventario_id):
+    """Vista para configurar el stock automático de un inventario específico."""
+    inventario = get_object_or_404(InventarioHuevos, id=inventario_id)
+    
+    if request.method == 'POST':
+        try:
+            stock_automatico = request.POST.get('stock_automatico') == 'true'
+            factor_calculo = float(request.POST.get('factor_calculo', 0.75))
+            dias_stock = int(request.POST.get('dias_stock', 3))
+            
+            inventario.stock_automatico = stock_automatico
+            inventario.factor_calculo = factor_calculo
+            inventario.dias_stock = dias_stock
+            
+            if stock_automatico:
+                inventario.cantidad_minima = inventario.calcular_stock_minimo_automatico()
+            
+            inventario.save()
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Configuración actualizada correctamente.',
+                'nuevo_stock_minimo': inventario.cantidad_minima_calculada
+            })
+            
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': f'Error al actualizar configuración: {str(e)}'
+            })
+    
+    return JsonResponse({'success': False, 'message': 'Método no permitido'})
 
 
 @login_required
