@@ -13639,3 +13639,489 @@ INFO 2025-10-08 00:47:23,318 basehttp 24388 21736 "GET /aves/inventario-huevos/ 
 INFO 2025-10-08 00:47:24,227 basehttp 24388 21736 "GET /aves/bitacora/ HTTP/1.1" 200 31060
 INFO 2025-10-08 00:47:25,276 basehttp 24388 21736 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 24104
 INFO 2025-10-08 00:47:28,122 basehttp 24388 21736 "GET /aves/bitacora/ HTTP/1.1" 200 31060
+INFO 2025-10-08 00:51:20,582 basehttp 24388 21736 "GET /aves/bitacora/ HTTP/1.1" 200 31060
+INFO 2025-10-08 00:51:20,604 basehttp 24388 22780 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-08 00:51:20,605 basehttp 24388 21736 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-08 00:51:21,194 basehttp 24388 22780 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-08 00:51:21,202 basehttp 24388 22780 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-08 00:51:22,216 basehttp 24388 22780 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-08 00:51:22,484 basehttp 24388 22780 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 34877
+INFO 2025-10-08 00:52:10,159 basehttp 24388 22780 "POST /aves/bitacora/nueva/ HTTP/1.1" 302 0
+INFO 2025-10-08 00:52:10,224 basehttp 24388 22780 "GET /aves/bitacora/ HTTP/1.1" 200 32657
+INFO 2025-10-08 00:52:19,234 basehttp 24388 22780 "GET /aves/ HTTP/1.1" 200 53503
+INFO 2025-10-08 00:52:34,160 basehttp 24388 22780 "GET /aves/reportes/ HTTP/1.1" 200 24251
+INFO 2025-10-08 00:59:04,617 basehttp 24388 24796 "GET /aves/reportes/ HTTP/1.1" 200 24251
+INFO 2025-10-08 00:59:04,640 basehttp 24388 18892 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-08 00:59:04,640 basehttp 24388 24796 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-08 00:59:05,561 basehttp 24388 18892 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-08 00:59:05,577 basehttp 24388 18892 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-08 00:59:05,944 basehttp 24388 18892 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-08 00:59:08,306 basehttp 24388 18892 "GET /aves/reportes/produccion/ HTTP/1.1" 200 22865
+INFO 2025-10-08 00:59:10,184 basehttp 24388 18892 "GET /aves/reportes/produccion/?lote=&fecha_desde=&fecha_hasta= HTTP/1.1" 200 22905
+INFO 2025-10-08 00:59:28,385 autoreload 11908 29112 Watching for file changes with StatReloader
+INFO 2025-10-08 00:59:47,532 basehttp 11908 26592 "GET / HTTP/1.1" 200 35990
+INFO 2025-10-08 00:59:53,906 basehttp 11908 26592 "GET /aves/ HTTP/1.1" 200 53503
+INFO 2025-10-08 01:00:03,706 basehttp 11908 26592 "GET /aves/reportes/ HTTP/1.1" 200 24251
+INFO 2025-10-08 01:00:04,822 basehttp 11908 26592 "GET /aves/reportes/produccion/ HTTP/1.1" 200 22865
+INFO 2025-10-08 01:03:34,142 autoreload 11908 29112 C:\Users\bp877\TRAE\AgroSmart\apps\aves\urls.py changed, reloading.
+INFO 2025-10-08 01:03:35,073 autoreload 21056 11888 Watching for file changes with StatReloader
+INFO 2025-10-08 01:05:07,401 autoreload 21056 11888 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-08 01:05:08,295 autoreload 1604 26064 Watching for file changes with StatReloader
+INFO 2025-10-08 01:07:21,762 autoreload 1604 26064 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-08 01:07:22,622 autoreload 18048 4368 Watching for file changes with StatReloader
+INFO 2025-10-08 01:07:43,674 autoreload 18048 4368 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-08 01:07:44,466 autoreload 6496 3216 Watching for file changes with StatReloader
+INFO 2025-10-08 01:08:08,706 autoreload 6496 3216 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-08 01:08:09,597 autoreload 25824 14760 Watching for file changes with StatReloader
+INFO 2025-10-08 01:08:11,062 autoreload 25824 14760 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-08 01:08:11,866 autoreload 17928 20640 Watching for file changes with StatReloader
+INFO 2025-10-08 01:08:15,250 autoreload 17928 20640 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-08 01:08:16,132 autoreload 4480 27028 Watching for file changes with StatReloader
+INFO 2025-10-08 01:10:00,251 autoreload 4480 27028 C:\Users\bp877\TRAE\AgroSmart\apps\aves\reports.py changed, reloading.
+INFO 2025-10-08 01:10:01,085 autoreload 18184 11224 Watching for file changes with StatReloader
+INFO 2025-10-08 01:10:28,003 autoreload 18184 11224 C:\Users\bp877\TRAE\AgroSmart\apps\aves\reports.py changed, reloading.
+INFO 2025-10-08 01:10:28,953 autoreload 4012 8340 Watching for file changes with StatReloader
+INFO 2025-10-08 01:11:08,281 autoreload 4012 8340 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-08 01:11:09,494 autoreload 4792 24380 Watching for file changes with StatReloader
+INFO 2025-10-08 07:13:41,291 autoreload 4320 4688 Watching for file changes with StatReloader
+INFO 2025-10-08 07:13:57,138 basehttp 4320 19876 "GET / HTTP/1.1" 200 35687
+INFO 2025-10-08 07:13:59,644 basehttp 4320 19876 "GET /usuarios/lista/ HTTP/1.1" 200 25244
+INFO 2025-10-08 07:14:02,336 basehttp 4320 19876 "GET /usuarios/editar/3/ HTTP/1.1" 200 24807
+INFO 2025-10-08 07:14:07,705 basehttp 4320 19876 "POST /usuarios/editar/3/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:14:07,745 basehttp 4320 19876 "GET /usuarios/lista/ HTTP/1.1" 200 25549
+INFO 2025-10-08 07:14:11,714 basehttp 4320 19876 "GET /usuarios/lista/?search= HTTP/1.1" 200 25251
+INFO 2025-10-08 07:14:14,106 basehttp 4320 19876 "GET / HTTP/1.1" 200 35684
+INFO 2025-10-08 07:14:17,492 basehttp 4320 19876 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:14:17,506 basehttp 4320 19876 "GET /usuarios/login/ HTTP/1.1" 200 20513
+INFO 2025-10-08 07:14:17,532 basehttp 4320 19876 "GET /static/dashboard/css/login.css HTTP/1.1" 304 0
+INFO 2025-10-08 07:14:17,534 basehttp 4320 1788 "GET /static/img/logo-ico.ico HTTP/1.1" 304 0
+INFO 2025-10-08 07:14:17,553 basehttp 4320 1788 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 304 0
+INFO 2025-10-08 07:14:21,622 basehttp 4320 1788 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:14:21,675 basehttp 4320 1788 "GET / HTTP/1.1" 200 35984
+INFO 2025-10-08 07:14:54,614 basehttp 4320 1788 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:14:55,759 basehttp 4320 1788 "GET /aves/bitacora/ HTTP/1.1" 200 32668
+INFO 2025-10-08 07:14:56,916 basehttp 4320 1788 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 34877
+INFO 2025-10-08 07:25:04,481 basehttp 4320 15216 "GET /aves/bitacora/ HTTP/1.1" 200 32668
+INFO 2025-10-08 07:25:06,830 basehttp 4320 15216 "GET /aves/bitacora/ HTTP/1.1" 200 32668
+INFO 2025-10-08 07:25:06,884 basehttp 4320 15216 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-08 07:25:06,901 basehttp 4320 17348 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-08 07:25:07,098 basehttp 4320 17348 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-08 07:25:07,137 basehttp 4320 17348 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-08 07:25:07,397 basehttp 4320 17348 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-08 07:25:13,292 basehttp 4320 17348 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:25:13,378 basehttp 4320 17348 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-08 07:25:15,435 basehttp 4320 17348 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:25:15,531 basehttp 4320 17348 "GET / HTTP/1.1" 200 35539
+ERROR 2025-10-08 07:25:36,829 log 4320 17348 Internal Server Error: /reportes/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\reportes\views.py", line 29, in lista_reportes
+    return render(request, 'reportes/lista_reportes.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: reportes/lista_reportes.html
+ERROR 2025-10-08 07:25:36,906 basehttp 4320 17348 "GET /reportes/ HTTP/1.1" 500 109282
+WARNING 2025-10-08 07:25:37,110 log 4320 17348 Not Found: /favicon.ico
+WARNING 2025-10-08 07:25:37,110 basehttp 4320 17348 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-08 07:25:43,968 basehttp 4320 17348 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:26:01,860 basehttp 4320 17348 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29216
+INFO 2025-10-08 07:27:00,836 basehttp 4320 17348 "POST /aves/lotes/nuevo/ HTTP/1.1" 200 29321
+INFO 2025-10-08 07:27:26,679 basehttp 4320 17348 "POST /aves/lotes/nuevo/ HTTP/1.1" 200 29321
+INFO 2025-10-08 07:27:32,087 basehttp 4320 17348 "GET /aves/lotes/ HTTP/1.1" 200 35867
+INFO 2025-10-08 07:27:34,987 basehttp 4320 17348 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29216
+INFO 2025-10-08 07:27:57,677 basehttp 4320 17348 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:27:57,697 basehttp 4320 17348 "GET /usuarios/login/ HTTP/1.1" 200 22166
+INFO 2025-10-08 07:29:16,321 basehttp 4320 17348 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:29:16,384 basehttp 4320 17348 "GET / HTTP/1.1" 200 35540
+INFO 2025-10-08 07:29:17,971 basehttp 4320 17348 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:29:19,419 basehttp 4320 17348 "GET /aves/bitacora/ HTTP/1.1" 200 32668
+INFO 2025-10-08 07:29:19,976 basehttp 4320 17348 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29216
+INFO 2025-10-08 07:30:17,849 autoreload 4320 4688 C:\Users\bp877\TRAE\AgroSmart\apps\dashboard\models.py changed, reloading.
+INFO 2025-10-08 07:30:19,566 autoreload 20036 1896 Watching for file changes with StatReloader
+INFO 2025-10-08 07:31:57,347 autoreload 3960 18932 Watching for file changes with StatReloader
+INFO 2025-10-08 07:32:02,247 basehttp 3960 19900 "GET / HTTP/1.1" 200 35251
+INFO 2025-10-08 07:32:04,373 basehttp 3960 19900 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:32:09,644 basehttp 3960 19900 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29216
+INFO 2025-10-08 07:32:54,240 basehttp 3960 19900 "POST /aves/lotes/nuevo/ HTTP/1.1" 200 29462
+INFO 2025-10-08 07:32:57,519 basehttp 3960 19900 "GET /aves/lotes/ HTTP/1.1" 200 35867
+INFO 2025-10-08 07:33:01,635 basehttp 3960 19900 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29216
+INFO 2025-10-08 07:33:24,020 basehttp 3960 19900 "POST /aves/lotes/nuevo/ HTTP/1.1" 200 29321
+INFO 2025-10-08 07:33:29,773 basehttp 3960 19900 "GET /aves/lotes/ HTTP/1.1" 200 35867
+INFO 2025-10-08 07:33:32,624 basehttp 3960 19900 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:33:32,643 basehttp 3960 19900 "GET /usuarios/login/ HTTP/1.1" 200 22730
+INFO 2025-10-08 07:34:15,924 basehttp 3960 19900 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:34:15,986 basehttp 3960 19900 "GET / HTTP/1.1" 200 35539
+INFO 2025-10-08 07:34:20,118 basehttp 3960 19900 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:35:06,829 autoreload 3960 18932 C:\Users\bp877\TRAE\AgroSmart\apps\dashboard\models.py changed, reloading.
+INFO 2025-10-08 07:35:07,709 autoreload 15820 18628 Watching for file changes with StatReloader
+INFO 2025-10-08 07:35:55,504 autoreload 21240 20748 Watching for file changes with StatReloader
+INFO 2025-10-08 07:35:59,476 basehttp 21240 21300 "GET / HTTP/1.1" 200 35251
+INFO 2025-10-08 07:36:01,637 basehttp 21240 21300 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:36:06,453 basehttp 21240 21300 "GET /aves/bitacora/ HTTP/1.1" 200 32668
+INFO 2025-10-08 07:36:07,079 basehttp 21240 21300 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:36:07,707 basehttp 21240 21300 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29216
+INFO 2025-10-08 07:36:10,350 basehttp 21240 21300 "GET /aves/lotes/ HTTP/1.1" 200 35867
+INFO 2025-10-08 07:36:22,887 basehttp 21240 21300 "GET /aves/bitacora/ HTTP/1.1" 200 32668
+INFO 2025-10-08 07:36:35,121 basehttp 21240 21300 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 34877
+INFO 2025-10-08 07:36:39,055 basehttp 21240 21300 "GET /aves/bitacora/ HTTP/1.1" 200 32668
+INFO 2025-10-08 07:36:40,361 basehttp 21240 21300 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29216
+INFO 2025-10-08 07:37:03,553 basehttp 21240 21300 "POST /aves/lotes/nuevo/ HTTP/1.1" 200 29322
+INFO 2025-10-08 07:37:10,136 basehttp 21240 21300 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:37:10,153 basehttp 21240 21300 "GET /usuarios/login/ HTTP/1.1" 200 21370
+INFO 2025-10-08 07:40:50,510 autoreload 21240 20748 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-10-08 07:40:51,314 autoreload 5764 21076 Watching for file changes with StatReloader
+INFO 2025-10-08 07:41:11,256 basehttp 5764 1776 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-08 07:41:11,283 basehttp 5764 1776 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9779
+INFO 2025-10-08 07:41:11,285 basehttp 5764 1296 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-08 07:41:11,286 basehttp 5764 7520 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-08 07:41:11,288 basehttp 5764 11092 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-08 07:41:11,760 basehttp 5764 11092 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-08 07:41:11,765 basehttp 5764 11092 "GET /static/img/logo-background.jpg HTTP/1.1" 200 3142
+INFO 2025-10-08 07:41:11,769 basehttp 5764 7520 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-08 07:41:11,779 basehttp 5764 7520 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-08 07:41:12,065 basehttp 5764 7520 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-08 07:41:13,522 basehttp 5764 7520 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:41:13,598 basehttp 5764 7520 "GET / HTTP/1.1" 200 35539
+INFO 2025-10-08 07:41:15,172 basehttp 5764 7520 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:41:17,416 basehttp 5764 7520 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29216
+INFO 2025-10-08 07:41:44,188 basehttp 5764 7520 "POST /aves/lotes/nuevo/ HTTP/1.1" 200 29322
+INFO 2025-10-08 07:41:48,551 basehttp 5764 7520 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:41:48,570 basehttp 5764 7520 "GET /usuarios/login/ HTTP/1.1" 200 21370
+INFO 2025-10-08 07:43:41,227 autoreload 5764 21076 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-10-08 07:43:42,589 autoreload 12796 13872 Watching for file changes with StatReloader
+INFO 2025-10-08 07:45:39,646 autoreload 12796 13872 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-08 07:45:40,971 autoreload 6856 2796 Watching for file changes with StatReloader
+INFO 2025-10-08 07:45:56,325 basehttp 6856 5108 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-08 07:45:56,357 basehttp 6856 5108 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9779
+INFO 2025-10-08 07:45:56,357 basehttp 6856 4196 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-08 07:45:56,358 basehttp 6856 8136 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-08 07:45:56,358 basehttp 6856 17876 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-08 07:45:56,835 basehttp 6856 17876 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-08 07:45:56,836 basehttp 6856 4196 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-08 07:45:56,838 basehttp 6856 17876 "GET /static/img/logo-background.jpg HTTP/1.1" 200 3142
+INFO 2025-10-08 07:45:56,841 basehttp 6856 8136 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-08 07:45:57,455 basehttp 6856 8136 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-08 07:45:59,161 basehttp 6856 8136 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:45:59,241 basehttp 6856 8136 "GET / HTTP/1.1" 200 35539
+INFO 2025-10-08 07:46:00,443 basehttp 6856 8136 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:46:01,876 basehttp 6856 8136 "GET /aves/bitacora/ HTTP/1.1" 200 32668
+INFO 2025-10-08 07:46:02,962 basehttp 6856 8136 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29216
+INFO 2025-10-08 07:46:18,332 basehttp 6856 8136 "POST /aves/lotes/nuevo/ HTTP/1.1" 200 29322
+INFO 2025-10-08 07:46:22,659 basehttp 6856 8136 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:46:22,678 basehttp 6856 8136 "GET /usuarios/login/ HTTP/1.1" 200 21370
+INFO 2025-10-08 07:46:48,197 autoreload 16844 17392 Watching for file changes with StatReloader
+INFO 2025-10-08 07:46:49,803 basehttp 16844 20800 "GET / HTTP/1.1" 302 0
+INFO 2025-10-08 07:46:49,838 basehttp 16844 20800 "GET /usuarios/login/?next=/ HTTP/1.1" 200 20521
+INFO 2025-10-08 07:46:53,747 basehttp 16844 20800 "POST /usuarios/login/?next=/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:46:53,847 basehttp 16844 20800 "GET / HTTP/1.1" 200 35539
+INFO 2025-10-08 07:47:06,384 basehttp 16844 20800 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:47:11,195 basehttp 16844 20800 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29216
+INFO 2025-10-08 07:47:30,525 basehttp 16844 20800 "POST /aves/lotes/nuevo/ HTTP/1.1" 200 29322
+INFO 2025-10-08 07:47:32,941 basehttp 16844 20800 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:47:32,960 basehttp 16844 20800 "GET /usuarios/login/ HTTP/1.1" 200 21370
+INFO 2025-10-08 07:47:54,185 basehttp 16844 20800 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:47:54,273 basehttp 16844 20800 "GET / HTTP/1.1" 200 35540
+INFO 2025-10-08 07:48:05,970 basehttp 16844 20800 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:48:13,975 basehttp 16844 20800 "GET /aves/bitacora/ HTTP/1.1" 200 32668
+INFO 2025-10-08 07:48:14,884 basehttp 16844 20800 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 34877
+INFO 2025-10-08 07:48:17,944 basehttp 16844 20800 "GET /aves/bitacora/ HTTP/1.1" 200 32668
+INFO 2025-10-08 07:48:19,032 basehttp 16844 20800 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29216
+INFO 2025-10-08 07:48:20,052 basehttp 16844 20800 "GET /aves/lotes/ HTTP/1.1" 200 35867
+INFO 2025-10-08 07:48:21,946 basehttp 16844 20800 "GET /aves/inventario-huevos/ HTTP/1.1" 200 42633
+INFO 2025-10-08 07:48:39,481 basehttp 16844 20800 "POST /aves/actualizar-stock-automatico/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:48:39,657 basehttp 16844 20800 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:48:39,867 basehttp 16844 20800 "GET /__debug__/history_sidebar/?request_id=3bf8649b35c74eaebb542804d52fc611 HTTP/1.1" 200 9525
+INFO 2025-10-08 07:48:54,903 basehttp 16844 20800 "GET /aves/vacunacion/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:48:55,084 basehttp 16844 20800 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:48:58,080 basehttp 16844 20800 "GET /aves/vacunacion/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:48:58,279 basehttp 16844 20800 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:48:58,715 basehttp 16844 20800 "GET /aves/inventario-huevos/ HTTP/1.1" 200 42633
+INFO 2025-10-08 07:48:59,163 basehttp 16844 20800 "GET /aves/vacunacion/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:48:59,347 basehttp 16844 20800 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:49:00,232 basehttp 16844 20800 "GET /aves/alertas/ HTTP/1.1" 200 56289
+INFO 2025-10-08 07:49:00,260 basehttp 16844 20800 "GET /static/aves/css/alertas.css HTTP/1.1" 304 0
+INFO 2025-10-08 07:49:00,260 basehttp 16844 9856 "GET /static/aves/js/alertas.js HTTP/1.1" 304 0
+INFO 2025-10-08 07:49:00,776 basehttp 16844 9856 "GET /aves/reportes/ HTTP/1.1" 200 24262
+INFO 2025-10-08 07:49:01,743 basehttp 16844 9856 "GET /aves/vacunacion/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:49:01,940 basehttp 16844 9856 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:49:02,538 basehttp 16844 9856 "GET /aves/vacunacion/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:49:02,783 basehttp 16844 9856 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:49:03,227 basehttp 16844 9856 "GET /aves/vacunacion/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:49:03,486 basehttp 16844 9856 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:49:03,881 basehttp 16844 9856 "GET /aves/vacunacion/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:49:04,138 basehttp 16844 9856 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:49:04,491 basehttp 16844 9856 "GET /aves/vacunacion/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:49:04,750 basehttp 16844 9856 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:49:05,215 basehttp 16844 9856 "GET /aves/vacunacion/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:49:05,462 basehttp 16844 9856 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:49:05,907 basehttp 16844 9856 "GET /aves/vacunacion/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:49:06,159 basehttp 16844 9856 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:49:06,558 basehttp 16844 9856 "GET /aves/vacunacion/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:49:06,811 basehttp 16844 9856 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:49:07,269 basehttp 16844 9856 "GET /aves/vacunacion/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:49:07,518 basehttp 16844 9856 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:49:10,991 basehttp 16844 9856 "GET /aves/bitacora/ HTTP/1.1" 200 32668
+INFO 2025-10-08 07:49:31,004 basehttp 16844 9856 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 07:49:46,650 basehttp 16844 9856 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:49:46,671 basehttp 16844 9856 "GET /usuarios/login/ HTTP/1.1" 200 30586
+INFO 2025-10-08 07:50:12,794 basehttp 16844 9856 "POST /usuarios/login/ HTTP/1.1" 302 0
+ERROR 2025-10-08 07:50:13,014 log 16844 9856 Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\dashboard\views.py", line 46, in dashboard_principal
+    return render(request, 'dashboard/principal.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+           ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'configuracion' not found. 'configuracion' is not a valid view function or pattern name.
+ERROR 2025-10-08 07:50:13,088 basehttp 16844 9856 "GET / HTTP/1.1" 500 200724
+WARNING 2025-10-08 07:50:13,267 log 16844 9856 Not Found: /favicon.ico
+WARNING 2025-10-08 07:50:13,268 basehttp 16844 9856 "GET /favicon.ico HTTP/1.1" 404 16922
+WARNING 2025-10-08 07:50:19,148 log 16844 9856 Forbidden (CSRF token from POST incorrect.): /usuarios/login/
+WARNING 2025-10-08 07:50:19,169 basehttp 16844 9856 "POST /usuarios/login/ HTTP/1.1" 403 16003
+INFO 2025-10-08 07:50:22,530 basehttp 16844 9856 "GET /usuarios/login/ HTTP/1.1" 302 0
+ERROR 2025-10-08 07:50:22,616 log 16844 9856 Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\dashboard\views.py", line 46, in dashboard_principal
+    return render(request, 'dashboard/principal.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+           ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'configuracion' not found. 'configuracion' is not a valid view function or pattern name.
+ERROR 2025-10-08 07:50:22,671 basehttp 16844 9856 "GET / HTTP/1.1" 500 200195
+INFO 2025-10-08 07:54:32,872 autoreload 16844 17392 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-08 07:54:33,810 autoreload 14448 7952 Watching for file changes with StatReloader
+INFO 2025-10-08 07:54:42,593 autoreload 14448 7952 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-08 07:54:43,525 autoreload 16544 15180 Watching for file changes with StatReloader
+INFO 2025-10-08 07:54:56,483 autoreload 16544 15180 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-08 07:54:57,389 autoreload 13832 12796 Watching for file changes with StatReloader
+INFO 2025-10-08 07:54:58,730 autoreload 13832 12796 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-08 07:54:59,576 autoreload 3200 11644 Watching for file changes with StatReloader
+INFO 2025-10-08 07:56:14,687 autoreload 3200 11644 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-08 07:56:15,391 autoreload 18056 2752 Watching for file changes with StatReloader
+INFO 2025-10-08 07:57:07,846 autoreload 18056 2752 C:\Users\bp877\TRAE\AgroSmart\apps\aves\urls.py changed, reloading.
+INFO 2025-10-08 07:57:08,615 autoreload 20220 14720 Watching for file changes with StatReloader
+INFO 2025-10-08 07:57:30,868 autoreload 20220 14720 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-08 07:57:32,182 autoreload 17396 6616 Watching for file changes with StatReloader
+INFO 2025-10-08 07:59:09,662 basehttp 17396 20840 "GET / HTTP/1.1" 200 35685
+INFO 2025-10-08 07:59:19,181 basehttp 17396 20840 "GET /aves/ HTTP/1.1" 200 53503
+INFO 2025-10-08 07:59:24,433 basehttp 17396 20840 "GET /aves/bitacora/ HTTP/1.1" 200 32657
+INFO 2025-10-08 07:59:24,849 basehttp 17396 20840 "GET /aves/inventario-huevos/ HTTP/1.1" 200 42622
+INFO 2025-10-08 07:59:25,212 basehttp 17396 20840 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29205
+INFO 2025-10-08 07:59:42,591 basehttp 17396 20840 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:59:42,610 basehttp 17396 20840 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-08 07:59:49,314 basehttp 17396 20840 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:59:49,370 basehttp 17396 20840 "GET / HTTP/1.1" 200 35971
+INFO 2025-10-08 07:59:50,895 basehttp 17396 20840 "GET /aves/ HTTP/1.1" 200 53503
+INFO 2025-10-08 07:59:54,110 basehttp 17396 20840 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 07:59:54,130 basehttp 17396 20840 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-08 08:00:32,557 basehttp 17396 20840 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 08:00:32,605 basehttp 17396 20840 "GET / HTTP/1.1" 200 35984
+INFO 2025-10-08 08:00:34,541 basehttp 17396 20840 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 08:00:37,747 basehttp 17396 20840 "GET /aves/bitacora/ HTTP/1.1" 200 32668
+INFO 2025-10-08 08:00:38,220 basehttp 17396 20840 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29216
+INFO 2025-10-08 08:01:22,834 basehttp 17396 20840 "POST /aves/lotes/nuevo/ HTTP/1.1" 200 29321
+INFO 2025-10-08 08:01:29,427 basehttp 17396 20840 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 08:01:29,444 basehttp 17396 20840 "GET /usuarios/login/ HTTP/1.1" 200 21370
+INFO 2025-10-08 08:03:51,139 basehttp 17396 20840 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 08:03:51,203 basehttp 17396 20840 "GET / HTTP/1.1" 200 35984
+INFO 2025-10-08 08:04:48,149 basehttp 17396 20840 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 08:05:46,596 basehttp 17396 20840 "GET /aves/vacunacion/ HTTP/1.1" 302 0
+INFO 2025-10-08 08:05:46,797 basehttp 17396 20840 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 08:05:48,295 basehttp 17396 20840 "GET /aves/vacunacion/ HTTP/1.1" 302 0
+INFO 2025-10-08 08:05:48,477 basehttp 17396 20840 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 08:05:49,175 basehttp 17396 20840 "GET /aves/vacunacion/ HTTP/1.1" 302 0
+INFO 2025-10-08 08:05:49,445 basehttp 17396 20840 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 08:05:49,979 basehttp 17396 20840 "GET /aves/vacunacion/ HTTP/1.1" 302 0
+INFO 2025-10-08 08:05:50,199 basehttp 17396 20840 "GET /aves/ HTTP/1.1" 200 53514
+INFO 2025-10-08 08:06:00,180 basehttp 17396 20840 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 08:06:00,211 basehttp 17396 20840 "GET /usuarios/login/ HTTP/1.1" 200 23654
+INFO 2025-10-08 08:06:28,228 basehttp 17396 20840 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 08:06:28,282 basehttp 17396 20840 "GET / HTTP/1.1" 200 35971
+INFO 2025-10-08 08:06:31,599 basehttp 17396 20840 "GET /aves/ HTTP/1.1" 200 53503
+INFO 2025-10-08 08:06:33,363 basehttp 17396 20840 "GET /aves/vacunacion/ HTTP/1.1" 200 28645
+INFO 2025-10-08 08:06:36,069 basehttp 17396 20840 "GET /aves/alertas/ HTTP/1.1" 200 56278
+INFO 2025-10-08 08:06:36,498 basehttp 17396 20840 "GET /aves/reportes/ HTTP/1.1" 200 24251
+INFO 2025-10-08 08:06:37,431 basehttp 17396 20840 "GET /aves/inventario-huevos/ HTTP/1.1" 200 42622
+INFO 2025-10-08 08:06:37,755 basehttp 17396 20840 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29205
+INFO 2025-10-08 08:06:59,213 basehttp 17396 20840 "POST /aves/lotes/nuevo/ HTTP/1.1" 200 29315
+INFO 2025-10-08 08:07:02,471 basehttp 17396 20840 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 08:07:02,491 basehttp 17396 20840 "GET /usuarios/login/ HTTP/1.1" 200 21370
+INFO 2025-10-08 08:08:42,297 autoreload 17396 6616 C:\Users\bp877\TRAE\AgroSmart\apps\dashboard\models.py changed, reloading.
+INFO 2025-10-08 08:08:44,151 autoreload 6360 8408 Watching for file changes with StatReloader
+INFO 2025-10-08 08:09:24,213 autoreload 6360 8408 C:\Users\bp877\TRAE\AgroSmart\apps\dashboard\models.py changed, reloading.
+INFO 2025-10-08 08:09:26,026 autoreload 16880 21092 Watching for file changes with StatReloader
+INFO 2025-10-08 08:09:36,179 basehttp 16880 1992 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-08 08:09:36,213 basehttp 16880 1992 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9779
+INFO 2025-10-08 08:09:36,222 basehttp 16880 7868 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-08 08:09:36,222 basehttp 16880 11832 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-08 08:09:36,223 basehttp 16880 10132 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-08 08:09:36,376 basehttp 16880 10132 "GET /static/img/logo-background.jpg HTTP/1.1" 200 3142
+INFO 2025-10-08 08:09:36,377 basehttp 16880 11832 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-08 08:09:36,387 basehttp 16880 11832 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-08 08:09:36,390 basehttp 16880 10132 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-08 08:09:36,689 basehttp 16880 10132 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-08 08:10:12,437 autoreload 17412 17308 Watching for file changes with StatReloader
+INFO 2025-10-08 08:10:14,306 basehttp 17412 652 "GET / HTTP/1.1" 302 0
+INFO 2025-10-08 08:10:14,336 basehttp 17412 652 "GET /usuarios/login/?next=/ HTTP/1.1" 200 20521
+INFO 2025-10-08 08:10:16,746 basehttp 17412 652 "POST /usuarios/login/?next=/ HTTP/1.1" 302 0
+INFO 2025-10-08 08:10:16,832 basehttp 17412 652 "GET / HTTP/1.1" 200 35971
+INFO 2025-10-08 08:10:18,130 basehttp 17412 652 "GET /aves/ HTTP/1.1" 200 53503
+INFO 2025-10-08 08:10:19,643 basehttp 17412 652 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29205
+INFO 2025-10-08 08:10:42,509 basehttp 17412 652 "POST /aves/lotes/nuevo/ HTTP/1.1" 200 29315
+INFO 2025-10-08 08:10:45,231 basehttp 17412 652 "POST /aves/lotes/nuevo/ HTTP/1.1" 200 29315
+INFO 2025-10-08 08:10:48,425 basehttp 17412 652 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 08:10:48,443 basehttp 17412 652 "GET /usuarios/login/ HTTP/1.1" 200 22165
+INFO 2025-10-08 08:13:22,574 basehttp 17412 652 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 08:13:22,630 basehttp 17412 652 "GET / HTTP/1.1" 200 35971
+INFO 2025-10-08 08:13:24,691 basehttp 17412 652 "GET /usuarios/lista/ HTTP/1.1" 200 25243
+INFO 2025-10-08 08:13:26,565 basehttp 17412 652 "GET / HTTP/1.1" 200 35684
+INFO 2025-10-08 08:19:42,078 autoreload 17412 17308 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-10-08 08:19:43,006 autoreload 5228 16788 Watching for file changes with StatReloader
+INFO 2025-10-08 08:25:28,659 autoreload 13480 13300 Watching for file changes with StatReloader
+INFO 2025-10-08 08:25:52,024 autoreload 10724 7404 Watching for file changes with StatReloader
+INFO 2025-10-08 08:25:53,720 basehttp 10724 12632 "GET / HTTP/1.1" 200 35685
+INFO 2025-10-08 08:25:55,494 basehttp 10724 12632 "GET /aves/ HTTP/1.1" 200 53503
+INFO 2025-10-08 08:26:04,650 basehttp 10724 12632 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29205
+INFO 2025-10-08 08:26:30,843 basehttp 10724 12632 "POST /aves/lotes/nuevo/ HTTP/1.1" 302 0
+INFO 2025-10-08 08:26:30,877 basehttp 10724 12632 "GET /aves/lotes/3/ HTTP/1.1" 200 27728
+INFO 2025-10-08 08:26:39,901 basehttp 10724 12632 "GET /aves/ HTTP/1.1" 200 55489
+INFO 2025-10-08 08:26:41,519 basehttp 10724 12632 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29205
+INFO 2025-10-08 08:26:42,991 basehttp 10724 12632 "GET /aves/lotes/ HTTP/1.1" 200 38717
+INFO 2025-10-08 08:27:20,757 basehttp 10724 12632 "GET /aves/lotes/3/editar/ HTTP/1.1" 200 32634
+INFO 2025-10-08 08:27:22,482 basehttp 10724 12632 "GET /aves/lotes/3/ HTTP/1.1" 200 27728
+INFO 2025-10-08 08:27:23,818 basehttp 10724 12632 "GET /aves/ HTTP/1.1" 200 55489
+INFO 2025-10-08 08:27:25,398 basehttp 10724 12632 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29205
+INFO 2025-10-08 08:27:26,903 basehttp 10724 12632 "GET /aves/lotes/ HTTP/1.1" 200 38717
+INFO 2025-10-08 08:27:46,615 basehttp 10724 12632 "POST /aves/lotes/3/eliminar/ HTTP/1.1" 302 0
+INFO 2025-10-08 08:27:46,648 basehttp 10724 12632 "GET /aves/lotes/ HTTP/1.1" 200 35856

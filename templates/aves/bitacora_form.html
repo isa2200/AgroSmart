@@ -5,208 +5,528 @@
 
 {% block extra_css %}
 <style>
+    /* Estilos principales del formulario */
+    .bitacora-form-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+    
+    .card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    
     .card-header {
         background: linear-gradient(135deg, #28a745, #20c997);
         color: white;
+        padding: 25px 30px;
+        border: none;
     }
-    .section-header {
-        border-left: 4px solid #28a745;
-        padding-left: 15px;
-        margin-bottom: 20px;
+    
+    .card-header h4 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.5rem;
     }
+    
+    .card-body {
+        padding: 30px;
+        background: white;
+    }
+    
+    /* Secciones del formulario */
     .form-section {
-        background: #f8f9fa;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 25px;
+        border: 1px solid #e9ecef;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .form-section:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .section-header {
+        border-left: 5px solid #28a745;
+        padding-left: 20px;
+        margin-bottom: 25px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        position: relative;
+    }
+    
+    .section-header::before {
+        content: '';
+        position: absolute;
+        left: -5px;
+        top: 0;
+        bottom: 0;
+        width: 5px;
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border-radius: 3px;
+    }
+    
+    /* Colores específicos para cada sección */
+    .section-header.text-primary::before {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+    }
+    
+    .section-header.text-success::before {
+        background: linear-gradient(135deg, #28a745, #20c997);
+    }
+    
+    .section-header.text-danger::before {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+    }
+    
+    .section-header.text-warning::before {
+        background: linear-gradient(135deg, #ffc107, #e0a800);
+    }
+    
+    .section-header.text-info::before {
+        background: linear-gradient(135deg, #17a2b8, #138496);
+    }
+    
+    /* Estilos de campos de formulario */
+    .form-label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+    
+    .form-control, .form-select {
+        border: 2px solid #e9ecef;
         border-radius: 8px;
-        padding: 20px;
+        padding: 12px 15px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background-color: #fff;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.15);
+        background-color: #fff;
+    }
+    
+    .form-control:hover, .form-select:hover {
+        border-color: #20c997;
+    }
+    
+    /* Campo de solo lectura */
+    .form-control[readonly] {
+        background-color: #f8f9fa;
+        border-color: #dee2e6;
+        color: #6c757d;
+        font-weight: 600;
+    }
+    
+    /* Campos de producción */
+    .produccion-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
         margin-bottom: 20px;
     }
     
-    /* Estilos para campos obligatorios */
-    .text-danger {
-        font-weight: bold;
+    .produccion-item {
+        background: #fff;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+        transition: all 0.3s ease;
     }
     
-    /* Estilos para el campo de justificación */
-    #justificacion.is-invalid {
-        border-color: #dc3545;
-        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
-    }
-    
-    #justificacion.is-valid {
+    .produccion-item:hover {
         border-color: #28a745;
-        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.1);
     }
     
-    .alert-justificacion {
-        background-color: #fff3cd;
-        border: 1px solid #ffeaa7;
-        border-radius: 5px;
-        padding: 10px;
-        margin-top: 10px;
+    .produccion-item label {
+        display: block;
+        font-weight: 700;
+        color: #28a745;
+        margin-bottom: 8px;
+        font-size: 1rem;
     }
+    
+    .produccion-item .form-control {
+        text-align: center;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    
+    /* Campo total especial */
+    .total-produccion {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        border: none;
+    }
+    
+    .total-produccion label {
+        color: white !important;
+    }
+    
+    .total-produccion .form-control {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+    
+    /* Estilos para errores */
+    .text-danger {
+        font-weight: 600;
+        font-size: 0.875rem;
+        margin-top: 5px;
+        display: block;
+    }
+    
+    .form-control.is-invalid, .form-select.is-invalid {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15);
+    }
+    
+    .form-control.is-valid, .form-select.is-valid {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.15);
+    }
+    
+    /* Estilos para justificación */
+    .justificacion-section {
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+        border: 2px solid #ffc107;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+    
+    .justificacion-section .form-label {
+        color: #856404;
+        font-weight: 700;
+    }
+    
+    .justificacion-section .form-control {
+        border-color: #ffc107;
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .justificacion-section .form-control:focus {
+        border-color: #e0a800;
+        box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+    }
+    
+    /* Botones */
+    .btn {
+        padding: 12px 25px;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        border: none;
+        font-size: 0.95rem;
+    }
+    
+    .btn-success {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    }
+    
+    .btn-success:hover {
+        background: linear-gradient(135deg, #218838, #1e7e34);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+    }
+    
+    .btn-secondary {
+        background: linear-gradient(135deg, #6c757d, #5a6268);
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+    }
+    
+    .btn-secondary:hover {
+        background: linear-gradient(135deg, #5a6268, #495057);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+    }
+    
+    /* Texto de ayuda */
+    .text-muted {
+        font-size: 0.875rem;
+        color: #6c757d !important;
+        margin-top: 5px;
+    }
+    
+    /* Iconos */
+    .fas {
+        margin-right: 8px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .card-body {
+            padding: 20px;
+        }
+        
+        .form-section {
+            padding: 20px;
+        }
+        
+        .produccion-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .btn {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .produccion-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .card-header {
+            padding: 20px;
+        }
+        
+        .card-header h4 {
+            font-size: 1.3rem;
+        }
+    }
+    
+    /* Animaciones */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .form-section {
+        animation: fadeInUp 0.6s ease-out;
+    }
+    
+    .form-section:nth-child(1) { animation-delay: 0.1s; }
+    .form-section:nth-child(2) { animation-delay: 0.2s; }
+    .form-section:nth-child(3) { animation-delay: 0.3s; }
+    .form-section:nth-child(4) { animation-delay: 0.4s; }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow">
-                <div class="card-header">
-                    <h4 class="mb-0">
-                        <i class="fas fa-clipboard-list me-2"></i>
-                        Nueva Bitácora Diaria
-                    </h4>
-                </div>
-                
-                <div class="card-body">
-                    <form method="post" id="bitacoraForm">
-                        {% csrf_token %}
-                        
-                        <!-- Información General -->
-                        <div class="form-section">
-                            <h6 class="section-header text-primary">Información General</h6>
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <label for="{{ form.lote.id_for_label }}" class="form-label">Lote *</label>
-                                    {{ form.lote|add_class:"form-select" }}
-                                    {% if form.lote.errors %}
-                                        <div class="text-danger small">{{ form.lote.errors.0 }}</div>
-                                    {% endif %}
-                                </div>
-                                
-                                <div class="col-md-4 mb-3">
-                                    <label for="{{ form.fecha.id_for_label }}" class="form-label">Fecha *</label>
-                                    {{ form.fecha|add_class:"form-control" }}
-                                    {% if form.fecha.errors %}
-                                        <div class="text-danger small">{{ form.fecha.errors.0 }}</div>
-                                    {% endif %}
-                                </div>
-                                
-                                <div class="col-md-4 mb-3">
-                                    <label for="{{ form.semana_vida.id_for_label }}" class="form-label">Semana de Vida</label>
-                                    {{ form.semana_vida|add_class:"form-control" }}
-                                    <small class="text-muted">Se calcula automáticamente si se deja vacío</small>
-                                    {% if form.semana_vida.errors %}
-                                        <div class="text-danger small">{{ form.semana_vida.errors.0 }}</div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Producción de Huevos -->
-                        <div class="form-section">
-                            <h6 class="section-header text-success">Producción de Huevos</h6>
-                            <div class="row">
-                                <div class="col-md-2 mb-3">
-                                    <label for="{{ form.produccion_aaa.id_for_label }}" class="form-label">AAA</label>
-                                    {{ form.produccion_aaa|add_class:"form-control" }}
-                                </div>
-                                <div class="col-md-2 mb-3">
-                                    <label for="{{ form.produccion_aa.id_for_label }}" class="form-label">AA</label>
-                                    {{ form.produccion_aa|add_class:"form-control" }}
-                                </div>
-                                <div class="col-md-2 mb-3">
-                                    <label for="{{ form.produccion_a.id_for_label }}" class="form-label">A</label>
-                                    {{ form.produccion_a|add_class:"form-control" }}
-                                </div>
-                                <div class="col-md-2 mb-3">
-                                    <label for="{{ form.produccion_b.id_for_label }}" class="form-label">B</label>
-                                    {{ form.produccion_b|add_class:"form-control" }}
-                                </div>
-                                <div class="col-md-2 mb-3">
-                                    <label for="{{ form.produccion_c.id_for_label }}" class="form-label">C</label>
-                                    {{ form.produccion_c|add_class:"form-control" }}
-                                </div>
-                                <div class="col-md-2 mb-3">
-                                    <label class="form-label">Total</label>
-                                    <input type="text" class="form-control" id="totalProduccion" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <!-- Mortalidad -->
-                            <div class="col-md-6">
-                                <div class="form-section">
-                                    <h6 class="section-header text-danger">Mortalidad</h6>
-                                    
-                                    <div class="mb-3">
-                                        <label for="{{ form.mortalidad.id_for_label }}" class="form-label">Cantidad</label>
-                                        {{ form.mortalidad|add_class:"form-control" }}
-                                        {% if form.mortalidad.errors %}
-                                            <div class="text-danger small">{{ form.mortalidad.errors.0 }}</div>
+<div class="bitacora-form-container">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12 col-xl-10">
+                <div class="card shadow">
+                    <div class="card-header">
+                        <h4 class="mb-0">
+                            <i class="fas fa-clipboard-list"></i>
+                            {% if is_edit %}Editar Bitácora Diaria{% else %}Nueva Bitácora Diaria{% endif %}
+                        </h4>
+                    </div>
+                    
+                    <div class="card-body">
+                        <form method="post" id="bitacoraForm">
+                            {% csrf_token %}
+                            
+                            <!-- Información General -->
+                            <div class="form-section">
+                                <h6 class="section-header text-primary">
+                                    <i class="fas fa-info-circle"></i>
+                                    Información General
+                                </h6>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="{{ form.lote.id_for_label }}" class="form-label">
+                                            <i class="fas fa-layer-group"></i>
+                                            Lote *
+                                        </label>
+                                        {{ form.lote|add_class:"form-select" }}
+                                        {% if form.lote.errors %}
+                                            <div class="text-danger">{{ form.lote.errors.0 }}</div>
                                         {% endif %}
                                     </div>
                                     
-                                    <div class="mb-3">
-                                        <label for="{{ form.causa_mortalidad.id_for_label }}" class="form-label">Causa</label>
-                                        {{ form.causa_mortalidad|add_class:"form-control" }}
-                                        {% if form.causa_mortalidad.errors %}
-                                            <div class="text-danger small">{{ form.causa_mortalidad.errors.0 }}</div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="{{ form.fecha.id_for_label }}" class="form-label">
+                                            <i class="fas fa-calendar-alt"></i>
+                                            Fecha *
+                                        </label>
+                                        {{ form.fecha|add_class:"form-control" }}
+                                        {% if form.fecha.errors %}
+                                            <div class="text-danger">{{ form.fecha.errors.0 }}</div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="col-md-4 mb-3">
+                                        <label for="{{ form.semana_vida.id_for_label }}" class="form-label">
+                                            <i class="fas fa-clock"></i>
+                                            Semana de Vida
+                                        </label>
+                                        {{ form.semana_vida|add_class:"form-control" }}
+                                        <small class="text-muted">Se calcula automáticamente si se deja vacío</small>
+                                        {% if form.semana_vida.errors %}
+                                            <div class="text-danger">{{ form.semana_vida.errors.0 }}</div>
                                         {% endif %}
                                     </div>
                                 </div>
                             </div>
                             
-                            <!-- Consumo -->
-                            <div class="col-md-6">
-                                <div class="form-section">
-                                    <h6 class="section-header text-warning">Consumo</h6>
-                                    
-                                    <div class="mb-3">
-                                        <label for="{{ form.consumo_concentrado.id_for_label }}" class="form-label">Concentrado (kg)</label>
-                                        {{ form.consumo_concentrado|add_class:"form-control" }}
-                                        {% if form.consumo_concentrado.errors %}
-                                            <div class="text-danger small">{{ form.consumo_concentrado.errors.0 }}</div>
-                                        {% endif %}
+                            <!-- Producción de Huevos -->
+                            <div class="form-section">
+                                <h6 class="section-header text-success">
+                                    <i class="fas fa-egg"></i>
+                                    Producción de Huevos
+                                </h6>
+                                <div class="produccion-grid">
+                                    <div class="produccion-item">
+                                        <label for="{{ form.produccion_aaa.id_for_label }}">AAA</label>
+                                        {{ form.produccion_aaa|add_class:"form-control" }}
+                                    </div>
+                                    <div class="produccion-item">
+                                        <label for="{{ form.produccion_aa.id_for_label }}">AA</label>
+                                        {{ form.produccion_aa|add_class:"form-control" }}
+                                    </div>
+                                    <div class="produccion-item">
+                                        <label for="{{ form.produccion_a.id_for_label }}">A</label>
+                                        {{ form.produccion_a|add_class:"form-control" }}
+                                    </div>
+                                    <div class="produccion-item">
+                                        <label for="{{ form.produccion_b.id_for_label }}">B</label>
+                                        {{ form.produccion_b|add_class:"form-control" }}
+                                    </div>
+                                    <div class="produccion-item">
+                                        <label for="{{ form.produccion_c.id_for_label }}">C</label>
+                                        {{ form.produccion_c|add_class:"form-control" }}
+                                    </div>
+                                    <div class="produccion-item total-produccion">
+                                        <label>Total</label>
+                                        <input type="text" class="form-control" id="totalProduccion" readonly>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <!-- Observaciones -->
-                        <div class="form-section">
-                            <h6 class="section-header text-info">Observaciones</h6>
-                            <div class="mb-3">
-                                <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
-                                {{ form.observaciones|add_class:"form-control" }}
-                                {% if form.observaciones.errors %}
-                                    <div class="text-danger small">{{ form.observaciones.errors.0 }}</div>
+                            
+                            <div class="row">
+                                <!-- Mortalidad -->
+                                <div class="col-md-6">
+                                    <div class="form-section">
+                                        <h6 class="section-header text-danger">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            Mortalidad
+                                        </h6>
+                                        
+                                        <div class="mb-3">
+                                            <label for="{{ form.mortalidad.id_for_label }}" class="form-label">
+                                                <i class="fas fa-hashtag"></i>
+                                                Cantidad
+                                            </label>
+                                            {{ form.mortalidad|add_class:"form-control" }}
+                                            {% if form.mortalidad.errors %}
+                                                <div class="text-danger">{{ form.mortalidad.errors.0 }}</div>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="{{ form.causa_mortalidad.id_for_label }}" class="form-label">
+                                                <i class="fas fa-notes-medical"></i>
+                                                Causa
+                                            </label>
+                                            {{ form.causa_mortalidad|add_class:"form-control" }}
+                                            {% if form.causa_mortalidad.errors %}
+                                                <div class="text-danger">{{ form.causa_mortalidad.errors.0 }}</div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Consumo -->
+                                <div class="col-md-6">
+                                    <div class="form-section">
+                                        <h6 class="section-header text-warning">
+                                            <i class="fas fa-weight-hanging"></i>
+                                            Consumo
+                                        </h6>
+                                        
+                                        <div class="mb-3">
+                                            <label for="{{ form.consumo_concentrado.id_for_label }}" class="form-label">
+                                                <i class="fas fa-balance-scale"></i>
+                                                Concentrado (kg)
+                                            </label>
+                                            {{ form.consumo_concentrado|add_class:"form-control" }}
+                                            {% if form.consumo_concentrado.errors %}
+                                                <div class="text-danger">{{ form.consumo_concentrado.errors.0 }}</div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Observaciones -->
+                            <div class="form-section">
+                                <h6 class="section-header text-info">
+                                    <i class="fas fa-sticky-note"></i>
+                                    Observaciones
+                                </h6>
+                                <div class="mb-3">
+                                    <label for="{{ form.observaciones.id_for_label }}" class="form-label">
+                                        <i class="fas fa-comment-alt"></i>
+                                        Observaciones
+                                    </label>
+                                    {{ form.observaciones|add_class:"form-control" }}
+                                    {% if form.observaciones.errors %}
+                                        <div class="text-danger">{{ form.observaciones.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                {% if is_edit %}
+                                <div class="justificacion-section">
+                                    <label for="justificacion" class="form-label">
+                                        <i class="fas fa-edit"></i>
+                                        Justificación de la modificación <span class="text-danger">*</span>
+                                    </label>
+                                    <textarea 
+                                        name="justificacion" 
+                                        id="justificacion"
+                                        class="form-control" 
+                                        rows="3" 
+                                        placeholder="Explique detalladamente el motivo de la modificación..."
+                                        required
+                                    >{{ request.POST.justificacion|default:"" }}</textarea>
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle"></i>
+                                        Este campo es obligatorio para registrar cualquier modificación.
+                                    </small>
+                                </div>
                                 {% endif %}
                             </div>
                             
-                            {% if is_edit %}
-                            <div class="mb-3">
-                                <label for="justificacion" class="form-label">
-                                    Justificación de la modificación <span class="text-danger">*</span>
-                                </label>
-                                <textarea 
-                                    name="justificacion" 
-                                    id="justificacion"
-                                    class="form-control" 
-                                    rows="3" 
-                                    placeholder="Explique detalladamente el motivo de la modificación..."
-                                    required
-                                >{{ request.POST.justificacion|default:"" }}</textarea>
-                                <small class="text-muted">
-                                    <i class="fas fa-info-circle me-1"></i>
-                                    Este campo es obligatorio para registrar cualquier modificación.
-                                </small>
+                            <!-- Botones -->
+                            <div class="d-flex justify-content-between flex-wrap">
+                                <a href="{% url 'aves:bitacora_list' %}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i>Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save"></i>{% if is_edit %}Actualizar{% else %}Guardar{% endif %} Bitácora
+                                </button>
                             </div>
-                            {% endif %}
-                        </div>
-                        
-                        <!-- Botones -->
-                        <div class="d-flex justify-content-between">
-                            <a href="{% url 'aves:bitacora_list' %}" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left me-2"></i>Cancelar
-                            </a>
-                            <button type="submit" class="btn btn-success">
-                                <i class="fas fa-save me-2"></i>{% if is_edit %}Actualizar{% else %}Guardar{% endif %} Bitácora
-                            </button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -217,17 +537,38 @@
 {% block extra_js %}
 <script>
 $(document).ready(function() {
+    // Calcular total de producción automáticamente
+    function calcularTotal() {
+        const aaa = parseInt($('#id_produccion_aaa').val()) || 0;
+        const aa = parseInt($('#id_produccion_aa').val()) || 0;
+        const a = parseInt($('#id_produccion_a').val()) || 0;
+        const b = parseInt($('#id_produccion_b').val()) || 0;
+        const c = parseInt($('#id_produccion_c').val()) || 0;
+        
+        const total = aaa + aa + a + b + c;
+        $('#totalProduccion').val(total);
+    }
+    
+    // Eventos para calcular total
+    $('#id_produccion_aaa, #id_produccion_aa, #id_produccion_a, #id_produccion_b, #id_produccion_c').on('input', calcularTotal);
+    
+    // Calcular total inicial
+    calcularTotal();
+    
     // Validación de mortalidad
     $('#id_mortalidad').on('input', function() {
         const mortalidad = parseInt($(this).val()) || 0;
         const causaInput = $('#id_causa_mortalidad')[0];
+        const causaLabel = causaInput.parentElement.querySelector('label');
         
         if (mortalidad > 0) {
             causaInput.required = true;
-            causaInput.parentElement.querySelector('label').innerHTML = 'Causa *';
+            causaLabel.innerHTML = '<i class="fas fa-notes-medical"></i> Causa *';
+            $(causaInput).addClass('border-danger');
         } else {
             causaInput.required = false;
-            causaInput.parentElement.querySelector('label').innerHTML = 'Causa';
+            causaLabel.innerHTML = '<i class="fas fa-notes-medical"></i> Causa';
+            $(causaInput).removeClass('border-danger');
         }
     });
     
@@ -238,6 +579,7 @@ $(document).ready(function() {
         
         if (!justificacion) {
             e.preventDefault();
+            $('#justificacion').addClass('is-invalid');
             alert('La justificación de la modificación es obligatoria.');
             $('#justificacion').focus();
             return false;
@@ -245,24 +587,38 @@ $(document).ready(function() {
         
         if (justificacion.length < 10) {
             e.preventDefault();
+            $('#justificacion').addClass('is-invalid');
             alert('La justificación debe tener al menos 10 caracteres.');
             $('#justificacion').focus();
             return false;
         }
     });
     
-    // Resaltar el campo de justificación si está vacío
-    $('#justificacion').on('blur', function() {
+    // Validación en tiempo real para justificación
+    $('#justificacion').on('input blur', function() {
         const valor = $(this).val().trim();
         if (!valor) {
-            $(this).addClass('is-invalid');
+            $(this).addClass('is-invalid').removeClass('is-valid');
         } else if (valor.length < 10) {
-            $(this).addClass('is-invalid');
+            $(this).addClass('is-invalid').removeClass('is-valid');
         } else {
             $(this).removeClass('is-invalid').addClass('is-valid');
         }
     });
     {% endif %}
+    
+    // Establecer fecha actual por defecto
+    if (!$('#id_fecha').val()) {
+        const hoy = new Date().toISOString().split('T')[0];
+        $('#id_fecha').val(hoy);
+    }
+    
+    // Animación suave para los campos de producción
+    $('.produccion-item input').on('focus', function() {
+        $(this).closest('.produccion-item').addClass('shadow-lg');
+    }).on('blur', function() {
+        $(this).closest('.produccion-item').removeClass('shadow-lg');
+    });
 });
 </script>
 {% endblock %}

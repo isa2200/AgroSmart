@@ -33,7 +33,7 @@ class AlertaSistema(BaseModel):
         ('warning', 'Advertencia'),
         ('error', 'Error'),
         ('success', 'Éxito')
-    ])
+    ], default='info')
     usuario = models.ForeignKey(
         User, 
         on_delete=models.CASCADE,

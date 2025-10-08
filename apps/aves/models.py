@@ -46,6 +46,12 @@ class LoteAves(BaseModel):
     estado = models.CharField('Estado', max_length=20, choices=ESTADOS, default='levante')
     observaciones = models.TextField('Observaciones', blank=True)
     
+    # Agregar el campo tipo que parece estar siendo referenciado en algún lugar
+    tipo = models.CharField('Tipo de lote', max_length=20, choices=[
+        ('ponedoras', 'Ponedoras'),
+        ('engorde', 'Engorde'),
+    ], default='ponedoras')
+    
     class Meta:
         verbose_name = 'Lote de Aves'
         verbose_name_plural = 'Lotes de Aves'
