@@ -9,65 +9,423 @@
     <li class="breadcrumb-item active">{{ title }}</li>
 {% endblock %}
 
+{% block extra_css %}
+<style>
+/* Estilos mejorados para el formulario de movimientos */
+.form-wizard {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.form-wizard h2 {
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+}
+
+.form-wizard p {
+    opacity: 0.9;
+    margin-bottom: 0;
+}
+
+.enhanced-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.enhanced-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.enhanced-card-header {
+    background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+    border-bottom: 2px solid #dee2e6;
+    padding: 1.5rem;
+    border-radius: 15px 15px 0 0 !important;
+}
+
+.enhanced-card-header h5 {
+    color: #495057;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.enhanced-card-header i {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 8px;
+    margin-right: 0.75rem;
+    font-size: 1rem;
+}
+
+.form-group-enhanced {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.form-group-enhanced label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    display: block;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-control-enhanced {
+    border: 2px solid #e9ecef !important;
+    border-radius: 10px !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 1rem !important;
+    transition: all 0.3s ease !important;
+    background: #f8f9fa !important;
+}
+
+.form-control-enhanced:focus {
+    border-color: #007bff !important;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25) !important;
+    background: white !important;
+    transform: translateY(-1px);
+}
+
+.detalle-item {
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border: 2px solid #e9ecef;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.detalle-item:hover {
+    border-color: #007bff;
+    box-shadow: 0 5px 15px rgba(0,123,255,0.1);
+}
+
+.detalle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.detalle-numero {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #007bff;
+    display: flex;
+    align-items: center;
+}
+
+.detalle-numero::before {
+    content: "🥚";
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.btn-eliminar-detalle {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.btn-eliminar-detalle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(220,53,69,0.3);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.stock-info {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: linear-gradient(45deg, #d1ecf1, #bee5eb);
+    border-radius: 8px;
+    border-left: 4px solid #17a2b8;
+}
+
+.stock-info small {
+    font-weight: 600;
+    color: #0c5460;
+}
+
+.subtotal-detalle {
+    background: linear-gradient(45deg, #d4edda, #c3e6cb);
+    border: 2px solid #28a745;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #155724;
+    margin-top: 1rem;
+}
+
+.totales-card {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+}
+
+.total-item {
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 0.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.total-item h4 {
+    margin: 0;
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+.total-item .total-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+
+.btn-agregar-detalle {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    border: none;
+    border-radius: 25px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(40,167,69,0.3);
+}
+
+.btn-agregar-detalle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40,167,69,0.4);
+}
+
+.observaciones-card {
+    background: linear-gradient(145deg, #fff3cd, #ffeaa7);
+    border: 2px solid #ffc107;
+    border-radius: 15px;
+}
+
+.observaciones-card .card-header {
+    background: linear-gradient(45deg, #ffc107, #ffb300);
+    color: #212529;
+    border-radius: 13px 13px 0 0 !important;
+}
+
+.btn-action-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.btn-primary-enhanced {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    border: none;
+    border-radius: 25px;
+    padding: 1rem 2rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+}
+
+.btn-primary-enhanced:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+}
+
+.btn-secondary-enhanced {
+    background: linear-gradient(45deg, #6c757d, #495057);
+    border: none;
+    border-radius: 25px;
+    padding: 1rem 2rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(108,117,125,0.3);
+}
+
+.btn-secondary-enhanced:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(108,117,125,0.4);
+}
+
+.info-transporte {
+    background: linear-gradient(145deg, #e3f2fd, #bbdefb);
+    border: 2px solid #2196f3;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.invalid-feedback {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    color: #721c24;
+    font-weight: 600;
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.detalle-item {
+    animation: fadeInUp 0.5s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .btn-action-group {
+        flex-direction: column;
+    }
+    
+    .form-wizard {
+        padding: 1rem;
+    }
+    
+    .total-item {
+        margin: 0.25rem;
+        padding: 1rem;
+    }
+}
+</style>
+
+<script>
+// Función para agregar clases CSS a los campos del formulario
+document.addEventListener('DOMContentLoaded', function() {
+    // Agregar clases a todos los campos de formulario
+    const formControls = document.querySelectorAll('input, select, textarea');
+    formControls.forEach(function(control) {
+        if (!control.classList.contains('btn')) {
+            control.classList.add('form-control', 'form-control-enhanced');
+        }
+    });
+});
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="container-fluid">
+    <!-- Header del Formulario -->
+    <div class="form-wizard">
+        <h2><i class="fas fa-exchange-alt"></i> {{ title }}</h2>
+        <p>Complete la información del movimiento de huevos de manera sencilla y organizada</p>
+    </div>
+
     <form method="post" novalidate id="movimiento-form">
         {% csrf_token %}
         
         <!-- Información del Movimiento -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-info-circle"></i> Información del Movimiento</h5>
+        <div class="enhanced-card">
+            <div class="enhanced-card-header">
+                <h5><i class="fas fa-info-circle"></i> Información del Movimiento</h5>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group-enhanced">
                             <label for="{{ form.fecha.id_for_label }}">{{ form.fecha.label }}</label>
                             {{ form.fecha }}
                             {% if form.fecha.errors %}
                                 <div class="invalid-feedback d-block">
                                     {% for error in form.fecha.errors %}
-                                        {{ error }}
+                                        <i class="fas fa-exclamation-triangle"></i> {{ error }}
                                     {% endfor %}
                                 </div>
                             {% endif %}
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group-enhanced">
                             <label for="{{ form.tipo_movimiento.id_for_label }}">{{ form.tipo_movimiento.label }}</label>
                             {{ form.tipo_movimiento }}
                             {% if form.tipo_movimiento.errors %}
                                 <div class="invalid-feedback d-block">
                                     {% for error in form.tipo_movimiento.errors %}
-                                        {{ error }}
+                                        <i class="fas fa-exclamation-triangle"></i> {{ error }}
                                     {% endfor %}
                                 </div>
                             {% endif %}
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group-enhanced">
                             <label for="{{ form.cliente.id_for_label }}">{{ form.cliente.label }}</label>
                             {{ form.cliente }}
                             {% if form.cliente.errors %}
                                 <div class="invalid-feedback d-block">
                                     {% for error in form.cliente.errors %}
-                                        {{ error }}
+                                        <i class="fas fa-exclamation-triangle"></i> {{ error }}
                                     {% endfor %}
                                 </div>
                             {% endif %}
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group-enhanced">
                             <label for="{{ form.numero_comprobante.id_for_label }}">{{ form.numero_comprobante.label }}</label>
                             {{ form.numero_comprobante }}
                             {% if form.numero_comprobante.errors %}
                                 <div class="invalid-feedback d-block">
                                     {% for error in form.numero_comprobante.errors %}
-                                        {{ error }}
+                                        <i class="fas fa-exclamation-triangle"></i> {{ error }}
                                     {% endfor %}
                                 </div>
                             {% endif %}
@@ -76,16 +434,18 @@
                 </div>
                 
                 <!-- Información de transporte (solo para ventas) -->
-                <div id="info-transporte" style="display: none;">
-                    <div class="row mt-3">
+                <div id="info-transporte" class="info-transporte" style="display: none;">
+                    <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="{{ form.conductor.id_for_label }}">{{ form.conductor.label }}</label>
+                            <div class="form-group-enhanced">
+                                <label for="{{ form.conductor.id_for_label }}">
+                                    <i class="fas fa-truck"></i> {{ form.conductor.label }}
+                                </label>
                                 {{ form.conductor }}
                                 {% if form.conductor.errors %}
                                     <div class="invalid-feedback d-block">
                                         {% for error in form.conductor.errors %}
-                                            {{ error }}
+                                            <i class="fas fa-exclamation-triangle"></i> {{ error }}
                                         {% endfor %}
                                     </div>
                                 {% endif %}
@@ -97,10 +457,10 @@
         </div>
 
         <!-- Detalles del Movimiento -->
-        <div class="card mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="fas fa-list"></i> Detalles del Movimiento</h5>
-                <button type="button" id="agregar-detalle" class="btn btn-success btn-sm">
+        <div class="enhanced-card">
+            <div class="enhanced-card-header d-flex justify-content-between align-items-center">
+                <h5><i class="fas fa-list"></i> Detalles del Movimiento</h5>
+                <button type="button" id="agregar-detalle" class="btn btn-agregar-detalle">
                     <i class="fas fa-plus"></i> Agregar Categoría
                 </button>
             </div>
@@ -113,45 +473,45 @@
                             <div class="detalle-header">
                                 <span class="detalle-numero">Categoría {{ forloop.counter }}</span>
                                 {% if not forloop.first %}
-                                    <button type="button" class="btn btn-danger btn-sm btn-eliminar-detalle">
+                                    <button type="button" class="btn btn-danger btn-eliminar-detalle">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 {% endif %}
                             </div>
                             
                             <div class="form-row">
-                                <div class="form-group">
-                                    <label>Categoría de Huevo</label>
+                                <div class="form-group-enhanced">
+                                    <label>🥚 Categoría de Huevo</label>
                                     {{ form.categoria_huevo }}
                                     <div class="stock-info" id="stock-info-{{ forloop.counter0 }}"></div>
                                     {% if form.categoria_huevo.errors %}
                                         <div class="invalid-feedback d-block">
                                             {% for error in form.categoria_huevo.errors %}
-                                                {{ error }}
+                                                <i class="fas fa-exclamation-triangle"></i> {{ error }}
                                             {% endfor %}
                                         </div>
                                     {% endif %}
                                 </div>
                                 
-                                <div class="form-group">
-                                    <label>Cantidad</label>
+                                <div class="form-group-enhanced">
+                                    <label>📦 Cantidad</label>
                                     {{ form.cantidad }}
                                     {% if form.cantidad.errors %}
                                         <div class="invalid-feedback d-block">
                                             {% for error in form.cantidad.errors %}
-                                                {{ error }}
+                                                <i class="fas fa-exclamation-triangle"></i> {{ error }}
                                             {% endfor %}
                                         </div>
                                     {% endif %}
                                 </div>
                                 
-                                <div class="form-group">
-                                    <label>Precio Unitario</label>
+                                <div class="form-group-enhanced">
+                                    <label>💰 Precio Unitario</label>
                                     {{ form.precio_unitario }}
                                     {% if form.precio_unitario.errors %}
                                         <div class="invalid-feedback d-block">
                                             {% for error in form.precio_unitario.errors %}
-                                                {{ error }}
+                                                <i class="fas fa-exclamation-triangle"></i> {{ error }}
                                             {% endfor %}
                                         </div>
                                     {% endif %}
@@ -159,7 +519,7 @@
                             </div>
                             
                             <div class="subtotal-detalle" id="subtotal-{{ forloop.counter0 }}">
-                                Subtotal: $0.00
+                                💵 Subtotal: $0.00
                             </div>
                             
                             <!-- Campos ocultos del formset -->
@@ -173,20 +533,24 @@
         </div>
 
         <!-- Totales -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-calculator"></i> Totales</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="total-info">
-                            <strong>Total de Huevos: <span id="total-huevos">0</span></strong>
+        <div class="enhanced-card">
+            <div class="card-body p-0">
+                <div class="totales-card">
+                    <h4 class="mb-4"><i class="fas fa-calculator"></i> Resumen de Totales</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="total-item">
+                                <h4>Total de Huevos</h4>
+                                <div class="total-value" id="total-huevos">0</div>
+                                <small>unidades</small>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="total-info">
-                            <strong>Valor Total: $<span id="total-valor">0.00</span></strong>
+                        <div class="col-md-6">
+                            <div class="total-item">
+                                <h4>Valor Total</h4>
+                                <div class="total-value">$<span id="total-valor">0.00</span></div>
+                                <small>pesos colombianos</small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -194,17 +558,17 @@
         </div>
 
         <!-- Observaciones -->
-        <div class="card mb-4">
+        <div class="enhanced-card observaciones-card">
             <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-comment"></i> Observaciones</h5>
             </div>
             <div class="card-body">
-                <div class="form-group">
+                <div class="form-group-enhanced">
                     {{ form.observaciones }}
                     {% if form.observaciones.errors %}
                         <div class="invalid-feedback d-block">
                             {% for error in form.observaciones.errors %}
-                                {{ error }}
+                                <i class="fas fa-exclamation-triangle"></i> {{ error }}
                             {% endfor %}
                         </div>
                     {% endif %}
@@ -213,14 +577,16 @@
         </div>
 
         <!-- Botones -->
-        <div class="card">
-            <div class="card-body text-center">
-                <button type="submit" class="btn btn-primary btn-lg">
-                    <i class="fas fa-save"></i> Guardar Movimiento
-                </button>
-                <a href="{% url 'aves:inventario_huevos' %}" class="btn btn-secondary btn-lg ml-2">
-                    <i class="fas fa-times"></i> Cancelar
-                </a>
+        <div class="enhanced-card">
+            <div class="card-body">
+                <div class="btn-action-group">
+                    <button type="submit" class="btn btn-primary-enhanced">
+                        <i class="fas fa-save"></i> Guardar Movimiento
+                    </button>
+                    <a href="{% url 'aves:inventario_huevos' %}" class="btn btn-secondary-enhanced">
+                        <i class="fas fa-times"></i> Cancelar
+                    </a>
+                </div>
             </div>
         </div>
     </form>
@@ -230,6 +596,14 @@
 document.addEventListener('DOMContentLoaded', function() {
     const inventarios = {{ inventario_json|safe }};
     let formIndex = {{ formset.total_form_count }};
+    
+    // Agregar clases CSS a todos los campos del formulario
+    const formControls = document.querySelectorAll('input, select, textarea');
+    formControls.forEach(function(control) {
+        if (!control.classList.contains('btn')) {
+            control.classList.add('form-control', 'form-control-enhanced');
+        }
+    });
     
     // Función para mostrar/ocultar información de transporte
     function toggleInfoTransporte() {
@@ -249,7 +623,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function actualizarStockInfo(categoriaSelect, stockInfoDiv) {
         const categoria = categoriaSelect.value;
         if (categoria && inventarios[categoria] !== undefined) {
-            stockInfoDiv.innerHTML = `<small class="text-info">Stock disponible: ${inventarios[categoria]} unidades</small>`;
+            const stock = inventarios[categoria];
+            const stockClass = stock < 100 ? 'text-danger' : stock < 500 ? 'text-warning' : 'text-success';
+            stockInfoDiv.innerHTML = `<small class="${stockClass}"><i class="fas fa-box"></i> Stock disponible: ${stock} unidades</small>`;
         } else {
             stockInfoDiv.innerHTML = '';
         }
@@ -265,7 +641,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const cantidad = parseFloat(cantidadInput.value) || 0;
             const precio = parseFloat(precioInput.value) || 0;
             const subtotal = cantidad * precio;
-            subtotalDiv.innerHTML = `Subtotal: $${subtotal.toFixed(2)}`;
+            subtotalDiv.innerHTML = `💵 Subtotal: $${subtotal.toLocaleString('es-CO', {minimumFractionDigits: 2})}`;
         }
     }
     
@@ -287,8 +663,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        document.getElementById('total-huevos').textContent = totalHuevos;
-        document.getElementById('total-valor').textContent = totalValor.toFixed(2);
+        document.getElementById('total-huevos').textContent = totalHuevos.toLocaleString('es-CO');
+        document.getElementById('total-valor').textContent = totalValor.toLocaleString('es-CO', {minimumFractionDigits: 2});
     }
     
     // Función para agregar nuevo detalle
@@ -313,6 +689,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     field.setAttribute('name', name.replace(/form-\d+/, `form-${newFormIndex}`));
                     field.setAttribute('id', field.getAttribute('id').replace(/form-\d+/, `form-${newFormIndex}`));
                     field.value = '';
+                    // Agregar clases CSS
+                    field.classList.add('form-control', 'form-control-enhanced');
                 }
             });
             
@@ -332,7 +710,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             // Resetear subtotal
-            newDetalle.querySelector('.subtotal-detalle').innerHTML = 'Subtotal: $0.00';
+            newDetalle.querySelector('.subtotal-detalle').innerHTML = '💵 Subtotal: $0.00';
             
             container.appendChild(newDetalle);
             totalForms.value = newFormIndex + 1;
@@ -425,6 +803,17 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Calcular totales iniciales
     calcularTotales();
+    
+    // Agregar efectos de hover a los campos
+    document.querySelectorAll('.form-control-enhanced').forEach(function(input) {
+        input.addEventListener('focus', function() {
+            this.parentElement.style.transform = 'translateY(-2px)';
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.style.transform = 'translateY(0)';
+        });
+    });
 });
 </script>
 {% endblock %}

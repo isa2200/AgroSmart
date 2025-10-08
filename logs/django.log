@@ -11616,3 +11616,547 @@ INFO 2025-10-07 19:30:09,011 basehttp 15652 2404 "GET /static/debug_toolbar/css/
 INFO 2025-10-07 19:30:09,155 basehttp 15652 12696 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
 INFO 2025-10-07 19:30:09,168 basehttp 15652 12696 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
 INFO 2025-10-07 19:30:09,332 basehttp 15652 12696 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 19:34:31,944 basehttp 15652 12696 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 37514
+ERROR 2025-10-07 19:37:27,954 log 15652 12696 Internal Server Error: /aves/movimiento-huevos/nuevo/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 795, in movimiento_huevos_create
+    return render(request, 'aves/movimiento_huevos_form.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 484, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 482, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 600, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 698, in __init__
+    filter_func = parser.find_filter(filter_name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 606, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'add_class'
+ERROR 2025-10-07 19:37:28,037 basehttp 15652 12696 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 500 302459
+INFO 2025-10-07 19:37:28,056 basehttp 15652 21852 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 19:37:28,056 basehttp 15652 12696 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 19:37:28,095 basehttp 15652 21852 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 19:37:28,131 basehttp 15652 21852 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-07 19:37:28,173 log 15652 21852 Not Found: /favicon.ico
+WARNING 2025-10-07 19:37:28,173 basehttp 15652 21852 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-10-07 19:41:58,407 basehttp 15652 21852 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 46905
+INFO 2025-10-07 19:42:56,731 views 15652 21852 POST data received: <QueryDict: {'csrfmiddlewaretoken': ['BF5iGDeH5fIUrvM4HfSvH4kPgB8SwyMvOwCuSAnHPF2DNNPmoIeuXO14tW5y8XuG'], 'fecha': [''], 'tipo_movimiento': [''], 'cliente': [''], 'numero_comprobante': [''], 'conductor': [''], 'form-TOTAL_FORMS': ['1'], 'form-INITIAL_FORMS': ['0'], 'form-MIN_NUM_FORMS': ['1'], 'form-MAX_NUM_FORMS': ['1000'], 'form-0-categoria_huevo': ['AAA'], 'form-0-cantidad': ['123'], 'form-0-precio_unitario': ['450'], 'observaciones': ['']}>
+INFO 2025-10-07 19:42:56,732 views 15652 21852 Form valid: False
+INFO 2025-10-07 19:42:56,734 views 15652 21852 Formset valid: True
+ERROR 2025-10-07 19:42:56,759 views 15652 21852 Form errors: <ul class="errorlist"><li>fecha<ul class="errorlist"><li>Este campo es obligatorio.</li></ul></li><li>tipo_movimiento<ul class="errorlist"><li>Este campo es obligatorio.</li></ul></li></ul>
+INFO 2025-10-07 19:42:56,790 basehttp 15652 21852 "POST /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 45104
+INFO 2025-10-07 19:43:02,853 basehttp 15652 21852 "GET /aves/inventario-huevos/ HTTP/1.1" 200 39391
+INFO 2025-10-07 19:43:05,704 basehttp 15652 21852 "GET /aves/inventario-huevos/ HTTP/1.1" 200 39391
+INFO 2025-10-07 19:43:07,996 basehttp 15652 21852 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 46905
+INFO 2025-10-07 19:43:51,132 views 15652 21852 POST data received: <QueryDict: {'csrfmiddlewaretoken': ['GHq4Ulh535ZyUbQLbS4BqC7elvNdkvjuTyXg6iq5NvjhgtT3SlqAGmOtyQKTWU1F'], 'fecha': ['2025-10-07'], 'tipo_movimiento': ['venta'], 'cliente': ['Punto Blanco'], 'numero_comprobante': ['3276867'], 'conductor': ['Carlitos'], 'form-TOTAL_FORMS': ['1'], 'form-INITIAL_FORMS': ['0'], 'form-MIN_NUM_FORMS': ['1'], 'form-MAX_NUM_FORMS': ['1000'], 'form-0-categoria_huevo': ['AAA'], 'form-0-cantidad': ['23'], 'form-0-precio_unitario': ['500'], 'observaciones': ['']}>
+INFO 2025-10-07 19:43:51,136 views 15652 21852 Form valid: True
+INFO 2025-10-07 19:43:51,137 views 15652 21852 Formset valid: True
+INFO 2025-10-07 19:43:51,139 views 15652 21852 Movimiento guardado con ID: 3
+INFO 2025-10-07 19:43:51,139 views 15652 21852 Procesando detalle 0: {'categoria_huevo': 'AAA', 'cantidad': 23, 'precio_unitario': Decimal('500'), 'DELETE': False}
+INFO 2025-10-07 19:43:51,141 views 15652 21852 Detalle 0 guardado con ID: 3
+INFO 2025-10-07 19:43:51,148 views 15652 21852 Inventario actualizado para AAA: 169 -> 146
+INFO 2025-10-07 19:43:51,148 views 15652 21852 Movimiento completado. Detalles guardados: 1
+INFO 2025-10-07 19:43:51,165 basehttp 15652 21852 "POST /aves/movimiento-huevos/nuevo/ HTTP/1.1" 302 0
+INFO 2025-10-07 19:43:51,244 basehttp 15652 21852 "GET /aves/inventario-huevos/ HTTP/1.1" 200 40260
+INFO 2025-10-07 19:44:09,788 basehttp 15652 21852 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 46905
+INFO 2025-10-07 19:44:16,302 basehttp 15652 21852 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 46905
+INFO 2025-10-07 19:45:50,617 basehttp 15652 21852 "GET /aves/inventario-huevos/ HTTP/1.1" 200 40260
+INFO 2025-10-07 19:45:59,319 basehttp 15652 21852 "POST /aves/actualizar-stock-automatico/ HTTP/1.1" 200 114
+INFO 2025-10-07 19:45:59,526 basehttp 15652 21852 "GET /__debug__/history_sidebar/?request_id=37b5ea5d1be54762b495ad5e39f9484b HTTP/1.1" 200 9527
+INFO 2025-10-07 19:46:00,906 basehttp 15652 21852 "GET /aves/inventario-huevos/ HTTP/1.1" 200 40260
+INFO 2025-10-07 19:46:08,784 basehttp 15652 21852 "GET /aves/alertas/ HTTP/1.1" 200 37921
+INFO 2025-10-07 19:46:08,808 basehttp 15652 21852 "GET /static/aves/js/alertas.js HTTP/1.1" 304 0
+INFO 2025-10-07 19:46:18,061 basehttp 15652 21852 "GET /aves/ HTTP/1.1" 200 51119
+INFO 2025-10-07 19:51:19,159 basehttp 15652 27864 "GET /aves/ HTTP/1.1" 200 51119
+INFO 2025-10-07 19:56:20,153 basehttp 15652 2564 "GET /aves/ HTTP/1.1" 200 51119
+INFO 2025-10-07 20:01:21,156 basehttp 15652 2056 "GET /aves/ HTTP/1.1" 200 51119
+INFO 2025-10-07 20:03:50,054 basehttp 15652 2056 "GET /aves/ HTTP/1.1" 200 56192
+INFO 2025-10-07 20:03:50,076 basehttp 15652 24636 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 20:03:50,076 basehttp 15652 2056 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 20:03:50,263 basehttp 15652 2056 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 20:03:50,269 basehttp 15652 2056 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 20:03:50,570 basehttp 15652 2056 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 20:04:02,347 basehttp 15652 2056 "GET /aves/ HTTP/1.1" 200 51119
+INFO 2025-10-07 20:04:02,370 basehttp 15652 2056 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 20:04:02,371 basehttp 15652 24636 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 20:04:03,000 basehttp 15652 24636 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 20:04:03,015 basehttp 15652 24636 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 20:04:03,735 basehttp 15652 24636 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 20:04:37,513 basehttp 15652 24636 "GET /aves/ HTTP/1.1" 200 51408
+INFO 2025-10-07 20:04:37,534 basehttp 15652 2056 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 20:04:37,535 basehttp 15652 24636 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 20:04:37,754 basehttp 15652 2056 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 20:04:37,760 basehttp 15652 2056 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 20:04:38,276 basehttp 15652 2056 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 20:04:46,853 basehttp 15652 2056 "GET /aves/ HTTP/1.1" 200 51119
+INFO 2025-10-07 20:04:46,875 basehttp 15652 24636 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 20:04:46,875 basehttp 15652 2056 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 20:04:47,062 basehttp 15652 2056 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 20:04:47,073 basehttp 15652 2056 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 20:04:47,429 basehttp 15652 2056 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 20:08:11,269 basehttp 15652 2056 "GET /aves/ HTTP/1.1" 200 53442
+INFO 2025-10-07 20:08:11,291 basehttp 15652 24636 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 20:08:11,291 basehttp 15652 2056 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 20:08:11,558 basehttp 15652 24636 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 20:08:11,568 basehttp 15652 24636 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 20:08:11,920 basehttp 15652 24636 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 20:09:40,820 basehttp 15652 24636 "GET /aves/ HTTP/1.1" 200 53421
+INFO 2025-10-07 20:09:40,852 basehttp 15652 24636 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 20:09:40,852 basehttp 15652 2056 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 20:09:43,803 basehttp 15652 2056 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 20:09:43,809 basehttp 15652 2056 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 20:09:44,269 basehttp 15652 2056 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 20:10:36,804 basehttp 15652 2056 "GET /aves/ HTTP/1.1" 200 53409
+INFO 2025-10-07 20:10:36,825 basehttp 15652 2056 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 20:10:36,826 basehttp 15652 24636 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 20:10:37,039 basehttp 15652 2056 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 20:10:37,045 basehttp 15652 2056 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 20:10:37,544 basehttp 15652 2056 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 20:10:41,109 basehttp 15652 2056 "GET /aves/ HTTP/1.1" 200 53409
+INFO 2025-10-07 20:10:41,129 basehttp 15652 24636 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 20:10:41,129 basehttp 15652 2056 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 20:10:41,270 basehttp 15652 2056 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 20:10:41,280 basehttp 15652 2056 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 20:10:41,467 basehttp 15652 2056 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 20:11:02,460 basehttp 15652 2056 "GET /aves/ HTTP/1.1" 200 53421
+INFO 2025-10-07 20:11:02,482 basehttp 15652 24636 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 20:11:02,483 basehttp 15652 2056 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 20:11:02,644 basehttp 15652 24636 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 20:11:02,650 basehttp 15652 24636 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 20:11:03,036 basehttp 15652 24636 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 20:11:11,167 basehttp 15652 24636 "GET /aves/bitacora/ HTTP/1.1" 200 31001
+INFO 2025-10-07 20:11:15,514 basehttp 15652 24636 "GET /aves/vacunacion/ HTTP/1.1" 200 28585
+INFO 2025-10-07 20:11:18,323 basehttp 15652 24636 "GET /aves/alertas/ HTTP/1.1" 200 40223
+INFO 2025-10-07 20:11:18,346 basehttp 15652 24636 "GET /static/aves/js/alertas.js HTTP/1.1" 304 0
+INFO 2025-10-07 20:11:21,251 basehttp 15652 24636 "GET /aves/ HTTP/1.1" 200 53421
+INFO 2025-10-07 20:13:27,169 basehttp 15652 24636 "GET /aves/ HTTP/1.1" 200 53351
+INFO 2025-10-07 20:13:27,190 basehttp 15652 24636 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 20:13:27,190 basehttp 15652 2056 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 20:13:27,957 basehttp 15652 2056 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 20:13:27,979 basehttp 15652 2056 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 20:13:28,571 basehttp 15652 2056 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 20:13:39,830 basehttp 15652 2056 "GET /aves/ HTTP/1.1" 200 53421
+INFO 2025-10-07 20:13:39,852 basehttp 15652 2056 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 20:13:39,852 basehttp 15652 24636 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 20:13:40,518 basehttp 15652 24636 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 20:13:40,544 basehttp 15652 24636 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 20:13:40,709 basehttp 15652 24636 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 20:17:06,983 basehttp 15652 24636 "GET /aves/ HTTP/1.1" 200 53480
+INFO 2025-10-07 20:17:07,008 basehttp 15652 2056 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 20:17:07,008 basehttp 15652 24636 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 20:17:07,270 basehttp 15652 24636 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 20:17:07,281 basehttp 15652 24636 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 20:17:07,690 basehttp 15652 24636 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 20:17:12,292 basehttp 15652 24636 "GET /aves/bitacora/ HTTP/1.1" 200 31060
+INFO 2025-10-07 20:17:13,125 basehttp 15652 24636 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29205
+INFO 2025-10-07 20:17:13,822 basehttp 15652 24636 "GET /aves/inventario-huevos/ HTTP/1.1" 200 42622
+INFO 2025-10-07 20:17:15,468 basehttp 15652 24636 "GET /aves/vacunacion/ HTTP/1.1" 200 28644
+INFO 2025-10-07 20:17:16,221 basehttp 15652 24636 "GET /aves/alertas/ HTTP/1.1" 200 40282
+INFO 2025-10-07 20:17:16,764 basehttp 15652 24636 "GET /aves/reportes/ HTTP/1.1" 200 24251
+INFO 2025-10-07 20:17:18,036 basehttp 15652 24636 "GET /aves/ HTTP/1.1" 200 53480
+INFO 2025-10-07 20:17:44,999 basehttp 15652 24636 "GET /aves/bitacora/ HTTP/1.1" 200 31060
+INFO 2025-10-07 20:17:45,723 basehttp 15652 24636 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29205
+INFO 2025-10-07 20:17:49,504 basehttp 15652 24636 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-07 20:17:49,658 basehttp 15652 24636 "GET /usuarios/login/ HTTP/1.1" 200 18189
+INFO 2025-10-07 20:57:27,653 basehttp 15652 6172 "GET /usuarios/login/ HTTP/1.1" 200 16993
+INFO 2025-10-07 20:57:27,673 basehttp 15652 6912 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 20:57:27,673 basehttp 15652 6172 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 20:57:28,050 basehttp 15652 6172 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 20:57:28,051 basehttp 15652 6912 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 20:57:28,078 basehttp 15652 6912 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+ERROR 2025-10-07 21:00:23,739 log 15652 6912 Internal Server Error: /usuarios/login/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\views.py", line 31, in get
+    return render(request, self.template_name, {'form': form})
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 484, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 482, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 600, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 698, in __init__
+    filter_func = parser.find_filter(filter_name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 606, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'add_class'
+ERROR 2025-10-07 21:00:23,811 basehttp 15652 6912 "GET /usuarios/login/ HTTP/1.1" 500 241371
+INFO 2025-10-07 21:00:23,832 basehttp 15652 6912 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:00:23,832 basehttp 15652 6172 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:00:23,869 basehttp 15652 6912 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:00:23,903 basehttp 15652 6912 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-07 21:00:23,955 log 15652 6912 Not Found: /favicon.ico
+WARNING 2025-10-07 21:00:23,955 basehttp 15652 6912 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-10-07 21:02:08,029 basehttp 15652 6912 "GET /usuarios/login/ HTTP/1.1" 200 22494
+INFO 2025-10-07 21:02:08,049 basehttp 15652 6912 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9073
+INFO 2025-10-07 21:02:08,053 basehttp 15652 5192 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:02:08,053 basehttp 15652 10788 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:02:08,054 basehttp 15652 6172 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+WARNING 2025-10-07 21:02:08,590 basehttp 15652 6172 "GET /static/dashboard/img/logo-caricatura-login.jpg HTTP/1.1" 404 1977
+WARNING 2025-10-07 21:02:08,591 basehttp 15652 10788 "GET /static/dashboard/img/logo-background.jpg HTTP/1.1" 404 1959
+INFO 2025-10-07 21:02:08,779 basehttp 15652 5192 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:02:08,780 basehttp 15652 6912 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:02:09,072 basehttp 15652 6912 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:06:49,446 basehttp 15652 6912 "GET /usuarios/login/ HTTP/1.1" 200 22494
+INFO 2025-10-07 21:06:49,489 basehttp 15652 6912 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9410
+INFO 2025-10-07 21:06:49,491 basehttp 15652 5192 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:06:49,492 basehttp 15652 17300 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:06:49,497 basehttp 15652 19864 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:06:49,777 basehttp 15652 17300 "GET /static/img/logo-background.jpg HTTP/1.1" 200 3142
+INFO 2025-10-07 21:06:49,777 basehttp 15652 5192 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 71236
+INFO 2025-10-07 21:06:49,797 basehttp 15652 5192 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:06:49,806 basehttp 15652 5192 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:06:50,134 basehttp 15652 5192 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:07:10,317 basehttp 15652 5192 "GET /static/dashboard/css/login.css HTTP/1.1" 304 0
+INFO 2025-10-07 21:08:55,495 basehttp 15652 5192 "GET /usuarios/login/ HTTP/1.1" 200 22494
+INFO 2025-10-07 21:08:55,656 basehttp 15652 5192 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9410
+INFO 2025-10-07 21:08:55,668 basehttp 15652 17300 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:08:55,668 basehttp 15652 19864 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:08:55,670 basehttp 15652 6912 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:08:55,913 basehttp 15652 17300 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:08:55,939 basehttp 15652 6912 "GET /static/img/logo-background.jpg HTTP/1.1" 200 3142
+INFO 2025-10-07 21:08:55,949 basehttp 15652 5192 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:08:55,954 basehttp 15652 19864 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:08:56,416 basehttp 15652 19864 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:09:27,252 basehttp 15652 19864 "GET /usuarios/login/ HTTP/1.1" 200 22494
+INFO 2025-10-07 21:09:27,305 basehttp 15652 19864 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9073
+INFO 2025-10-07 21:09:27,306 basehttp 15652 6912 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:09:27,307 basehttp 15652 5192 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:09:27,308 basehttp 15652 17300 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:09:27,488 basehttp 15652 6912 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:09:27,489 basehttp 15652 19864 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-07 21:09:27,511 basehttp 15652 19864 "GET /static/dashboard/img/logo-background.jpg HTTP/1.1" 404 1959
+WARNING 2025-10-07 21:09:27,512 basehttp 15652 6912 "GET /static/dashboard/img/logo-caricatura-login.jpg HTTP/1.1" 404 1977
+INFO 2025-10-07 21:09:27,875 basehttp 15652 17300 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:11:40,744 basehttp 15652 17300 "GET /usuarios/login/ HTTP/1.1" 200 21885
+INFO 2025-10-07 21:11:40,788 basehttp 15652 25904 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:11:40,789 basehttp 15652 17300 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9073
+INFO 2025-10-07 21:11:40,789 basehttp 15652 5192 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:11:40,790 basehttp 15652 25220 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+WARNING 2025-10-07 21:11:41,071 basehttp 15652 25220 "GET /static/dashboard/img/logo-background.jpg HTTP/1.1" 404 1959
+WARNING 2025-10-07 21:11:41,073 basehttp 15652 17300 "GET /static/dashboard/img/logo-caricatura-login.jpg HTTP/1.1" 404 1977
+INFO 2025-10-07 21:11:41,073 basehttp 15652 5192 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:11:41,074 basehttp 15652 25904 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:11:41,428 basehttp 15652 25904 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:11:53,551 basehttp 15652 25904 "GET /static/dashboard/css/login.css HTTP/1.1" 304 0
+WARNING 2025-10-07 21:12:26,274 basehttp 15652 25904 "GET /static/dashboard/img/logo-caricatura-login.jpg HTTP/1.1" 404 1977
+WARNING 2025-10-07 21:12:26,410 basehttp 15652 5192 "GET /static/dashboard/img/logo-caricatura-login.jpg HTTP/1.1" 404 1977
+WARNING 2025-10-07 21:12:27,426 basehttp 15652 12712 "GET /static/dashboard/img/logo-caricatura-login.jpg HTTP/1.1" 404 1977
+WARNING 2025-10-07 21:12:27,593 basehttp 15652 27888 "GET /static/dashboard/img/logo-caricatura-login.jpg HTTP/1.1" 404 1977
+INFO 2025-10-07 21:12:49,665 basehttp 15652 26432 "GET /usuarios/login/ HTTP/1.1" 200 21885
+INFO 2025-10-07 21:12:49,715 basehttp 15652 26432 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9410
+INFO 2025-10-07 21:12:49,716 basehttp 15652 1404 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:12:49,723 basehttp 15652 25980 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:12:49,737 basehttp 15652 5916 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:12:50,210 basehttp 15652 5916 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:12:50,214 basehttp 15652 5916 "GET /static/img/logo-background.jpg HTTP/1.1" 200 3142
+INFO 2025-10-07 21:12:50,222 basehttp 15652 25980 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:12:50,224 basehttp 15652 5916 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:12:50,664 basehttp 15652 5916 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:16:16,460 basehttp 15652 5916 "GET /usuarios/login/ HTTP/1.1" 200 21086
+INFO 2025-10-07 21:16:16,496 basehttp 15652 5916 "GET /static/dashboard/css/login.css HTTP/1.1" 200 11078
+INFO 2025-10-07 21:16:16,497 basehttp 15652 1404 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:16:16,497 basehttp 15652 25980 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:16:16,498 basehttp 15652 26432 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:16:16,889 basehttp 15652 1404 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:16:17,109 basehttp 15652 1404 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:16:17,116 basehttp 15652 26432 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:16:17,303 basehttp 15652 26432 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:19:21,480 basehttp 15652 26432 "GET /usuarios/login/ HTTP/1.1" 200 21086
+INFO 2025-10-07 21:19:21,642 basehttp 15652 25980 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:19:21,643 basehttp 15652 1404 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:19:21,644 basehttp 15652 26432 "GET /static/dashboard/css/login.css HTTP/1.1" 200 13690
+INFO 2025-10-07 21:19:21,652 basehttp 15652 5916 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:19:22,051 basehttp 15652 5916 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:19:22,053 basehttp 15652 25980 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:19:22,054 basehttp 15652 26432 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:19:22,621 basehttp 15652 26432 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:20:07,453 basehttp 15652 26432 "GET /usuarios/login/ HTTP/1.1" 200 21086
+INFO 2025-10-07 21:20:07,505 basehttp 15652 26432 "GET /static/dashboard/css/login.css HTTP/1.1" 200 11328
+INFO 2025-10-07 21:20:07,505 basehttp 15652 25980 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:20:07,507 basehttp 15652 5916 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:20:07,513 basehttp 15652 1404 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:20:07,707 basehttp 15652 1404 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:20:07,720 basehttp 15652 1404 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:20:07,725 basehttp 15652 25980 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:20:08,083 basehttp 15652 25980 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:20:25,590 basehttp 15652 25980 "GET /static/dashboard/css/login.css HTTP/1.1" 304 0
+INFO 2025-10-07 21:21:43,418 basehttp 15652 25980 "GET /usuarios/login/ HTTP/1.1" 200 21086
+INFO 2025-10-07 21:21:43,458 basehttp 15652 25980 "GET /static/dashboard/css/login.css HTTP/1.1" 200 11294
+INFO 2025-10-07 21:21:43,617 basehttp 15652 25980 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 304 0
+INFO 2025-10-07 21:22:03,506 basehttp 15652 25980 "GET /usuarios/login/ HTTP/1.1" 200 21086
+INFO 2025-10-07 21:22:03,570 basehttp 15652 25980 "GET /static/dashboard/css/login.css HTTP/1.1" 200 11294
+INFO 2025-10-07 21:22:03,571 basehttp 15652 1404 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:22:03,571 basehttp 15652 5916 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:22:03,579 basehttp 15652 26432 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:22:03,989 basehttp 15652 26432 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:22:03,991 basehttp 15652 5916 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:22:04,005 basehttp 15652 5916 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:22:04,499 basehttp 15652 5916 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:22:10,076 basehttp 15652 5916 "GET /usuarios/login/ HTTP/1.1" 200 20583
+INFO 2025-10-07 21:22:10,119 basehttp 15652 5916 "GET /static/dashboard/css/login.css HTTP/1.1" 200 11294
+INFO 2025-10-07 21:22:10,121 basehttp 15652 26432 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:22:10,122 basehttp 15652 1404 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:22:10,123 basehttp 15652 25980 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:22:10,290 basehttp 15652 25980 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:22:10,305 basehttp 15652 25980 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:22:10,327 basehttp 15652 25980 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:22:10,527 basehttp 15652 25980 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:22:22,583 basehttp 15652 25980 "GET /static/dashboard/css/login.css HTTP/1.1" 304 0
+INFO 2025-10-07 21:23:21,043 basehttp 15652 25980 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-07 21:23:21,160 basehttp 15652 25980 "GET / HTTP/1.1" 200 33510
+ERROR 2025-10-07 21:23:24,556 log 15652 25980 Internal Server Error: /usuarios/perfil/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: usuarios/perfil.html
+ERROR 2025-10-07 21:23:24,601 basehttp 15652 25980 "GET /usuarios/perfil/ HTTP/1.1" 500 100720
+WARNING 2025-10-07 21:23:24,748 log 15652 25980 Not Found: /favicon.ico
+WARNING 2025-10-07 21:23:24,749 basehttp 15652 25980 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-10-07 21:23:38,130 basehttp 15652 25980 "GET /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-07 21:23:38,206 basehttp 15652 25980 "GET / HTTP/1.1" 200 33223
+INFO 2025-10-07 21:23:40,170 basehttp 15652 25980 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29205
+INFO 2025-10-07 21:23:41,351 basehttp 15652 25980 "GET /aves/bitacora/ HTTP/1.1" 200 31060
+INFO 2025-10-07 21:23:42,326 basehttp 15652 25980 "GET /aves/ HTTP/1.1" 200 53480
+INFO 2025-10-07 21:23:43,971 basehttp 15652 25980 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-07 21:23:43,998 basehttp 15652 25980 "GET /usuarios/login/ HTTP/1.1" 200 20583
+INFO 2025-10-07 21:23:44,035 basehttp 15652 25980 "GET /static/dashboard/css/login.css HTTP/1.1" 304 0
+INFO 2025-10-07 21:23:44,047 basehttp 15652 25980 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 304 0
+INFO 2025-10-07 21:24:30,570 basehttp 15652 25980 "GET /usuarios/login/ HTTP/1.1" 200 20501
+INFO 2025-10-07 21:24:30,641 basehttp 15652 25980 "GET /static/dashboard/css/login.css HTTP/1.1" 200 11294
+INFO 2025-10-07 21:24:30,648 basehttp 15652 1404 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:24:30,655 basehttp 15652 26432 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:24:30,658 basehttp 15652 5916 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:24:31,019 basehttp 15652 5916 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:24:31,088 basehttp 15652 5916 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:24:31,097 basehttp 15652 5916 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:24:31,633 basehttp 15652 5916 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:25:10,147 basehttp 15652 5916 "GET /usuarios/login/ HTTP/1.1" 200 20500
+INFO 2025-10-07 21:25:10,213 basehttp 15652 5916 "GET /static/dashboard/css/login.css HTTP/1.1" 200 11294
+INFO 2025-10-07 21:25:10,215 basehttp 15652 25980 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:25:10,215 basehttp 15652 1404 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:25:10,217 basehttp 15652 26432 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:25:10,452 basehttp 15652 26432 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:25:10,465 basehttp 15652 5916 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:25:10,476 basehttp 15652 26432 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:25:10,948 basehttp 15652 26432 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:25:43,896 basehttp 15652 26432 "GET /usuarios/login/ HTTP/1.1" 200 20500
+INFO 2025-10-07 21:25:43,942 basehttp 15652 26432 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9880
+INFO 2025-10-07 21:25:43,949 basehttp 15652 25980 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:25:43,950 basehttp 15652 5916 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:25:43,952 basehttp 15652 1404 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:25:44,335 basehttp 15652 1404 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:25:44,341 basehttp 15652 1404 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:25:44,353 basehttp 15652 1404 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:25:44,946 basehttp 15652 1404 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:26:13,408 basehttp 15652 1404 "GET /usuarios/login/ HTTP/1.1" 200 20500
+INFO 2025-10-07 21:26:13,456 basehttp 15652 1404 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9902
+INFO 2025-10-07 21:26:13,460 basehttp 15652 25980 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:26:13,461 basehttp 15652 5916 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:26:13,462 basehttp 15652 26432 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:26:13,738 basehttp 15652 26432 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:26:13,756 basehttp 15652 26432 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:26:13,759 basehttp 15652 25980 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:26:14,093 basehttp 15652 25980 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:27:22,512 basehttp 15652 25980 "GET /usuarios/login/ HTTP/1.1" 200 20500
+INFO 2025-10-07 21:27:22,581 basehttp 15652 1404 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:27:22,587 basehttp 15652 26432 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:27:22,602 basehttp 15652 25980 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9961
+INFO 2025-10-07 21:27:22,627 basehttp 15652 25980 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:27:22,863 basehttp 15652 25980 "GET /static/img/logo-background.jpg HTTP/1.1" 200 3142
+INFO 2025-10-07 21:27:22,880 basehttp 15652 26432 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:27:22,883 basehttp 15652 25980 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:27:22,908 basehttp 15652 25980 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:27:23,236 basehttp 15652 25980 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:27:46,878 basehttp 15652 25980 "GET /usuarios/login/ HTTP/1.1" 200 20500
+INFO 2025-10-07 21:27:46,919 basehttp 15652 25980 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9959
+INFO 2025-10-07 21:27:46,920 basehttp 15652 1404 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:27:46,920 basehttp 15652 26432 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:27:46,922 basehttp 15652 5916 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:27:47,207 basehttp 15652 5916 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:27:47,209 basehttp 15652 1404 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:27:47,216 basehttp 15652 1404 "GET /static/img/logo-background.jpg HTTP/1.1" 200 3142
+INFO 2025-10-07 21:27:47,227 basehttp 15652 5916 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:27:47,618 basehttp 15652 5916 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:28:20,411 basehttp 15652 5916 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9967
+INFO 2025-10-07 21:28:39,170 basehttp 15652 5916 "GET /usuarios/login/ HTTP/1.1" 200 20500
+INFO 2025-10-07 21:28:39,214 basehttp 15652 5916 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9620
+INFO 2025-10-07 21:28:39,215 basehttp 15652 26432 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:28:39,217 basehttp 15652 1404 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:28:39,218 basehttp 15652 25980 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:28:39,452 basehttp 15652 25980 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:28:39,473 basehttp 15652 25980 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:28:39,481 basehttp 15652 26432 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:28:39,851 basehttp 15652 26432 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:28:50,629 basehttp 15652 26432 "GET /static/dashboard/css/login.css HTTP/1.1" 304 0
+INFO 2025-10-07 21:29:24,758 basehttp 15652 26432 "GET /usuarios/login/ HTTP/1.1" 200 20500
+INFO 2025-10-07 21:29:24,801 basehttp 15652 1404 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:29:24,802 basehttp 15652 26432 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9681
+INFO 2025-10-07 21:29:24,802 basehttp 15652 25980 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:29:24,843 basehttp 15652 26432 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:29:25,000 basehttp 15652 26432 "GET /static/img/logo-background.jpg HTTP/1.1" 200 3142
+INFO 2025-10-07 21:29:25,008 basehttp 15652 25980 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:29:25,014 basehttp 15652 26432 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:29:25,027 basehttp 15652 25980 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:29:25,376 basehttp 15652 25980 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:32:17,307 basehttp 15652 25980 "GET /usuarios/login/ HTTP/1.1" 200 20500
+INFO 2025-10-07 21:32:17,345 basehttp 15652 5916 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:32:17,346 basehttp 15652 25980 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9624
+INFO 2025-10-07 21:32:17,347 basehttp 15652 26432 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:32:17,348 basehttp 15652 1404 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:32:17,756 basehttp 15652 1404 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:32:17,763 basehttp 15652 1404 "GET /static/img/logo-background.jpg HTTP/1.1" 200 3142
+INFO 2025-10-07 21:32:17,775 basehttp 15652 26432 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:32:17,779 basehttp 15652 5916 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:32:18,408 basehttp 15652 5916 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:32:23,216 basehttp 15652 5916 "GET /usuarios/login/ HTTP/1.1" 200 20500
+INFO 2025-10-07 21:32:23,276 basehttp 15652 5916 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9624
+INFO 2025-10-07 21:32:23,280 basehttp 15652 1404 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:32:23,284 basehttp 15652 26432 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:32:23,295 basehttp 15652 25980 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:32:23,393 basehttp 15652 25980 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:32:23,415 basehttp 15652 26432 "GET /static/img/logo-background.jpg HTTP/1.1" 200 3142
+INFO 2025-10-07 21:32:23,422 basehttp 15652 1404 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:32:23,422 basehttp 15652 25980 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:32:23,733 basehttp 15652 25980 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:32:30,371 basehttp 15652 25980 "GET /usuarios/login/ HTTP/1.1" 200 20500
+INFO 2025-10-07 21:32:30,415 basehttp 15652 25980 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9681
+INFO 2025-10-07 21:32:30,416 basehttp 15652 1404 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:32:30,418 basehttp 15652 26432 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:32:30,434 basehttp 15652 5916 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:32:30,659 basehttp 15652 5916 "GET /static/img/logo-background.jpg HTTP/1.1" 200 3142
+INFO 2025-10-07 21:32:30,664 basehttp 15652 25980 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:32:30,675 basehttp 15652 1404 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:32:30,680 basehttp 15652 5916 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:32:31,061 basehttp 15652 5916 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:33:07,744 basehttp 15652 5916 "GET /usuarios/login/ HTTP/1.1" 200 20500
+INFO 2025-10-07 21:33:07,779 basehttp 15652 25980 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:33:07,779 basehttp 15652 1404 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:33:07,780 basehttp 15652 5916 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9779
+INFO 2025-10-07 21:33:07,782 basehttp 15652 26432 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:33:07,975 basehttp 15652 26432 "GET /static/img/logo-background.jpg HTTP/1.1" 200 3142
+INFO 2025-10-07 21:33:07,978 basehttp 15652 1404 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:33:07,986 basehttp 15652 26432 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:33:07,994 basehttp 15652 25980 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:33:08,358 basehttp 15652 25980 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:33:54,606 basehttp 15652 25980 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-07 21:33:54,652 basehttp 15652 1404 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:33:54,652 basehttp 15652 25980 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9779
+INFO 2025-10-07 21:33:54,653 basehttp 15652 26432 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:33:54,653 basehttp 15652 5916 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:33:54,957 basehttp 15652 5916 "GET /static/img/logo-background.jpg HTTP/1.1" 200 3142
+INFO 2025-10-07 21:33:54,960 basehttp 15652 1404 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 21:33:54,976 basehttp 15652 1404 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:33:54,986 basehttp 15652 5916 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:33:55,391 basehttp 15652 5916 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:34:26,156 basehttp 15652 5916 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-07 21:34:26,237 basehttp 15652 5916 "GET / HTTP/1.1" 200 33510
