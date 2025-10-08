@@ -156,33 +156,175 @@ class RegistroCompletoForm(UserCreationForm):
         return email
     
     def save(self, commit=True):
-        user = super().save(commit=False)
+        user = super().save(commit=commit)
+        
         if commit:
-            user.save()
-            # Verificar si ya existe un perfil (creado por el signal)
-            try:
-                perfil = user.perfilusuario
-                # Si existe, actualizar los datos
+            # Obtener o actualizar el perfil del usuario (creado por la señal)
+            perfil, created = PerfilUsuario.objects.get_or_create(
+                user=user,
+                defaults={
+                    'rol': self.cleaned_data['rol'],
+                    'telefono': self.cleaned_data['telefono'],
+                    'cedula': self.cleaned_data['cedula'],
+                    'fecha_nacimiento': self.cleaned_data['fecha_nacimiento'],
+                    'direccion': self.cleaned_data['direccion'],
+                    'acceso_modulo_avicola': self.cleaned_data['acceso_modulo_avicola'],
+                    'puede_eliminar_registros': self.cleaned_data['puede_eliminar_registros']
+                }
+            )
+            
+            # Si el perfil ya existía, actualizarlo con los datos del formulario
+            if not created:
                 perfil.rol = self.cleaned_data['rol']
-                perfil.telefono = self.cleaned_data.get('telefono', '')
-                perfil.cedula = self.cleaned_data.get('cedula', '')
-                perfil.fecha_nacimiento = self.cleaned_data.get('fecha_nacimiento')
-                perfil.direccion = self.cleaned_data.get('direccion', '')
-                perfil.acceso_modulo_avicola = self.cleaned_data.get('acceso_modulo_avicola', False)
-                perfil.puede_eliminar_registros = self.cleaned_data.get('puede_eliminar_registros', False)
+                perfil.telefono = self.cleaned_data['telefono']
+                perfil.cedula = self.cleaned_data['cedula']
+                perfil.fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
+                perfil.direccion = self.cleaned_data['direccion']
+                perfil.acceso_modulo_avicola = self.cleaned_data['acceso_modulo_avicola']
+                perfil.puede_eliminar_registros = self.cleaned_data['puede_eliminar_registros']
                 perfil.save()
+        
+        return user
+
+
+class EditarUsuarioForm(forms.ModelForm):
+    """
+    Formulario para editar usuarios existentes.
+    """
+    # Campos del usuario
+    email = forms.EmailField(required=True, label='Correo Electrónico')
+    first_name = forms.CharField(max_length=30, required=True, label='Nombre')
+    last_name = forms.CharField(max_length=30, required=True, label='Apellido')
+    is_active = forms.BooleanField(
+        required=False, 
+        label='Usuario Activo',
+        help_text='Desmarcar para desactivar la cuenta del usuario'
+    )
+    
+    # Campos del perfil
+    rol = forms.ChoiceField(
+        choices=PerfilUsuario.ROLES,
+        required=True,
+        label='Rol del Usuario'
+    )
+    telefono = forms.CharField(
+        max_length=15, 
+        required=False, 
+        label='Teléfono',
+        widget=forms.TextInput(attrs={'placeholder': 'Ej: 3001234567'})
+    )
+    cedula = forms.CharField(
+        max_length=20, 
+        required=False, 
+        label='Cédula',
+        widget=forms.TextInput(attrs={'placeholder': 'Número de identificación'})
+    )
+    fecha_nacimiento = forms.DateField(
+        required=False,
+        label='Fecha de Nacimiento',
+        widget=forms.DateInput(attrs={'type': 'date'})
+    )
+    direccion = forms.CharField(
+        required=False,
+        label='Dirección',
+        widget=forms.Textarea(attrs={'rows': 3, 'placeholder': 'Dirección completa'})
+    )
+    
+    # Permisos específicos
+    acceso_modulo_avicola = forms.BooleanField(
+        required=False,
+        label='Acceso al Módulo Avícola'
+    )
+    puede_eliminar_registros = forms.BooleanField(
+        required=False,
+        label='Puede eliminar registros'
+    )
+    
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', 'is_active')
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Si estamos editando un usuario existente, cargar datos del perfil
+        if self.instance and self.instance.pk:
+            try:
+                perfil = self.instance.perfilusuario
+                self.fields['rol'].initial = perfil.rol
+                self.fields['telefono'].initial = perfil.telefono
+                self.fields['cedula'].initial = perfil.cedula
+                self.fields['fecha_nacimiento'].initial = perfil.fecha_nacimiento
+                self.fields['direccion'].initial = perfil.direccion
+                self.fields['acceso_modulo_avicola'].initial = perfil.acceso_modulo_avicola
+                self.fields['puede_eliminar_registros'].initial = perfil.puede_eliminar_registros
             except PerfilUsuario.DoesNotExist:
-                # Si no existe, crear uno nuevo
-                PerfilUsuario.objects.create(
-                    user=user,
-                    rol=self.cleaned_data['rol'],
-                    telefono=self.cleaned_data.get('telefono', ''),
-                    cedula=self.cleaned_data.get('cedula', ''),
-                    fecha_nacimiento=self.cleaned_data.get('fecha_nacimiento'),
-                    direccion=self.cleaned_data.get('direccion', ''),
-                    acceso_modulo_avicola=self.cleaned_data.get('acceso_modulo_avicola', False),
-                    puede_eliminar_registros=self.cleaned_data.get('puede_eliminar_registros', False)
-                )
+                pass
+        
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            HTML('<h4 class="mb-3"><i class="fas fa-user"></i> Información Personal</h4>'),
+            Row(
+                Column('first_name', css_class='form-group col-md-6 mb-0'),
+                Column('last_name', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('username', css_class='form-group col-md-6 mb-0'),
+                Column('email', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('cedula', css_class='form-group col-md-6 mb-0'),
+                Column('telefono', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row'
+            ),
+            'fecha_nacimiento',
+            'direccion',
+            
+            HTML('<hr><h4 class="mb-3"><i class="fas fa-user-tag"></i> Rol y Estado</h4>'),
+            Row(
+                Column('rol', css_class='form-group col-md-6 mb-0'),
+                Column('is_active', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row'
+            ),
+            
+            HTML('<hr><h4 class="mb-3"><i class="fas fa-key"></i> Permisos Específicos</h4>'),
+            Div(
+                'acceso_modulo_avicola',
+                'puede_eliminar_registros',
+                css_class='border p-3 bg-light rounded'
+            ),
+            
+            HTML('<hr>'),
+            Submit('submit', 'Actualizar Usuario', css_class='btn btn-success btn-lg w-100')
+        )
+        
+        # Personalizar widgets
+        self.fields['username'].help_text = 'Nombre único para iniciar sesión'
+        self.fields['rol'].widget.attrs.update({'class': 'form-select'})
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError('Ya existe otro usuario con este correo electrónico.')
+        return email
+    
+    def save(self, commit=True):
+        user = super().save(commit=commit)
+        
+        if commit:
+            # Actualizar o crear el perfil del usuario
+            perfil, created = PerfilUsuario.objects.get_or_create(user=user)
+            perfil.rol = self.cleaned_data['rol']
+            perfil.telefono = self.cleaned_data['telefono']
+            perfil.cedula = self.cleaned_data['cedula']
+            perfil.fecha_nacimiento = self.cleaned_data['fecha_nacimiento']
+            perfil.direccion = self.cleaned_data['direccion']
+            perfil.acceso_modulo_avicola = self.cleaned_data['acceso_modulo_avicola']
+            perfil.puede_eliminar_registros = self.cleaned_data['puede_eliminar_registros']
+            perfil.save()
+        
         return user
 
 
@@ -219,22 +361,12 @@ class LoginForm(AuthenticationForm):
     """
     Formulario personalizado de login.
     """
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
             'username',
             'password',
-            HTML('<div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="remember_me"><label class="form-check-label" for="remember_me">Recordarme</label></div>'),
             Submit('submit', 'Iniciar Sesión', css_class='btn btn-primary w-100')
         )
-        
-        # Personalizar campos
-        self.fields['username'].widget.attrs.update({
-            'class': 'form-control',
-            'placeholder': 'Nombre de usuario'
-        })
-        self.fields['password'].widget.attrs.update({
-            'class': 'form-control',
-            'placeholder': 'Contraseña'
-        })

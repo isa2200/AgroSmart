@@ -9,7 +9,7 @@ from apps.dashboard.models import AlertaSistema  # Usar el AlertaSistema del das
 from apps.usuarios.decorators import role_required
 
 @login_required
-@role_required(['superusuario', 'admin_aves', 'solo_vista'])
+@role_required(['superusuario', 'admin_aves', 'veterinario', 'solo_vista'])
 def dashboard_principal(request):
     """
     Vista principal del dashboard con métricas generales

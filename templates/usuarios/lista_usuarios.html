@@ -1,0 +1,325 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gestión de Usuarios - AgroSmart{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+    
+    .management-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        overflow: hidden;
+        margin: 20px auto;
+        max-width: 1200px;
+    }
+    
+    .management-header {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+    }
+    
+    .management-header h2 {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+    
+    .management-body {
+        padding: 30px;
+    }
+    
+    .search-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+    
+    .users-table {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .table {
+        margin: 0;
+    }
+    
+    .table thead th {
+        background: #2c3e50;
+        color: white;
+        border: none;
+        padding: 15px;
+        font-weight: 600;
+    }
+    
+    .table tbody td {
+        padding: 15px;
+        vertical-align: middle;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .table tbody tr:hover {
+        background: #f8f9fa;
+    }
+    
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #667eea;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+    
+    .user-info {
+        display: flex;
+        align-items: center;
+    }
+    
+    .user-details h6 {
+        margin: 0;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    
+    .user-details small {
+        color: #6c757d;
+    }
+    
+    .role-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    
+    .role-superusuario { background: #e74c3c; color: white; }
+    .role-admin_aves { background: #3498db; color: white; }
+    .role-veterinario { background: #2ecc71; color: white; }
+    .role-punto_blanco { background: #f39c12; color: white; }
+    .role-solo_vista { background: #95a5a6; color: white; }
+    
+    .action-buttons {
+        display: flex;
+        gap: 5px;
+    }
+    
+    .btn-action {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 0.8rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-view { background: #17a2b8; color: white; }
+    .btn-edit { background: #28a745; color: white; }
+    .btn-delete { background: #dc3545; color: white; }
+    
+    .btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .pagination {
+        justify-content: center;
+        margin-top: 30px;
+    }
+    
+    .page-link {
+        color: #2c3e50;
+        border: 1px solid #dee2e6;
+    }
+    
+    .page-link:hover {
+        color: #667eea;
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+    }
+    
+    .page-item.active .page-link {
+        background-color: #667eea;
+        border-color: #667eea;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #6c757d;
+    }
+    
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        opacity: 0.5;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="user-management-container">
+    <div class="container">
+        <div class="management-card">
+            <div class="management-header">
+                <h2><i class="fas fa-users"></i> Gestión de Usuarios</h2>
+                <p class="mb-0">Administra los usuarios del sistema AgroSmart</p>
+            </div>
+            
+            <div class="management-body">
+                <!-- Barra de búsqueda y acciones -->
+                <div class="search-section">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <form method="get" class="d-flex">
+                                <input type="text" name="search" class="form-control me-2" 
+                                       placeholder="Buscar por nombre, usuario o email..." 
+                                       value="{{ request.GET.search }}">
+                                <button type="submit" class="btn btn-outline-primary">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <a href="{% url 'usuarios:crear' %}" class="btn btn-success">
+                                <i class="fas fa-plus"></i> Nuevo Usuario
+                            </a>
+                            <a href="{% url 'dashboard:principal' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Volver
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tabla de usuarios -->
+                {% if usuarios %}
+                <div class="users-table">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Rol</th>
+                                <th>Email</th>
+                                <th>Fecha Registro</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for usuario in usuarios %}
+                            <tr>
+                                <td>
+                                    <div class="user-info">
+                                        <div class="user-avatar">
+                                            {{ usuario.first_name|first|upper }}{{ usuario.last_name|first|upper }}
+                                        </div>
+                                        <div class="user-details">
+                                            <h6>{{ usuario.get_full_name|default:usuario.username }}</h6>
+                                            <small>@{{ usuario.username }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if usuario.perfilusuario %}
+                                        <span class="role-badge role-{{ usuario.perfilusuario.rol }}">
+                                            {{ usuario.perfilusuario.get_rol_display }}
+                                        </span>
+                                    {% else %}
+                                        <span class="role-badge" style="background: #6c757d; color: white;">Sin Perfil</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ usuario.email|default:"No especificado" }}</td>
+                                <td>{{ usuario.date_joined|date:"d/m/Y" }}</td>
+                                <td>
+                                    {% if usuario.is_active %}
+                                        <span class="badge bg-success">Activo</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Inactivo</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a href="{% url 'usuarios:detalle' usuario.pk %}" 
+                                           class="btn-action btn-view" title="Ver detalles">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{% url 'usuarios:editar' usuario.pk %}" 
+                                           class="btn-action btn-edit" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        {% if usuario != request.user %}
+                                        <a href="{% url 'usuarios:eliminar' usuario.pk %}" 
+                                           class="btn-action btn-delete" title="Eliminar"
+                                           onclick="return confirm('¿Estás seguro de eliminar este usuario?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Paginación -->
+                {% if is_paginated %}
+                <nav aria-label="Navegación de usuarios">
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Primera</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Anterior</a>
+                            </li>
+                        {% endif %}
+                        
+                        <li class="page-item active">
+                            <span class="page-link">{{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+                        </li>
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Siguiente</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Última</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+                
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-users"></i>
+                    <h4>No se encontraron usuarios</h4>
+                    <p>{% if request.GET.search %}No hay usuarios que coincidan con tu búsqueda.{% else %}Aún no hay usuarios registrados en el sistema.{% endif %}</p>
+                    <a href="{% url 'usuarios:crear' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Crear Primer Usuario
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

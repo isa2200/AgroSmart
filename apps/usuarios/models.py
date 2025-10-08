@@ -51,22 +51,56 @@ class PerfilUsuario(BaseModel):
         """Verifica si el usuario puede editar datos."""
         return self.rol not in ['solo_vista', 'punto_blanco']
     
+    def puede_eliminar(self):
+        """Verifica si el usuario puede eliminar registros."""
+        if self.rol == 'superusuario':
+            return True
+        return self.puede_eliminar_registros
+    
+    def puede_administrar_usuarios(self):
+        """Verifica si el usuario puede administrar otros usuarios."""
+        return self.rol == 'superusuario'
+    
+    def puede_acceder_modulo_aves(self):
+        """Verifica si el usuario puede acceder al módulo de aves."""
+        return self.rol in ['superusuario', 'admin_aves', 'veterinario', 'solo_vista'] or self.acceso_modulo_avicola
+    
+    def puede_editar_modulo_aves(self):
+        """Verifica si el usuario puede editar en el módulo de aves."""
+        return self.rol in ['superusuario', 'admin_aves', 'veterinario']
+    
     def puede_registrar_vacunas(self):
         """Verifica si puede registrar vacunas."""
         return self.rol in ['superusuario', 'veterinario']
-    
+
     def puede_gestionar_vacunacion(self):
         """Verifica si el usuario puede gestionar vacunación."""
         return self.rol in ['superusuario', 'veterinario']
-    
+
     def puede_ver_inventarios(self):
         """Verifica si el usuario puede ver inventarios."""
         return self.rol in ['superusuario', 'admin_aves', 'punto_blanco', 'solo_vista']
-    
+
     def puede_generar_pedidos(self):
         """Verifica si el usuario puede generar pedidos."""
         return self.rol in ['superusuario', 'punto_blanco']
     
+    def puede_ver_inventario_punto_blanco(self):
+        """Verifica si el usuario puede ver inventarios desde punto blanco."""
+        return self.rol in ['superusuario', 'punto_blanco']
+    
+    def puede_acceder_dashboard_principal(self):
+        """Verifica si puede acceder al dashboard principal del sistema."""
+        return self.rol == 'superusuario'
+    
+    def puede_ver_reportes_completos(self):
+        """Verifica si puede ver reportes completos del sistema."""
+        return self.rol in ['superusuario', 'admin_aves']
+    
+    def puede_modificar_configuracion(self):
+        """Verifica si puede modificar configuraciones del sistema."""
+        return self.rol == 'superusuario'
+
     def requiere_justificacion_modificacion(self):
         """Verifica si requiere justificación para modificaciones."""
         return self.rol in ['admin_aves', 'veterinario']

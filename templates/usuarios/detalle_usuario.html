@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Detalle de Usuario - {{ usuario.get_full_name|default:usuario.username }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .detalle-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .usuario-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+    
+    .usuario-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+    }
+    
+    .usuario-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 4px solid white;
+        margin: 0 auto 15px;
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        color: #6c757d;
+    }
+    
+    .usuario-info {
+        padding: 30px;
+    }
+    
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .info-row:last-child {
+        border-bottom: none;
+    }
+    
+    .info-label {
+        font-weight: 600;
+        color: #495057;
+        flex: 0 0 200px;
+    }
+    
+    .info-value {
+        flex: 1;
+        text-align: right;
+    }
+    
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    
+    .status-active {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .status-inactive {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
+    .role-badge {
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: 600;
+        background: #e9ecef;
+        color: #495057;
+    }
+    
+    .accesos-section {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 20px;
+    }
+    
+    .accesos-table {
+        width: 100%;
+        margin-top: 15px;
+    }
+    
+    .accesos-table th,
+    .accesos-table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .accesos-table th {
+        background: #f8f9fa;
+        font-weight: 600;
+        color: #495057;
+    }
+    
+    .btn-group {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 30px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="detalle-container">
+    <div class="usuario-card">
+        <div class="usuario-header">
+            <div class="usuario-avatar">
+                {% if perfil and perfil.avatar %}
+                    <img src="{{ perfil.avatar.url }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                {% else %}
+                    <i class="fas fa-user"></i>
+                {% endif %}
+            </div>
+            <h2>{{ usuario.get_full_name|default:usuario.username }}</h2>
+            <p>@{{ usuario.username }}</p>
+        </div>
+        
+        <div class="usuario-info">
+            <div class="info-row">
+                <span class="info-label">Nombre completo:</span>
+                <span class="info-value">{{ usuario.get_full_name|default:"No especificado" }}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">Email:</span>
+                <span class="info-value">{{ usuario.email|default:"No especificado" }}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">Estado:</span>
+                <span class="info-value">
+                    {% if usuario.is_active %}
+                        <span class="status-badge status-active">Activo</span>
+                    {% else %}
+                        <span class="status-badge status-inactive">Inactivo</span>
+                    {% endif %}
+                </span>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">Rol:</span>
+                <span class="info-value">
+                    {% if perfil %}
+                        <span class="role-badge">{{ perfil.get_rol_display }}</span>
+                    {% else %}
+                        <span class="role-badge">Sin perfil</span>
+                    {% endif %}
+                </span>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">Fecha de registro:</span>
+                <span class="info-value">{{ usuario.date_joined|date:"d/m/Y H:i" }}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">Último acceso:</span>
+                <span class="info-value">
+                    {% if usuario.last_login %}
+                        {{ usuario.last_login|date:"d/m/Y H:i" }}
+                    {% else %}
+                        Nunca
+                    {% endif %}
+                </span>
+            </div>
+            
+            {% if perfil %}
+                {% if perfil.telefono %}
+                <div class="info-row">
+                    <span class="info-label">Teléfono:</span>
+                    <span class="info-value">{{ perfil.telefono }}</span>
+                </div>
+                {% endif %}
+                
+                {% if perfil.direccion %}
+                <div class="info-row">
+                    <span class="info-label">Dirección:</span>
+                    <span class="info-value">{{ perfil.direccion }}</span>
+                </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if registros_acceso %}
+    <div class="accesos-section">
+        <h4><i class="fas fa-history"></i> Últimos Accesos</h4>
+        <table class="accesos-table">
+            <thead>
+                <tr>
+                    <th>Fecha y Hora</th>
+                    <th>IP</th>
+                    <th>Navegador</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros_acceso %}
+                <tr>
+                    <td>{{ registro.fecha_acceso|date:"d/m/Y H:i:s" }}</td>
+                    <td>{{ registro.ip_address }}</td>
+                    <td>{{ registro.user_agent|truncatechars:50 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    
+    <div class="btn-group">
+        <a href="{% url 'usuarios:editar' usuario.pk %}" class="btn btn-primary">
+            <i class="fas fa-edit"></i> Editar Usuario
+        </a>
+        <a href="{% url 'usuarios:lista' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver a la Lista
+        </a>
+        {% if usuario != request.user %}
+        <a href="{% url 'usuarios:eliminar' usuario.pk %}" class="btn btn-danger">
+            <i class="fas fa-trash"></i> Eliminar Usuario
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

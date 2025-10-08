@@ -8,13 +8,14 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.views.generic import ListView, DetailView, UpdateView, CreateView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView, TemplateView
+from django.http import Http404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.db.models import Q
 from .models import PerfilUsuario, RegistroAcceso
-from .forms import RegistroUsuarioForm, PerfilUsuarioForm, LoginForm, RegistroCompletoForm
-from .decorators import role_required
+from .forms import RegistroUsuarioForm, PerfilUsuarioForm, LoginForm, RegistroCompletoForm, EditarUsuarioForm
+from .decorators import role_required, admin_usuarios_required, punto_blanco_required
 
 
 class LoginView(CreateView):
@@ -26,7 +27,19 @@ class LoginView(CreateView):
     
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('dashboard:principal')
+            # Redirección basada en el rol del usuario autenticado
+            try:
+                perfil = request.user.perfilusuario
+                if perfil.rol == 'punto_blanco':
+                    return redirect('usuarios:punto_blanco_dashboard')
+                elif perfil.rol in ['superusuario', 'admin_aves', 'solo_vista']:
+                    return redirect('dashboard:principal')
+                elif perfil.rol == 'veterinario':
+                    return redirect('aves:dashboard')
+                else:
+                    return redirect('dashboard:principal')
+            except:
+                return redirect('dashboard:principal')
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
@@ -47,7 +60,22 @@ class LoginView(CreateView):
                     modulo='Usuarios'
                 )
                 messages.success(request, f'Bienvenido {user.get_full_name()}')
-                return redirect('dashboard:principal')
+                
+                # Redirección basada en el rol del usuario
+                try:
+                    perfil = user.perfilusuario
+                    if perfil.rol == 'punto_blanco':
+                        return redirect('usuarios:punto_blanco_dashboard')
+                    elif perfil.rol in ['superusuario', 'admin_aves', 'solo_vista']:
+                        return redirect('dashboard:principal')
+                    elif perfil.rol == 'veterinario':
+                        return redirect('aves:dashboard')
+                    else:
+                        # Fallback para roles no definidos
+                        return redirect('dashboard:principal')
+                except:
+                    # Si no tiene perfil, redirigir al dashboard principal
+                    return redirect('dashboard:principal')
         return render(request, self.template_name, {'form': form})
     
     def get_client_ip(self, request):
@@ -108,7 +136,7 @@ class RegistroView(CreateView):
         return ip
 
 
-@method_decorator(role_required(['superusuario']), name='dispatch')
+@method_decorator(admin_usuarios_required, name='dispatch')
 class UsuarioListView(LoginRequiredMixin, ListView):
     """
     Lista de usuarios del sistema.
@@ -131,20 +159,43 @@ class UsuarioListView(LoginRequiredMixin, ListView):
         return queryset.order_by('-date_joined')
 
 
-@method_decorator(role_required(['superusuario']), name='dispatch')
+@method_decorator(admin_usuarios_required, name='dispatch')
 class CrearUsuarioView(LoginRequiredMixin, CreateView):
     """
     Vista para crear nuevos usuarios.
     """
     model = User
-    form_class = RegistroUsuarioForm
+    form_class = RegistroCompletoForm
     template_name = 'usuarios/crear_usuario.html'
     success_url = reverse_lazy('usuarios:lista')
     
     def form_valid(self, form):
         response = super().form_valid(form)
-        messages.success(self.request, 'Usuario creado exitosamente')
+        user = form.instance
+        
+        # Registrar la creación del usuario
+        RegistroAcceso.objects.create(
+            usuario=user,
+            ip_address=self.get_client_ip(self.request),
+            user_agent=self.request.META.get('HTTP_USER_AGENT', ''),
+            accion='Creación de Usuario',
+            modulo='Usuarios'
+        )
+        
+        messages.success(
+            self.request, 
+            f'Usuario {user.get_full_name()} creado exitosamente. '
+            f'Rol asignado: {user.perfilusuario.get_rol_display()}'
+        )
         return response
+    
+    def get_client_ip(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
 
 
 class PerfilView(LoginRequiredMixin, DetailView):
@@ -157,6 +208,77 @@ class PerfilView(LoginRequiredMixin, DetailView):
     
     def get_object(self):
         return get_object_or_404(PerfilUsuario, user=self.request.user)
+
+
+@method_decorator(admin_usuarios_required, name='dispatch')
+class UsuarioDetailView(LoginRequiredMixin, DetailView):
+    """
+    Vista de detalle de un usuario.
+    """
+    model = User
+    template_name = 'usuarios/detalle_usuario.html'
+    context_object_name = 'usuario'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        usuario = self.get_object()
+        try:
+            context['perfil'] = usuario.perfilusuario
+        except PerfilUsuario.DoesNotExist:
+            context['perfil'] = None
+        return context
+
+
+@method_decorator(admin_usuarios_required, name='dispatch')
+class EditarUsuarioView(LoginRequiredMixin, UpdateView):
+    """
+    Vista para editar un usuario.
+    """
+    model = User
+    form_class = EditarUsuarioForm
+    template_name = 'usuarios/editar_usuario.html'
+    success_url = reverse_lazy('usuarios:lista')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        usuario = self.get_object()
+        try:
+            context['perfil'] = usuario.perfilusuario
+        except PerfilUsuario.DoesNotExist:
+            context['perfil'] = None
+        return context
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, f'Usuario {form.instance.username} actualizado exitosamente')
+        return response
+
+
+@method_decorator(admin_usuarios_required, name='dispatch')
+class EliminarUsuarioView(LoginRequiredMixin, DeleteView):
+    """
+    Vista para eliminar un usuario.
+    """
+    model = User
+    template_name = 'usuarios/eliminar_usuario.html'
+    success_url = reverse_lazy('usuarios:lista')
+    context_object_name = 'usuario'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        usuario = self.get_object()
+        try:
+            context['perfil'] = usuario.perfilusuario
+        except PerfilUsuario.DoesNotExist:
+            context['perfil'] = None
+        return context
+    
+    def delete(self, request, *args, **kwargs):
+        usuario = self.get_object()
+        username = usuario.username
+        response = super().delete(request, *args, **kwargs)
+        messages.success(request, f'Usuario {username} eliminado exitosamente')
+        return response
 
 
 class EditarPerfilView(LoginRequiredMixin, UpdateView):
@@ -175,3 +297,56 @@ class EditarPerfilView(LoginRequiredMixin, UpdateView):
         response = super().form_valid(form)
         messages.success(self.request, 'Perfil actualizado exitosamente')
         return response
+
+
+@method_decorator(punto_blanco_required, name='dispatch')
+class PuntoBlancoDashboardView(LoginRequiredMixin, TemplateView):
+    """
+    Dashboard específico para usuarios de Punto Blanco.
+    """
+    template_name = 'usuarios/punto_blanco_dashboard.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Obtener inventarios de huevos disponibles
+        from apps.aves.models import InventarioHuevos
+        inventarios = InventarioHuevos.objects.filter(cantidad_actual__gt=0)
+        
+        context.update({
+            'inventarios_huevos': inventarios,
+            'total_huevos_disponibles': sum(inv.cantidad_actual for inv in inventarios),
+        })
+        
+        return context
+
+
+@method_decorator(punto_blanco_required, name='dispatch')
+class PuntoBlancoInventarioHuevosView(LoginRequiredMixin, ListView):
+    """
+    Vista de inventario de huevos para Punto Blanco.
+    """
+    template_name = 'usuarios/punto_blanco_inventario.html'
+    context_object_name = 'inventarios'
+    
+    def get_queryset(self):
+        from apps.aves.models import InventarioHuevos
+        return InventarioHuevos.objects.all().order_by('categoria', '-fecha_ultima_actualizacion')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        inventarios = self.get_queryset()
+        
+        # Calcular estadísticas
+        total_disponible = sum(inv.cantidad_actual for inv in inventarios)
+        total_minimo = sum(inv.cantidad_minima for inv in inventarios)
+        inventarios_criticos = sum(1 for inv in inventarios if inv.cantidad_actual <= inv.cantidad_minima)
+        
+        context.update({
+            'total_disponible': total_disponible,
+            'total_minimo': total_minimo,
+            'inventarios_criticos': inventarios_criticos,
+            'categorias': inventarios,
+        })
+        
+        return context

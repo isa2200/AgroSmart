@@ -14,6 +14,7 @@
         --success-color: #27ae60;
         --warning-color: #f39c12;
         --danger-color: #e74c3c;
+        --info-color: #17a2b8;
         --light-bg: #f8f9fa;
         --border-color: #dee2e6;
     }
@@ -41,6 +42,23 @@
         z-index: 1000;
         transition: all 0.3s ease;
         box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    /* Ocultar scrollbar pero mantener funcionalidad */
+    .sidebar::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+        background: transparent;
+    }
+
+    /* Para Firefox */
+    .sidebar {
+        scrollbar-width: none;
     }
 
     .sidebar-header {
@@ -62,7 +80,15 @@
     }
 
     .sidebar-nav {
-        padding: 1rem 0;
+        padding: 1rem 0 2rem 0;
+        height: calc(100vh - 120px);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .sidebar-nav::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
     }
 
     .nav-section {
@@ -136,7 +162,7 @@
 
     .welcome-section {
         display: flex;
-        justify-content: between;
+        justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
     }
@@ -158,19 +184,36 @@
         display: flex;
         align-items: center;
         gap: 1rem;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        color: white;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     .user-avatar {
-        width: 50px;
-        height: 50px;
+        width: 45px;
+        height: 45px;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--accent-color), var(--success-color));
+        background: rgba(255, 255, 255, 0.2);
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         font-weight: bold;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .user-info h6 {
+        color: white !important;
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .user-info small {
+        color: rgba(255, 255, 255, 0.8) !important;
+        font-size: 0.85rem;
     }
 
     /* Metrics Cards */
@@ -205,6 +248,7 @@
     .metric-card.success::before { background: var(--success-color); }
     .metric-card.warning::before { background: var(--warning-color); }
     .metric-card.danger::before { background: var(--danger-color); }
+    .metric-card.info::before { background: var(--info-color); }
 
     .metric-card:hover {
         transform: translateY(-5px);
@@ -233,6 +277,7 @@
     .metric-icon.success { background: var(--success-color); }
     .metric-icon.warning { background: var(--warning-color); }
     .metric-icon.danger { background: var(--danger-color); }
+    .metric-icon.info { background: var(--info-color); }
 
     .metric-value {
         font-size: 2.5rem;
@@ -460,7 +505,7 @@
 
         <!-- Módulos Section -->
         <div class="nav-section">
-            <div class="nav-section-title">Módulos</div>
+            <div class="nav-section-title">Módulos Ganaderos</div>
             <div class="nav-item">
                 <a href="{% url 'aves:dashboard' %}" class="nav-link">
                     <i class="fas fa-dove"></i>
@@ -470,18 +515,45 @@
                     {% endif %}
                 </a>
             </div>
-            <!-- Futuras áreas se agregarán aquí -->
             <div class="nav-item">
-                <a href="#" class="nav-link" style="opacity: 0.5;">
+                <a href="#" class="nav-link" style="opacity: 0.6;">
                     <i class="fas fa-cow"></i>
-                    <span>Módulo Ganadero</span>
+                    <span>Módulo Bovino</span>
                     <span class="badge bg-secondary">Próximamente</span>
                 </a>
             </div>
             <div class="nav-item">
-                <a href="#" class="nav-link" style="opacity: 0.5;">
-                    <i class="fas fa-tractor"></i>
-                    <span>Módulo Agrícola</span>
+                <a href="#" class="nav-link" style="opacity: 0.6;">
+                    <i class="fas fa-horse-head"></i>
+                    <span>Módulo Equino</span>
+                    <span class="badge bg-secondary">Próximamente</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" style="opacity: 0.6;">
+                    <i class="fas fa-piggy-bank"></i>
+                    <span>Módulo Porcino</span>
+                    <span class="badge bg-secondary">Próximamente</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" style="opacity: 0.6;">
+                    <i class="fas fa-paw"></i>
+                    <span>Módulo Ovino</span>
+                    <span class="badge bg-secondary">Próximamente</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" style="opacity: 0.6;">
+                    <i class="fas fa-mountain"></i>
+                    <span>Módulo Caprino</span>
+                    <span class="badge bg-secondary">Próximamente</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" style="opacity: 0.6;">
+                    <i class="fas fa-carrot"></i>
+                    <span>Módulo Cunícola</span>
                     <span class="badge bg-secondary">Próximamente</span>
                 </a>
             </div>
@@ -549,50 +621,52 @@
         <div class="metric-card">
             <div class="metric-header">
                 <div class="metric-icon">
-                    <i class="fas fa-dove"></i>
+                    <i class="fas fa-seedling"></i>
                 </div>
             </div>
-            <h2 class="metric-value">{{ total_aves|default:0 }}</h2>
-            <p class="metric-label">Total de Aves</p>
+            <h2 class="metric-value">7</h2>
+            <p class="metric-label">Módulos Disponibles</p>
             <p class="metric-change positive">
-                <i class="fas fa-arrow-up"></i> +5% este mes
+                <i class="fas fa-arrow-up"></i> 1 activo
             </p>
         </div>
 
         <div class="metric-card success">
             <div class="metric-header">
                 <div class="metric-icon success">
-                    <i class="fas fa-egg"></i>
+                    <i class="fas fa-chart-line"></i>
                 </div>
             </div>
-            <h2 class="metric-value">{{ produccion_aves|default:0 }}</h2>
-            <p class="metric-label">Producción del Mes</p>
+            <h2 class="metric-value">{{ total_aves|default:0 }}</h2>
+            <p class="metric-label">Total de Animales</p>
             <p class="metric-change positive">
-                <i class="fas fa-arrow-up"></i> +12% vs mes anterior
+                <i class="fas fa-arrow-up"></i> Módulo Avícola
             </p>
         </div>
 
         <div class="metric-card warning">
             <div class="metric-header">
                 <div class="metric-icon warning">
-                    <i class="fas fa-exclamation-triangle"></i>
+                    <i class="fas fa-bell"></i>
                 </div>
             </div>
             <h2 class="metric-value">{{ alertas.count|default:0 }}</h2>
-            <p class="metric-label">Alertas Activas</p>
-            <p class="metric-change negative">
-                <i class="fas fa-arrow-down"></i> -3 desde ayer
+            <p class="metric-label">Alertas del Sistema</p>
+            <p class="metric-change">
+                <i class="fas fa-info-circle"></i> Todas las áreas
             </p>
         </div>
 
-        <div class="metric-card danger">
+        <div class="metric-card info">
             <div class="metric-header">
-                <div class="metric-icon danger">
-                    <i class="fas fa-thermometer-half"></i>
+                <div class="metric-icon info">
+                    <i class="fas fa-users"></i>
                 </div>
             </div>
+            <h2 class="metric-value">1</h2>
+            <p class="metric-label">Usuarios Activos</p>
             <p class="metric-change positive">
-                <i class="fas fa-arrow-up"></i> Óptima
+                <i class="fas fa-check"></i> Sistema operativo
             </p>
         </div>
     </div>

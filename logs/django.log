@@ -12160,3 +12160,745 @@ INFO 2025-10-07 21:33:54,986 basehttp 15652 5916 "GET /static/debug_toolbar/js/u
 INFO 2025-10-07 21:33:55,391 basehttp 15652 5916 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
 INFO 2025-10-07 21:34:26,156 basehttp 15652 5916 "POST /usuarios/login/ HTTP/1.1" 302 0
 INFO 2025-10-07 21:34:26,237 basehttp 15652 5916 "GET / HTTP/1.1" 200 33510
+INFO 2025-10-07 21:37:46,859 basehttp 15652 5916 "GET / HTTP/1.1" 200 33779
+INFO 2025-10-07 21:37:46,884 basehttp 15652 1404 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:37:46,884 basehttp 15652 5916 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:37:47,183 basehttp 15652 1404 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:37:47,190 basehttp 15652 1404 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:37:47,560 basehttp 15652 1404 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:43:59,843 basehttp 15652 20044 "GET / HTTP/1.1" 200 34991
+INFO 2025-10-07 21:43:59,866 basehttp 15652 16196 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:43:59,866 basehttp 15652 20044 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:44:00,287 basehttp 15652 16196 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:44:00,292 basehttp 15652 16196 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:44:00,893 basehttp 15652 16196 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:44:20,878 basehttp 15652 16196 "GET / HTTP/1.1" 200 34991
+INFO 2025-10-07 21:44:20,900 basehttp 15652 20044 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:44:20,900 basehttp 15652 16196 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:44:21,110 basehttp 15652 16196 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:44:21,116 basehttp 15652 16196 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:44:22,003 basehttp 15652 16196 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 21:46:19,591 basehttp 15652 16196 "GET / HTTP/1.1" 200 34998
+INFO 2025-10-07 21:46:19,613 basehttp 15652 20044 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:46:19,613 basehttp 15652 16196 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:46:19,913 basehttp 15652 16196 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:46:19,913 basehttp 15652 20044 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:46:20,281 basehttp 15652 20044 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+ERROR 2025-10-07 21:49:05,056 log 15652 20044 Internal Server Error: /reportes/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\reportes\views.py", line 29, in lista_reportes
+    return render(request, 'reportes/lista_reportes.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: reportes/lista_reportes.html
+ERROR 2025-10-07 21:49:05,105 basehttp 15652 20044 "GET /reportes/ HTTP/1.1" 500 109054
+WARNING 2025-10-07 21:49:05,230 log 15652 20044 Not Found: /favicon.ico
+WARNING 2025-10-07 21:49:05,230 basehttp 15652 20044 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-10-07 21:50:45,802 basehttp 15652 20044 "GET / HTTP/1.1" 200 35684
+INFO 2025-10-07 21:50:45,825 basehttp 15652 16196 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 21:50:45,825 basehttp 15652 20044 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 21:50:46,076 basehttp 15652 20044 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 21:50:46,078 basehttp 15652 16196 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 21:50:46,432 basehttp 15652 16196 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 22:01:12,000 autoreload 15652 2636 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\forms.py changed, reloading.
+INFO 2025-10-07 22:01:13,105 autoreload 29656 28188 Watching for file changes with StatReloader
+INFO 2025-10-07 22:01:52,917 autoreload 29656 28188 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\urls.py changed, reloading.
+INFO 2025-10-07 22:01:54,778 autoreload 27092 1684 Watching for file changes with StatReloader
+INFO 2025-10-07 22:15:28,678 autoreload 27092 1684 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\views.py changed, reloading.
+INFO 2025-10-07 22:15:30,359 autoreload 8560 13396 Watching for file changes with StatReloader
+INFO 2025-10-07 22:16:17,774 autoreload 8560 13396 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\forms.py changed, reloading.
+INFO 2025-10-07 22:16:18,884 autoreload 12256 29548 Watching for file changes with StatReloader
+INFO 2025-10-07 22:16:59,382 autoreload 12256 29548 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\urls.py changed, reloading.
+INFO 2025-10-07 22:17:00,483 autoreload 1784 27756 Watching for file changes with StatReloader
+INFO 2025-10-07 22:17:49,179 autoreload 3780 19688 Watching for file changes with StatReloader
+INFO 2025-10-07 22:17:53,342 basehttp 3780 23532 "GET / HTTP/1.1" 200 35685
+ERROR 2025-10-07 22:17:57,095 log 3780 23532 Internal Server Error: /usuarios/lista/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+           ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+                    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'detalle' not found. 'detalle' is not a valid view function or pattern name.
+ERROR 2025-10-07 22:17:57,156 basehttp 3780 23532 "GET /usuarios/lista/ HTTP/1.1" 500 198186
+WARNING 2025-10-07 22:17:57,334 log 3780 23532 Not Found: /favicon.ico
+WARNING 2025-10-07 22:17:57,334 basehttp 3780 23532 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-10-07 22:21:48,296 autoreload 3780 19688 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\views.py changed, reloading.
+INFO 2025-10-07 22:21:49,275 autoreload 29584 24108 Watching for file changes with StatReloader
+INFO 2025-10-07 22:22:32,935 autoreload 29584 24108 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\views.py changed, reloading.
+INFO 2025-10-07 22:22:33,829 autoreload 6888 4460 Watching for file changes with StatReloader
+INFO 2025-10-07 22:23:20,401 autoreload 6888 4460 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\views.py changed, reloading.
+INFO 2025-10-07 22:23:21,322 autoreload 21004 5444 Watching for file changes with StatReloader
+INFO 2025-10-07 22:23:43,969 autoreload 21004 5444 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\urls.py changed, reloading.
+INFO 2025-10-07 22:23:44,998 autoreload 11660 22932 Watching for file changes with StatReloader
+INFO 2025-10-07 22:24:35,801 basehttp 11660 26348 "GET /usuarios/lista/ HTTP/1.1" 200 22805
+INFO 2025-10-07 22:24:43,820 basehttp 11660 26348 "GET /usuarios/lista/ HTTP/1.1" 200 22804
+ERROR 2025-10-07 22:24:49,741 log 11660 26348 Internal Server Error: /usuarios/detalle/1/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: usuarios/detalle_usuario.html
+ERROR 2025-10-07 22:24:49,777 basehttp 11660 26348 "GET /usuarios/detalle/1/ HTTP/1.1" 500 100975
+INFO 2025-10-07 22:27:30,297 basehttp 11660 26348 "GET /usuarios/detalle/1/ HTTP/1.1" 200 19385
+INFO 2025-10-07 22:27:44,277 basehttp 11660 26348 "GET /usuarios/editar/1/ HTTP/1.1" 200 25246
+INFO 2025-10-07 22:27:58,131 basehttp 11660 26348 "GET /usuarios/lista/ HTTP/1.1" 200 22804
+INFO 2025-10-07 22:28:00,468 basehttp 11660 26348 "GET /usuarios/crear/ HTTP/1.1" 200 26398
+ERROR 2025-10-07 22:29:37,305 log 11660 26348 Internal Server Error: /usuarios/crear/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\backends\utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\backends\mysql\base.py", line 75, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\MySQLdb\cursors.py", line 179, in execute
+    res = self._query(mogrified_query)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\MySQLdb\cursors.py", line 330, in _query
+    db.query(q)
+    ~~~~~~~~^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\MySQLdb\connections.py", line 280, in query
+    _mysql.connection.query(self, query)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+MySQLdb.IntegrityError: (1062, "Duplicate entry '2' for key 'usuarios_perfilusuario.user_id'")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\edit.py", line 153, in post
+    return self.form_valid(form)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\views.py", line 146, in form_valid
+    response = super().form_valid(form)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\edit.py", line 135, in form_valid
+    self.object = form.save()
+                  ~~~~~~~~~^^
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\forms.py", line 163, in save
+    PerfilUsuario.objects.create(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        user=user,
+        ^^^^^^^^^^
+    ...<6 lines>...
+        puede_eliminar_registros=self.cleaned_data['puede_eliminar_registros']
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 658, in create
+    obj.save(force_insert=True, using=self.db)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\core\models.py", line 25, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\base.py", line 814, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\base.py", line 877, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\base.py", line 1020, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, fields, returning_fields, raw
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\base.py", line 1061, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\debug_toolbar\panels\sql\tracking.py", line 234, in execute
+    return self._record(super().execute, sql, params)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\debug_toolbar\panels\sql\tracking.py", line 160, in _record
+    return method(sql, params)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\backends\utils.py", line 102, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\backends\utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\backends\utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\backends\mysql\base.py", line 75, in execute
+    return self.cursor.execute(query, args)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\MySQLdb\cursors.py", line 179, in execute
+    res = self._query(mogrified_query)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\MySQLdb\cursors.py", line 330, in _query
+    db.query(q)
+    ~~~~~~~~^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\MySQLdb\connections.py", line 280, in query
+    _mysql.connection.query(self, query)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+django.db.utils.IntegrityError: (1062, "Duplicate entry '2' for key 'usuarios_perfilusuario.user_id'")
+ERROR 2025-10-07 22:29:37,396 basehttp 11660 26348 "POST /usuarios/crear/ HTTP/1.1" 500 272488
+INFO 2025-10-07 22:32:49,805 autoreload 11660 22932 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\forms.py changed, reloading.
+INFO 2025-10-07 22:32:50,629 autoreload 4704 24588 Watching for file changes with StatReloader
+INFO 2025-10-07 22:33:05,981 basehttp 4704 27408 "GET /usuarios/lista/ HTTP/1.1" 200 25395
+INFO 2025-10-07 22:33:09,648 basehttp 4704 27408 "GET /usuarios/editar/2/ HTTP/1.1" 200 24912
+INFO 2025-10-07 22:33:17,702 basehttp 4704 27408 "POST /usuarios/editar/2/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:33:17,737 basehttp 4704 27408 "GET /usuarios/lista/ HTTP/1.1" 200 25710
+INFO 2025-10-07 22:33:35,421 basehttp 4704 27408 "GET /usuarios/detalle/1/ HTTP/1.1" 200 19385
+INFO 2025-10-07 22:33:39,302 basehttp 4704 27408 "GET /usuarios/lista/ HTTP/1.1" 200 25405
+INFO 2025-10-07 22:33:40,793 basehttp 4704 27408 "GET / HTTP/1.1" 200 35684
+INFO 2025-10-07 22:33:53,708 basehttp 4704 27408 "GET /usuarios/lista/ HTTP/1.1" 200 25405
+INFO 2025-10-07 22:33:58,862 basehttp 4704 27408 "GET /usuarios/lista/?search=ale HTTP/1.1" 200 23271
+INFO 2025-10-07 22:34:05,961 basehttp 4704 27408 "GET /usuarios/lista/?search= HTTP/1.1" 200 25413
+INFO 2025-10-07 22:34:12,178 basehttp 4704 27408 "GET /usuarios/eliminar/2/ HTTP/1.1" 200 21506
+INFO 2025-10-07 22:34:21,493 basehttp 4704 27408 "GET /usuarios/lista/ HTTP/1.1" 200 25405
+INFO 2025-10-07 22:34:32,207 basehttp 4704 27408 "GET /usuarios/eliminar/2/ HTTP/1.1" 200 21506
+INFO 2025-10-07 22:34:43,372 basehttp 4704 27408 "POST /usuarios/eliminar/2/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:34:43,413 basehttp 4704 27408 "GET /usuarios/lista/ HTTP/1.1" 200 22804
+INFO 2025-10-07 22:35:57,576 basehttp 4704 27408 "GET /usuarios/lista/ HTTP/1.1" 200 22642
+INFO 2025-10-07 22:35:59,825 basehttp 4704 27408 "GET /usuarios/detalle/1/ HTTP/1.1" 200 19385
+INFO 2025-10-07 22:36:01,671 basehttp 4704 27408 "GET /usuarios/lista/ HTTP/1.1" 200 22642
+INFO 2025-10-07 22:36:03,107 basehttp 4704 27408 "GET /usuarios/editar/1/ HTTP/1.1" 200 25246
+INFO 2025-10-07 22:36:29,398 basehttp 4704 27408 "GET /usuarios/editar/1/ HTTP/1.1" 200 25085
+INFO 2025-10-07 22:36:47,699 basehttp 4704 27408 "GET /usuarios/lista/ HTTP/1.1" 200 22642
+INFO 2025-10-07 22:36:54,376 basehttp 4704 27408 "GET /usuarios/crear/ HTTP/1.1" 200 26398
+INFO 2025-10-07 22:38:00,880 basehttp 4704 27408 "POST /usuarios/crear/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:00,911 basehttp 4704 27408 "GET /usuarios/lista/ HTTP/1.1" 200 25576
+INFO 2025-10-07 22:38:12,493 basehttp 4704 27408 "GET / HTTP/1.1" 200 35684
+INFO 2025-10-07 22:38:16,537 basehttp 4704 27408 "GET /usuarios/lista/ HTTP/1.1" 200 25244
+INFO 2025-10-07 22:38:26,192 basehttp 4704 27408 "GET / HTTP/1.1" 200 35684
+ERROR 2025-10-07 22:38:30,287 log 4704 27408 Internal Server Error: /usuarios/perfil/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: usuarios/perfil.html
+ERROR 2025-10-07 22:38:30,321 basehttp 4704 27408 "GET /usuarios/perfil/ HTTP/1.1" 500 100719
+INFO 2025-10-07 22:38:32,850 basehttp 4704 27408 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:32,867 basehttp 4704 27408 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-07 22:38:32,895 basehttp 4704 27408 "GET /static/dashboard/css/login.css HTTP/1.1" 304 0
+INFO 2025-10-07 22:38:32,905 basehttp 4704 27408 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 304 0
+INFO 2025-10-07 22:38:36,474 basehttp 4704 27408 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:36,507 basehttp 4704 27408 "GET / HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:36,542 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:36,590 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:36,634 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:36,674 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:36,703 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:36,740 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:36,776 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:36,811 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:36,847 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:36,885 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:36,930 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:36,962 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:37,000 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:37,025 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:37,056 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:37,086 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:37,115 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:37,149 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,227 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,260 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,292 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,319 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,345 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,369 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,393 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,415 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,438 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,458 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,478 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,499 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,522 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,541 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,561 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,580 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,604 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,626 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,646 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:38,669 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,296 basehttp 4704 27408 "GET /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,325 basehttp 4704 27408 "GET / HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,362 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,410 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,450 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,488 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,517 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,550 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,581 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,615 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,651 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,698 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,730 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,763 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,796 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,827 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,861 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,895 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,925 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:42,955 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,028 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,060 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,092 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,119 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,143 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,165 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,187 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,209 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,234 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,256 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,280 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,303 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,326 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,348 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,371 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,394 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,415 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,437 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,457 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:44,478 basehttp 4704 27408 "GET /aves/lotes/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:48,138 basehttp 4704 27408 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:38:48,162 basehttp 4704 27408 "GET /usuarios/login/ HTTP/1.1" 200 82996
+INFO 2025-10-07 22:39:04,991 basehttp 4704 27408 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-07 22:39:05,014 basehttp 4704 27408 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9779
+INFO 2025-10-07 22:39:05,014 basehttp 4704 3020 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 22:39:05,015 basehttp 4704 15780 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 22:39:05,017 basehttp 4704 3380 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 22:39:05,306 basehttp 4704 15780 "GET /static/img/logo-background.jpg HTTP/1.1" 200 3142
+INFO 2025-10-07 22:39:05,309 basehttp 4704 3380 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 22:39:05,318 basehttp 4704 3380 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 22:39:05,324 basehttp 4704 15780 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 22:39:05,820 basehttp 4704 15780 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 22:45:56,866 autoreload 4704 24588 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\models.py changed, reloading.
+INFO 2025-10-07 22:45:58,829 autoreload 13452 18980 Watching for file changes with StatReloader
+INFO 2025-10-07 22:47:23,331 autoreload 13452 18980 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\views.py changed, reloading.
+INFO 2025-10-07 22:47:24,919 autoreload 23664 27144 Watching for file changes with StatReloader
+INFO 2025-10-07 22:48:20,781 autoreload 23664 27144 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py changed, reloading.
+INFO 2025-10-07 22:48:22,354 autoreload 28864 1868 Watching for file changes with StatReloader
+INFO 2025-10-07 22:49:03,777 autoreload 28864 1868 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-07 22:49:05,512 autoreload 2896 27040 Watching for file changes with StatReloader
+INFO 2025-10-07 22:50:56,581 autoreload 2896 27040 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-07 22:50:58,380 autoreload 3380 11224 Watching for file changes with StatReloader
+INFO 2025-10-07 22:51:25,409 autoreload 24044 6824 Watching for file changes with StatReloader
+INFO 2025-10-07 22:51:28,215 basehttp 24044 27144 "GET / HTTP/1.1" 302 0
+INFO 2025-10-07 22:51:28,245 basehttp 24044 27144 "GET /usuarios/login/?next=/ HTTP/1.1" 200 20521
+INFO 2025-10-07 22:51:28,368 basehttp 24044 27144 "GET /static/dashboard/css/login.css HTTP/1.1" 304 0
+INFO 2025-10-07 22:51:28,396 basehttp 24044 27144 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 304 0
+INFO 2025-10-07 22:51:39,660 basehttp 24044 27144 "POST /usuarios/login/?next=/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:51:39,741 basehttp 24044 27144 "GET / HTTP/1.1" 200 35971
+INFO 2025-10-07 22:51:43,870 basehttp 24044 27144 "GET /usuarios/lista/ HTTP/1.1" 200 25244
+INFO 2025-10-07 22:51:46,559 basehttp 24044 27144 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:51:46,573 basehttp 24044 27144 "GET /usuarios/login/ HTTP/1.1" 200 20513
+INFO 2025-10-07 22:51:50,061 basehttp 24044 27144 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:51:50,090 basehttp 24044 27144 "GET / HTTP/1.1" 302 0
+INFO 2025-10-07 22:51:50,371 basehttp 24044 27144 "GET /aves/ HTTP/1.1" 200 53490
+INFO 2025-10-07 22:54:30,026 autoreload 24044 6824 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\views.py changed, reloading.
+INFO 2025-10-07 22:54:30,796 autoreload 21028 22600 Watching for file changes with StatReloader
+INFO 2025-10-07 22:54:48,988 autoreload 21028 22600 C:\Users\bp877\TRAE\AgroSmart\apps\dashboard\views.py changed, reloading.
+INFO 2025-10-07 22:54:49,859 autoreload 25028 27796 Watching for file changes with StatReloader
+INFO 2025-10-07 22:55:00,722 autoreload 25028 27796 C:\Users\bp877\TRAE\AgroSmart\apps\dashboard\views.py changed, reloading.
+INFO 2025-10-07 22:55:01,503 autoreload 25756 20112 Watching for file changes with StatReloader
+INFO 2025-10-07 22:55:04,054 autoreload 25756 20112 C:\Users\bp877\TRAE\AgroSmart\apps\dashboard\views.py changed, reloading.
+INFO 2025-10-07 22:55:04,815 autoreload 9672 19664 Watching for file changes with StatReloader
+INFO 2025-10-07 22:55:21,900 autoreload 9672 19664 C:\Users\bp877\TRAE\AgroSmart\apps\dashboard\views.py changed, reloading.
+INFO 2025-10-07 22:55:22,758 autoreload 23944 24176 Watching for file changes with StatReloader
+INFO 2025-10-07 22:55:32,650 autoreload 23944 24176 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\views.py changed, reloading.
+INFO 2025-10-07 22:55:33,508 autoreload 1088 13680 Watching for file changes with StatReloader
+INFO 2025-10-07 22:55:56,396 basehttp 1088 29548 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:55:56,417 basehttp 1088 29548 "GET /usuarios/login/ HTTP/1.1" 200 22012
+INFO 2025-10-07 22:56:04,400 basehttp 1088 29548 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-07 22:56:04,429 basehttp 1088 29548 "GET /static/dashboard/css/login.css HTTP/1.1" 200 9779
+INFO 2025-10-07 22:56:04,434 basehttp 1088 26528 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 22:56:04,435 basehttp 1088 13324 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 22:56:04,440 basehttp 1088 20044 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 22:56:04,624 basehttp 1088 20044 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 22:56:04,626 basehttp 1088 13324 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-07 22:56:04,630 basehttp 1088 13324 "GET /static/img/logo-background.jpg HTTP/1.1" 200 3142
+INFO 2025-10-07 22:56:04,646 basehttp 1088 20044 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 200 258353
+INFO 2025-10-07 22:56:05,037 basehttp 1088 20044 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-07 22:56:06,965 basehttp 1088 20044 "POST /usuarios/login/ HTTP/1.1" 302 0
+ERROR 2025-10-07 22:56:07,083 log 1088 20044 Internal Server Error: /usuarios/punto-blanco/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\base.py", line 228, in get
+    context = self.get_context_data(**kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\views.py", line 314, in get_context_data
+    inventarios = InventarioHuevos.objects.filter(cantidad_disponible__gt=0)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1436, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1454, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1461, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1546, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1577, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<6 lines>...
+        summarize=summarize,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1427, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1237, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1726, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'cantidad_disponible' into field. Choices are: cantidad_actual, cantidad_minima, categoria, created_at, dias_stock, factor_calculo, fecha_ultima_actualizacion, id, is_active, stock_automatico, updated_at
+ERROR 2025-10-07 22:56:07,150 basehttp 1088 20044 "GET /usuarios/punto-blanco/ HTTP/1.1" 500 161030
+WARNING 2025-10-07 22:56:07,300 log 1088 20044 Not Found: /favicon.ico
+WARNING 2025-10-07 22:56:07,300 basehttp 1088 20044 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-10-07 22:57:20,415 autoreload 1088 13680 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\views.py changed, reloading.
+INFO 2025-10-07 22:57:21,368 autoreload 3380 25836 Watching for file changes with StatReloader
+INFO 2025-10-07 22:57:26,623 basehttp 3380 19672 "GET /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-07 22:57:26,673 basehttp 3380 19672 "GET /usuarios/punto-blanco/ HTTP/1.1" 200 23255
+ERROR 2025-10-07 23:05:22,934 log 3380 4360 Internal Server Error: /usuarios/punto-blanco/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 1026, in find_library
+    return parser.libraries[name]
+           ~~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'math_filters'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 1088, in load
+    lib = find_library(parser, name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 1028, in find_library
+    raise TemplateSyntaxError(
+    ...<5 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: 'math_filters' is not a registered tag library. Must be one of:
+admin_list
+admin_modify
+admin_urls
+cache
+crispy_forms_field
+crispy_forms_filters
+crispy_forms_tags
+crispy_forms_utils
+debugger_tags
+highlighting
+i18n
+indent_text
+l10n
+log
+static
+syntax_color
+tz
+widget_tweaks
+widont
+ERROR 2025-10-07 23:05:23,011 basehttp 3380 4360 "GET /usuarios/punto-blanco/ HTTP/1.1" 500 247250
+INFO 2025-10-07 23:05:23,033 basehttp 3380 21708 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-07 23:05:23,033 basehttp 3380 4360 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-07 23:05:23,078 basehttp 3380 21708 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-07 23:05:23,108 basehttp 3380 21708 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-07 23:05:23,160 log 3380 21708 Not Found: /favicon.ico
+WARNING 2025-10-07 23:05:23,160 basehttp 3380 21708 "GET /favicon.ico HTTP/1.1" 404 16809
+INFO 2025-10-07 23:08:56,543 autoreload 3380 25836 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\views.py changed, reloading.
+INFO 2025-10-07 23:08:57,435 autoreload 27708 13628 Watching for file changes with StatReloader
+ERROR 2025-10-07 23:11:46,474 log 27708 26192 Internal Server Error: /usuarios/punto-blanco/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 953, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 853, in do_for
+    nodelist_loop = parser.parse(
+        (
+    ...<2 lines>...
+        )
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 1482, in do_with
+    extra_context = token_kwargs(remaining_bits, parser, support_legacy=True)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1116, in token_kwargs
+    kwargs[key] = parser.compile_filter(value)
+                  ~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 600, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 698, in __init__
+    filter_func = parser.find_filter(filter_name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 606, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'mul'
+ERROR 2025-10-07 23:11:46,567 basehttp 27708 26192 "GET /usuarios/punto-blanco/ HTTP/1.1" 500 323435
+INFO 2025-10-07 23:13:32,554 basehttp 27708 26192 "GET /usuarios/punto-blanco/ HTTP/1.1" 200 31559
+INFO 2025-10-07 23:13:55,765 basehttp 27708 26192 "GET /usuarios/punto-blanco/inventario-huevos/ HTTP/1.1" 200 46884
+INFO 2025-10-07 23:14:08,048 basehttp 27708 26192 "GET /usuarios/punto-blanco/ HTTP/1.1" 200 31559

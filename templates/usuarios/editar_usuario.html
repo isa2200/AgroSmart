@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Editar Usuario - AgroSmart{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+    .edit-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        overflow: hidden;
+        margin: 20px auto;
+        max-width: 800px;
+    }
+    
+    .edit-header {
+        background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+    }
+    
+    .edit-header h2 {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+    
+    .edit-body {
+        padding: 40px;
+    }
+    
+    .user-summary {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    
+    .user-avatar-large {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: #667eea;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        padding: 12px 15px;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #f39c12;
+        box-shadow: 0 0 0 0.2rem rgba(243, 156, 18, 0.25);
+    }
+    
+    .btn-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+    }
+    
+    .btn-secondary {
+        background: #6c757d;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+    }
+    
+    .form-check-input:checked {
+        background-color: #f39c12;
+        border-color: #f39c12;
+    }
+    
+    .alert-warning {
+        border-radius: 8px;
+        border: none;
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="edit-user-container">
+    <div class="container">
+        <div class="edit-card">
+            <div class="edit-header">
+                <h2><i class="fas fa-user-edit"></i> Editar Usuario</h2>
+                <p class="mb-0">Modifica la información del usuario</p>
+            </div>
+            
+            <div class="edit-body">
+                <div class="user-summary">
+                    <div class="user-avatar-large">
+                        {{ object.first_name|first|upper }}{{ object.last_name|first|upper }}
+                    </div>
+                    <h4>{{ object.get_full_name|default:object.username }}</h4>
+                    <p class="text-muted mb-0">@{{ object.username }}</p>
+                    <small class="text-muted">Miembro desde {{ object.date_joined|date:"d/m/Y" }}</small>
+                </div>
+                
+                {% if object == request.user %}
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Atención:</strong> Estás editando tu propia cuenta. Ten cuidado al modificar los permisos.
+                </div>
+                {% endif %}
+                
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% crispy form %}
+                    
+                    <div class="action-buttons">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-save"></i> Guardar Cambios
+                        </button>
+                        <a href="{% url 'usuarios:lista' %}" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-times"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Confirmar cambios importantes
+    const form = document.querySelector('form');
+    const isActiveCheckbox = document.querySelector('#id_is_active');
+    const rolSelect = document.querySelector('#id_rol');
+    
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            let confirmMessage = '';
+            
+            // Verificar si se está desactivando el usuario
+            if (isActiveCheckbox && !isActiveCheckbox.checked) {
+                confirmMessage += 'Estás desactivando este usuario. ';
+            }
+            
+            // Verificar si se está cambiando a un rol con menos permisos
+            if (rolSelect && rolSelect.value === 'solo_vista') {
+                confirmMessage += 'Estás asignando un rol de solo lectura. ';
+            }
+            
+            if (confirmMessage && !confirm(confirmMessage + '¿Estás seguro de continuar?')) {
+                e.preventDefault();
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

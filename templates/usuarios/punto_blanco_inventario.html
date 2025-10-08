@@ -1,0 +1,339 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Inventario de Huevos - Punto Blanco{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+    .inventory-card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+    }
+    .inventory-card:hover {
+        transform: translateY(-2px);
+    }
+    .category-card {
+        border-left: 5px solid #007bff;
+        margin-bottom: 20px;
+    }
+    .category-card.warning {
+        border-left-color: #ffc107;
+    }
+    .category-card.danger {
+        border-left-color: #dc3545;
+    }
+    .category-card.success {
+        border-left-color: #28a745;
+    }
+    .stock-indicator {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 10px;
+    }
+    .stock-high { background-color: #28a745; }
+    .stock-medium { background-color: #ffc107; }
+    .stock-low { background-color: #dc3545; }
+    .page-header {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="page-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="display-5 mb-2">
+                    <i class="fas fa-warehouse me-3"></i>Inventario de Huevos
+                </h1>
+                <p class="lead mb-0">Gestión completa del inventario - Punto Blanco</p>
+            </div>
+            <div class="text-end">
+                <a href="{% url 'usuarios:punto_blanco_dashboard' %}" class="btn btn-light btn-lg">
+                    <i class="fas fa-arrow-left me-2"></i>Volver al Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resumen General -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card inventory-card bg-primary text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-cubes fa-3x mb-3 opacity-75"></i>
+                    <h3 class="mb-1">{{ total_disponible|floatformat:0 }}</h3>
+                    <p class="mb-0">Total Disponible</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card inventory-card bg-info text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-layer-group fa-3x mb-3 opacity-75"></i>
+                    <h3 class="mb-1">{{ inventarios.count }}</h3>
+                    <p class="mb-0">Categorías</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card inventory-card bg-warning text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-exclamation-triangle fa-3x mb-3 opacity-75"></i>
+                    <h3 class="mb-1">{{ inventarios_criticos }}</h3>
+                    <p class="mb-0">Stock Crítico</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card inventory-card bg-success text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-shield-alt fa-3x mb-3 opacity-75"></i>
+                    <h3 class="mb-1">{{ total_minimo|floatformat:0 }}</h3>
+                    <p class="mb-0">Stock Mínimo</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventario Detallado -->
+    <div class="row">
+        {% for inventario in inventarios %}
+        <div class="col-lg-6 col-xl-4 mb-4">
+            <div class="card inventory-card category-card 
+                {% if inventario.cantidad_actual <= inventario.cantidad_minima %}
+                    {% if inventario.cantidad_actual == 0 %}danger{% else %}warning{% endif %}
+                {% else %}success{% endif %}">
+                <div class="card-header bg-transparent">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <span class="stock-indicator 
+                                {% if inventario.cantidad_actual <= inventario.cantidad_minima %}
+                                    {% if inventario.cantidad_actual == 0 %}stock-low{% else %}stock-medium{% endif %}
+                                {% else %}stock-high{% endif %}"></span>
+                            Categoría {{ inventario.categoria }}
+                        </h5>
+                        <span class="badge 
+                            {% if inventario.cantidad_actual <= inventario.cantidad_minima %}
+                                {% if inventario.cantidad_actual == 0 %}bg-danger{% else %}bg-warning{% endif %}
+                            {% else %}bg-success{% endif %} fs-6">
+                            {% if inventario.cantidad_actual <= inventario.cantidad_minima %}
+                                {% if inventario.cantidad_actual == 0 %}Agotado{% else %}Bajo{% endif %}
+                            {% else %}Disponible{% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center mb-3">
+                        <div class="col-6">
+                            <h3 class="text-primary mb-1">{{ inventario.cantidad_actual|floatformat:0 }}</h3>
+                            <small class="text-muted">Cantidad Actual</small>
+                        </div>
+                        <div class="col-6">
+                            <h3 class="text-secondary mb-1">{{ inventario.cantidad_minima|floatformat:0 }}</h3>
+                            <small class="text-muted">Stock Mínimo</small>
+                        </div>
+                    </div>
+                    
+                    <!-- Barra de Progreso Simple -->
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <small class="text-muted">Nivel de Stock</small>
+                            {% if inventario.cantidad_minima > 0 %}
+                                {% widthratio inventario.cantidad_actual inventario.cantidad_minima 100 as porcentaje %}
+                                <small class="text-muted">{{ porcentaje }}%</small>
+                            {% else %}
+                                <small class="text-muted">N/A</small>
+                            {% endif %}
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            {% if inventario.cantidad_minima > 0 %}
+                                {% widthratio inventario.cantidad_actual inventario.cantidad_minima 100 as porcentaje %}
+                                <div class="progress-bar 
+                                    {% if porcentaje >= 100 %}bg-success
+                                    {% elif porcentaje >= 50 %}bg-warning
+                                    {% else %}bg-danger{% endif %}" 
+                                    style="width: {% if porcentaje > 100 %}100{% else %}{{ porcentaje }}{% endif %}%">
+                                </div>
+                            {% else %}
+                                <div class="progress-bar bg-secondary" style="width: 100%"></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Información Adicional -->
+                    <div class="row small text-muted">
+                        <div class="col-12 mb-2">
+                            <i class="fas fa-clock me-1"></i>
+                            <strong>Última actualización:</strong><br>
+                            {{ inventario.fecha_ultima_actualizacion|date:"d/m/Y H:i" }}
+                        </div>
+                        {% if inventario.stock_automatico %}
+                        <div class="col-12">
+                            <i class="fas fa-robot me-1"></i>
+                            <strong>Stock automático:</strong> 
+                            {{ inventario.dias_stock }} días (Factor: {{ inventario.factor_calculo }})
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-sm btn-outline-primary" onclick="verDetalles('{{ inventario.categoria }}')">
+                            <i class="fas fa-eye me-1"></i>Ver Detalles
+                        </button>
+                        {% if inventario.cantidad_actual <= inventario.cantidad_minima %}
+                        <button class="btn btn-sm btn-outline-warning" onclick="solicitarReposicion('{{ inventario.categoria }}')">
+                            <i class="fas fa-plus me-1"></i>Solicitar
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="card inventory-card">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-inbox fa-4x text-muted mb-3"></i>
+                    <h4 class="text-muted">No hay inventarios configurados</h4>
+                    <p class="text-muted">Contacte al administrador para configurar los inventarios de huevos.</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Tabla Detallada (Opcional) -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card inventory-card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-table me-2"></i>Vista Detallada del Inventario
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th><i class="fas fa-tag me-1"></i>Categoría</th>
+                                    <th><i class="fas fa-cubes me-1"></i>Cantidad Actual</th>
+                                    <th><i class="fas fa-shield-alt me-1"></i>Stock Mínimo</th>
+                                    <th><i class="fas fa-percentage me-1"></i>Nivel (%)</th>
+                                    <th><i class="fas fa-robot me-1"></i>Automático</th>
+                                    <th><i class="fas fa-clock me-1"></i>Última Actualización</th>
+                                    <th><i class="fas fa-traffic-light me-1"></i>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for inventario in inventarios %}
+                                <tr>
+                                    <td>
+                                        <span class="badge bg-secondary fs-6">{{ inventario.categoria }}</span>
+                                    </td>
+                                    <td>
+                                        <strong class="fs-5">{{ inventario.cantidad_actual|floatformat:0 }}</strong>
+                                    </td>
+                                    <td>{{ inventario.cantidad_minima|floatformat:0 }}</td>
+                                    <td>
+                                            {% if inventario.cantidad_minima > 0 %}
+                                            {% widthratio inventario.cantidad_actual inventario.cantidad_minima 100 as porcentaje %}
+                                            <span class="badge 
+                                                {% if porcentaje >= 100 %}bg-success
+                                                {% elif porcentaje >= 50 %}bg-warning
+                                                {% else %}bg-danger{% endif %}">
+                                                {{ porcentaje }}%
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if inventario.stock_automatico %}
+                                            <i class="fas fa-check text-success"></i>
+                                        {% else %}
+                                            <i class="fas fa-times text-danger"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small>{{ inventario.fecha_ultima_actualizacion|date:"d/m/Y H:i" }}</small>
+                                    </td>
+                                    <td>
+                                        {% if inventario.cantidad_actual <= inventario.cantidad_minima %}
+                                            {% if inventario.cantidad_actual == 0 %}
+                                                <span class="badge bg-danger">
+                                                    <i class="fas fa-times me-1"></i>Agotado
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-warning">
+                                                    <i class="fas fa-exclamation me-1"></i>Stock Bajo
+                                                </span>
+                                            {% endif %}
+                                        {% else %}
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check me-1"></i>Disponible
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function verDetalles(categoria) {
+    Swal.fire({
+        title: `Detalles - Categoría ${categoria}`,
+        text: 'Funcionalidad de detalles en desarrollo',
+        icon: 'info',
+        confirmButtonText: 'Entendido'
+    });
+}
+
+function solicitarReposicion(categoria) {
+    Swal.fire({
+        title: `Solicitar Reposición`,
+        text: `¿Desea solicitar reposición para la categoría ${categoria}?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, solicitar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire(
+                'Solicitud Enviada',
+                `Se ha enviado la solicitud de reposición para la categoría ${categoria}`,
+                'success'
+            );
+        }
+    });
+}
+
+// Auto-refresh cada 2 minutos
+setTimeout(function() {
+    location.reload();
+}, 120000);
+</script>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}

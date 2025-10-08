@@ -1,0 +1,253 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Eliminar Usuario - AgroSmart{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+    .delete-user-container {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+    
+    .delete-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        overflow: hidden;
+        margin: 20px auto;
+        max-width: 600px;
+    }
+    
+    .delete-header {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+    }
+    
+    .delete-header h2 {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+    
+    .delete-body {
+        padding: 40px;
+        text-align: center;
+    }
+    
+    .user-info {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .user-avatar-large {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: #e74c3c;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+    
+    .warning-message {
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+        border: 2px solid #f39c12;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .warning-message i {
+        font-size: 1.5rem;
+        color: #f39c12;
+        margin-bottom: 10px;
+    }
+    
+    .btn-danger {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+    }
+    
+    .btn-secondary {
+        background: #6c757d;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+    }
+    
+    .user-details {
+        text-align: left;
+        margin-top: 20px;
+    }
+    
+    .detail-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .detail-item:last-child {
+        border-bottom: none;
+    }
+    
+    .detail-label {
+        font-weight: 600;
+        color: #495057;
+    }
+    
+    .detail-value {
+        color: #6c757d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="delete-user-container">
+    <div class="container">
+        <div class="delete-card">
+            <div class="delete-header">
+                <h2><i class="fas fa-user-times"></i> Eliminar Usuario</h2>
+                <p class="mb-0">Esta acción no se puede deshacer</p>
+            </div>
+            
+            <div class="delete-body">
+                <div class="user-info">
+                    <div class="user-avatar-large">
+                        {{ object.first_name|first|upper }}{{ object.last_name|first|upper }}
+                    </div>
+                    <h4>{{ object.get_full_name|default:object.username }}</h4>
+                    <p class="text-muted mb-0">@{{ object.username }}</p>
+                    
+                    <div class="user-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Email:</span>
+                            <span class="detail-value">{{ object.email|default:"No especificado" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Rol:</span>
+                            <span class="detail-value">{{ object.perfilusuario.get_rol_display|default:"Sin rol" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Fecha de registro:</span>
+                            <span class="detail-value">{{ object.date_joined|date:"d/m/Y H:i" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Último acceso:</span>
+                            <span class="detail-value">{{ object.last_login|date:"d/m/Y H:i"|default:"Nunca" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Estado:</span>
+                            <span class="detail-value">
+                                {% if object.is_active %}
+                                    <span class="badge bg-success">Activo</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Inactivo</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="warning-message">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h5><strong>¡Advertencia!</strong></h5>
+                    <p class="mb-0">
+                        Estás a punto de eliminar permanentemente este usuario. Esta acción:
+                    </p>
+                    <ul class="text-start mt-2 mb-0">
+                        <li>Eliminará toda la información del usuario</li>
+                        <li>Revocará todos sus permisos y accesos</li>
+                        <li>No se puede deshacer</li>
+                        {% if object == request.user %}
+                        <li><strong>¡Estás eliminando tu propia cuenta!</strong></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                {% if object == request.user %}
+                <div class="alert alert-danger">
+                    <i class="fas fa-ban"></i>
+                    <strong>Error:</strong> No puedes eliminar tu propia cuenta.
+                </div>
+                <div class="action-buttons">
+                    <a href="{% url 'usuarios:lista' %}" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-arrow-left"></i> Volver a la Lista
+                    </a>
+                </div>
+                {% else %}
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="action-buttons">
+                        <button type="submit" class="btn btn-danger btn-lg" id="confirmDelete">
+                            <i class="fas fa-trash"></i> Sí, Eliminar Usuario
+                        </button>
+                        <a href="{% url 'usuarios:lista' %}" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-times"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteButton = document.getElementById('confirmDelete');
+    
+    if (deleteButton) {
+        deleteButton.addEventListener('click', function(e) {
+            const userName = '{{ object.get_full_name|default:object.username }}';
+            const confirmMessage = `¿Estás completamente seguro de que deseas eliminar al usuario "${userName}"?\n\nEsta acción NO se puede deshacer.\n\nEscribe "ELIMINAR" para confirmar:`;
+            
+            const userInput = prompt(confirmMessage);
+            
+            if (userInput !== 'ELIMINAR') {
+                e.preventDefault();
+                if (userInput !== null) {
+                    alert('Eliminación cancelada. Debes escribir exactamente "ELIMINAR" para confirmar.');
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

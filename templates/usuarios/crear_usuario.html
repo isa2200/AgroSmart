@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Crear Usuario - AgroSmart{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+    .create-user-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+    
+    .create-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        overflow: hidden;
+        margin: 20px auto;
+        max-width: 800px;
+    }
+    
+    .create-header {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+    }
+    
+    .create-header h2 {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+    
+    .create-body {
+        padding: 40px;
+    }
+    
+    .form-section {
+        margin-bottom: 30px;
+    }
+    
+    .form-section h4 {
+        color: #2c3e50;
+        border-bottom: 2px solid #667eea;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        padding: 12px 15px;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    
+    .btn-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+    }
+    
+    .btn-secondary {
+        background: #6c757d;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+    }
+    
+    .role-info {
+        background: #e3f2fd;
+        border: 1px solid #bbdefb;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .role-info h5 {
+        color: #1976d2;
+        margin-bottom: 15px;
+    }
+    
+    .role-description {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: #424242;
+    }
+    
+    .permissions-section {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+    
+    .form-check {
+        margin-bottom: 10px;
+    }
+    
+    .form-check-input:checked {
+        background-color: #667eea;
+        border-color: #667eea;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="create-user-container">
+    <div class="container">
+        <div class="create-card">
+            <div class="create-header">
+                <h2><i class="fas fa-user-plus"></i> Crear Nuevo Usuario</h2>
+                <p class="mb-0">Registra un nuevo usuario en el sistema AgroSmart</p>
+            </div>
+            
+            <div class="create-body">
+                <div class="role-info">
+                    <h5><i class="fas fa-info-circle"></i> Información sobre Roles</h5>
+                    <div class="role-description">
+                        <strong>Superusuario:</strong> Acceso completo al sistema y gestión de usuarios<br>
+                        <strong>Admin de Aves:</strong> Administrador del módulo avícola<br>
+                        <strong>Veterinario:</strong> Gestión de salud y vacunación de animales<br>
+                        <strong>Punto Blanco:</strong> Gestión de ventas y distribución<br>
+                        <strong>Solo Vista:</strong> Acceso de solo lectura a los módulos permitidos
+                    </div>
+                </div>
+                
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% crispy form %}
+                    
+                    <div class="action-buttons">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-save"></i> Crear Usuario
+                        </button>
+                        <a href="{% url 'usuarios:lista' %}" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-times"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Mostrar/ocultar permisos según el rol seleccionado
+    const rolSelect = document.querySelector('#id_rol');
+    const permissionsSection = document.querySelector('.permissions-section');
+    
+    if (rolSelect && permissionsSection) {
+        function togglePermissions() {
+            const selectedRole = rolSelect.value;
+            if (selectedRole === 'superusuario') {
+                // Los superusuarios tienen todos los permisos por defecto
+                document.querySelector('#id_acceso_modulo_avicola').checked = true;
+                document.querySelector('#id_puede_eliminar_registros').checked = true;
+            } else if (selectedRole === 'solo_vista') {
+                // Solo vista no puede eliminar registros
+                document.querySelector('#id_puede_eliminar_registros').checked = false;
+            }
+        }
+        
+        rolSelect.addEventListener('change', togglePermissions);
+        togglePermissions(); // Ejecutar al cargar la página
+    }
+});
+</script>
+{% endblock %}

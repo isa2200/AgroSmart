@@ -14,14 +14,14 @@ from django.core.exceptions import ValidationError
 from datetime import timedelta
 import json
 
-from apps.usuarios.decorators import role_required
+from apps.usuarios.decorators import role_required, acceso_modulo_aves_required, puede_editar_required, puede_eliminar_required, veterinario_required
 from .models import *
 from .forms import *
 from .utils import generar_alertas, actualizar_inventario_huevos, exportar_reporte_pdf
 
 
 @login_required
-@role_required(['superusuario', 'admin_aves', 'veterinario', 'solo_vista'])
+@acceso_modulo_aves_required
 def dashboard_aves(request):
     """Dashboard principal del módulo avícola mejorado."""
     from django.db.models import F
@@ -320,7 +320,8 @@ def dashboard_aves(request):
 
 
 @login_required
-@role_required(['superusuario', 'admin_aves'])
+@acceso_modulo_aves_required
+@puede_editar_required
 def bitacora_diaria_create(request):
     """Crear nueva bitácora diaria."""
     if request.method == 'POST':
@@ -384,7 +385,8 @@ def bitacora_list(request):
 
 
 @login_required
-@role_required(['superusuario', 'admin_aves'])
+@acceso_modulo_aves_required
+@puede_editar_required
 def lote_create(request):
     """Crear nuevo lote de aves."""
     if request.method == 'POST':
@@ -416,7 +418,8 @@ def lote_create(request):
     return render(request, 'aves/lote_form.html', {'form': form})
 
 @login_required
-@role_required(['superusuario', 'admin_aves'])
+@acceso_modulo_aves_required
+@puede_editar_required
 def lote_edit(request, pk):
     """Editar lote de aves con justificación obligatoria."""
     lote = get_object_or_404(LoteAves, pk=pk)
@@ -470,7 +473,8 @@ def lote_edit(request, pk):
     return render(request, 'aves/lote_edit.html', context)
 
 @login_required
-@role_required(['superusuario', 'admin_aves'])
+@acceso_modulo_aves_required
+@puede_eliminar_required
 @require_http_methods(["POST"])
 def lote_delete(request, pk):
     """Eliminar lote (desactivar) con justificación obligatoria."""
@@ -515,7 +519,7 @@ def lote_delete(request, pk):
     return redirect('aves:lote_list')
 
 @login_required
-@role_required(['superusuario', 'admin_aves', 'solo_vista'])
+@acceso_modulo_aves_required
 def lote_list(request):
     """Lista de lotes de aves."""
     lotes = LoteAves.objects.filter(is_active=True).order_by('-fecha_llegada')
@@ -553,7 +557,7 @@ def lote_list(request):
 
 
 @login_required
-@role_required(['superusuario', 'admin_aves', 'solo_vista'])
+@acceso_modulo_aves_required
 def lote_detail(request, pk):
     """Detalle de un lote."""
     lote = get_object_or_404(LoteAves, pk=pk)
@@ -584,7 +588,7 @@ def lote_detail(request, pk):
 
 
 @login_required
-@role_required(['superusuario', 'punto_blanco', 'solo_vista'])
+@acceso_modulo_aves_required
 def inventario_huevos(request):
     """Vista de inventario de huevos."""
     from django.db.models import Sum
@@ -796,7 +800,7 @@ def movimiento_huevos_create(request):
 
 
 @login_required
-@role_required(['superusuario', 'veterinario'])
+@veterinario_required
 def plan_vacunacion_list(request):
     """Lista de planes de vacunación."""
     planes = PlanVacunacion.objects.select_related('lote', 'tipo_vacuna', 'veterinario').all()
@@ -831,7 +835,7 @@ def plan_vacunacion_list(request):
 
 
 @login_required
-@role_required(['superusuario', 'veterinario'])
+@veterinario_required
 def plan_vacunacion_create(request):
     """Crear plan de vacunación."""
     if request.method == 'POST':
