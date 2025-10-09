@@ -106,10 +106,11 @@
                     <tr>
                         <th>Fecha</th>
                         <th>Lote</th>
-                        <th>Huevos Buenos</th>
-                        <th>Huevos Rotos</th>
+                        <th>Huevos Buenos (AAA+AA+A)</th>
+                        <th>Huevos Defectuosos (B+C)</th>
                         <th>Total</th>
                         <th>% Postura</th>
+                        <th>Mortalidad</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -117,10 +118,11 @@
                     <tr>
                         <td>{{ dato.fecha|date:"d/m/Y" }}</td>
                         <td>{{ dato.lote.codigo }}</td>
-                        <td>{{ dato.huevos_buenos }}</td>
-                        <td>{{ dato.huevos_rotos }}</td>
+                        <td>{{ dato.huevos_buenos|default:0 }}</td>
+                        <td>{{ dato.huevos_defectuosos|default:0 }}</td>
                         <td>{{ dato.total_huevos }}</td>
                         <td>{{ dato.porcentaje_postura|floatformat:1 }}%</td>
+                        <td>{{ dato.mortalidad|default:0 }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

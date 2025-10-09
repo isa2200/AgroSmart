@@ -14167,3 +14167,511 @@ INFO 2025-10-08 08:38:12,213 basehttp 13420 20720 "GET /aves/reportes/ HTTP/1.1"
 INFO 2025-10-08 08:38:13,048 basehttp 13420 20720 "GET /aves/reportes/produccion/ HTTP/1.1" 200 22865
 INFO 2025-10-08 08:38:14,137 basehttp 13420 20720 "GET /aves/reportes/produccion/?lote=&fecha_desde=&fecha_hasta= HTTP/1.1" 200 22905
 INFO 2025-10-08 08:38:14,501 basehttp 13420 20720 "GET /aves/reportes/produccion/?lote=&fecha_desde=&fecha_hasta= HTTP/1.1" 200 22905
+INFO 2025-10-08 08:44:13,971 autoreload 13420 5788 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-08 08:44:14,883 autoreload 10188 14372 Watching for file changes with StatReloader
+INFO 2025-10-08 08:48:26,906 autoreload 10188 14372 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-08 08:48:28,047 autoreload 1764 5296 Watching for file changes with StatReloader
+INFO 2025-10-08 08:48:34,722 autoreload 1764 5296 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-08 08:48:35,792 autoreload 8372 16716 Watching for file changes with StatReloader
+INFO 2025-10-08 08:49:00,658 basehttp 8372 8012 "GET / HTTP/1.1" 200 36578
+INFO 2025-10-08 08:49:05,925 basehttp 8372 8012 "GET /aves/ HTTP/1.1" 200 50176
+INFO 2025-10-08 08:49:11,310 basehttp 8372 8012 "GET /aves/bitacora/ HTTP/1.1" 200 31065
+INFO 2025-10-08 08:49:11,918 basehttp 8372 8012 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29205
+INFO 2025-10-08 08:49:14,533 basehttp 8372 8012 "GET /aves/inventario-huevos/ HTTP/1.1" 200 42313
+INFO 2025-10-08 08:49:27,941 basehttp 8372 8012 "GET /aves/vacunacion/ HTTP/1.1" 200 28644
+INFO 2025-10-08 08:49:29,403 basehttp 8372 8012 "GET /aves/alertas/ HTTP/1.1" 200 52083
+INFO 2025-10-08 08:49:35,705 basehttp 8372 8012 "GET /aves/reportes/ HTTP/1.1" 200 24251
+ERROR 2025-10-08 08:49:36,667 log 8372 8012 Internal Server Error: /aves/reportes/produccion/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 1080, in reporte_produccion
+    ).order_by('-produccion_total').first()
+                                    ~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1057, in first
+    for obj in queryset[:1]:
+               ~~~~~~~~^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 398, in __iter__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1881, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 129, in __iter__
+    setattr(obj, attr_name, row[col_pos])
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: property 'produccion_total' of 'BitacoraDiaria' object has no setter
+ERROR 2025-10-08 08:49:36,712 basehttp 8372 8012 "GET /aves/reportes/produccion/ HTTP/1.1" 500 127016
+WARNING 2025-10-08 08:49:36,847 log 8372 8012 Not Found: /favicon.ico
+WARNING 2025-10-08 08:49:36,848 basehttp 8372 8012 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-08 08:49:48,445 autoreload 8372 16716 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-08 08:49:49,285 autoreload 2168 340 Watching for file changes with StatReloader
+INFO 2025-10-08 08:49:52,145 basehttp 2168 17924 "GET /aves/reportes/produccion/ HTTP/1.1" 200 22866
+INFO 2025-10-08 08:49:53,834 basehttp 2168 17924 "GET /aves/vacunacion/ HTTP/1.1" 200 28644
+INFO 2025-10-08 08:49:54,440 basehttp 2168 17924 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29205
+INFO 2025-10-08 08:49:54,957 basehttp 2168 17924 "GET /aves/bitacora/ HTTP/1.1" 200 31065
+INFO 2025-10-08 08:50:25,285 basehttp 2168 17924 "GET /aves/ HTTP/1.1" 200 50176
+INFO 2025-10-08 08:50:33,841 basehttp 2168 17924 "GET /aves/?galpon=%231&lote=1 HTTP/1.1" 200 50215
+INFO 2025-10-08 08:50:36,663 basehttp 2168 17924 "GET /aves/ HTTP/1.1" 200 50176
+INFO 2025-10-08 08:51:08,851 basehttp 2168 17924 "GET /aves/bitacora/ HTTP/1.1" 200 31065
+INFO 2025-10-08 08:51:10,815 basehttp 2168 17924 "GET /aves/ HTTP/1.1" 200 50176
+INFO 2025-10-08 08:51:12,919 basehttp 2168 17924 "GET /aves/bitacora/ HTTP/1.1" 200 31065
+INFO 2025-10-08 08:51:15,277 basehttp 2168 17924 "GET /aves/bitacora/ HTTP/1.1" 200 31065
+INFO 2025-10-08 08:51:15,800 basehttp 2168 17924 "GET /aves/ HTTP/1.1" 200 50176
+INFO 2025-10-08 08:51:29,377 basehttp 2168 17924 "GET /aves/bitacora/ HTTP/1.1" 200 31065
+INFO 2025-10-08 08:51:36,802 basehttp 2168 17924 "GET /aves/bitacora/5/ HTTP/1.1" 200 24735
+INFO 2025-10-08 08:51:38,974 basehttp 2168 17924 "GET /aves/bitacora/5/editar/ HTTP/1.1" 200 37316
+INFO 2025-10-08 08:52:15,881 basehttp 2168 17924 "POST /aves/bitacora/5/editar/ HTTP/1.1" 302 0
+INFO 2025-10-08 08:52:15,925 basehttp 2168 17924 "GET /aves/bitacora/5/ HTTP/1.1" 200 24735
+INFO 2025-10-08 08:52:19,454 basehttp 2168 17924 "GET /aves/bitacora/ HTTP/1.1" 200 31065
+INFO 2025-10-08 08:52:21,651 basehttp 2168 17924 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29205
+INFO 2025-10-08 08:52:22,430 basehttp 2168 17924 "GET /aves/bitacora/ HTTP/1.1" 200 31065
+INFO 2025-10-08 08:52:23,982 basehttp 2168 17924 "GET /aves/bitacora/?lote=&fecha_desde=2025-09-08&fecha_hasta=2025-10-08 HTTP/1.1" 200 31145
+INFO 2025-10-08 08:52:24,624 basehttp 2168 17924 "GET /aves/bitacora/?lote=&fecha_desde=2025-09-08&fecha_hasta=2025-10-08 HTTP/1.1" 200 31145
+INFO 2025-10-08 08:52:25,093 basehttp 2168 17924 "GET /aves/bitacora/?lote=&fecha_desde=2025-09-08&fecha_hasta=2025-10-08 HTTP/1.1" 200 31145
+INFO 2025-10-08 08:52:26,109 basehttp 2168 17924 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29205
+INFO 2025-10-08 08:52:33,411 basehttp 2168 17924 "GET /aves/lotes/ HTTP/1.1" 200 33007
+INFO 2025-10-08 08:52:40,814 basehttp 2168 17924 "GET /aves/lotes/?estado=&galpon=%231&linea_genetica= HTTP/1.1" 200 33053
+INFO 2025-10-08 08:52:47,941 basehttp 2168 17924 "GET /aves/lotes/?estado=&galpon=%231&linea_genetica=hy_line_brown HTTP/1.1" 200 33074
+INFO 2025-10-08 08:52:53,639 basehttp 2168 17924 "GET /aves/lotes/?estado=&galpon=%233&linea_genetica=hy_line_brown HTTP/1.1" 200 29690
+INFO 2025-10-08 08:52:55,545 basehttp 2168 17924 "GET /aves/inventario-huevos/ HTTP/1.1" 200 42313
+INFO 2025-10-08 08:52:56,388 basehttp 2168 17924 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29205
+INFO 2025-10-08 08:52:57,719 basehttp 2168 17924 "GET /aves/lotes/ HTTP/1.1" 200 33007
+INFO 2025-10-08 08:52:59,894 basehttp 2168 17924 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29205
+INFO 2025-10-08 08:53:03,329 basehttp 2168 17924 "GET /aves/inventario-huevos/ HTTP/1.1" 200 42313
+INFO 2025-10-08 08:53:08,509 basehttp 2168 17924 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 49266
+INFO 2025-10-08 08:55:14,599 views 2168 17924 POST data received: <QueryDict: {'csrfmiddlewaretoken': ['0COwuFSi9y3HWGJ1899N7KfaZDloEhMVc876O6SfDVYcHLFjtbaAGreVigWqhtst'], 'fecha': ['2025-10-08'], 'tipo_movimiento': ['autoconsumo'], 'cliente': ['Punto Blanco'], 'numero_comprobante': ['3276557'], 'conductor': [''], 'form-TOTAL_FORMS': ['1'], 'form-INITIAL_FORMS': ['0'], 'form-MIN_NUM_FORMS': ['1'], 'form-MAX_NUM_FORMS': ['1000'], 'form-0-categoria_huevo': ['AAA'], 'form-0-cantidad': ['6'], 'form-0-precio_unitario': ['440'], 'observaciones': ['']}>
+INFO 2025-10-08 08:55:14,600 views 2168 17924 Form valid: True
+INFO 2025-10-08 08:55:14,601 views 2168 17924 Formset valid: True
+INFO 2025-10-08 08:55:14,603 views 2168 17924 Movimiento guardado con ID: 4
+INFO 2025-10-08 08:55:14,603 views 2168 17924 Procesando detalle 0: {'categoria_huevo': 'AAA', 'cantidad': 6, 'precio_unitario': Decimal('440'), 'DELETE': False}
+INFO 2025-10-08 08:55:14,606 views 2168 17924 Detalle 0 guardado con ID: 4
+INFO 2025-10-08 08:55:14,613 views 2168 17924 Inventario actualizado para AAA: 236 -> 230
+INFO 2025-10-08 08:55:14,613 views 2168 17924 Movimiento completado. Detalles guardados: 1
+INFO 2025-10-08 08:55:14,630 basehttp 2168 17924 "POST /aves/movimiento-huevos/nuevo/ HTTP/1.1" 302 0
+INFO 2025-10-08 08:55:14,703 basehttp 2168 17924 "GET /aves/inventario-huevos/ HTTP/1.1" 200 43194
+INFO 2025-10-08 08:55:30,427 basehttp 2168 17924 "GET /aves/vacunacion/ HTTP/1.1" 200 28644
+INFO 2025-10-08 08:55:31,732 basehttp 2168 17924 "GET /aves/inventario-huevos/ HTTP/1.1" 200 43193
+INFO 2025-10-08 08:55:48,018 basehttp 2168 17924 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 49266
+INFO 2025-10-08 08:56:28,404 basehttp 2168 17924 "GET /aves/vacunacion/ HTTP/1.1" 200 28644
+INFO 2025-10-08 08:56:29,144 basehttp 2168 17924 "GET /aves/alertas/ HTTP/1.1" 200 52083
+INFO 2025-10-08 08:56:38,529 basehttp 2168 17924 "GET /aves/reportes/ HTTP/1.1" 200 24251
+INFO 2025-10-08 09:23:28,079 basehttp 2168 19272 "GET /aves/alertas/ HTTP/1.1" 200 52083
+INFO 2025-10-08 09:23:28,106 basehttp 2168 19272 "GET /static/aves/js/alertas.js HTTP/1.1" 304 0
+INFO 2025-10-08 09:23:28,878 basehttp 2168 19272 "GET /aves/reportes/ HTTP/1.1" 200 24251
+INFO 2025-10-08 09:23:29,869 basehttp 2168 19272 "GET /aves/alertas/ HTTP/1.1" 200 52083
+INFO 2025-10-08 09:23:38,987 basehttp 2168 19272 "POST /aves/alertas/marcar-masivo/ HTTP/1.1" 200 29
+INFO 2025-10-08 09:23:39,195 basehttp 2168 19272 "GET /__debug__/history_sidebar/?request_id=ff6e075f48944929a9f360642852789c HTTP/1.1" 200 9514
+INFO 2025-10-08 09:23:40,033 basehttp 2168 19272 "GET /aves/alertas/ HTTP/1.1" 200 52031
+INFO 2025-10-08 09:24:11,137 basehttp 2168 19272 "GET /aves/alertas/ HTTP/1.1" 200 52031
+INFO 2025-10-08 09:24:34,107 autoreload 2168 340 C:\Users\bp877\TRAE\AgroSmart\apps\aves\urls.py changed, reloading.
+INFO 2025-10-08 09:24:34,908 autoreload 16896 22384 Watching for file changes with StatReloader
+INFO 2025-10-08 09:24:58,010 autoreload 16896 22384 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-08 09:24:58,845 autoreload 17924 13392 Watching for file changes with StatReloader
+INFO 2025-10-08 09:26:36,923 autoreload 17924 13392 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-08 09:26:38,398 autoreload 6180 22132 Watching for file changes with StatReloader
+INFO 2025-10-08 11:11:10,178 autoreload 6180 22132 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-08 11:11:12,267 autoreload 15924 10076 Watching for file changes with StatReloader
+INFO 2025-10-08 11:15:42,414 autoreload 900 5704 Watching for file changes with StatReloader
+INFO 2025-10-08 11:19:10,244 autoreload 14952 21896 Watching for file changes with StatReloader
+INFO 2025-10-08 11:21:47,781 autoreload 14952 21896 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-08 11:21:48,714 autoreload 10244 21272 Watching for file changes with StatReloader
+INFO 2025-10-08 11:25:37,460 autoreload 10244 21272 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-08 11:25:38,549 autoreload 13700 16832 Watching for file changes with StatReloader
+INFO 2025-10-08 11:26:15,101 autoreload 15080 4352 Watching for file changes with StatReloader
+INFO 2025-10-08 11:27:52,842 autoreload 15080 4352 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-08 11:27:54,001 autoreload 17212 18712 Watching for file changes with StatReloader
+INFO 2025-10-08 11:28:04,558 basehttp 17212 21216 "GET / HTTP/1.1" 200 36286
+INFO 2025-10-08 11:28:13,457 basehttp 17212 21216 "GET /usuarios/lista/ HTTP/1.1" 200 25243
+INFO 2025-10-08 11:28:26,594 basehttp 17212 21216 "GET / HTTP/1.1" 200 35684
+INFO 2025-10-08 11:28:29,128 basehttp 17212 21216 "GET /aves/ HTTP/1.1" 200 50176
+INFO 2025-10-08 11:28:30,393 basehttp 17212 21216 "GET /aves/reportes/ HTTP/1.1" 200 26277
+ERROR 2025-10-08 11:28:32,333 log 17212 21216 Internal Server Error: /aves/reportes/produccion/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 1047, in reporte_produccion
+    stats = bitacoras.aggregate(
+        total_produccion=Sum('produccion_aaa') + Sum('produccion_aa') + Sum('produccion_a') +
+    ...<4 lines>...
+        total_huevos_sucios=Sum('huevos_sucios'),
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 592, in aggregate
+    return self.query.chain().get_aggregation(self.db, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 398, in get_aggregation
+    aggregate = aggregate_expr.resolve_expression(
+        self, allow_joins=True, reuse=None, summarize=True
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\aggregates.py", line 64, in resolve_expression
+    c = super().resolve_expression(query, allow_joins, reuse, summarize)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\expressions.py", line 950, in resolve_expression
+    c.source_expressions[pos] = arg.resolve_expression(
+                                ~~~~~~~~~~~~~~~~~~~~~~^
+        query, allow_joins, reuse, summarize, for_save
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\expressions.py", line 829, in resolve_expression
+    return query.resolve_ref(self.name, allow_joins, reuse, summarize)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1978, in resolve_ref
+    join_info = self.setup_joins(
+        field_list, self.get_meta(), self.get_initial_alias(), can_reuse=reuse
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1825, in setup_joins
+    path, final_field, targets, rest = self.names_to_path(
+                                       ~~~~~~~~~~~~~~~~~~^
+        names[:pivot],
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        fail_on_missing=True,
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1726, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'huevos_rotos' into field. Choices are: causa_mortalidad, consumo_concentrado, consumo_promedio, created_at, fecha, id, is_active, lote, lote_id, mortalidad, observaciones, produccion_a, produccion_aa, produccion_aaa, produccion_b, produccion_c, semana_vida, total_mortalidad, total_produccion, updated_at, usuario_registro, usuario_registro_id
+ERROR 2025-10-08 11:28:32,377 basehttp 17212 21216 "GET /aves/reportes/produccion/ HTTP/1.1" 500 140699
+INFO 2025-10-08 11:28:36,324 basehttp 17212 21216 "GET /aves/reportes/mortalidad/ HTTP/1.1" 200 24063
+INFO 2025-10-08 11:29:00,184 basehttp 17212 21216 "POST /aves/reportes/mortalidad/ HTTP/1.1" 200 24063
+INFO 2025-10-08 11:35:01,151 autoreload 17212 18712 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-08 11:35:02,081 autoreload 14896 10720 Watching for file changes with StatReloader
+INFO 2025-10-08 11:35:10,822 basehttp 14896 14952 "POST /aves/reportes/mortalidad/ HTTP/1.1" 200 24064
+INFO 2025-10-08 11:35:10,860 basehttp 14896 14952 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-08 11:35:10,875 basehttp 14896 15556 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-08 11:35:11,088 basehttp 14896 15556 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-08 11:35:11,120 basehttp 14896 15556 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-08 11:35:11,385 basehttp 14896 15556 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-08 11:35:23,836 basehttp 14896 15556 "POST /aves/reportes/mortalidad/ HTTP/1.1" 200 24063
+INFO 2025-10-08 11:35:35,442 basehttp 14896 15556 "GET / HTTP/1.1" 200 35684
+INFO 2025-10-08 11:35:38,300 basehttp 14896 15556 "GET /aves/ HTTP/1.1" 200 50176
+INFO 2025-10-08 11:35:40,834 basehttp 14896 15556 "GET /aves/alertas/ HTTP/1.1" 200 52031
+INFO 2025-10-08 11:35:40,857 basehttp 14896 15556 "GET /static/aves/js/alertas.js HTTP/1.1" 304 0
+INFO 2025-10-08 11:35:41,615 basehttp 14896 15556 "GET /aves/reportes/ HTTP/1.1" 200 26277
+INFO 2025-10-08 11:35:42,296 basehttp 14896 15556 "GET /aves/alertas/ HTTP/1.1" 200 52031
+INFO 2025-10-08 11:35:43,012 basehttp 14896 15556 "GET /aves/reportes/ HTTP/1.1" 200 26277
+ERROR 2025-10-08 11:35:44,506 log 14896 15556 Internal Server Error: /aves/reportes/produccion/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 1047, in reporte_produccion
+    stats = bitacoras.aggregate(
+        total_produccion=Sum('produccion_aaa') + Sum('produccion_aa') + Sum('produccion_a') +
+    ...<4 lines>...
+        total_huevos_sucios=Sum('huevos_sucios'),
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 592, in aggregate
+    return self.query.chain().get_aggregation(self.db, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 398, in get_aggregation
+    aggregate = aggregate_expr.resolve_expression(
+        self, allow_joins=True, reuse=None, summarize=True
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\aggregates.py", line 64, in resolve_expression
+    c = super().resolve_expression(query, allow_joins, reuse, summarize)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\expressions.py", line 950, in resolve_expression
+    c.source_expressions[pos] = arg.resolve_expression(
+                                ~~~~~~~~~~~~~~~~~~~~~~^
+        query, allow_joins, reuse, summarize, for_save
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\expressions.py", line 829, in resolve_expression
+    return query.resolve_ref(self.name, allow_joins, reuse, summarize)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1978, in resolve_ref
+    join_info = self.setup_joins(
+        field_list, self.get_meta(), self.get_initial_alias(), can_reuse=reuse
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1825, in setup_joins
+    path, final_field, targets, rest = self.names_to_path(
+                                       ~~~~~~~~~~~~~~~~~~^
+        names[:pivot],
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        fail_on_missing=True,
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1726, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'huevos_rotos' into field. Choices are: causa_mortalidad, consumo_concentrado, consumo_promedio, created_at, fecha, id, is_active, lote, lote_id, mortalidad, observaciones, produccion_a, produccion_aa, produccion_aaa, produccion_b, produccion_c, semana_vida, total_mortalidad, total_produccion, updated_at, usuario_registro, usuario_registro_id
+ERROR 2025-10-08 11:35:44,559 basehttp 14896 15556 "GET /aves/reportes/produccion/ HTTP/1.1" 500 140698
+WARNING 2025-10-08 11:35:44,694 log 14896 15556 Not Found: /favicon.ico
+WARNING 2025-10-08 11:35:44,694 basehttp 14896 15556 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-08 11:35:50,262 basehttp 14896 15556 "GET /aves/reportes/exportar-completo/ HTTP/1.1" 200 5171
+INFO 2025-10-08 11:36:06,206 basehttp 14896 15556 "GET /aves/reportes/vacunacion/ HTTP/1.1" 200 24074
+ERROR 2025-10-08 11:36:09,168 log 14896 15556 Internal Server Error: /aves/reportes/comparativo-lotes/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 118, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py", line 165, in reporte_comparativo_lotes
+    return render(request, 'aves/reporte_comparativo_lotes.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: aves/reporte_comparativo_lotes.html
+ERROR 2025-10-08 11:36:09,202 basehttp 14896 15556 "GET /aves/reportes/comparativo-lotes/ HTTP/1.1" 500 113658
+INFO 2025-10-08 14:02:14,463 autoreload 11244 21516 Watching for file changes with StatReloader
+INFO 2025-10-08 14:02:15,817 basehttp 11244 2460 "GET / HTTP/1.1" 200 35685
+ERROR 2025-10-08 14:02:23,986 log 11244 2460 Internal Server Error: /reportes/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\reportes\views.py", line 29, in lista_reportes
+    return render(request, 'reportes/lista_reportes.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: reportes/lista_reportes.html
+ERROR 2025-10-08 14:02:24,020 basehttp 11244 2460 "GET /reportes/ HTTP/1.1" 500 109280
+INFO 2025-10-08 14:02:26,642 basehttp 11244 2460 "GET /aves/ HTTP/1.1" 200 50176
+INFO 2025-10-08 14:02:28,561 basehttp 11244 2460 "GET /aves/reportes/ HTTP/1.1" 200 26277
+ERROR 2025-10-08 14:02:33,392 log 11244 2460 Internal Server Error: /aves/reportes/produccion/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 1047, in reporte_produccion
+    stats = bitacoras.aggregate(
+        total_produccion=Sum('produccion_aaa') + Sum('produccion_aa') + Sum('produccion_a') +
+    ...<4 lines>...
+        total_huevos_sucios=Sum('huevos_sucios'),
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 592, in aggregate
+    return self.query.chain().get_aggregation(self.db, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 398, in get_aggregation
+    aggregate = aggregate_expr.resolve_expression(
+        self, allow_joins=True, reuse=None, summarize=True
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\aggregates.py", line 64, in resolve_expression
+    c = super().resolve_expression(query, allow_joins, reuse, summarize)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\expressions.py", line 950, in resolve_expression
+    c.source_expressions[pos] = arg.resolve_expression(
+                                ~~~~~~~~~~~~~~~~~~~~~~^
+        query, allow_joins, reuse, summarize, for_save
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\expressions.py", line 829, in resolve_expression
+    return query.resolve_ref(self.name, allow_joins, reuse, summarize)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1978, in resolve_ref
+    join_info = self.setup_joins(
+        field_list, self.get_meta(), self.get_initial_alias(), can_reuse=reuse
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1825, in setup_joins
+    path, final_field, targets, rest = self.names_to_path(
+                                       ~~~~~~~~~~~~~~~~~~^
+        names[:pivot],
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        fail_on_missing=True,
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1726, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'huevos_rotos' into field. Choices are: causa_mortalidad, consumo_concentrado, consumo_promedio, created_at, fecha, id, is_active, lote, lote_id, mortalidad, observaciones, produccion_a, produccion_aa, produccion_aaa, produccion_b, produccion_c, semana_vida, total_mortalidad, total_produccion, updated_at, usuario_registro, usuario_registro_id
+ERROR 2025-10-08 14:02:33,452 basehttp 11244 2460 "GET /aves/reportes/produccion/ HTTP/1.1" 500 140698
+INFO 2025-10-08 14:07:06,337 autoreload 11244 21516 C:\Users\bp877\TRAE\AgroSmart\apps\aves\reports.py changed, reloading.
+INFO 2025-10-08 14:07:07,399 autoreload 8488 22460 Watching for file changes with StatReloader
+INFO 2025-10-08 14:07:12,012 basehttp 8488 17828 "GET /aves/reportes/ HTTP/1.1" 200 26278
+INFO 2025-10-08 14:07:12,031 basehttp 8488 6360 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-08 14:07:12,031 basehttp 8488 17828 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-08 14:07:12,446 basehttp 8488 6360 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-08 14:07:12,458 basehttp 8488 6360 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-08 14:07:12,924 basehttp 8488 6360 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+ERROR 2025-10-08 14:07:14,108 log 8488 6360 Internal Server Error: /aves/reportes/produccion/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 1047, in reporte_produccion
+    stats = bitacoras.aggregate(
+        total_produccion=Sum('produccion_aaa') + Sum('produccion_aa') + Sum('produccion_a') +
+    ...<4 lines>...
+        total_huevos_sucios=Sum('huevos_sucios'),
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 592, in aggregate
+    return self.query.chain().get_aggregation(self.db, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 398, in get_aggregation
+    aggregate = aggregate_expr.resolve_expression(
+        self, allow_joins=True, reuse=None, summarize=True
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\aggregates.py", line 64, in resolve_expression
+    c = super().resolve_expression(query, allow_joins, reuse, summarize)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\expressions.py", line 950, in resolve_expression
+    c.source_expressions[pos] = arg.resolve_expression(
+                                ~~~~~~~~~~~~~~~~~~~~~~^
+        query, allow_joins, reuse, summarize, for_save
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\expressions.py", line 829, in resolve_expression
+    return query.resolve_ref(self.name, allow_joins, reuse, summarize)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1978, in resolve_ref
+    join_info = self.setup_joins(
+        field_list, self.get_meta(), self.get_initial_alias(), can_reuse=reuse
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1825, in setup_joins
+    path, final_field, targets, rest = self.names_to_path(
+                                       ~~~~~~~~~~~~~~~~~~^
+        names[:pivot],
+        ^^^^^^^^^^^^^^
+    ...<2 lines>...
+        fail_on_missing=True,
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1726, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'huevos_rotos' into field. Choices are: causa_mortalidad, consumo_concentrado, consumo_promedio, created_at, fecha, id, is_active, lote, lote_id, mortalidad, observaciones, produccion_a, produccion_aa, produccion_aaa, produccion_b, produccion_c, semana_vida, total_mortalidad, total_produccion, updated_at, usuario_registro, usuario_registro_id
+ERROR 2025-10-08 14:07:14,159 basehttp 8488 6360 "GET /aves/reportes/produccion/ HTTP/1.1" 500 140699
+WARNING 2025-10-08 14:07:14,277 log 8488 6360 Not Found: /favicon.ico
+WARNING 2025-10-08 14:07:14,278 basehttp 8488 6360 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-08 14:09:52,530 autoreload 8488 22460 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-08 14:09:53,824 autoreload 13320 15016 Watching for file changes with StatReloader
+INFO 2025-10-08 14:10:10,065 basehttp 13320 19864 "GET /aves/reportes/produccion/ HTTP/1.1" 200 22867
+INFO 2025-10-08 14:10:17,218 basehttp 13320 19864 "GET /aves/reportes/produccion/ HTTP/1.1" 200 22866
+INFO 2025-10-08 14:10:17,239 basehttp 13320 6540 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-08 14:10:17,240 basehttp 13320 19864 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-08 14:10:17,444 basehttp 13320 6540 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-08 14:10:17,456 basehttp 13320 6540 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-08 14:10:17,840 basehttp 13320 6540 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-08 14:10:21,258 basehttp 13320 6540 "GET /aves/alertas/ HTTP/1.1" 200 52031
+INFO 2025-10-08 14:10:21,281 basehttp 13320 6540 "GET /static/aves/css/alertas.css HTTP/1.1" 304 0
+INFO 2025-10-08 14:10:21,281 basehttp 13320 19864 "GET /static/aves/js/alertas.js HTTP/1.1" 304 0
+INFO 2025-10-08 14:10:21,620 basehttp 13320 19864 "GET /aves/reportes/ HTTP/1.1" 200 26277
+INFO 2025-10-08 14:10:22,920 basehttp 13320 19864 "GET /aves/reportes/produccion/ HTTP/1.1" 200 22866
+INFO 2025-10-08 14:11:00,230 basehttp 13320 19864 "GET /aves/reportes/produccion/?lote=&fecha_desde=2025-09-08&fecha_hasta=2025-10-08 HTTP/1.1" 200 22946
+INFO 2025-10-08 14:14:01,564 autoreload 13320 15016 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-08 14:14:02,615 autoreload 14312 4876 Watching for file changes with StatReloader
+INFO 2025-10-08 14:15:23,888 basehttp 14312 21332 "GET /aves/alertas/ HTTP/1.1" 200 52032
+INFO 2025-10-08 14:15:28,029 basehttp 14312 21332 "GET /aves/inventario-huevos/ HTTP/1.1" 200 43194
+INFO 2025-10-08 14:15:34,306 basehttp 14312 21332 "GET /aves/vacunacion/ HTTP/1.1" 200 28644
+INFO 2025-10-08 14:15:35,333 basehttp 14312 21332 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29206
+INFO 2025-10-08 14:15:36,634 autoreload 14312 4876 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-08 14:15:37,987 autoreload 18620 16232 Watching for file changes with StatReloader
+INFO 2025-10-08 14:16:19,953 basehttp 18620 11928 "GET /aves/reportes/ HTTP/1.1" 200 26278
+INFO 2025-10-08 14:16:21,722 basehttp 18620 11928 "GET /aves/reportes/ HTTP/1.1" 200 26277
+INFO 2025-10-08 14:16:21,740 basehttp 18620 7152 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-08 14:16:21,740 basehttp 18620 11928 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-08 14:16:21,905 basehttp 18620 7152 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-08 14:16:21,918 basehttp 18620 7152 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-08 14:16:22,254 basehttp 18620 7152 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-08 14:16:23,019 basehttp 18620 7152 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26108
+INFO 2025-10-08 14:19:17,046 basehttp 18620 13568 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 14:19:17,112 basehttp 18620 13568 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-08 14:19:17,142 basehttp 18620 13568 "GET /static/dashboard/css/login.css HTTP/1.1" 304 0
+INFO 2025-10-08 14:19:17,154 basehttp 18620 13568 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 304 0
+INFO 2025-10-08 14:20:10,079 basehttp 18620 13568 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 14:20:10,245 basehttp 18620 13568 "GET / HTTP/1.1" 200 35986
+INFO 2025-10-08 14:20:15,854 basehttp 18620 13568 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 14:20:15,911 basehttp 18620 13568 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-08 14:20:21,943 basehttp 18620 13568 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 14:20:22,079 basehttp 18620 13568 "GET / HTTP/1.1" 200 35973
+INFO 2025-10-08 14:20:26,227 basehttp 18620 13568 "GET /usuarios/lista/ HTTP/1.1" 200 25243
+INFO 2025-10-08 14:20:29,140 basehttp 18620 13568 "GET /usuarios/editar/3/ HTTP/1.1" 200 24788
+INFO 2025-10-08 14:20:35,406 basehttp 18620 13568 "POST /usuarios/editar/3/ HTTP/1.1" 302 0
+INFO 2025-10-08 14:20:35,498 basehttp 18620 13568 "GET /usuarios/lista/ HTTP/1.1" 200 25550
+INFO 2025-10-08 14:20:37,075 basehttp 18620 13568 "GET / HTTP/1.1" 200 35684
+INFO 2025-10-08 14:20:39,129 basehttp 18620 13568 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 14:20:39,187 basehttp 18620 13568 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-08 14:20:57,489 basehttp 18620 13568 - Broken pipe from ('127.0.0.1', 56779)
+INFO 2025-10-08 14:20:59,336 basehttp 18620 5736 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 14:20:59,636 basehttp 18620 5736 "GET /punto-blanco/ HTTP/1.1" 200 39563
+INFO 2025-10-08 14:21:26,550 basehttp 18620 5736 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-08 14:21:26,616 basehttp 18620 5736 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-08 14:21:32,986 basehttp 18620 5736 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-08 14:21:33,113 basehttp 18620 5736 "GET / HTTP/1.1" 200 35972
+INFO 2025-10-08 14:21:48,219 basehttp 18620 5736 "GET /aves/ HTTP/1.1" 200 50177
+INFO 2025-10-08 14:24:36,596 basehttp 18620 5736 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29205
+INFO 2025-10-08 14:24:44,341 basehttp 18620 5736 "GET /aves/lotes/ HTTP/1.1" 200 33007
+INFO 2025-10-08 14:24:46,141 basehttp 18620 5736 "GET /aves/lotes/1/ HTTP/1.1" 200 27728
+INFO 2025-10-08 14:25:20,017 basehttp 18620 5736 "GET /aves/bitacora/ HTTP/1.1" 200 31065
+INFO 2025-10-08 14:25:23,689 basehttp 18620 5736 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 34884
+INFO 2025-10-09 18:21:30,674 autoreload 12528 7812 Watching for file changes with StatReloader
+INFO 2025-10-09 18:21:34,965 basehttp 12528 23164 "GET / HTTP/1.1" 200 35686
+INFO 2025-10-09 18:21:35,151 basehttp 12528 23164 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 18:21:35,175 basehttp 12528 19460 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 18:21:35,641 basehttp 12528 19460 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 18:21:35,659 basehttp 12528 23164 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 18:21:41,911 basehttp 12528 23164 "GET /aves/ HTTP/1.1" 200 51508
+INFO 2025-10-09 18:21:43,081 basehttp 12528 23164 "GET /static/img/logo-ico.ico HTTP/1.1" 304 0
+INFO 2025-10-09 18:24:56,673 autoreload 22392 22396 Watching for file changes with StatReloader
+INFO 2025-10-09 18:25:00,293 basehttp 22392 10436 "GET / HTTP/1.1" 200 35687
+INFO 2025-10-09 18:25:23,549 basehttp 22392 10436 "GET /usuarios/lista/ HTTP/1.1" 200 25245
+INFO 2025-10-09 18:25:26,036 basehttp 22392 10436 "GET /usuarios/editar/3/ HTTP/1.1" 200 24788
+INFO 2025-10-09 18:25:36,605 basehttp 22392 13568 "POST /usuarios/editar/3/ HTTP/1.1" 302 0
+INFO 2025-10-09 18:25:36,639 basehttp 22392 13568 "GET /usuarios/lista/ HTTP/1.1" 200 25549
+INFO 2025-10-09 18:25:39,563 basehttp 22392 22188 "GET / HTTP/1.1" 200 35684
+INFO 2025-10-09 18:25:41,409 basehttp 22392 22188 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-09 18:25:41,434 basehttp 22392 22188 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-09 18:25:41,461 basehttp 22392 22188 "GET /static/dashboard/css/login.css HTTP/1.1" 304 0
+INFO 2025-10-09 18:25:41,471 basehttp 22392 22188 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 304 0
+INFO 2025-10-09 18:25:46,474 basehttp 22392 22188 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-09 18:25:46,527 basehttp 22392 22188 "GET / HTTP/1.1" 200 35984
+INFO 2025-10-09 18:25:48,466 basehttp 22392 22188 "GET /aves/ HTTP/1.1" 200 51519
+INFO 2025-10-09 18:25:56,657 basehttp 22392 22188 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29216
+INFO 2025-10-09 18:26:01,125 basehttp 22392 22188 "GET /aves/lotes/ HTTP/1.1" 200 33019
+INFO 2025-10-09 18:26:03,817 basehttp 22392 22188 "GET /aves/bitacora/ HTTP/1.1" 200 31076
+INFO 2025-10-09 18:26:05,194 basehttp 22392 22188 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29216
+INFO 2025-10-09 18:26:57,171 basehttp 22392 22188 "POST /aves/lotes/nuevo/ HTTP/1.1" 302 0
+INFO 2025-10-09 18:26:57,253 basehttp 22392 22188 "GET /aves/lotes/4/ HTTP/1.1" 200 27743

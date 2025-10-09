@@ -38,8 +38,8 @@ except ImportError:
     OPENPYXL_AVAILABLE = False
 
 from .models import (
-    LoteAves, BitacoraDiaria, MovimientoHuevos, ConsumoConcentrado,
-    RegistroVacunacion, AlertaSistema, Galpon, LineaGenetica
+    LoteAves, BitacoraDiaria, MovimientoHuevos, ControlConcentrado,
+    PlanVacunacion, AlertaSistema, TipoVacuna, TipoConcentrado
 )
 
 class ReporteAvicola:
@@ -52,180 +52,141 @@ class ReporteAvicola:
         self.fecha_inicio = self.parametros.get('fecha_inicio')
         self.fecha_fin = self.parametros.get('fecha_fin')
         self.lote_id = self.parametros.get('lote_id')
-        self.galpon_id = self.parametros.get('galpon_id')
         
     def obtener_datos_produccion_diaria(self):
         """
-        Obtiene datos de producción diaria de huevos
+        Obtiene datos de producción diaria con filtros aplicados
         """
-        filtros = {}
-        if self.fecha_inicio:
-            filtros['fecha__gte'] = self.fecha_inicio
-        if self.fecha_fin:
-            filtros['fecha__lte'] = self.fecha_fin
-        if self.lote_id:
-            filtros['lote_id'] = self.lote_id
-        if self.galpon_id:
-            filtros['lote__galpon_id'] = self.galpon_id
-            
-        bitacoras = BitacoraDiaria.objects.filter(**filtros).select_related(
-            'lote', 'lote__galpon', 'lote__linea_genetica'
-        ).order_by('fecha')
+        queryset = BitacoraDiaria.objects.all()
         
-        datos = []
-        for bitacora in bitacoras:
-            porcentaje_postura = (bitacora.huevos_buenos / bitacora.lote.cantidad_actual * 100) if bitacora.lote.cantidad_actual > 0 else 0
-            datos.append({
-                'fecha': bitacora.fecha,
-                'lote': bitacora.lote.codigo,
-                'galpon': bitacora.lote.galpon.nombre,
-                'huevos_buenos': bitacora.huevos_buenos,
-                'huevos_rotos': bitacora.huevos_rotos,
-                'huevos_sucios': bitacora.huevos_sucios,
-                'total_huevos': bitacora.huevos_buenos + bitacora.huevos_rotos + bitacora.huevos_sucios,
-                'porcentaje_postura': round(porcentaje_postura, 2),
-                'mortalidad': bitacora.mortalidad,
-                'observaciones': bitacora.observaciones
-            })
+        if self.lote_id:
+            queryset = queryset.filter(lote_id=self.lote_id)
+        if self.fecha_inicio:
+            queryset = queryset.filter(fecha__gte=self.fecha_inicio)
+        if self.fecha_fin:
+            queryset = queryset.filter(fecha__lte=self.fecha_fin)
             
-        return datos
+        return queryset.select_related('lote').order_by('-fecha')
     
     def obtener_resumen_produccion(self):
         """
         Obtiene resumen estadístico de producción
         """
-        filtros = {}
-        if self.fecha_inicio:
-            filtros['fecha__gte'] = self.fecha_inicio
-        if self.fecha_fin:
-            filtros['fecha__lte'] = self.fecha_fin
-        if self.lote_id:
-            filtros['lote_id'] = self.lote_id
-        if self.galpon_id:
-            filtros['lote__galpon_id'] = self.galpon_id
-            
-        bitacoras = BitacoraDiaria.objects.filter(**filtros)
+        datos = self.obtener_datos_produccion_diaria()
         
-        resumen = bitacoras.aggregate(
-            total_huevos_buenos=Sum('huevos_buenos'),
-            total_huevos_rotos=Sum('huevos_rotos'),
-            total_huevos_sucios=Sum('huevos_sucios'),
+        if not datos.exists():
+            return {
+                'total_huevos': 0,
+                'produccion_aaa': 0,
+                'produccion_aa': 0,
+                'produccion_a': 0,
+                'produccion_b': 0,
+                'produccion_c': 0,
+                'total_mortalidad': 0,
+                'promedio_diario': 0,
+                'mejor_dia': 0,
+                'total_consumo': 0,
+                'porcentaje_postura': 0,
+                'dias_registrados': 0
+            }
+            
+        resumen = datos.aggregate(
+            total_huevos=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + F('produccion_b') + F('produccion_c')),
+            produccion_aaa=Sum('produccion_aaa'),
+            produccion_aa=Sum('produccion_aa'),
+            produccion_a=Sum('produccion_a'),
+            produccion_b=Sum('produccion_b'),
+            produccion_c=Sum('produccion_c'),
             total_mortalidad=Sum('mortalidad'),
+            promedio_diario=Avg(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + F('produccion_b') + F('produccion_c')),
+            mejor_dia=Max(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + F('produccion_b') + F('produccion_c')),
+            total_consumo=Sum('consumo_concentrado'),
             dias_registrados=Count('id')
         )
         
-        # Calcular totales
-        total_huevos = (resumen['total_huevos_buenos'] or 0) + (resumen['total_huevos_rotos'] or 0) + (resumen['total_huevos_sucios'] or 0)
+        # Calcular porcentaje de postura promedio
+        total_aves = 0
+        total_produccion = 0
         
-        # Calcular porcentajes
-        porcentaje_buenos = (resumen['total_huevos_buenos'] / total_huevos * 100) if total_huevos > 0 else 0
-        porcentaje_rotos = (resumen['total_huevos_rotos'] / total_huevos * 100) if total_huevos > 0 else 0
-        porcentaje_sucios = (resumen['total_huevos_sucios'] / total_huevos * 100) if total_huevos > 0 else 0
+        for registro in datos:
+            aves_dia = registro.lote.numero_aves_actual
+            produccion_dia = (registro.produccion_aaa + registro.produccion_aa + 
+                            registro.produccion_a + registro.produccion_b + registro.produccion_c)
+            total_aves += aves_dia
+            total_produccion += produccion_dia
+            
+        porcentaje_postura = (total_produccion / total_aves * 100) if total_aves > 0 else 0
+        
+        # Calcular porcentajes por categoría
+        total_huevos = resumen['total_huevos'] or 0
+        porcentaje_aaa = (resumen['produccion_aaa'] / total_huevos * 100) if total_huevos > 0 else 0
+        porcentaje_aa = (resumen['produccion_aa'] / total_huevos * 100) if total_huevos > 0 else 0
+        porcentaje_a = (resumen['produccion_a'] / total_huevos * 100) if total_huevos > 0 else 0
+        porcentaje_b = (resumen['produccion_b'] / total_huevos * 100) if total_huevos > 0 else 0
+        porcentaje_c = (resumen['produccion_c'] / total_huevos * 100) if total_huevos > 0 else 0
         
         return {
             'total_huevos': total_huevos,
-            'huevos_buenos': resumen['total_huevos_buenos'] or 0,
-            'huevos_rotos': resumen['total_huevos_rotos'] or 0,
-            'huevos_sucios': resumen['total_huevos_sucios'] or 0,
-            'porcentaje_buenos': round(porcentaje_buenos, 2),
-            'porcentaje_rotos': round(porcentaje_rotos, 2),
-            'porcentaje_sucios': round(porcentaje_sucios, 2),
+            'produccion_aaa': resumen['produccion_aaa'] or 0,
+            'produccion_aa': resumen['produccion_aa'] or 0,
+            'produccion_a': resumen['produccion_a'] or 0,
+            'produccion_b': resumen['produccion_b'] or 0,
+            'produccion_c': resumen['produccion_c'] or 0,
+            'porcentaje_aaa': round(porcentaje_aaa, 2),
+            'porcentaje_aa': round(porcentaje_aa, 2),
+            'porcentaje_a': round(porcentaje_a, 2),
+            'porcentaje_b': round(porcentaje_b, 2),
+            'porcentaje_c': round(porcentaje_c, 2),
             'total_mortalidad': resumen['total_mortalidad'] or 0,
+            'promedio_diario': round(resumen['promedio_diario'] or 0, 1),
+            'mejor_dia': resumen['mejor_dia'] or 0,
+            'total_consumo': resumen['total_consumo'] or 0,
+            'porcentaje_postura': round(porcentaje_postura, 2),
             'dias_registrados': resumen['dias_registrados']
         }
     
     def obtener_datos_movimiento_huevos(self):
         """
-        Obtiene datos de movimiento de huevos
+        Obtiene datos de movimientos de huevos
         """
-        filtros = {}
-        if self.fecha_inicio:
-            filtros['fecha__gte'] = self.fecha_inicio
-        if self.fecha_fin:
-            filtros['fecha__lte'] = self.fecha_fin
-        if self.lote_id:
-            filtros['lote_id'] = self.lote_id
-            
-        movimientos = MovimientoHuevos.objects.filter(**filtros).select_related(
-            'lote', 'categoria_huevo'
-        ).order_by('-fecha')
+        queryset = MovimientoHuevos.objects.all()
         
-        datos = []
-        for mov in movimientos:
-            datos.append({
-                'fecha': mov.fecha,
-                'lote': mov.lote.codigo,
-                'tipo_movimiento': mov.get_tipo_movimiento_display(),
-                'categoria': mov.categoria_huevo.nombre,
-                'cantidad': mov.cantidad,
-                'precio_unitario': mov.precio_unitario,
-                'valor_total': mov.cantidad * mov.precio_unitario,
-                'destino': mov.destino,
-                'observaciones': mov.observaciones
-            })
+        if self.fecha_inicio:
+            queryset = queryset.filter(fecha__gte=self.fecha_inicio)
+        if self.fecha_fin:
+            queryset = queryset.filter(fecha__lte=self.fecha_fin)
             
-        return datos
+        return queryset.prefetch_related('detalles').order_by('-fecha')
     
     def obtener_datos_consumo_concentrado(self):
         """
         Obtiene datos de consumo de concentrado
         """
-        filtros = {}
-        if self.fecha_inicio:
-            filtros['fecha__gte'] = self.fecha_inicio
-        if self.fecha_fin:
-            filtros['fecha__lte'] = self.fecha_fin
-        if self.lote_id:
-            filtros['lote_id'] = self.lote_id
-            
-        consumos = ConsumoConcentrado.objects.filter(**filtros).select_related(
-            'lote', 'tipo_concentrado'
-        ).order_by('fecha')
+        queryset = ControlConcentrado.objects.filter(tipo_movimiento='salida')
         
-        datos = []
-        for consumo in consumos:
-            datos.append({
-                'fecha': consumo.fecha,
-                'lote': consumo.lote.codigo,
-                'tipo_concentrado': consumo.tipo_concentrado.nombre,
-                'cantidad_kg': consumo.cantidad_kg,
-                'costo_unitario': consumo.costo_unitario,
-                'costo_total': consumo.cantidad_kg * consumo.costo_unitario,
-                'observaciones': consumo.observaciones
-            })
+        if self.lote_id:
+            queryset = queryset.filter(lote_id=self.lote_id)
+        if self.fecha_inicio:
+            queryset = queryset.filter(fecha__gte=self.fecha_inicio)
+        if self.fecha_fin:
+            queryset = queryset.filter(fecha__lte=self.fecha_fin)
             
-        return datos
+        return queryset.select_related('tipo_concentrado', 'lote').order_by('-fecha')
     
     def obtener_datos_vacunacion(self):
         """
         Obtiene datos de vacunación
         """
-        filtros = {}
-        if self.fecha_inicio:
-            filtros['fecha_aplicacion__gte'] = self.fecha_inicio
-        if self.fecha_fin:
-            filtros['fecha_aplicacion__lte'] = self.fecha_fin
-        if self.lote_id:
-            filtros['lote_id'] = self.lote_id
-            
-        vacunaciones = RegistroVacunacion.objects.filter(**filtros).select_related(
-            'lote', 'plan_vacunacion', 'plan_vacunacion__tipo_vacuna'
-        ).order_by('fecha_aplicacion')
+        queryset = PlanVacunacion.objects.all()
         
-        datos = []
-        for vac in vacunaciones:
-            datos.append({
-                'fecha_aplicacion': vac.fecha_aplicacion,
-                'lote': vac.lote.codigo,
-                'vacuna': vac.plan_vacunacion.tipo_vacuna.nombre,
-                'dosis_aplicada': vac.dosis_aplicada,
-                'via_administracion': vac.get_via_administracion_display(),
-                'veterinario': vac.veterinario_responsable,
-                'observaciones': vac.observaciones,
-                'reacciones_adversas': vac.reacciones_adversas
-            })
+        if self.lote_id:
+            queryset = queryset.filter(lote_id=self.lote_id)
+        if self.fecha_inicio:
+            queryset = queryset.filter(fecha_programada__gte=self.fecha_inicio)
+        if self.fecha_fin:
+            queryset = queryset.filter(fecha_programada__lte=self.fecha_fin)
             
-        return datos
+        return queryset.select_related('lote', 'tipo_vacuna', 'veterinario').order_by('-fecha_programada')
     
     def generar_pdf_produccion(self, nombre_archivo="reporte_produccion.pdf"):
         """
@@ -271,11 +232,15 @@ class ReporteAvicola:
         resumen_data = [
             ['Concepto', 'Valor'],
             ['Total de huevos producidos', f"{resumen['total_huevos']:,}"],
-            ['Huevos buenos', f"{resumen['huevos_buenos']:,} ({resumen['porcentaje_buenos']}%)"],
-            ['Huevos rotos', f"{resumen['huevos_rotos']:,} ({resumen['porcentaje_rotos']}%)"],
-            ['Huevos sucios', f"{resumen['huevos_sucios']:,} ({resumen['porcentaje_sucios']}%)"],
+            ['Producción AAA', f"{resumen['produccion_aaa']:,} ({resumen['porcentaje_aaa']}%)"],
+            ['Producción AA', f"{resumen['produccion_aa']:,} ({resumen['porcentaje_aa']}%)"],
+            ['Producción A', f"{resumen['produccion_a']:,} ({resumen['porcentaje_a']}%)"],
+            ['Producción B', f"{resumen['produccion_b']:,} ({resumen['porcentaje_b']}%)"],
+            ['Producción C', f"{resumen['produccion_c']:,} ({resumen['porcentaje_c']}%)"],
             ['Total mortalidad', f"{resumen['total_mortalidad']:,}"],
             ['Días registrados', f"{resumen['dias_registrados']}"],
+            ['Promedio diario', f"{resumen['promedio_diario']:,}"],
+            ['% Postura promedio', f"{resumen['porcentaje_postura']}%"],
         ]
         
         resumen_table = Table(resumen_data, colWidths=[3*inch, 2*inch])
@@ -298,23 +263,25 @@ class ReporteAvicola:
         
         if datos_produccion:
             # Encabezados de la tabla
-            headers = ['Fecha', 'Lote', 'Galpón', 'H. Buenos', 'H. Rotos', 'H. Sucios', 'Total', '% Postura', 'Mortalidad']
+            headers = ['Fecha', 'Lote', 'Galpón', 'AAA', 'AA', 'A', 'B', 'C', 'Total', 'Mortalidad']
             data = [headers]
             
             for dato in datos_produccion[:50]:  # Limitar a 50 registros para el PDF
+                total_huevos = dato.produccion_aaa + dato.produccion_aa + dato.produccion_a + dato.produccion_b + dato.produccion_c
                 data.append([
-                    dato['fecha'].strftime('%d/%m/%Y'),
-                    dato['lote'],
-                    dato['galpon'],
-                    str(dato['huevos_buenos']),
-                    str(dato['huevos_rotos']),
-                    str(dato['huevos_sucios']),
-                    str(dato['total_huevos']),
-                    f"{dato['porcentaje_postura']}%",
-                    str(dato['mortalidad'])
+                    dato.fecha.strftime('%d/%m/%Y'),
+                    dato.lote.codigo,
+                    dato.lote.galpon,
+                    str(dato.produccion_aaa),
+                    str(dato.produccion_aa),
+                    str(dato.produccion_a),
+                    str(dato.produccion_b),
+                    str(dato.produccion_c),
+                    str(total_huevos),
+                    str(dato.mortalidad)
                 ])
             
-            produccion_table = Table(data, colWidths=[0.8*inch, 0.8*inch, 0.8*inch, 0.6*inch, 0.6*inch, 0.6*inch, 0.6*inch, 0.7*inch, 0.7*inch])
+            produccion_table = Table(data, colWidths=[0.8*inch, 0.8*inch, 0.8*inch, 0.5*inch, 0.5*inch, 0.5*inch, 0.5*inch, 0.5*inch, 0.6*inch, 0.6*inch])
             produccion_table.setStyle(TableStyle([
                 ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
@@ -366,11 +333,15 @@ class ReporteAvicola:
         datos_resumen = [
             ['Concepto', 'Valor'],
             ['Total de huevos producidos', resumen['total_huevos']],
-            ['Huevos buenos', f"{resumen['huevos_buenos']} ({resumen['porcentaje_buenos']}%)"],
-            ['Huevos rotos', f"{resumen['huevos_rotos']} ({resumen['porcentaje_rotos']}%)"],
-            ['Huevos sucios', f"{resumen['huevos_sucios']} ({resumen['porcentaje_sucios']}%)"],
+            ['Producción AAA', f"{resumen['produccion_aaa']} ({resumen['porcentaje_aaa']}%)"],
+            ['Producción AA', f"{resumen['produccion_aa']} ({resumen['porcentaje_aa']}%)"],
+            ['Producción A', f"{resumen['produccion_a']} ({resumen['porcentaje_a']}%)"],
+            ['Producción B', f"{resumen['produccion_b']} ({resumen['porcentaje_b']}%)"],
+            ['Producción C', f"{resumen['produccion_c']} ({resumen['porcentaje_c']}%)"],
             ['Total mortalidad', resumen['total_mortalidad']],
             ['Días registrados', resumen['dias_registrados']],
+            ['Promedio diario', resumen['promedio_diario']],
+            ['% Postura promedio', f"{resumen['porcentaje_postura']}%"],
         ]
         
         for i, fila in enumerate(datos_resumen, start=8):
@@ -385,8 +356,8 @@ class ReporteAvicola:
         datos_produccion = self.obtener_datos_produccion_diaria()
         
         # Encabezados
-        encabezados = ['Fecha', 'Lote', 'Galpón', 'Huevos Buenos', 'Huevos Rotos', 'Huevos Sucios', 
-                      'Total Huevos', '% Postura', 'Mortalidad', 'Observaciones']
+        encabezados = ['Fecha', 'Lote', 'Galpón', 'Producción AAA', 'Producción AA', 'Producción A', 
+                      'Producción B', 'Producción C', 'Total Huevos', 'Mortalidad', 'Consumo Concentrado', 'Observaciones']
         
         for i, encabezado in enumerate(encabezados, start=1):
             celda = ws_produccion.cell(row=1, column=i, value=encabezado)
@@ -395,16 +366,19 @@ class ReporteAvicola:
         
         # Datos
         for i, dato in enumerate(datos_produccion, start=2):
-            ws_produccion.cell(row=i, column=1, value=dato['fecha'])
-            ws_produccion.cell(row=i, column=2, value=dato['lote'])
-            ws_produccion.cell(row=i, column=3, value=dato['galpon'])
-            ws_produccion.cell(row=i, column=4, value=dato['huevos_buenos'])
-            ws_produccion.cell(row=i, column=5, value=dato['huevos_rotos'])
-            ws_produccion.cell(row=i, column=6, value=dato['huevos_sucios'])
-            ws_produccion.cell(row=i, column=7, value=dato['total_huevos'])
-            ws_produccion.cell(row=i, column=8, value=dato['porcentaje_postura'])
-            ws_produccion.cell(row=i, column=9, value=dato['mortalidad'])
-            ws_produccion.cell(row=i, column=13, value=dato['observaciones'])
+            total_huevos = dato.produccion_aaa + dato.produccion_aa + dato.produccion_a + dato.produccion_b + dato.produccion_c
+            ws_produccion.cell(row=i, column=1, value=dato.fecha)
+            ws_produccion.cell(row=i, column=2, value=dato.lote.codigo)
+            ws_produccion.cell(row=i, column=3, value=dato.lote.galpon)
+            ws_produccion.cell(row=i, column=4, value=dato.produccion_aaa)
+            ws_produccion.cell(row=i, column=5, value=dato.produccion_aa)
+            ws_produccion.cell(row=i, column=6, value=dato.produccion_a)
+            ws_produccion.cell(row=i, column=7, value=dato.produccion_b)
+            ws_produccion.cell(row=i, column=8, value=dato.produccion_c)
+            ws_produccion.cell(row=i, column=9, value=total_huevos)
+            ws_produccion.cell(row=i, column=10, value=dato.mortalidad)
+            ws_produccion.cell(row=i, column=11, value=float(dato.consumo_concentrado))
+            ws_produccion.cell(row=i, column=12, value=dato.observaciones)
         
         # Ajustar ancho de columnas
         for column in ws_produccion.columns:
@@ -419,28 +393,6 @@ class ReporteAvicola:
             adjusted_width = min(max_length + 2, 50)
             ws_produccion.column_dimensions[column_letter].width = adjusted_width
         
-        # Hoja 3: Movimiento de Huevos
-        ws_movimientos = wb.create_sheet("Movimiento Huevos")
-        datos_movimientos = self.obtener_datos_movimiento_huevos()
-        
-        encabezados_mov = ['Fecha', 'Lote', 'Tipo Movimiento', 'Categoría', 'Cantidad', 'Precio Unitario', 'Valor Total', 'Destino', 'Observaciones']
-        
-        for i, encabezado in enumerate(encabezados_mov, start=1):
-            celda = ws_movimientos.cell(row=1, column=i, value=encabezado)
-            celda.font = Font(bold=True)
-            celda.fill = PatternFill(start_color="CCCCCC", end_color="CCCCCC", fill_type="solid")
-        
-        for i, dato in enumerate(datos_movimientos, start=2):
-            ws_movimientos.cell(row=i, column=1, value=dato['fecha'])
-            ws_movimientos.cell(row=i, column=2, value=dato['lote'])
-            ws_movimientos.cell(row=i, column=3, value=dato['tipo_movimiento'])
-            ws_movimientos.cell(row=i, column=4, value=dato['categoria'])
-            ws_movimientos.cell(row=i, column=5, value=dato['cantidad'])
-            ws_movimientos.cell(row=i, column=6, value=dato['precio_unitario'])
-            ws_movimientos.cell(row=i, column=7, value=dato['valor_total'])
-            ws_movimientos.cell(row=i, column=8, value=dato['destino'])
-            ws_movimientos.cell(row=i, column=9, value=dato['observaciones'])
-        
         # Crear gráfico de producción
         if datos_produccion:
             chart = LineChart()
@@ -450,18 +402,19 @@ class ReporteAvicola:
             chart.y_axis.title = 'Cantidad de Huevos'
             
             # Datos para el gráfico (últimos 30 días)
-            datos_grafico = datos_produccion[-30:] if len(datos_produccion) > 30 else datos_produccion
+            datos_grafico = list(datos_produccion)[-30:] if len(list(datos_produccion)) > 30 else list(datos_produccion)
             
             # Agregar datos del gráfico en una nueva hoja
             ws_grafico = wb.create_sheet("Datos Gráfico")
             ws_grafico['A1'] = "Fecha"
-            ws_grafico['B1'] = "Huevos Buenos"
-            ws_grafico['C1'] = "Total Huevos"
+            ws_grafico['B1'] = "Total Huevos"
+            ws_grafico['C1'] = "Mortalidad"
             
             for i, dato in enumerate(datos_grafico, start=2):
-                ws_grafico.cell(row=i, column=1, value=dato['fecha'].strftime('%d/%m'))
-                ws_grafico.cell(row=i, column=2, value=dato['huevos_buenos'])
-                ws_grafico.cell(row=i, column=3, value=dato['total_huevos'])
+                total_huevos = dato.produccion_aaa + dato.produccion_aa + dato.produccion_a + dato.produccion_b + dato.produccion_c
+                ws_grafico.cell(row=i, column=1, value=dato.fecha.strftime('%d/%m'))
+                ws_grafico.cell(row=i, column=2, value=total_huevos)
+                ws_grafico.cell(row=i, column=3, value=dato.mortalidad)
             
             # Configurar referencias del gráfico
             data = Reference(ws_grafico, min_col=2, min_row=1, max_col=3, max_row=len(datos_grafico)+1)
@@ -496,24 +449,27 @@ class ReporteAvicola:
         
         # Encabezados
         writer.writerow([
-            'Fecha', 'Lote', 'Galpón', 'Huevos Buenos', 'Huevos Rotos', 'Huevos Sucios',
-            'Total Huevos', '% Postura', 'Mortalidad', 'Observaciones'
+            'Fecha', 'Lote', 'Galpón', 'Producción AAA', 'Producción AA', 'Producción A',
+            'Producción B', 'Producción C', 'Total Huevos', 'Mortalidad', 'Consumo Concentrado', 'Observaciones'
         ])
         
         # Datos
         datos_produccion = self.obtener_datos_produccion_diaria()
         for dato in datos_produccion:
+            total_huevos = dato.produccion_aaa + dato.produccion_aa + dato.produccion_a + dato.produccion_b + dato.produccion_c
             writer.writerow([
-                dato['fecha'].strftime('%d/%m/%Y'),
-                dato['lote'],
-                dato['galpon'],
-                dato['huevos_buenos'],
-                dato['huevos_rotos'],
-                dato['huevos_sucios'],
-                dato['total_huevos'],
-                dato['porcentaje_postura'],
-                dato['mortalidad'],
-                dato['observaciones']
+                dato.fecha.strftime('%d/%m/%Y'),
+                dato.lote.codigo,
+                dato.lote.galpon,
+                dato.produccion_aaa,
+                dato.produccion_aa,
+                dato.produccion_a,
+                dato.produccion_b,
+                dato.produccion_c,
+                total_huevos,
+                dato.mortalidad,
+                float(dato.consumo_concentrado),
+                dato.observaciones
             ])
         
         return response
@@ -543,30 +499,39 @@ class ReporteComparativo:
             )
             
             resumen = bitacoras.aggregate(
-                total_huevos_buenos=Sum('huevos_buenos'),
-                total_huevos_rotos=Sum('huevos_rotos'),
-                total_huevos_sucios=Sum('huevos_sucios'),
+                total_produccion_aaa=Sum('produccion_aaa'),
+                total_produccion_aa=Sum('produccion_aa'),
+                total_produccion_a=Sum('produccion_a'),
+                total_produccion_b=Sum('produccion_b'),
+                total_produccion_c=Sum('produccion_c'),
                 total_mortalidad=Sum('mortalidad'),
-                promedio_postura=Avg(F('huevos_buenos') / F('lote__cantidad_actual') * 100),
+                promedio_postura=Avg(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + F('produccion_b') + F('produccion_c')),
                 dias_registrados=Count('id')
             )
             
-            total_huevos = (resumen['total_huevos_buenos'] or 0) + (resumen['total_huevos_rotos'] or 0) + (resumen['total_huevos_sucios'] or 0)
+            total_huevos = (
+                (resumen['total_produccion_aaa'] or 0) + 
+                (resumen['total_produccion_aa'] or 0) + 
+                (resumen['total_produccion_a'] or 0) + 
+                (resumen['total_produccion_b'] or 0) + 
+                (resumen['total_produccion_c'] or 0)
+            )
             
             datos_comparacion.append({
                 'lote_codigo': lote.codigo,
-                'lote_nombre': lote.nombre_lote,
-                'galpon': lote.galpon.nombre,
-                'linea_genetica': lote.linea_genetica.nombre,
-                'cantidad_aves': lote.cantidad_actual,
+                'galpon': lote.galpon,
+                'linea_genetica': lote.linea_genetica,
+                'numero_aves_actual': lote.numero_aves_actual,
                 'total_huevos': total_huevos,
-                'huevos_buenos': resumen['total_huevos_buenos'] or 0,
-                'huevos_rotos': resumen['total_huevos_rotos'] or 0,
-                'huevos_sucios': resumen['total_huevos_sucios'] or 0,
+                'produccion_aaa': resumen['total_produccion_aaa'] or 0,
+                'produccion_aa': resumen['total_produccion_aa'] or 0,
+                'produccion_a': resumen['total_produccion_a'] or 0,
+                'produccion_b': resumen['total_produccion_b'] or 0,
+                'produccion_c': resumen['total_produccion_c'] or 0,
                 'total_mortalidad': resumen['total_mortalidad'] or 0,
                 'promedio_postura': round(resumen['promedio_postura'] or 0, 2),
                 'dias_registrados': resumen['dias_registrados'],
-                'huevos_por_ave_dia': round(total_huevos / (lote.cantidad_actual * resumen['dias_registrados']), 3) if lote.cantidad_actual > 0 and resumen['dias_registrados'] > 0 else 0
+                'huevos_por_ave_dia': round(total_huevos / (lote.numero_aves_actual * resumen['dias_registrados']), 3) if lote.numero_aves_actual > 0 and resumen['dias_registrados'] > 0 else 0
             })
         
         return datos_comparacion
@@ -589,23 +554,33 @@ class ReporteComparativo:
             )
             
             resumen = bitacoras.aggregate(
-                total_huevos_buenos=Sum('huevos_buenos'),
-                total_huevos_rotos=Sum('huevos_rotos'),
-                total_huevos_sucios=Sum('huevos_sucios'),
+                total_produccion_aaa=Sum('produccion_aaa'),
+                total_produccion_aa=Sum('produccion_aa'),
+                total_produccion_a=Sum('produccion_a'),
+                total_produccion_b=Sum('produccion_b'),
+                total_produccion_c=Sum('produccion_c'),
                 total_mortalidad=Sum('mortalidad'),
                 dias_registrados=Count('id')
             )
             
-            total_huevos = (resumen['total_huevos_buenos'] or 0) + (resumen['total_huevos_rotos'] or 0) + (resumen['total_huevos_sucios'] or 0)
+            total_huevos = (
+                (resumen['total_produccion_aaa'] or 0) + 
+                (resumen['total_produccion_aa'] or 0) + 
+                (resumen['total_produccion_a'] or 0) + 
+                (resumen['total_produccion_b'] or 0) + 
+                (resumen['total_produccion_c'] or 0)
+            )
             
             datos_comparacion.append({
                 'periodo': nombre_periodo,
                 'fecha_inicio': fecha_inicio,
                 'fecha_fin': fecha_fin,
                 'total_huevos': total_huevos,
-                'huevos_buenos': resumen['total_huevos_buenos'] or 0,
-                'huevos_rotos': resumen['total_huevos_rotos'] or 0,
-                'huevos_sucios': resumen['total_huevos_sucios'] or 0,
+                'produccion_aaa': resumen['total_produccion_aaa'] or 0,
+                'produccion_aa': resumen['total_produccion_aa'] or 0,
+                'produccion_a': resumen['total_produccion_a'] or 0,
+                'produccion_b': resumen['total_produccion_b'] or 0,
+                'produccion_c': resumen['total_produccion_c'] or 0,
                 'total_mortalidad': resumen['total_mortalidad'] or 0,
                 'dias_registrados': resumen['dias_registrados'],
                 'promedio_huevos_dia': round(total_huevos / resumen['dias_registrados'], 1) if resumen['dias_registrados'] > 0 else 0
@@ -621,12 +596,12 @@ def obtener_datos_dashboard():
     hace_30_dias = hoy - timedelta(days=30)
     
     # Estadísticas generales
-    total_lotes_activos = LoteAves.objects.filter(estado='activo').count()
-    total_aves = LoteAves.objects.filter(estado='activo').aggregate(total=Sum('cantidad_actual'))['total'] or 0
+    total_lotes_activos = LoteAves.objects.filter(estado__in=['levante', 'postura']).count()
+    total_aves = LoteAves.objects.filter(estado__in=['levante', 'postura']).aggregate(total=Sum('numero_aves_actual'))['total'] or 0
     
     # Producción del día
     produccion_hoy = BitacoraDiaria.objects.filter(fecha=hoy).aggregate(
-        huevos_hoy=Sum('huevos_buenos'),
+        huevos_hoy=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + F('produccion_b') + F('produccion_c')),
         mortalidad_hoy=Sum('mortalidad')
     )
     
@@ -635,14 +610,13 @@ def obtener_datos_dashboard():
         fecha__gte=hace_30_dias,
         fecha__lte=hoy
     ).aggregate(
-        total_huevos=Sum('huevos_buenos'),
-        promedio_diario=Avg('huevos_buenos')
+        total_huevos=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + F('produccion_b') + F('produccion_c')),
+        promedio_diario=Avg(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + F('produccion_b') + F('produccion_c'))
     )
     
     # Alertas activas
     alertas_activas = AlertaSistema.objects.filter(
-        estado='activa',
-        fecha_creacion__gte=hace_30_dias
+        leida=False
     ).count()
     
     # Evolución de producción (últimos 7 días)
@@ -650,7 +624,7 @@ def obtener_datos_dashboard():
     for i in range(7):
         fecha = hoy - timedelta(days=i)
         produccion_dia = BitacoraDiaria.objects.filter(fecha=fecha).aggregate(
-            total=Sum('huevos_buenos')
+            total=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + F('produccion_b') + F('produccion_c'))
         )['total'] or 0
         evolucion_produccion.append({
             'fecha': fecha.strftime('%d/%m'),
@@ -663,9 +637,9 @@ def obtener_datos_dashboard():
     top_lotes = BitacoraDiaria.objects.filter(
         fecha__gte=hace_30_dias
     ).values(
-        'lote__codigo', 'lote__nombre_lote'
+        'lote__codigo', 'lote__galpon'
     ).annotate(
-        total_produccion=Sum('huevos_buenos')
+        total_produccion=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + F('produccion_b') + F('produccion_c'))
     ).order_by('-total_produccion')[:5]
     
     return {

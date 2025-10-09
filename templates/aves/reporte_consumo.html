@@ -1,0 +1,71 @@
+{% extends 'aves/base.html' %}
+{% load static %}
+
+{% block title %}Reporte de Consumo - AgroSmart{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2><i class="fas fa-chart-bar text-success me-2"></i>Reporte de Consumo de Alimento</h2>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-filter me-2"></i>Filtros</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Lote</label>
+                            <select name="lote_id" class="form-select">
+                                <option value="">Todos los lotes</option>
+                                {% for lote in lotes_activos %}
+                                    <option value="{{ lote.id }}">{{ lote.codigo }} - {{ lote.galpon }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Fecha Inicio</label>
+                            <input type="date" name="fecha_inicio" class="form-control">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Fecha Fin</label>
+                            <input type="date" name="fecha_fin" class="form-control">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Formato</label>
+                            <select name="formato" class="form-select">
+                                <option value="html">Ver en pantalla</option>
+                                <option value="pdf">Descargar PDF</option>
+                                <option value="excel">Descargar Excel</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-chart-bar me-2"></i>Generar Reporte
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-bar fa-5x text-muted mb-3"></i>
+                    <h5>Selecciona los filtros y genera tu reporte</h5>
+                    <p class="text-muted">Configura los parámetros en el panel izquierdo y haz clic en "Generar Reporte"</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

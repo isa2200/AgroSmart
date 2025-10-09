@@ -99,9 +99,9 @@ class GestorProduccion:
         ValidadorAvicola.validar_fecha_registro(fecha, lote)
         ValidadorAvicola.validar_produccion_huevos(
             lote, 
-            datos_produccion['huevos_buenos'],
-            datos_produccion['huevos_rotos'],
-            datos_produccion['huevos_sucios'],
+            datos_produccion.get('produccion_aaa', 0) + datos_produccion.get('produccion_aa', 0) + datos_produccion.get('produccion_a', 0),
+            datos_produccion.get('produccion_b', 0),
+            datos_produccion.get('produccion_c', 0),
             fecha
         )
         
@@ -124,14 +124,18 @@ class GestorProduccion:
         # Aplicar reglas automáticas
         GestorProduccion._aplicar_reglas_produccion(bitacora)
         
-        # Crear movimientos de huevos automáticamente
-        if datos_produccion['huevos_buenos'] > 0:
+        # Crear movimientos de huevos automáticamente para huevos buenos (AAA, AA, A)
+        huevos_buenos = (datos_produccion.get('produccion_aaa', 0) + 
+                        datos_produccion.get('produccion_aa', 0) + 
+                        datos_produccion.get('produccion_a', 0))
+        
+        if huevos_buenos > 0:
             MovimientoHuevos.objects.create(
                 lote=lote,
                 tipo_movimiento='entrada',
                 categoria=datos_produccion.get('categoria_huevo'),
-                cantidad=datos_produccion['huevos_buenos'],
-                cantidad_disponible=datos_produccion['huevos_buenos'],
+                cantidad=huevos_buenos,
+                cantidad_disponible=huevos_buenos,
                 fecha=fecha,
                 origen='produccion',
                 observaciones=f'Producción diaria lote {lote.codigo}'
@@ -164,7 +168,8 @@ class GestorProduccion:
                 )
         
         # Calcular y alertar sobre baja producción
-        total_huevos = bitacora.huevos_buenos + bitacora.huevos_rotos + bitacora.huevos_sucios
+        total_huevos = (bitacora.produccion_aaa + bitacora.produccion_aa + bitacora.produccion_a + 
+                       bitacora.produccion_b + bitacora.produccion_c)
         if total_huevos > 0:
             porcentaje_postura = (total_huevos / lote.cantidad_actual) * 100
             
@@ -178,9 +183,10 @@ class GestorProduccion:
                     prioridad='media'
                 )
         
-        # Alerta por alta proporción de huevos defectuosos
+        # Alerta por alta proporción de huevos defectuosos (B y C)
         if total_huevos > 0:
-            porcentaje_defectuosos = ((bitacora.huevos_rotos + bitacora.huevos_sucios) / total_huevos) * 100
+            huevos_defectuosos = bitacora.produccion_b + bitacora.produccion_c
+            porcentaje_defectuosos = (huevos_defectuosos / total_huevos) * 100
             if porcentaje_defectuosos > 20:
                 AlertaSistema.objects.create(
                     tipo='huevos_defectuosos',

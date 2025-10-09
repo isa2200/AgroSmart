@@ -9,6 +9,20 @@
 {% endblock %}
 
 {% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <h4><i class="fas fa-chart-line me-2"></i>Dashboard de Reportes</h4>
+                <p class="mb-3">Accede al dashboard interactivo con métricas en tiempo real</p>
+                <a href="{% url 'aves:reportes_dashboard' %}" class="btn btn-light">
+                    <i class="fas fa-tachometer-alt me-2"></i>Ir al Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <!-- Reporte de Producción -->
     <div class="col-md-6 mb-4">
@@ -35,9 +49,9 @@
                 </div>
                 <h5 class="card-title">Reporte de Mortalidad</h5>
                 <p class="card-text">Analiza las tasas de mortalidad por lote y identifica patrones.</p>
-                <button class="btn btn-danger" disabled>
-                    <i class="fas fa-file-alt me-2"></i>Próximamente
-                </button>
+                <a href="{% url 'aves:reporte_mortalidad' %}" class="btn btn-danger">
+                    <i class="fas fa-file-alt me-2"></i>Generar Reporte
+                </a>
             </div>
         </div>
     </div>
@@ -51,9 +65,9 @@
                 </div>
                 <h5 class="card-title">Reporte de Consumo</h5>
                 <p class="card-text">Monitorea el consumo de alimento y agua por lote.</p>
-                <button class="btn btn-success" disabled>
-                    <i class="fas fa-file-alt me-2"></i>Próximamente
-                </button>
+                <a href="{% url 'aves:reporte_consumo' %}" class="btn btn-success">
+                    <i class="fas fa-file-alt me-2"></i>Generar Reporte
+                </a>
             </div>
         </div>
     </div>
@@ -67,9 +81,41 @@
                 </div>
                 <h5 class="card-title">Reporte de Vacunación</h5>
                 <p class="card-text">Seguimiento del plan de vacunación y cumplimiento.</p>
-                <button class="btn btn-info" disabled>
-                    <i class="fas fa-file-alt me-2"></i>Próximamente
-                </button>
+                <a href="{% url 'aves:reporte_vacunacion' %}" class="btn btn-info">
+                    <i class="fas fa-file-alt me-2"></i>Generar Reporte
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Reporte Comparativo -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-balance-scale fa-3x text-warning"></i>
+                </div>
+                <h5 class="card-title">Reporte Comparativo</h5>
+                <p class="card-text">Compara el rendimiento entre diferentes lotes.</p>
+                <a href="{% url 'aves:reporte_comparativo_lotes' %}" class="btn btn-warning">
+                    <i class="fas fa-file-alt me-2"></i>Generar Reporte
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Exportar Datos Completos -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-download fa-3x text-secondary"></i>
+                </div>
+                <h5 class="card-title">Exportar Datos Completos</h5>
+                <p class="card-text">Descarga todos los datos del módulo avícola.</p>
+                <a href="{% url 'aves:exportar_datos_completos' %}" class="btn btn-secondary">
+                    <i class="fas fa-download me-2"></i>Exportar Datos
+                </a>
             </div>
         </div>
     </div>
@@ -84,7 +130,8 @@
             <div class="card-body">
                 <p class="mb-0">
                     Los reportes te permiten analizar el rendimiento de tus lotes avícolas. 
-                    Selecciona el tipo de reporte que necesitas y configura los parámetros según tus requerimientos.
+                    Cada reporte puede exportarse en formato PDF, Excel o CSV según tus necesidades.
+                    Utiliza el dashboard para obtener una vista general en tiempo real de todos tus indicadores.
                 </p>
             </div>
         </div>

@@ -5,7 +5,7 @@ Vistas para el módulo avícola.
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.db.models import Sum, Avg
 from django.utils import timezone
 from django.core.paginator import Paginator
@@ -17,7 +17,7 @@ import json
 from apps.usuarios.decorators import role_required, acceso_modulo_aves_required, puede_editar_required, puede_eliminar_required, veterinario_required
 from .models import *
 from .forms import *
-from .utils import generar_alertas, actualizar_inventario_huevos, exportar_reporte_pdf
+from .utils import generar_alertas, actualizar_inventario_huevos, exportar_reporte_pdf, exportar_reporte_excel
 
 
 @login_required
@@ -1024,7 +1024,7 @@ def reportes(request):
 @login_required
 @role_required(['superusuario', 'admin_aves', 'solo_vista'])
 def reporte_produccion(request):
-    """Reporte de producción."""
+    """Reporte de producción mejorado."""
     # Lógica para generar reporte de producción
     lotes = LoteAves.objects.filter(is_active=True)
     
@@ -1043,21 +1043,85 @@ def reporte_produccion(request):
     if fecha_hasta:
         bitacoras = bitacoras.filter(fecha__lte=fecha_hasta)
     
-    # Estadísticas
+    # Preparar datos para el template
+    datos_reporte = []
+    for bitacora in bitacoras:
+        huevos_buenos = bitacora.produccion_aaa + bitacora.produccion_aa + bitacora.produccion_a
+        huevos_defectuosos = bitacora.produccion_b + bitacora.produccion_c
+        total_huevos = huevos_buenos + huevos_defectuosos
+        
+        # Calcular porcentaje de postura
+        porcentaje_postura = 0
+        if bitacora.lote.numero_aves_actual > 0:
+            porcentaje_postura = (total_huevos / bitacora.lote.numero_aves_actual) * 100
+        
+        datos_reporte.append({
+            'fecha': bitacora.fecha,
+            'lote': bitacora.lote,
+            'huevos_buenos': huevos_buenos,
+            'huevos_defectuosos': huevos_defectuosos,
+            'total_huevos': total_huevos,
+            'porcentaje_postura': porcentaje_postura,
+            'mortalidad': bitacora.mortalidad,
+            'consumo_concentrado': bitacora.consumo_concentrado,
+        })
+    
+    # Estadísticas mejoradas
     stats = bitacoras.aggregate(
         total_produccion=Sum('produccion_aaa') + Sum('produccion_aa') + Sum('produccion_a') + 
                         Sum('produccion_b') + Sum('produccion_c'),
         total_mortalidad=Sum('mortalidad'),
         consumo_promedio=Avg('consumo_concentrado'),
+        total_huevos_b=Sum('produccion_b'),
+        total_huevos_c=Sum('produccion_c'),
     )
     
+    # Calcular resumen
+    resumen = {}
+    if datos_reporte:
+        total_huevos = sum(dato['total_huevos'] for dato in datos_reporte)
+        total_buenos = sum(dato['huevos_buenos'] for dato in datos_reporte)
+        mejor_dia = max(datos_reporte, key=lambda x: x['total_huevos'])['total_huevos'] if datos_reporte else 0
+        promedio_diario = total_huevos / len(datos_reporte) if datos_reporte else 0
+        
+        # Calcular porcentaje de postura promedio
+        porcentajes_postura = [dato['porcentaje_postura'] for dato in datos_reporte if dato['porcentaje_postura'] > 0]
+        porcentaje_postura_promedio = sum(porcentajes_postura) / len(porcentajes_postura) if porcentajes_postura else 0
+        
+        resumen = {
+            'total_huevos': total_huevos,
+            'total_buenos': total_buenos,
+            'mejor_dia': mejor_dia,
+            'promedio_diario': promedio_diario,
+            'porcentaje_postura': porcentaje_postura_promedio,
+        }
+    
+    # Producción por categoría
+    produccion_categoria = {
+        'AAA': bitacoras.aggregate(total=Sum('produccion_aaa'))['total'] or 0,
+        'AA': bitacoras.aggregate(total=Sum('produccion_aa'))['total'] or 0,
+        'A': bitacoras.aggregate(total=Sum('produccion_a'))['total'] or 0,
+        'B': bitacoras.aggregate(total=Sum('produccion_b'))['total'] or 0,
+        'C': bitacoras.aggregate(total=Sum('produccion_c'))['total'] or 0,
+    }
+    
+    # Exportar según formato
     if formato == 'pdf':
         return exportar_reporte_pdf('produccion', bitacoras, stats)
+    elif formato == 'excel':
+        filtros = {
+            'lote': lote_id,
+            'fecha_desde': fecha_desde,
+            'fecha_hasta': fecha_hasta,
+        }
+        return exportar_reporte_excel('produccion', bitacoras, stats, filtros)
     
     context = {
-        'bitacoras': bitacoras,
-        'lotes': lotes,
+        'datos_reporte': datos_reporte,  # Cambiado de 'bitacoras' a 'datos_reporte'
+        'resumen': resumen,  # Agregado el resumen
+        'lotes_disponibles': lotes,  # Cambiado de 'lotes' a 'lotes_disponibles'
         'stats': stats,
+        'produccion_categoria': produccion_categoria,
         'filtros': {
             'lote': lote_id,
             'fecha_desde': fecha_desde,

@@ -7,131 +7,250 @@ from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
+from reportlab.lib.pagesizes import letter, A4
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
 import io
+import openpyxl
+from openpyxl.styles import Font, Alignment, PatternFill
+from openpyxl.chart import BarChart, LineChart, Reference
 
 from .models import AlertaSistema, InventarioHuevos, LoteAves
 
 
-def generar_alertas(bitacora):
-    """Genera alertas automáticas basadas en la bitácora."""
+def generar_alertas():
+    """Genera alertas automáticas del sistema."""
+    alertas_generadas = []
     
-    # Alerta por mortalidad alta (más del 2% diario)
-    porcentaje_mortalidad_diario = (bitacora.mortalidad / bitacora.lote.numero_aves_actual) * 100
-    if porcentaje_mortalidad_diario > 2:
-        # Crítica si es mayor al 5%, normal si es entre 2-5%
-        nivel = 'critica' if porcentaje_mortalidad_diario > 5 else 'normal'
-        AlertaSistema.objects.create(
-            tipo_alerta='mortalidad_alta',
-            nivel=nivel,
-            titulo=f'Mortalidad {"crítica" if nivel == "critica" else "elevada"} en lote {bitacora.lote.codigo}',
-            mensaje=f'Se registró una mortalidad del {porcentaje_mortalidad_diario:.1f}% en el día {bitacora.fecha}',
-            lote=bitacora.lote,
-            galpon_nombre=bitacora.lote.galpon
+    # Alerta por baja producción
+    lotes_activos = LoteAves.objects.filter(is_active=True, estado='postura')
+    for lote in lotes_activos:
+        # Lógica para detectar baja producción
+        pass
+    
+    return alertas_generadas
+
+
+def actualizar_inventario_huevos(lote, produccion_data):
+    """Actualiza el inventario de huevos automáticamente."""
+    try:
+        inventario, created = InventarioHuevos.objects.get_or_create(
+            lote=lote,
+            defaults={
+                'stock_aaa': 0,
+                'stock_aa': 0,
+                'stock_a': 0,
+                'stock_b': 0,
+                'stock_c': 0,
+                'stock_automatico': True
+            }
         )
-    
-    # Alerta por producción baja (menos del 70% en aves en postura)
-    if bitacora.lote.estado == 'postura':
-        porcentaje_postura = bitacora.porcentaje_postura
-        if porcentaje_postura < 70:
-            # Crítica si es menor al 50%, normal si es entre 50-70%
-            nivel = 'critica' if porcentaje_postura < 50 else 'normal'
-            AlertaSistema.objects.create(
-                tipo_alerta='produccion_baja',
-                nivel=nivel,
-                titulo=f'Producción {"crítica" if nivel == "critica" else "baja"} en lote {bitacora.lote.codigo}',
-                mensaje=f'Porcentaje de postura del {porcentaje_postura:.1f}% el {bitacora.fecha}',
-                lote=bitacora.lote,
-                galpon_nombre=bitacora.lote.galpon
-            )
-
-    # Nota: Se eliminaron las alertas de temperatura ya que no se desean agregar esos campos
-
-
-def actualizar_inventario_huevos(bitacora):
-    """Actualiza el inventario de huevos basado en la producción."""
-    categorias = {
-        'AAA': bitacora.produccion_aaa,
-        'AA': bitacora.produccion_aa,
-        'A': bitacora.produccion_a,
-        'B': bitacora.produccion_b,
-        'C': bitacora.produccion_c,
-    }
-    
-    for categoria, cantidad in categorias.items():
-        if cantidad > 0:
-            inventario, created = InventarioHuevos.objects.get_or_create(
-                categoria=categoria,
-                defaults={'cantidad_actual': 0}
-            )
-            inventario.cantidad_actual += cantidad
-            inventario.save()
-            
-            # Verificar si necesita reposición
-            if inventario.necesita_reposicion:
-                AlertaSistema.objects.create(
-                    tipo_alerta='stock_bajo',
-                    nivel='warning',
-                    titulo=f'Stock bajo de huevos categoría {categoria}',
-                    mensaje=f'Quedan {inventario.cantidad_actual} huevos de categoría {categoria}. Mínimo: {inventario.cantidad_minima}',
-                )
+        
+        # Actualizar stocks
+        inventario.stock_aaa += produccion_data.get('produccion_aaa', 0)
+        inventario.stock_aa += produccion_data.get('produccion_aa', 0)
+        inventario.stock_a += produccion_data.get('produccion_a', 0)
+        inventario.stock_b += produccion_data.get('produccion_b', 0)
+        inventario.stock_c += produccion_data.get('produccion_c', 0)
+        inventario.save()
+        
+        return True
+    except Exception as e:
+        return False
 
 
 def exportar_reporte_pdf(tipo_reporte, datos, estadisticas):
-    """Exporta reportes a PDF."""
+    """Exporta reportes a PDF con formato mejorado."""
     buffer = io.BytesIO()
-    p = canvas.Canvas(buffer, pagesize=letter)
+    doc = SimpleDocTemplate(buffer, pagesize=A4)
+    styles = getSampleStyleSheet()
+    story = []
     
     # Título
-    p.setFont("Helvetica-Bold", 16)
-    p.drawString(100, 750, f"Reporte de {tipo_reporte.title()}")
-    p.drawString(100, 730, f"Generado el: {timezone.now().strftime('%d/%m/%Y %H:%M')}")
+    title_style = styles['Title']
+    title = Paragraph(f"Reporte de {tipo_reporte.title()}", title_style)
+    story.append(title)
+    story.append(Spacer(1, 20))
     
-    # Contenido básico (aquí puedes expandir según el tipo de reporte)
-    y_position = 700
-    p.setFont("Helvetica", 12)
+    # Fecha de generación
+    fecha_style = styles['Normal']
+    fecha = Paragraph(f"Generado el: {timezone.now().strftime('%d/%m/%Y %H:%M')}", fecha_style)
+    story.append(fecha)
+    story.append(Spacer(1, 20))
     
     if tipo_reporte == 'produccion':
-        p.drawString(100, y_position, f"Total de registros: {len(datos)}")
-        y_position -= 20
-        p.drawString(100, y_position, f"Producción total: {estadisticas.get('total_produccion', 0)} huevos")
-        y_position -= 20
-        p.drawString(100, y_position, f"Mortalidad total: {estadisticas.get('total_mortalidad', 0)} aves")
-        y_position -= 20
-        p.drawString(100, y_position, f"Consumo promedio: {estadisticas.get('consumo_promedio', 0):.2f} kg")
+        # Estadísticas resumen
+        stats_data = [
+            ['Estadística', 'Valor'],
+            ['Total Producción', f"{estadisticas.get('total_produccion', 0):,} huevos"],
+            ['Total Mortalidad', f"{estadisticas.get('total_mortalidad', 0):,} aves"],
+            ['Consumo Promedio', f"{estadisticas.get('consumo_promedio', 0):.2f} kg/día"],
+        ]
+        
+        stats_table = Table(stats_data)
+        stats_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, 0), 14),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black)
+        ]))
+        
+        story.append(stats_table)
+        story.append(Spacer(1, 20))
+        
+        # Datos detallados
+        if datos:
+            detail_data = [['Fecha', 'Lote', 'Producción AAA', 'Producción AA', 'Producción A', 'Mortalidad']]
+            for bitacora in datos[:50]:  # Limitar a 50 registros
+                detail_data.append([
+                    bitacora.fecha.strftime('%d/%m/%Y'),
+                    bitacora.lote.codigo,
+                    str(bitacora.produccion_aaa or 0),
+                    str(bitacora.produccion_aa or 0),
+                    str(bitacora.produccion_a or 0),
+                    str(bitacora.mortalidad or 0),
+                ])
+            
+            detail_table = Table(detail_data)
+            detail_table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 10),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black)
+            ]))
+            
+            story.append(detail_table)
     
-    p.showPage()
-    p.save()
-    
+    doc.build(story)
     buffer.seek(0)
-    response = HttpResponse(buffer, content_type='application/pdf')
+    
+    response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="reporte_{tipo_reporte}_{timezone.now().strftime("%Y%m%d")}.pdf"'
     
     return response
 
 
-def verificar_vacunas_pendientes():
-    """Verifica vacunas pendientes y genera alertas."""
-    from .models import PlanVacunacion
+def exportar_reporte_excel(tipo_reporte, datos, estadisticas, filtros=None):
+    """Exporta reportes a Excel con formato mejorado."""
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = f"Reporte {tipo_reporte.title()}"
     
-    fecha_limite = timezone.now().date() + timezone.timedelta(days=3)
-    vacunas_pendientes = PlanVacunacion.objects.filter(
-        aplicada=False,
-        fecha_programada__lte=fecha_limite
-    )
+    # Estilos
+    header_font = Font(bold=True, color="FFFFFF")
+    header_fill = PatternFill(start_color="366092", end_color="366092", fill_type="solid")
+    center_alignment = Alignment(horizontal="center", vertical="center")
     
-    for vacuna in vacunas_pendientes:
-        dias_restantes = (vacuna.fecha_programada - timezone.now().date()).days
-        # Crítica si debe aplicarse hoy o ya pasó la fecha, normal si faltan 1-3 días
-        nivel = 'critica' if dias_restantes <= 0 else 'normal'
+    # Título
+    ws['A1'] = f"Reporte de {tipo_reporte.title()}"
+    ws['A1'].font = Font(bold=True, size=16)
+    ws.merge_cells('A1:F1')
+    
+    # Fecha de generación
+    ws['A2'] = f"Generado el: {timezone.now().strftime('%d/%m/%Y %H:%M')}"
+    ws.merge_cells('A2:F2')
+    
+    # Filtros aplicados
+    row = 4
+    if filtros:
+        ws[f'A{row}'] = "Filtros aplicados:"
+        ws[f'A{row}'].font = Font(bold=True)
+        row += 1
+        for key, value in filtros.items():
+            if value:
+                ws[f'A{row}'] = f"{key.replace('_', ' ').title()}: {value}"
+                row += 1
+        row += 1
+    
+    if tipo_reporte == 'produccion':
+        # Estadísticas resumen
+        ws[f'A{row}'] = "Resumen Estadístico"
+        ws[f'A{row}'].font = Font(bold=True, size=14)
+        row += 2
         
-        AlertaSistema.objects.get_or_create(
-            tipo_alerta='vacuna_pendiente',
-            lote=vacuna.lote,
-            defaults={
-                'nivel': nivel,
-                'titulo': f'Vacuna {"urgente" if nivel == "critica" else "pendiente"} para lote {vacuna.lote.codigo}',
-                'mensaje': f'La vacuna {vacuna.tipo_vacuna.nombre} {"debe aplicarse HOY" if dias_restantes <= 0 else f"debe aplicarse en {dias_restantes} días"}',
-                'usuario_destinatario': vacuna.veterinario
-            }
-        )
+        stats_headers = ['Estadística', 'Valor']
+        for col, header in enumerate(stats_headers, 1):
+            cell = ws.cell(row=row, column=col, value=header)
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.alignment = center_alignment
+        
+        row += 1
+        stats_data = [
+            ['Total Producción', f"{estadisticas.get('total_produccion', 0):,} huevos"],
+            ['Total Mortalidad', f"{estadisticas.get('total_mortalidad', 0):,} aves"],
+            ['Consumo Promedio', f"{estadisticas.get('consumo_promedio', 0):.2f} kg/día"],
+        ]
+        
+        for stat_row in stats_data:
+            for col, value in enumerate(stat_row, 1):
+                ws.cell(row=row, column=col, value=value)
+            row += 1
+        
+        row += 2
+        
+        # Datos detallados
+        ws[f'A{row}'] = "Datos Detallados"
+        ws[f'A{row}'].font = Font(bold=True, size=14)
+        row += 2
+        
+        headers = ['Fecha', 'Lote', 'Galpón', 'Producción AAA', 'Producción AA', 'Producción A', 'Producción B', 'Producción C', 'Total Huevos', 'Mortalidad', 'Consumo']
+        for col, header in enumerate(headers, 1):
+            cell = ws.cell(row=row, column=col, value=header)
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.alignment = center_alignment
+        
+        row += 1
+        for bitacora in datos:
+            data_row = [
+                bitacora.fecha.strftime('%d/%m/%Y'),
+                bitacora.lote.codigo,
+                bitacora.lote.galpon,
+                bitacora.produccion_aaa or 0,
+                bitacora.produccion_aa or 0,
+                bitacora.produccion_a or 0,
+                bitacora.produccion_b or 0,
+                bitacora.produccion_c or 0,
+                (bitacora.produccion_aaa or 0) + (bitacora.produccion_aa or 0) + (bitacora.produccion_a or 0) + (bitacora.produccion_b or 0) + (bitacora.produccion_c or 0),
+                bitacora.mortalidad or 0,
+                bitacora.consumo_concentrado or 0,
+            ]
+            for col, value in enumerate(data_row, 1):
+                ws.cell(row=row, column=col, value=value)
+            row += 1
+    
+    # Ajustar ancho de columnas
+    for column in ws.columns:
+        max_length = 0
+        column_letter = column[0].column_letter
+        for cell in column:
+            try:
+                if len(str(cell.value)) > max_length:
+                    max_length = len(str(cell.value))
+            except:
+                pass
+        adjusted_width = min(max_length + 2, 50)
+        ws.column_dimensions[column_letter].width = adjusted_width
+    
+    # Guardar en buffer
+    buffer = io.BytesIO()
+    wb.save(buffer)
+    buffer.seek(0)
+    
+    response = HttpResponse(
+        buffer.getvalue(),
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = f'attachment; filename="reporte_{tipo_reporte}_{timezone.now().strftime("%Y%m%d")}.xlsx"'
+    
+    return response

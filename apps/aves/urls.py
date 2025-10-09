@@ -4,6 +4,7 @@ URLs para el módulo avícola.
 
 from django.urls import path
 from . import views
+from . import views_reports
 
 app_name = 'aves'
 
@@ -45,5 +46,12 @@ urlpatterns = [
     
     # Reportes
     path('reportes/', views.reportes, name='reportes'),
+    path('reportes/dashboard/', views_reports.dashboard_reportes, name='reportes_dashboard'),
     path('reportes/produccion/', views.reporte_produccion, name='reporte_produccion'),
+    path('reportes/mortalidad/', views_reports.reporte_mortalidad, name='reporte_mortalidad'),
+    path('reportes/consumo/', views_reports.reporte_consumo_concentrado, name='reporte_consumo'),
+    path('reportes/vacunacion/', views_reports.reporte_salud_vacunacion, name='reporte_vacunacion'),
+    path('reportes/comparativo-lotes/', views_reports.reporte_comparativo_lotes, name='reporte_comparativo_lotes'),
+    path('reportes/exportar-completo/', views_reports.exportar_datos_completos, name='exportar_datos_completos'),
+    path('api/datos-dashboard/', views_reports.api_datos_dashboard, name='api_datos_dashboard'),
 ]
