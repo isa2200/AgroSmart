@@ -579,12 +579,48 @@ def lote_detail(request, pk):
     # Consumo promedio
     consumo_promedio = bitacoras.aggregate(promedio=Avg('consumo_concentrado'))['promedio'] or 0
     
+    # Calcular promedio de producción diaria
+    if bitacoras.count() > 0:
+        promedio_produccion = produccion_total / bitacoras.count()
+    else:
+        promedio_produccion = 0
+    
+    # Calcular porcentaje de mortalidad
+    if lote.numero_aves_inicial > 0:
+        porcentaje_mortalidad = (mortalidad_total / lote.numero_aves_inicial) * 100
+    else:
+        porcentaje_mortalidad = 0
+    
+    # Preparar datos para gráficos (últimas 15 bitácoras)
+    bitacoras_grafico = bitacoras[:15]
+    fechas_grafico = []
+    produccion_grafico = []
+    mortalidad_grafico = []
+    
+    for bitacora in reversed(bitacoras_grafico):
+        fechas_grafico.append(bitacora.fecha.strftime('%d/%m'))
+        produccion_grafico.append(bitacora.produccion_total)
+        mortalidad_grafico.append(bitacora.mortalidad)
+    
+    # Estadísticas organizadas
+    estadisticas = {
+        'produccion_total': produccion_total,
+        'mortalidad_total': mortalidad_total,
+        'promedio_produccion': round(promedio_produccion, 1),
+        'porcentaje_mortalidad': round(porcentaje_mortalidad, 2),
+    }
+    
     context = {
         'lote': lote,
-        'bitacoras': bitacoras[:10],  # Últimas 10 bitácoras
+        'bitacoras_recientes': bitacoras[:10],  # Últimas 10 bitácoras para la tabla
+        'estadisticas': estadisticas,
         'produccion_total': produccion_total,
         'mortalidad_total': mortalidad_total,
         'consumo_promedio': round(consumo_promedio, 2),
+        # Datos para gráficos
+        'fechas_grafico': fechas_grafico,
+        'produccion_grafico': produccion_grafico,
+        'mortalidad_grafico': mortalidad_grafico,
     }
     
     return render(request, 'aves/lote_detail.html', context)

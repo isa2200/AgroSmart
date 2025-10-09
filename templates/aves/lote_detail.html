@@ -43,7 +43,7 @@
                     </tr>
                     <tr>
                         <td><strong>Fecha Ingreso:</strong></td>
-                        <td>{{ lote.fecha_ingreso|date:"d/m/Y" }}</td>
+                        <td>{{ lote.fecha_llegada|date:"d/m/Y" }}</td>
                     </tr>
                     <tr>
                         <td><strong>Estado:</strong></td>
@@ -145,7 +145,7 @@
                                 <tr>
                                     <td>{{ bitacora.fecha|date:"d/m/Y" }}</td>
                                     <td>{{ bitacora.semana_vida|default:"-" }}</td>
-                                    <td>{{ bitacora.total_produccion|floatformat:0 }}</td>
+                                    <td>{{ bitacora.produccion_total|floatformat:0 }}</td>
                                     <td>
                                         {% if bitacora.mortalidad > 0 %}
                                             <span class="text-danger">{{ bitacora.mortalidad }}</span>

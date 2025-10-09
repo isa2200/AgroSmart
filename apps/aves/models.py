@@ -66,6 +66,16 @@ class LoteAves(BaseModel):
         return (timezone.now().date() - self.fecha_llegada).days
     
     @property
+    def edad_actual_semanas(self):
+        """Calcula la edad del lote en semanas."""
+        return round(self.edad_dias / 7, 1)
+    
+    @property
+    def fecha_ingreso(self):
+        """Alias para fecha_llegada para compatibilidad con templates."""
+        return self.fecha_llegada
+    
+    @property
     def mortalidad_total(self):
         """Calcula la mortalidad total del lote."""
         return self.numero_aves_inicial - self.numero_aves_actual

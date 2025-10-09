@@ -14675,3 +14675,13 @@ INFO 2025-10-09 18:26:03,817 basehttp 22392 22188 "GET /aves/bitacora/ HTTP/1.1"
 INFO 2025-10-09 18:26:05,194 basehttp 22392 22188 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29216
 INFO 2025-10-09 18:26:57,171 basehttp 22392 22188 "POST /aves/lotes/nuevo/ HTTP/1.1" 302 0
 INFO 2025-10-09 18:26:57,253 basehttp 22392 22188 "GET /aves/lotes/4/ HTTP/1.1" 200 27743
+INFO 2025-10-09 18:27:34,155 basehttp 22392 22188 "GET /aves/ HTTP/1.1" 200 53503
+INFO 2025-10-09 18:27:35,926 basehttp 22392 22188 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29216
+INFO 2025-10-09 18:27:36,757 basehttp 22392 22188 "GET /aves/lotes/ HTTP/1.1" 200 35881
+INFO 2025-10-09 18:27:40,209 basehttp 22392 22188 "GET /aves/lotes/1/ HTTP/1.1" 200 27739
+INFO 2025-10-09 18:44:17,138 autoreload 22392 22396 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-09 18:44:19,838 autoreload 13952 18016 Watching for file changes with StatReloader
+INFO 2025-10-09 18:46:34,981 autoreload 13952 18016 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-10-09 18:46:36,297 autoreload 5380 21808 Watching for file changes with StatReloader
+INFO 2025-10-09 18:49:06,710 basehttp 5380 20716 "GET /aves/lotes/1/ HTTP/1.1" 200 30327
+INFO 2025-10-09 18:50:02,182 basehttp 5380 20716 "GET /aves/ HTTP/1.1" 200 53503
