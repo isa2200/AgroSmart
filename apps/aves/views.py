@@ -738,10 +738,10 @@ def movimiento_huevos_create(request):
                                 if movimiento.tipo_movimiento in ['venta', 'autoconsumo', 'baja']:
                                     try:
                                         inventario = InventarioHuevos.objects.get(categoria=detalle.categoria_huevo)
-                                        if detalle.cantidad > inventario.cantidad_actual:
+                                        if detalle.cantidad_unidades > inventario.cantidad_actual:
                                             errores_stock.append(
                                                 f'Detalle {i+1}: No hay suficiente stock de huevos {detalle.categoria_huevo}. '
-                                                f'Disponible: {inventario.cantidad_actual}, Solicitado: {detalle.cantidad}'
+                                                f'Disponible: {inventario.cantidad_actual}, Solicitado: {detalle.cantidad_unidades}'
                                             )
                                             continue
                                     except InventarioHuevos.DoesNotExist:
@@ -771,9 +771,9 @@ def movimiento_huevos_create(request):
                                     cantidad_anterior = inventario.cantidad_actual
                                     
                                     if movimiento.tipo_movimiento in ['venta', 'autoconsumo', 'baja']:
-                                        inventario.cantidad_actual -= detalle.cantidad
+                                        inventario.cantidad_actual -= detalle.cantidad_unidades
                                     else:  # devolución
-                                        inventario.cantidad_actual += detalle.cantidad
+                                        inventario.cantidad_actual += detalle.cantidad_unidades
                                     
                                     inventario.save()
                                     logger.info(f"Inventario actualizado para {detalle.categoria_huevo}: {cantidad_anterior} -> {inventario.cantidad_actual}")
@@ -1251,7 +1251,7 @@ def bitacora_edit(request, pk):
 
 
 @login_required
-@role_required(['superusuario', 'punto_blanco'])
+@role_required(['superusuario', 'punto_blanco', 'admin_aves'])
 def actualizar_stock_automatico(request):
     """Vista AJAX para actualizar stocks mínimos automáticamente."""
     if request.method == 'POST':
@@ -1278,7 +1278,7 @@ def actualizar_stock_automatico(request):
 
 
 @login_required
-@role_required(['superusuario', 'punto_blanco'])
+@role_required(['superusuario', 'punto_blanco', 'admin_aves'])
 def configurar_stock_automatico(request, inventario_id):
     """Vista para configurar el stock automático de un inventario específico."""
     inventario = get_object_or_404(InventarioHuevos, id=inventario_id)

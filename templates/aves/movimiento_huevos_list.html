@@ -166,17 +166,17 @@
                             <thead>
                                 <tr>
                                     <th>Categoría</th>
-                                    <th>Cantidad</th>
-                                    <th>Precio Unitario</th>
+                                    <th>Cantidad (Docenas)</th>
+                                    <th>Precio por Docena</th>
                                     <th>Subtotal</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for detalle in movimiento.detalles.all %}
                                     <tr>
-                                        <td>{{ detalle.categoria_huevo.nombre }}</td>
-                                        <td>{{ detalle.cantidad }} unidades</td>
-                                        <td>${{ detalle.precio_unitario|floatformat:0 }}</td>
+                                        <td>{{ detalle.categoria_huevo }}</td>
+                                        <td>{{ detalle.cantidad_docenas|floatformat:2 }} docenas ({{ detalle.cantidad_unidades }} unidades)</td>
+                                        <td>${{ detalle.precio_por_docena|floatformat:0 }}</td>
                                         <td>${{ detalle.subtotal|floatformat:0 }}</td>
                                     </tr>
                                 {% endfor %}

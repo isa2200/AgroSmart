@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "movimiento_id": 1,
+    "categoria_huevo": "AAA",
+    "cantidad_docenas": 2.5,
+    "precio_por_docena": 7200.0
+  },
+  {
+    "id": 2,
+    "movimiento_id": 2,
+    "categoria_huevo": "AA",
+    "cantidad_docenas": 6.67,
+    "precio_por_docena": 5400.0
+  },
+  {
+    "id": 3,
+    "movimiento_id": 3,
+    "categoria_huevo": "AAA",
+    "cantidad_docenas": 1.92,
+    "precio_por_docena": 6000.0
+  },
+  {
+    "id": 4,
+    "movimiento_id": 4,
+    "categoria_huevo": "AAA",
+    "cantidad_docenas": 0.5,
+    "precio_por_docena": 5280.0
+  }
+]

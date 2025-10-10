@@ -132,7 +132,7 @@
                                         </span>
                                     </td>
                                     <td>{{ detalle.categoria_huevo }}</td>
-                                    <td><strong>{{ detalle.cantidad|floatformat:0 }}</strong></td>
+                                    <td><strong>{{ detalle.cantidad_docenas|floatformat:2 }} docenas</strong> ({{ detalle.cantidad_unidades }} unidades)</td>
                                     <td>{{ detalle.movimiento.cliente|default:"N/A" }}</td>
                                     <td>{{ detalle.movimiento.usuario_registro.get_full_name|default:detalle.movimiento.usuario_registro.username }}</td>
                                     <td>

@@ -272,12 +272,17 @@ class MovimientoHuevos(BaseModel):
     
     @property
     def cantidad_total(self):
-        """Calcula la cantidad total de huevos en el movimiento."""
-        return sum(detalle.cantidad for detalle in self.detalles.all())
+        """Suma total de huevos en unidades."""
+        return sum(detalle.cantidad_unidades for detalle in self.detalles.all())
+    
+    @property
+    def cantidad_total_docenas(self):
+        """Suma total de huevos en docenas."""
+        return sum(detalle.cantidad_docenas for detalle in self.detalles.all() if detalle.cantidad_docenas)
     
     @property
     def valor_total(self):
-        """Calcula el valor total del movimiento."""
+        """Suma total del valor del movimiento."""
         return sum(detalle.subtotal for detalle in self.detalles.all())
 
 
@@ -294,13 +299,21 @@ class DetalleMovimientoHuevos(BaseModel):
         max_length=3, 
         choices=MovimientoHuevos.CATEGORIAS_HUEVO
     )
-    cantidad = models.PositiveIntegerField('Cantidad')
-    precio_unitario = models.DecimalField(
-        'Precio unitario', 
+    # CAMBIO: De cantidad individual a docenas
+    cantidad_docenas = models.DecimalField(
+        'Cantidad (docenas)', 
+        max_digits=10, 
+        decimal_places=2,
+        help_text='Cantidad en docenas (12 unidades por docena)'
+    )
+    # CAMBIO: De precio unitario a precio por docena
+    precio_por_docena = models.DecimalField(
+        'Precio por docena', 
         max_digits=10, 
         decimal_places=2, 
         null=True, 
-        blank=True
+        blank=True,
+        help_text='Precio por cada docena de huevos'
     )
     
     class Meta:
@@ -309,13 +322,25 @@ class DetalleMovimientoHuevos(BaseModel):
         unique_together = ['movimiento', 'categoria_huevo']
     
     def __str__(self):
-        return f"{self.movimiento} - {self.categoria_huevo} - {self.cantidad}"
+        return f"{self.movimiento} - {self.categoria_huevo} - {self.cantidad_docenas} docenas"
+    
+    @property
+    def cantidad_unidades(self):
+        """Convierte docenas a unidades individuales."""
+        return int(self.cantidad_docenas * 12) if self.cantidad_docenas else 0
+    
+    @property
+    def precio_unitario(self):
+        """Calcula el precio por unidad individual."""
+        if self.precio_por_docena:
+            return self.precio_por_docena / 12
+        return 0
     
     @property
     def subtotal(self):
         """Calcula el subtotal del detalle."""
-        if self.precio_unitario:
-            return self.cantidad * self.precio_unitario
+        if self.precio_por_docena and self.cantidad_docenas:
+            return self.cantidad_docenas * self.precio_por_docena
         return 0
     
     def clean(self):
@@ -326,39 +351,55 @@ class DetalleMovimientoHuevos(BaseModel):
         if not self.categoria_huevo:
             raise ValidationError({'categoria_huevo': 'La categoría de huevo es requerida.'})
         
-        if self.cantidad is None or self.cantidad <= 0:
-            raise ValidationError({'cantidad': 'La cantidad debe ser mayor a 0.'})
+        if self.cantidad_docenas is None or self.cantidad_docenas <= 0:
+            raise ValidationError({'cantidad_docenas': 'La cantidad debe ser mayor a 0.'})
         
-        # Validar precio unitario si está presente
-        if self.precio_unitario is not None and self.precio_unitario < 0:
-            raise ValidationError({'precio_unitario': 'El precio unitario no puede ser negativo.'})
+        # Validar precio por docena si está presente
+        if self.precio_por_docena is not None and self.precio_por_docena < 0:
+            raise ValidationError({'precio_por_docena': 'El precio por docena no puede ser negativo.'})
+        
+        # NUEVA VALIDACIÓN: Para autoconsumo no se requiere precio
+        if (hasattr(self, 'movimiento') and self.movimiento and 
+            self.movimiento.tipo_movimiento == 'autoconsumo'):
+            # Para autoconsumo, el precio es opcional (puede ser 0 o None)
+            pass
+        elif (hasattr(self, 'movimiento') and self.movimiento and 
+              self.movimiento.tipo_movimiento == 'venta'):
+            # Para ventas, el precio es obligatorio
+            if not self.precio_por_docena or self.precio_por_docena <= 0:
+                raise ValidationError({
+                    'precio_por_docena': 'El precio por docena es obligatorio para ventas y debe ser mayor a 0.'
+                })
         
         # Validar stock solo para movimientos que requieren validación de stock
-        # Solo validar si tenemos un movimiento válido, cantidad válida y es un movimiento de salida
         if (hasattr(self, 'movimiento') and self.movimiento and 
             self.movimiento.tipo_movimiento in ['venta', 'autoconsumo', 'baja'] and
-            self.cantidad is not None and self.cantidad > 0 and
+            self.cantidad_docenas is not None and self.cantidad_docenas > 0 and
             self.categoria_huevo):
             
             try:
                 inventario = InventarioHuevos.objects.get(categoria=self.categoria_huevo)
                 
+                # Convertir docenas a unidades para validar stock
+                cantidad_unidades_a_validar = int(self.cantidad_docenas * 12)
+                
                 # Si estamos editando un detalle existente, considerar la cantidad anterior
-                cantidad_a_validar = self.cantidad
                 if self.pk:  # Si es una edición
                     try:
                         detalle_anterior = DetalleMovimientoHuevos.objects.get(pk=self.pk)
                         # Restaurar la cantidad anterior al stock para validar correctamente
-                        stock_disponible = inventario.cantidad_actual + detalle_anterior.cantidad
+                        cantidad_anterior_unidades = int(detalle_anterior.cantidad_docenas * 12) if detalle_anterior.cantidad_docenas else 0
+                        stock_disponible = inventario.cantidad_actual + cantidad_anterior_unidades
                     except DetalleMovimientoHuevos.DoesNotExist:
                         stock_disponible = inventario.cantidad_actual
                 else:
                     stock_disponible = inventario.cantidad_actual
                 
-                if cantidad_a_validar > stock_disponible:
+                if cantidad_unidades_a_validar > stock_disponible:
+                    docenas_disponibles = round(stock_disponible / 12, 2)
                     raise ValidationError({
-                        'cantidad': f'No hay suficiente stock de huevos {self.categoria_huevo}. '
-                                   f'Stock disponible: {stock_disponible}'
+                        'cantidad_docenas': f'No hay suficiente stock de huevos {self.categoria_huevo}. '
+                                           f'Stock disponible: {stock_disponible} unidades ({docenas_disponibles} docenas)'
                     })
                     
             except InventarioHuevos.DoesNotExist:

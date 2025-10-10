@@ -256,16 +256,17 @@ class DetalleMovimientoHuevosForm(forms.ModelForm):
     
     class Meta:
         model = DetalleMovimientoHuevos
-        fields = ['categoria_huevo', 'cantidad', 'precio_unitario']
+        fields = ['categoria_huevo', 'cantidad_docenas', 'precio_por_docena']
         widgets = {
             'categoria_huevo': forms.Select(attrs={
                 'class': 'form-control categoria-select'
             }),
-            'cantidad': forms.NumberInput(attrs={
+            'cantidad_docenas': forms.NumberInput(attrs={
                 'class': 'form-control cantidad-input',
-                'min': '1'
+                'step': '0.01',
+                'min': '0.01'
             }),
-            'precio_unitario': forms.NumberInput(attrs={
+            'precio_por_docena': forms.NumberInput(attrs={
                 'class': 'form-control precio-input',
                 'step': '0.01',
                 'min': '0'
@@ -279,40 +280,37 @@ class DetalleMovimientoHuevosForm(forms.ModelForm):
         
         # Hacer campos requeridos
         self.fields['categoria_huevo'].required = True
-        self.fields['cantidad'].required = True
-    
+        self.fields['cantidad_docenas'].required = True
+        
+        # Configurar labels más descriptivos
+        self.fields['cantidad_docenas'].label = 'Cantidad (docenas)'
+        self.fields['precio_por_docena'].label = 'Precio por docena'
+        
+        # Configurar help_text
+        self.fields['cantidad_docenas'].help_text = 'Ingrese la cantidad en docenas (12 unidades por docena)'
+        self.fields['precio_por_docena'].help_text = 'Precio por cada docena de huevos'
+
     def clean_categoria_huevo(self):
-        """Validar categoría de huevo."""
         categoria = self.cleaned_data.get('categoria_huevo')
         if not categoria:
-            raise ValidationError('Debe seleccionar una categoría de huevo.')
+            raise ValidationError("La categoría de huevo es requerida.")
         return categoria
-    
-    def clean_cantidad(self):
-        """Validar cantidad."""
-        cantidad = self.cleaned_data.get('cantidad')
+
+    def clean_cantidad_docenas(self):
+        cantidad = self.cleaned_data.get('cantidad_docenas')
         if cantidad is None or cantidad <= 0:
-            raise ValidationError('La cantidad debe ser mayor a 0.')
+            raise ValidationError("La cantidad debe ser mayor a 0.")
         return cantidad
-    
-    def clean_precio_unitario(self):
-        """Validar precio unitario."""
-        precio = self.cleaned_data.get('precio_unitario')
+
+    def clean_precio_por_docena(self):
+        precio = self.cleaned_data.get('precio_por_docena')
         if precio is not None and precio < 0:
-            raise ValidationError('El precio unitario no puede ser negativo.')
+            raise ValidationError("El precio no puede ser negativo.")
         return precio
-    
+
     def clean(self):
-        """Validación personalizada del formulario."""
         cleaned_data = super().clean()
-        categoria = cleaned_data.get('categoria_huevo')
-        cantidad = cleaned_data.get('cantidad')
-        
-        # Validaciones adicionales si es necesario
-        if categoria and cantidad:
-            # La validación de stock se realizará en el modelo y en la vista
-            pass
-            
+        # Las validaciones específicas del modelo se manejan en el método clean() del modelo
         return cleaned_data
 
 

@@ -15111,3 +15111,99 @@ INFO 2025-10-09 19:50:59,600 basehttp 17244 15656 "POST /aves/bitacora/5/editar/
 INFO 2025-10-09 19:50:59,657 basehttp 17244 15656 "GET /aves/bitacora/5/ HTTP/1.1" 200 49426
 INFO 2025-10-09 19:51:16,458 basehttp 17244 15656 "GET /aves/ HTTP/1.1" 200 53501
 INFO 2025-10-09 19:51:39,689 basehttp 17244 15656 "GET /aves/inventario-huevos/ HTTP/1.1" 200 43513
+INFO 2025-10-09 19:51:55,178 basehttp 17244 15656 "POST /aves/actualizar-stock-automatico/ HTTP/1.1" 302 0
+INFO 2025-10-09 19:51:55,412 basehttp 17244 15656 "GET /aves/ HTTP/1.1" 200 53501
+INFO 2025-10-09 19:51:55,628 basehttp 17244 15656 "GET /__debug__/history_sidebar/?request_id=81079d91c132407f8cbbbf184f8a21be HTTP/1.1" 200 9525
+INFO 2025-10-09 19:51:58,268 basehttp 17244 15656 "POST /aves/actualizar-stock-automatico/ HTTP/1.1" 302 0
+INFO 2025-10-09 19:51:58,490 basehttp 17244 15656 "GET /aves/ HTTP/1.1" 200 53501
+INFO 2025-10-09 19:51:58,706 basehttp 17244 15656 "GET /__debug__/history_sidebar/?request_id=92c8007a3d8c4438a60fa91cbedd86ce HTTP/1.1" 200 9525
+INFO 2025-10-09 19:52:04,834 basehttp 17244 15656 "GET /aves/bitacora/ HTTP/1.1" 200 31076
+INFO 2025-10-09 19:52:08,035 basehttp 17244 15656 "GET /aves/bitacora/5/ HTTP/1.1" 200 49426
+INFO 2025-10-09 19:52:09,664 basehttp 17244 15656 "GET /aves/bitacora/ HTTP/1.1" 200 31076
+INFO 2025-10-09 19:52:10,636 basehttp 17244 15656 "GET /aves/bitacora/5/editar/ HTTP/1.1" 200 38322
+INFO 2025-10-09 19:53:32,097 autoreload 17244 12420 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-09 19:53:33,475 autoreload 6832 15252 Watching for file changes with StatReloader
+INFO 2025-10-09 19:53:41,384 basehttp 6832 2592 "GET /aves/bitacora/ HTTP/1.1" 200 31077
+INFO 2025-10-09 19:53:41,406 basehttp 6832 12628 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 19:53:41,406 basehttp 6832 2592 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 19:53:42,113 basehttp 6832 12628 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 19:53:42,131 basehttp 6832 12628 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 19:53:43,051 basehttp 6832 12628 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-09 19:53:43,633 basehttp 6832 12628 "GET /aves/inventario-huevos/ HTTP/1.1" 200 43511
+INFO 2025-10-09 19:53:44,725 basehttp 6832 12628 "POST /aves/actualizar-stock-automatico/ HTTP/1.1" 302 0
+INFO 2025-10-09 19:53:44,951 basehttp 6832 12628 "GET /aves/ HTTP/1.1" 200 53501
+INFO 2025-10-09 19:53:45,173 basehttp 6832 12628 "GET /__debug__/history_sidebar/?request_id=3dc9b0fa741a4344aa6a35491e1992f3 HTTP/1.1" 200 9525
+INFO 2025-10-09 19:53:50,189 basehttp 6832 12628 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 49277
+INFO 2025-10-09 19:53:53,769 basehttp 6832 12628 "GET /aves/bitacora/ HTTP/1.1" 200 31076
+INFO 2025-10-09 19:53:54,800 basehttp 6832 12628 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 35282
+INFO 2025-10-09 19:54:07,295 autoreload 6832 15252 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-09 19:54:08,584 autoreload 20804 13880 Watching for file changes with StatReloader
+INFO 2025-10-09 19:54:37,083 basehttp 20804 11092 "GET /aves/bitacora/ HTTP/1.1" 200 31077
+INFO 2025-10-09 19:54:37,105 basehttp 20804 18436 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 19:54:37,106 basehttp 20804 11092 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 19:54:37,742 basehttp 20804 11092 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 19:54:37,759 basehttp 20804 11092 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 19:54:38,757 basehttp 20804 11092 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-09 19:54:39,703 basehttp 20804 11092 "GET /aves/inventario-huevos/ HTTP/1.1" 200 43512
+INFO 2025-10-09 19:54:40,696 basehttp 20804 11092 "POST /aves/actualizar-stock-automatico/ HTTP/1.1" 200 114
+INFO 2025-10-09 19:54:40,905 basehttp 20804 11092 "GET /__debug__/history_sidebar/?request_id=6b241d9036424f1c910ee8b39eda79c7 HTTP/1.1" 200 9528
+INFO 2025-10-09 19:54:42,299 basehttp 20804 11092 "GET /aves/inventario-huevos/ HTTP/1.1" 200 43513
+INFO 2025-10-09 19:54:50,465 basehttp 20804 11092 "GET /aves/vacunacion/ HTTP/1.1" 302 0
+INFO 2025-10-09 19:54:50,683 basehttp 20804 11092 "GET /aves/ HTTP/1.1" 200 53501
+INFO 2025-10-09 19:59:28,286 basehttp 20804 11092 "GET /aves/ HTTP/1.1" 200 53448
+INFO 2025-10-09 19:59:28,308 basehttp 20804 18436 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 19:59:28,308 basehttp 20804 11092 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 19:59:28,638 basehttp 20804 18436 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 19:59:28,657 basehttp 20804 18436 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 19:59:28,986 basehttp 20804 18436 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-09 19:59:34,756 basehttp 20804 18436 "GET /aves/bitacora/ HTTP/1.1" 200 31023
+INFO 2025-10-09 19:59:35,686 basehttp 20804 18436 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29163
+INFO 2025-10-09 19:59:37,941 basehttp 20804 18436 "GET /aves/inventario-huevos/ HTTP/1.1" 200 43459
+INFO 2025-10-09 19:59:42,227 basehttp 20804 18436 "GET /aves/alertas/ HTTP/1.1" 200 52195
+INFO 2025-10-09 19:59:42,251 basehttp 20804 18436 "GET /static/aves/css/alertas.css HTTP/1.1" 304 0
+INFO 2025-10-09 19:59:42,255 basehttp 20804 18436 "GET /static/aves/js/alertas.js HTTP/1.1" 304 0
+INFO 2025-10-09 19:59:47,903 basehttp 20804 18436 "GET /aves/inventario-huevos/ HTTP/1.1" 200 43459
+INFO 2025-10-09 19:59:49,768 basehttp 20804 18436 "POST /aves/actualizar-stock-automatico/ HTTP/1.1" 200 114
+INFO 2025-10-09 19:59:49,976 basehttp 20804 18436 "GET /__debug__/history_sidebar/?request_id=2d314dec68c34dbe924cbb76a37f9230 HTTP/1.1" 200 9527
+INFO 2025-10-09 19:59:51,356 basehttp 20804 18436 "GET /aves/inventario-huevos/ HTTP/1.1" 200 43459
+INFO 2025-10-09 19:59:54,486 basehttp 20804 18436 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 49224
+INFO 2025-10-09 21:03:53,878 autoreload 784 15768 Watching for file changes with StatReloader
+INFO 2025-10-09 21:22:02,950 autoreload 6752 7268 Watching for file changes with StatReloader
+INFO 2025-10-09 21:22:07,367 basehttp 6752 7900 "GET / HTTP/1.1" 200 36047
+INFO 2025-10-09 21:22:15,903 basehttp 6752 7900 "GET /aves/ HTTP/1.1" 200 53448
+INFO 2025-10-09 21:22:18,468 basehttp 6752 7900 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29163
+INFO 2025-10-09 21:22:19,111 basehttp 6752 7900 "GET /aves/inventario-huevos/ HTTP/1.1" 200 43452
+INFO 2025-10-09 21:22:20,806 basehttp 6752 7900 "POST /aves/actualizar-stock-automatico/ HTTP/1.1" 200 114
+INFO 2025-10-09 21:22:21,013 basehttp 6752 7900 "GET /__debug__/history_sidebar/?request_id=856987e7a58d4e958d13d7eea17b1ef6 HTTP/1.1" 200 9527
+INFO 2025-10-09 21:22:22,399 basehttp 6752 7900 "GET /aves/inventario-huevos/ HTTP/1.1" 200 43452
+INFO 2025-10-09 21:22:24,195 basehttp 6752 7900 "GET /aves/alertas/ HTTP/1.1" 200 52195
+INFO 2025-10-09 21:22:24,895 basehttp 6752 7900 "GET /aves/inventario-huevos/ HTTP/1.1" 200 43452
+INFO 2025-10-09 21:22:30,034 basehttp 6752 7900 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29163
+INFO 2025-10-09 21:22:32,452 basehttp 6752 7900 "GET /aves/bitacora/ HTTP/1.1" 200 31023
+INFO 2025-10-09 21:22:34,992 basehttp 6752 7900 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29163
+INFO 2025-10-09 21:22:35,531 basehttp 6752 7900 "GET /aves/inventario-huevos/ HTTP/1.1" 200 43452
+INFO 2025-10-09 21:22:38,080 basehttp 6752 7900 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 48728
+INFO 2025-10-09 21:33:37,559 basehttp 6752 19144 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 49388
+INFO 2025-10-09 21:33:37,585 basehttp 6752 15452 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 21:33:37,585 basehttp 6752 19144 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 21:33:37,937 basehttp 6752 19144 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 21:33:37,958 basehttp 6752 19144 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 21:33:38,541 basehttp 6752 19144 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-09 21:42:40,229 basehttp 6752 11360 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 49960
+INFO 2025-10-09 21:45:54,067 views 6752 11360 POST data received: <QueryDict: {'csrfmiddlewaretoken': ['taWerHrC0PGpRJA2t1dyFO08dGA32x6mibBNMgNyOWu5mS19GGzJsL1RpkIFbBkt'], 'fecha': ['2025-10-09'], 'tipo_movimiento': ['venta'], 'cliente': ['Punto Blanco'], 'numero_comprobante': ['623847'], 'conductor': ['Carlitos'], 'form-TOTAL_FORMS': ['2'], 'form-INITIAL_FORMS': ['0'], 'form-MIN_NUM_FORMS': ['1'], 'form-MAX_NUM_FORMS': ['1000'], 'form-0-categoria_huevo': ['AAA'], 'form-0-cantidad_docenas': ['6'], 'form-0-precio_por_docena': ['5600'], 'observaciones': ['']}>
+INFO 2025-10-09 21:45:54,071 views 6752 11360 Form valid: True
+INFO 2025-10-09 21:45:54,072 views 6752 11360 Formset valid: True
+INFO 2025-10-09 21:45:54,075 views 6752 11360 Movimiento guardado con ID: 5
+INFO 2025-10-09 21:45:54,076 views 6752 11360 Procesando detalle 0: {'categoria_huevo': 'AAA', 'cantidad_docenas': Decimal('6'), 'precio_por_docena': Decimal('5600'), 'DELETE': False}
+INFO 2025-10-09 21:45:54,079 views 6752 11360 Detalle 0 guardado con ID: 5
+INFO 2025-10-09 21:45:54,088 views 6752 11360 Inventario actualizado para AAA: 230 -> 158
+INFO 2025-10-09 21:45:54,088 views 6752 11360 Movimiento completado. Detalles guardados: 1
+INFO 2025-10-09 21:45:54,113 basehttp 6752 11360 "POST /aves/movimiento-huevos/nuevo/ HTTP/1.1" 302 0
+INFO 2025-10-09 21:45:54,205 basehttp 6752 11360 "GET /aves/inventario-huevos/ HTTP/1.1" 200 44451
+INFO 2025-10-09 21:46:10,151 basehttp 6752 11360 "POST /aves/actualizar-stock-automatico/ HTTP/1.1" 200 114
+INFO 2025-10-09 21:46:10,358 basehttp 6752 11360 "GET /__debug__/history_sidebar/?request_id=2a1d528c5df1445e92e337fe1cf91949 HTTP/1.1" 200 9527
+INFO 2025-10-09 21:46:11,743 basehttp 6752 11360 "GET /aves/inventario-huevos/ HTTP/1.1" 200 44450
+INFO 2025-10-09 21:46:18,794 basehttp 6752 11360 "GET /aves/alertas/ HTTP/1.1" 200 52195
+INFO 2025-10-09 21:46:19,301 basehttp 6752 11360 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29163
+INFO 2025-10-09 21:46:20,142 basehttp 6752 11360 "GET /aves/bitacora/ HTTP/1.1" 200 31023
+INFO 2025-10-09 21:46:22,327 basehttp 6752 11360 "GET /aves/ HTTP/1.1" 200 53448

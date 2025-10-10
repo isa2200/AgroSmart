@@ -494,11 +494,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </div>
                                 
                                 <div class="form-group-enhanced">
-                                    <label>📦 Cantidad</label>
-                                    {{ form.cantidad }}
-                                    {% if form.cantidad.errors %}
+                                    <label>📦 Cantidad (Docenas)</label>
+                                    {{ form.cantidad_docenas }}
+                                    {% if form.cantidad_docenas.errors %}
                                         <div class="invalid-feedback d-block">
-                                            {% for error in form.cantidad.errors %}
+                                            {% for error in form.cantidad_docenas.errors %}
                                                 <i class="fas fa-exclamation-triangle"></i> {{ error }}
                                             {% endfor %}
                                         </div>
@@ -506,11 +506,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </div>
                                 
                                 <div class="form-group-enhanced">
-                                    <label>💰 Precio Unitario</label>
-                                    {{ form.precio_unitario }}
-                                    {% if form.precio_unitario.errors %}
+                                    <label>💰 Precio por Docena</label>
+                                    {{ form.precio_por_docena }}
+                                    {% if form.precio_por_docena.errors %}
                                         <div class="invalid-feedback d-block">
-                                            {% for error in form.precio_unitario.errors %}
+                                            {% for error in form.precio_por_docena.errors %}
                                                 <i class="fas fa-exclamation-triangle"></i> {{ error }}
                                             {% endfor %}
                                         </div>
@@ -623,9 +623,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function actualizarStockInfo(categoriaSelect, stockInfoDiv) {
         const categoria = categoriaSelect.value;
         if (categoria && inventarios[categoria] !== undefined) {
-            const stock = inventarios[categoria];
-            const stockClass = stock < 100 ? 'text-danger' : stock < 500 ? 'text-warning' : 'text-success';
-            stockInfoDiv.innerHTML = `<small class="${stockClass}"><i class="fas fa-box"></i> Stock disponible: ${stock} unidades</small>`;
+            const stockUnidades = inventarios[categoria];
+            const stockDocenas = (stockUnidades / 12).toFixed(2);
+            const stockClass = stockUnidades < 100 ? 'text-danger' : stockUnidades < 500 ? 'text-warning' : 'text-success';
+            stockInfoDiv.innerHTML = `<small class="${stockClass}"><i class="fas fa-box"></i> Stock disponible: ${stockDocenas} docenas (${stockUnidades} unidades)</small>`;
         } else {
             stockInfoDiv.innerHTML = '';
         }
@@ -633,8 +634,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Función para calcular subtotal
     function calcularSubtotal(detalleItem) {
-        const cantidadInput = detalleItem.querySelector('input[name$="-cantidad"]');
-        const precioInput = detalleItem.querySelector('input[name$="-precio_unitario"]');
+        const cantidadInput = detalleItem.querySelector('input[name$="-cantidad_docenas"]');
+        const precioInput = detalleItem.querySelector('input[name$="-precio_por_docena"]');
         const subtotalDiv = detalleItem.querySelector('.subtotal-detalle');
         
         if (cantidadInput && precioInput && subtotalDiv) {
@@ -651,14 +652,14 @@ document.addEventListener('DOMContentLoaded', function() {
         let totalValor = 0;
         
         document.querySelectorAll('.detalle-item').forEach(function(detalle) {
-            const cantidadInput = detalle.querySelector('input[name$="-cantidad"]');
-            const precioInput = detalle.querySelector('input[name$="-precio_unitario"]');
+            const cantidadInput = detalle.querySelector('input[name$="-cantidad_docenas"]');
+            const precioInput = detalle.querySelector('input[name$="-precio_por_docena"]');
             
             if (cantidadInput && precioInput) {
                 const cantidad = parseFloat(cantidadInput.value) || 0;
                 const precio = parseFloat(precioInput.value) || 0;
                 
-                totalHuevos += cantidad;
+                totalHuevos += cantidad * 12; // Convertir docenas a unidades para mostrar
                 totalValor += cantidad * precio;
             }
         });
@@ -723,8 +724,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Función para configurar eventos de un detalle
     function configurarEventosDetalle(detalle) {
         const categoriaSelect = detalle.querySelector('select[name$="-categoria_huevo"]');
-        const cantidadInput = detalle.querySelector('input[name$="-cantidad"]');
-        const precioInput = detalle.querySelector('input[name$="-precio_unitario"]');
+        const cantidadInput = detalle.querySelector('input[name$="-cantidad_docenas"]');
+        const precioInput = detalle.querySelector('input[name$="-precio_por_docena"]');
         const stockInfoDiv = detalle.querySelector('.stock-info');
         const deleteBtn = detalle.querySelector('.btn-eliminar-detalle');
         
@@ -750,14 +751,27 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (deleteBtn) {
             deleteBtn.addEventListener('click', function() {
-                detalle.remove();
-                calcularTotales();
-                // Actualizar contador de formularios
-                const totalForms = document.getElementById('id_form-TOTAL_FORMS');
-                totalForms.value = parseInt(totalForms.value) - 1;
+                if (confirm('¿Está seguro de eliminar este detalle?')) {
+                    detalle.remove();
+                    calcularTotales();
+                }
             });
         }
     }
+    
+    // Configurar eventos iniciales
+    document.addEventListener('DOMContentLoaded', function() {
+        // Configurar eventos para detalles existentes
+        document.querySelectorAll('.detalle-item').forEach(function(detalle) {
+            configurarEventosDetalle(detalle);
+        });
+        
+        // Calcular totales iniciales
+        calcularTotales();
+        
+        // Configurar botón agregar detalle
+        document.getElementById('btn-agregar-detalle').addEventListener('click', agregarDetalle);
+    });
     
     // Función para validar el formulario antes del envío
     function validarFormulario() {
@@ -766,9 +780,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         detalles.forEach(function(detalle) {
             const categoria = detalle.querySelector('select[name$="-categoria_huevo"]');
-            const cantidad = detalle.querySelector('input[name$="-cantidad"]');
+            const cantidad = detalle.querySelector('input[name$="-cantidad_docenas"]');
             
-            if (categoria && cantidad && categoria.value && cantidad.value && parseInt(cantidad.value) > 0) {
+            if (categoria && cantidad && categoria.value && cantidad.value && parseFloat(cantidad.value) > 0) {
                 detallesValidos++;
             }
         });
