@@ -1,4 +1,5 @@
 {% extends 'aves/base.html' %}
+{% load aves_extras %}
 
 {% block title %}Detalle Bitácora - AgroSmart{% endblock %}
 
@@ -16,6 +17,55 @@
     <a href="{% url 'aves:bitacora_list' %}" class="btn btn-secondary">
         <i class="fas fa-arrow-left me-2"></i>Volver
     </a>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.modification-entry {
+    transition: all 0.3s ease;
+}
+
+.modification-entry:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.change-item {
+    transition: all 0.2s ease;
+}
+
+.change-item:hover {
+    background-color: #f8f9fa !important;
+}
+
+.old-value, .new-value {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    min-height: 2.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.change-values .row > div {
+    position: relative;
+}
+
+.change-values .row > div:first-child::after {
+    content: '→';
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-weight: bold;
+    z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .change-values .row > div:first-child::after {
+        display: none;
+    }
+}
+</style>
 {% endblock %}
 
 {% block content %}
@@ -104,20 +154,91 @@
     <div class="col-md-4">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-history me-2"></i>Historial de Modificaciones</h5>
+                <h5 class="mb-0">
+                    <i class="fas fa-history me-2"></i>
+                    Historial de Modificaciones
+                    {% if registros_modificacion %}
+                        <span class="badge bg-secondary ms-2">{{ registros_modificacion|length }}</span>
+                    {% endif %}
+                </h5>
             </div>
             <div class="card-body">
-                {% for registro in bitacora.registromodificacion_set.all %}
-                <div class="border-bottom pb-2 mb-2">
-                    <small class="text-muted">{{ registro.fecha_modificacion|date:"d/m/Y H:i" }}</small>
-                    <p class="mb-1"><strong>{{ registro.usuario.get_full_name|default:registro.usuario.username }}</strong></p>
-                    <p class="mb-1">{{ registro.get_accion_display }}</p>
+                {% for registro in registros_modificacion %}
+                <div class="modification-entry border rounded p-3 mb-3 {% if forloop.first %}border-primary{% else %}border-light{% endif %}">
+                    <!-- Encabezado de la modificación -->
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <h6 class="mb-1">
+                                <i class="fas fa-user-edit me-1"></i>
+                                {{ registro.usuario.get_full_name|default:registro.usuario.username }}
+                            </h6>
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i>
+                                {{ registro.fecha_modificacion|date:"d/m/Y H:i:s" }}
+                            </small>
+                        </div>
+                        <span class="badge bg-primary">{{ registro.accion }}</span>
+                    </div>
+                    
+                    <!-- Justificación -->
                     {% if registro.justificacion %}
-                    <p class="mb-0"><em>{{ registro.justificacion }}</em></p>
+                    <div class="alert alert-light border-start border-4 border-info mb-3">
+                        <small class="fw-bold text-info">Justificación:</small><br>
+                        <em>{{ registro.justificacion }}</em>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Campos modificados -->
+                    {% if registro.campos_modificados %}
+                    <div class="changes-section">
+                        <small class="fw-bold text-secondary mb-2 d-block">
+                            <i class="fas fa-exchange-alt me-1"></i>
+                            Campos modificados ({{ registro.campos_modificados|length }}):
+                        </small>
+                        
+                        <div class="row">
+                            {% for campo in registro.campos_modificados %}
+                            <div class="col-12 mb-2">
+                                <div class="change-item p-2 bg-light rounded">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <span class="{{ campo|get_change_badge_class }} me-2">
+                                            {{ campo|format_field_name }}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="change-values">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <small class="text-muted">Valor anterior:</small>
+                                                <div class="old-value p-2 bg-danger bg-opacity-10 border border-danger border-opacity-25 rounded">
+                                                    {% with registro.valores_anteriores|parse_json_safe as valores_ant %}
+                                                        {{ valores_ant|default_if_none:"{}"|lookup:campo|format_field_value:campo|safe }}
+                                                    {% endwith %}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <small class="text-muted">Valor nuevo:</small>
+                                                <div class="new-value p-2 bg-success bg-opacity-10 border border-success border-opacity-25 rounded">
+                                                    {% with registro.valores_nuevos|parse_json_safe as valores_nue %}
+                                                        {{ valores_nue|default_if_none:"{}"|lookup:campo|format_field_value:campo|safe }}
+                                                    {% endwith %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                     {% endif %}
                 </div>
                 {% empty %}
-                <p class="text-muted">No hay modificaciones registradas</p>
+                <div class="text-center py-4">
+                    <i class="fas fa-history fa-3x text-muted mb-3"></i>
+                    <p class="text-muted mb-0">No hay modificaciones registradas</p>
+                    <small class="text-muted">Los cambios aparecerán aquí cuando se edite la bitácora</small>
+                </div>
                 {% endfor %}
             </div>
         </div>

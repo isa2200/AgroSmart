@@ -1174,8 +1174,15 @@ def bitacora_detail(request, pk):
     """Ver detalle de una bitácora diaria."""
     bitacora = get_object_or_404(BitacoraDiaria, pk=pk)
     
+    # Obtener el historial de modificaciones para esta bitácora
+    registros_modificacion = RegistroModificacion.objects.filter(
+        modelo='BitacoraDiaria',
+        objeto_id=bitacora.id
+    ).select_related('usuario').order_by('-fecha_modificacion')
+    
     context = {
         'bitacora': bitacora,
+        'registros_modificacion': registros_modificacion,
     }
     return render(request, 'aves/bitacora_detail.html', context)
 
@@ -1202,8 +1209,17 @@ def bitacora_edit(request, pk):
             valores_nuevos = {}
             
             for field in changed_data:
-                valores_anteriores[field] = getattr(bitacora, field)
-                valores_nuevos[field] = form.cleaned_data[field]
+                valor_anterior = getattr(bitacora, field)
+                valor_nuevo = form.cleaned_data[field]
+                
+                # Convertir objetos date a string para JSON serialization
+                if hasattr(valor_anterior, 'isoformat'):
+                    valor_anterior = valor_anterior.isoformat()
+                if hasattr(valor_nuevo, 'isoformat'):
+                    valor_nuevo = valor_nuevo.isoformat()
+                
+                valores_anteriores[field] = valor_anterior
+                valores_nuevos[field] = valor_nuevo
             
             bitacora_actualizada = form.save()
             

@@ -20,6 +20,23 @@ def procesar_bitacora_diaria(sender, instance, created, **kwargs):
         actualizar_inventario_huevos(instance)
 
 
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
+from django.contrib.auth.models import User
+from .models import RegistroModificacion
+import json
+from datetime import date, datetime
+from decimal import Decimal
+
+class DateTimeEncoder(json.JSONEncoder):
+    """Encoder personalizado para manejar fechas y decimales."""
+    def default(self, obj):
+        if isinstance(obj, (date, datetime)):
+            return obj.isoformat()
+        elif isinstance(obj, Decimal):
+            return float(obj)
+        return super().default(obj)
+
 @receiver(pre_save)
 def registrar_modificaciones(sender, instance, **kwargs):
     """Registra modificaciones para auditoría."""
@@ -42,8 +59,16 @@ def registrar_modificaciones(sender, instance, **kwargs):
                 
                 if valor_anterior != valor_nuevo:
                     campos_modificados[field_name] = True
-                    valores_anteriores[field_name] = str(valor_anterior)
-                    valores_nuevos[field_name] = str(valor_nuevo)
+                    # Convertir valores a string de forma segura
+                    if isinstance(valor_anterior, (date, datetime)):
+                        valores_anteriores[field_name] = valor_anterior.isoformat()
+                    else:
+                        valores_anteriores[field_name] = str(valor_anterior) if valor_anterior is not None else None
+                    
+                    if isinstance(valor_nuevo, (date, datetime)):
+                        valores_nuevos[field_name] = valor_nuevo.isoformat()
+                    else:
+                        valores_nuevos[field_name] = str(valor_nuevo) if valor_nuevo is not None else None
             
             if campos_modificados:
                 # Aquí podrías obtener el usuario actual del request
