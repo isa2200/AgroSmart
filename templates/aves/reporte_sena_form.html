@@ -1,0 +1,107 @@
+{% extends 'aves/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Reporte SENA - AgroSmart{% endblock %}
+
+{% block page_title %}Generar Reporte SENA{% endblock %}
+
+{% block breadcrumb_items %}
+    <li class="breadcrumb-item"><a href="{% url 'aves:reportes_dashboard' %}">Reportes</a></li>
+    <li class="breadcrumb-item active">Reporte SENA</li>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-file-excel me-2"></i>
+                    Registro Mensual de Postura - Formato SENA
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="lote_id" class="form-label">Lote *</label>
+                                <select name="lote_id" id="lote_id" class="form-control" required>
+                                    <option value="">Seleccione un lote</option>
+                                    {% for lote in lotes %}
+                                        <option value="{{ lote.id }}">
+                                            {{ lote.codigo }} - {{ lote.galpon }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="mes" class="form-label">Mes *</label>
+                                <select name="mes" id="mes" class="form-control" required>
+                                    {% for valor, nombre in meses %}
+                                        <option value="{{ valor }}" {% if valor == mes_actual %}selected{% endif %}>
+                                            {{ nombre }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="año" class="form-label">Año *</label>
+                                <select name="año" id="año" class="form-control" required>
+                                    {% for año in años %}
+                                        <option value="{{ año }}" {% if año == año_actual %}selected{% endif %}>
+                                            {{ año }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="nombre_granja" class="form-label">Nombre de la Granja</label>
+                                <input type="text" name="nombre_granja" id="nombre_granja" 
+                                       class="form-control" value="Granja Avícola La Salada">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="registro_ica" class="form-label">Registro ICA</label>
+                                <input type="text" name="registro_ica" id="registro_ica" 
+                                       class="form-control" value="051290274">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Información:</strong> Este reporte generará un archivo Excel con el formato oficial SENA 
+                        para el registro mensual de postura. Incluye producción diaria, consumo de alimento, 
+                        mortalidad y resumen mensual.
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'aves:reportes_dashboard' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Volver
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-download me-2"></i>Generar Reporte Excel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

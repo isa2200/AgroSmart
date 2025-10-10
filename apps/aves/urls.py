@@ -54,6 +54,7 @@ urlpatterns = [
     path('reportes/consumo/', views_reports.reporte_consumo_concentrado, name='reporte_consumo'),
     path('reportes/vacunacion/', views_reports.reporte_salud_vacunacion, name='reporte_vacunacion'),
     path('reportes/comparativo-lotes/', views_reports.reporte_comparativo_lotes, name='reporte_comparativo_lotes'),
+    path('reportes/sena/', views_reports.generar_reporte_sena, name='generar_reporte_sena'),
     path('reportes/exportar-completo/', views_reports.exportar_datos_completos, name='exportar_datos_completos'),
     path('api/datos-dashboard/', views_reports.api_datos_dashboard, name='api_datos_dashboard'),
 ]

@@ -2,8 +2,9 @@
 Vistas para el sistema de reportes del módulo avícola
 """
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.db.models import Q, Sum, Avg, Count, F
@@ -482,3 +483,48 @@ def generar_csv_datos_completos(incluir_historicos=False):
         ])
     
     return response
+
+
+@login_required
+@acceso_modulo_aves_required
+def generar_reporte_sena(request):
+    """
+    Genera reporte mensual en formato SENA
+    """
+    if request.method == 'GET':
+        # Mostrar formulario de selección
+        lotes = LoteAves.objects.filter(is_active=True)
+        
+        # Obtener mes y año actual por defecto
+        hoy = timezone.now().date()
+        mes_actual = hoy.month
+        año_actual = hoy.year
+        
+        context = {
+            'lotes': lotes,
+            'mes_actual': mes_actual,
+            'año_actual': año_actual,
+            'meses': [
+                (1, 'Enero'), (2, 'Febrero'), (3, 'Marzo'), (4, 'Abril'),
+                (5, 'Mayo'), (6, 'Junio'), (7, 'Julio'), (8, 'Agosto'),
+                (9, 'Septiembre'), (10, 'Octubre'), (11, 'Noviembre'), (12, 'Diciembre')
+            ],
+            'años': list(range(año_actual - 2, año_actual + 1))
+        }
+        
+        return render(request, 'aves/reporte_sena_form.html', context)
+    
+    elif request.method == 'POST':
+        # Generar reporte
+        lote_id = request.POST.get('lote_id')
+        mes = int(request.POST.get('mes'))
+        año = int(request.POST.get('año'))
+        nombre_granja = request.POST.get('nombre_granja', 'Granja Avícola La Salada')
+        registro_ica = request.POST.get('registro_ica', '051290274')
+        
+        try:
+            from .reports import generar_reporte_sena_excel
+            return generar_reporte_sena_excel(lote_id, mes, año, nombre_granja, registro_ica)
+        except Exception as e:
+            messages.error(request, f'Error al generar el reporte: {str(e)}')
+            return redirect('aves:generar_reporte_sena')

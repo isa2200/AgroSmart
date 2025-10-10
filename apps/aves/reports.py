@@ -653,3 +653,392 @@ def obtener_datos_dashboard():
         'evolucion_produccion': evolucion_produccion,
         'top_lotes': list(top_lotes)
     }
+
+
+def generar_reporte_sena_excel(lote_id, mes, año, nombre_granja="Granja Avícola La Salada", registro_ica="051290274"):
+    """
+    Genera reporte mensual en formato SENA para registro de postura
+    """
+    if not OPENPYXL_AVAILABLE:
+        raise ImportError("openpyxl no está disponible para generar reportes Excel")
+    
+    # Obtener el lote
+    try:
+        lote = LoteAves.objects.get(id=lote_id)
+    except LoteAves.DoesNotExist:
+        raise ValueError(f"No se encontró el lote con ID {lote_id}")
+    
+    # Crear workbook
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = f"Registro Postura {mes}-{año}"
+    
+    # Configurar página
+    ws.page_setup.orientation = ws.ORIENTATION_LANDSCAPE
+    ws.page_setup.paperSize = ws.PAPERSIZE_A4
+    
+    # Estilos
+    header_font = Font(name='Arial', size=10, bold=True)
+    normal_font = Font(name='Arial', size=9)
+    title_font = Font(name='Arial', size=12, bold=True)
+    border_thin = Border(
+        left=Side(style='thin'),
+        right=Side(style='thin'),
+        top=Side(style='thin'),
+        bottom=Side(style='thin')
+    )
+    
+    # Colores
+    green_fill = PatternFill(start_color='92D050', end_color='92D050', fill_type='solid')
+    light_green_fill = PatternFill(start_color='C6EFCE', end_color='C6EFCE', fill_type='solid')
+    
+    # ENCABEZADO SENA
+    # Fila 1: Logo SENA, Nombre de la granja, Centro
+    ws['A1'] = 'SENA'
+    ws['A1'].font = Font(name='Arial', size=14, bold=True)
+    ws['A1'].fill = green_fill
+    
+    ws.merge_cells('B1:M1')
+    ws['B1'] = nombre_granja.upper()
+    ws['B1'].font = title_font
+    ws['B1'].alignment = Alignment(horizontal='center')
+    ws['B1'].fill = green_fill
+    
+    ws.merge_cells('N1:P1')
+    ws['N1'] = 'CENTRO DE LOS RECURSOS NATURALES RENOVABLES'
+    ws['N1'].font = Font(name='Arial', size=8)
+    ws['N1'].alignment = Alignment(horizontal='center', wrap_text=True)
+    ws['N1'].fill = green_fill
+    
+    # Fila 2: Registro ICA
+    ws.merge_cells('A2:P2')
+    ws['A2'] = f'Registro ICA {registro_ica}'
+    ws['A2'].font = Font(name='Arial', size=11, bold=True)
+    ws['A2'].alignment = Alignment(horizontal='center')
+    ws['A2'].fill = light_green_fill
+    
+    # Fila 3: Vacía
+    
+    # Fila 4: Título del reporte
+    ws.merge_cells('A4:P4')
+    ws['A4'] = 'REGISTRO MENSUAL DE POSTURA'
+    ws['A4'].font = Font(name='Arial', size=14, bold=True)
+    ws['A4'].alignment = Alignment(horizontal='center')
+    ws['A4'].fill = green_fill
+    
+    # Fila 5: Versión
+    ws['P5'] = 'Versión: 2020-01'
+    ws['P5'].font = Font(name='Arial', size=8)
+    ws['P5'].alignment = Alignment(horizontal='right')
+    
+    # Fila 6: Información del lote
+    ws['A6'] = 'Mes:'
+    ws['A6'].font = header_font
+    ws['B6'] = f'{mes:02d}'
+    ws['B6'].font = normal_font
+    
+    ws['C6'] = 'Año:'
+    ws['C6'].font = header_font
+    ws['D6'] = str(año)
+    ws['D6'].font = normal_font
+    
+    ws['E6'] = 'Galpón:'
+    ws['E6'].font = header_font
+    ws['F6'] = str(lote.galpon)
+    ws['F6'].font = normal_font
+    
+    ws['G6'] = 'Lote:'
+    ws['G6'].font = header_font
+    ws['H6'] = str(lote.codigo)
+    ws['H6'].font = normal_font
+    
+    ws['I6'] = 'Sistema:'
+    ws['I6'].font = header_font
+    ws['J6'] = 'Jaula'  # Valor por defecto
+    ws['J6'].font = normal_font
+    
+    ws['K6'] = 'Línea:'
+    ws['K6'].font = header_font
+    ws['L6'] = lote.get_linea_genetica_display_name() if hasattr(lote, 'get_linea_genetica_display_name') else str(lote.linea_genetica)
+    ws['L6'].font = normal_font
+    
+    # Fila 7: Información de aves
+    ws['A7'] = 'Edad en semanas:'
+    ws['A7'].font = header_font
+    edad_semanas = lote.edad_actual_semanas if hasattr(lote, 'edad_actual_semanas') else 0
+    ws['B7'] = f'{edad_semanas:.1f}'
+    ws['B7'].font = normal_font
+    
+    ws['C7'] = 'Aves alojadas:'
+    ws['C7'].font = header_font
+    ws['D7'] = lote.numero_aves_inicial
+    ws['D7'].font = normal_font
+    
+    ws['E7'] = 'N° de aves al inicio del mes:'
+    ws['E7'].font = header_font
+    ws['F7'] = lote.numero_aves_actual
+    ws['F7'].font = normal_font
+    
+    # TABLA DE DATOS DIARIOS
+    # Fila 9: Encabezados principales
+    fila_encabezado = 9
+    
+    # Aplicar color de fondo a encabezados
+    for col in range(1, 17):  # A hasta P
+        ws.cell(row=fila_encabezado, column=col).fill = green_fill
+        ws.cell(row=fila_encabezado + 1, column=col).fill = light_green_fill
+    
+    # Encabezados principales
+    ws['A9'] = 'Día'
+    ws.merge_cells('B9:F9')
+    ws['B9'] = 'PRODUCCIÓN'
+    ws.merge_cells('G9:H9')
+    ws['G9'] = 'ALIMENTO'
+    ws.merge_cells('I9:K9')
+    ws['I9'] = 'BAJAS'
+    ws['L9'] = 'Existencia'
+    ws['M9'] = 'OBSERVACIONES'
+    
+    # Aplicar formato a encabezados principales
+    for col in ['A', 'B', 'G', 'I', 'L', 'M']:
+        ws[f'{col}9'].font = header_font
+        ws[f'{col}9'].alignment = Alignment(horizontal='center', vertical='center')
+        ws[f'{col}9'].border = border_thin
+    
+    # Fila 10: Subencabezados
+    subencabezados = [
+        ('A', ''),
+        ('B', '1a'),
+        ('C', '2a'),
+        ('D', '3a'),
+        ('E', 'Rotos'),
+        ('F', 'Total'),
+        ('G', 'Kg'),
+        ('H', 'Acumulado'),
+        ('I', 'Descar'),
+        ('J', 'Elimin'),
+        ('K', 'Total'),
+        ('L', ''),
+        ('M', '')
+    ]
+    
+    for col, texto in subencabezados:
+        ws[f'{col}10'] = texto
+        ws[f'{col}10'].font = header_font
+        ws[f'{col}10'].alignment = Alignment(horizontal='center', vertical='center')
+        ws[f'{col}10'].border = border_thin
+    
+    # Obtener datos del mes
+    from calendar import monthrange
+    dias_en_mes = monthrange(año, mes)[1]
+    
+    # Obtener bitácoras del mes
+    bitacoras = BitacoraDiaria.objects.filter(
+        lote=lote,
+        fecha__year=año,
+        fecha__month=mes
+    ).order_by('fecha')
+    
+    # Crear diccionario de bitácoras por día
+    bitacoras_por_dia = {bitacora.fecha.day: bitacora for bitacora in bitacoras}
+    
+    # LLENAR DATOS DIARIOS
+    fila_inicio_datos = 11
+    acumulado_alimento = 0
+    
+    # Variables para totales
+    total_1a = 0
+    total_2a = 0
+    total_3a = 0
+    total_rotos = 0
+    total_alimento = 0
+    total_mortalidad = 0
+    
+    for dia in range(1, dias_en_mes + 1):
+        fila = fila_inicio_datos + dia - 1
+        
+        # Día
+        ws[f'A{fila}'] = dia
+        ws[f'A{fila}'].alignment = Alignment(horizontal='center')
+        ws[f'A{fila}'].border = border_thin
+        
+        if dia in bitacoras_por_dia:
+            bitacora = bitacoras_por_dia[dia]
+            
+            # Producción (mapear categorías del sistema a formato SENA)
+            # 1a = AAA + AA
+            # 2a = A
+            # 3a = B + C
+            produccion_1a = (bitacora.produccion_aaa or 0) + (bitacora.produccion_aa or 0)
+            produccion_2a = bitacora.produccion_a or 0
+            produccion_3a = (bitacora.produccion_b or 0) + (bitacora.produccion_c or 0)
+            rotos = bitacora.huevos_rotos or 0
+            total_produccion_dia = produccion_1a + produccion_2a + produccion_3a + rotos
+            
+            # Acumular totales
+            total_1a += produccion_1a
+            total_2a += produccion_2a
+            total_3a += produccion_3a
+            total_rotos += rotos
+            
+            ws[f'B{fila}'] = produccion_1a if produccion_1a > 0 else ''
+            ws[f'C{fila}'] = produccion_2a if produccion_2a > 0 else ''
+            ws[f'D{fila}'] = produccion_3a if produccion_3a > 0 else ''
+            ws[f'E{fila}'] = rotos if rotos > 0 else ''
+            ws[f'F{fila}'] = total_produccion_dia if total_produccion_dia > 0 else ''
+            
+            # Alimento
+            consumo_kg = float(bitacora.consumo_concentrado) if bitacora.consumo_concentrado else 0
+            acumulado_alimento += consumo_kg
+            total_alimento += consumo_kg
+            
+            ws[f'G{fila}'] = consumo_kg if consumo_kg > 0 else ''
+            ws[f'H{fila}'] = round(acumulado_alimento, 2) if acumulado_alimento > 0 else ''
+            
+            # Bajas (mortalidad)
+            mortalidad = bitacora.mortalidad or 0
+            total_mortalidad += mortalidad
+            
+            ws[f'I{fila}'] = mortalidad if mortalidad > 0 else ''
+            ws[f'J{fila}'] = ''  # Eliminación (no tenemos este dato)
+            ws[f'K{fila}'] = mortalidad if mortalidad > 0 else ''
+            
+            # Existencia (aves restantes)
+            aves_restantes = lote.numero_aves_actual - total_mortalidad
+            ws[f'L{fila}'] = aves_restantes if aves_restantes >= 0 else ''
+            
+            # Observaciones
+            ws[f'M{fila}'] = bitacora.observaciones[:30] if bitacora.observaciones else ''
+        
+        # Aplicar bordes y formato a toda la fila
+        for col in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M']:
+            ws[f'{col}{fila}'].border = border_thin
+            ws[f'{col}{fila}'].font = normal_font
+            if col in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']:
+                ws[f'{col}{fila}'].alignment = Alignment(horizontal='center')
+    
+    # FILA TOTAL
+    fila_total = fila_inicio_datos + dias_en_mes
+    ws[f'A{fila_total}'] = 'TOTAL'
+    ws[f'A{fila_total}'].font = header_font
+    ws[f'A{fila_total}'].fill = green_fill
+    
+    total_general = total_1a + total_2a + total_3a + total_rotos
+    
+    ws[f'B{fila_total}'] = total_1a if total_1a > 0 else ''
+    ws[f'C{fila_total}'] = total_2a if total_2a > 0 else ''
+    ws[f'D{fila_total}'] = total_3a if total_3a > 0 else ''
+    ws[f'E{fila_total}'] = total_rotos if total_rotos > 0 else ''
+    ws[f'F{fila_total}'] = total_general if total_general > 0 else ''
+    
+    # Total alimento
+    ws[f'G{fila_total}'] = round(total_alimento, 2) if total_alimento > 0 else ''
+    
+    # Total bajas
+    ws[f'I{fila_total}'] = total_mortalidad if total_mortalidad > 0 else ''
+    ws[f'K{fila_total}'] = total_mortalidad if total_mortalidad > 0 else ''
+    
+    # Aplicar formato a fila total
+    for col in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M']:
+        ws[f'{col}{fila_total}'].border = border_thin
+        ws[f'{col}{fila_total}'].font = header_font
+        ws[f'{col}{fila_total}'].fill = green_fill
+        if col in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']:
+            ws[f'{col}{fila_total}'].alignment = Alignment(horizontal='center')
+    
+    # RESUMEN MENSUAL
+    fila_resumen = fila_total + 3
+    ws[f'A{fila_resumen}'] = 'RESUMEN MENSUAL'
+    ws[f'A{fila_resumen}'].font = Font(name='Arial', size=12, bold=True)
+    ws[f'A{fila_resumen}'].fill = green_fill
+    
+    fila_resumen += 1
+    ws[f'A{fila_resumen}'] = 'PRODUCCIÓN TOTAL:'
+    ws[f'A{fila_resumen}'].font = header_font
+    ws[f'C{fila_resumen}'] = f'{total_general} huevos'
+    ws[f'C{fila_resumen}'].font = normal_font
+    
+    ws[f'F{fila_resumen}'] = '% DE PRODUCCIÓN:'
+    ws[f'F{fila_resumen}'].font = header_font
+    
+    # Calcular porcentaje de producción
+    if lote.numero_aves_actual > 0:
+        porcentaje_produccion = (total_general / (lote.numero_aves_actual * dias_en_mes)) * 100
+        ws[f'H{fila_resumen}'] = f'{porcentaje_produccion:.1f}%'
+        ws[f'H{fila_resumen}'].font = normal_font
+    
+    fila_resumen += 1
+    ws[f'A{fila_resumen}'] = 'CONSUMO TOTAL:'
+    ws[f'A{fila_resumen}'].font = header_font
+    ws[f'C{fila_resumen}'] = f'{total_alimento:.2f} kg'
+    ws[f'C{fila_resumen}'].font = normal_font
+    
+    ws[f'F{fila_resumen}'] = '% DE MORTALIDAD:'
+    ws[f'F{fila_resumen}'].font = header_font
+    
+    # Calcular porcentaje de mortalidad
+    if lote.numero_aves_inicial > 0:
+        porcentaje_mortalidad = (total_mortalidad / lote.numero_aves_inicial) * 100
+        ws[f'H{fila_resumen}'] = f'{porcentaje_mortalidad:.2f}%'
+        ws[f'H{fila_resumen}'].font = normal_font
+    
+    fila_resumen += 1
+    ws[f'A{fila_resumen}'] = 'MORTALIDAD TOTAL:'
+    ws[f'A{fila_resumen}'].font = header_font
+    ws[f'C{fila_resumen}'] = f'{total_mortalidad} aves'
+    ws[f'C{fila_resumen}'].font = normal_font
+    
+    ws[f'F{fila_resumen}'] = 'CONSUMO PROMEDIO:'
+    ws[f'F{fila_resumen}'].font = header_font
+    if dias_en_mes > 0:
+        consumo_promedio = total_alimento / dias_en_mes
+        ws[f'H{fila_resumen}'] = f'{consumo_promedio:.2f} kg/día'
+        ws[f'H{fila_resumen}'].font = normal_font
+    
+    # CONVERSIÓN Y FIRMAS
+    fila_conversion = fila_resumen + 3
+    ws[f'A{fila_conversion}'] = 'CONVERSIÓN:'
+    ws[f'A{fila_conversion}'].font = header_font
+    
+    # Calcular conversión alimenticia
+    if total_general > 0:
+        # Conversión = kg alimento / docenas de huevos
+        docenas = total_general / 12
+        conversion = total_alimento / docenas if docenas > 0 else 0
+        ws[f'C{fila_conversion}'] = f'{conversion:.2f} kg/docena'
+        ws[f'C{fila_conversion}'].font = normal_font
+    
+    # Firmas
+    fila_firmas = fila_conversion + 3
+    ws[f'B{fila_firmas}'] = 'Elaboró: Sergio Buitrago'
+    ws[f'B{fila_firmas}'].font = normal_font
+    
+    ws[f'H{fila_firmas}'] = 'Administrador Unidades Agropecuarias'
+    ws[f'H{fila_firmas}'].font = normal_font
+    
+    # Ajustar ancho de columnas
+    anchos_columnas = {
+        'A': 6, 'B': 8, 'C': 8, 'D': 8, 'E': 8, 'F': 8,
+        'G': 10, 'H': 12, 'I': 8, 'J': 8, 'K': 8, 'L': 10, 'M': 25
+    }
+    
+    for col, ancho in anchos_columnas.items():
+        ws.column_dimensions[col].width = ancho
+    
+    # Ajustar altura de filas
+    ws.row_dimensions[1].height = 25
+    ws.row_dimensions[2].height = 20
+    ws.row_dimensions[4].height = 25
+    ws.row_dimensions[9].height = 20
+    ws.row_dimensions[10].height = 20
+    
+    # Crear respuesta HTTP
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    
+    nombre_archivo = f'Registro_Postura_SENA_{lote.codigo}_{mes:02d}_{año}.xlsx'
+    response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
+    
+    wb.save(response)
+    return response

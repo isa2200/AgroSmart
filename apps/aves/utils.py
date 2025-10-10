@@ -5,7 +5,7 @@ Utilidades para el módulo avícola.
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseServerError
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, A4
 from reportlab.lib import colors
@@ -13,8 +13,10 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, 
 from reportlab.lib.styles import getSampleStyleSheet
 import io
 import openpyxl
-from openpyxl.styles import Font, Alignment, PatternFill
+from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
 from openpyxl.chart import BarChart, LineChart, Reference
+import traceback
+from calendar import monthrange
 
 from .models import AlertaSistema, InventarioHuevos, LoteAves
 
@@ -42,7 +44,7 @@ def generar_alertas(bitacora_instance=None):
                     lote=lote,
                     fecha=bitacora_instance.fecha,
                     defaults={
-                        'mensaje': f'Baja producción detectada en lote {lote.nombre}: {total_produccion} huevos',
+                        'mensaje': f'Baja producción detectada en lote {lote.codigo}: {total_produccion} huevos',
                         'nivel': 'warning',
                         'activa': True
                     }
@@ -60,7 +62,7 @@ def generar_alertas(bitacora_instance=None):
                     lote=lote,
                     fecha=bitacora_instance.fecha,
                     defaults={
-                        'mensaje': f'Alta mortalidad detectada en lote {lote.nombre}: {bitacora_instance.mortalidad} aves',
+                        'mensaje': f'Alta mortalidad detectada en lote {lote.codigo}: {bitacora_instance.mortalidad} aves',
                         'nivel': 'danger',
                         'activa': True
                     }
@@ -159,7 +161,7 @@ def exportar_reporte_pdf(tipo_reporte, datos, estadisticas):
                 
                 table_data.append([
                     bitacora.fecha.strftime('%d/%m/%Y'),
-                    str(bitacora.lote.nombre),
+                    str(bitacora.lote.codigo),
                     str(bitacora.produccion_aaa),
                     str(bitacora.produccion_aa),
                     str(bitacora.produccion_a),
@@ -197,137 +199,509 @@ def exportar_reporte_pdf(tipo_reporte, datos, estadisticas):
 
 
 def exportar_reporte_excel(tipo_reporte, datos, estadisticas, filtros=None):
-    """Exporta reportes a Excel con formato mejorado."""
+    """Exporta reportes a Excel en formato SENA oficial exacto."""
     try:
+        from openpyxl.drawing import image
+        import os
+        from django.conf import settings
+        
         # Crear workbook y worksheet
         wb = openpyxl.Workbook()
         ws = wb.active
-        ws.title = f"Reporte {tipo_reporte.title()}"
         
-        # Estilos
-        title_font = Font(name='Arial', size=16, bold=True, color='FFFFFF')
-        header_font = Font(name='Arial', size=12, bold=True, color='FFFFFF')
-        data_font = Font(name='Arial', size=10)
+        # Obtener información del primer registro para determinar mes/año
+        if datos and len(datos) > 0:
+            primera_fecha = datos[0].fecha
+            mes = primera_fecha.month
+            año = primera_fecha.year
+            lote = datos[0].lote
+        else:
+            # Valores por defecto si no hay datos
+            from datetime import datetime
+            hoy = datetime.now()
+            mes = hoy.month
+            año = hoy.year
+            lote = None
         
-        title_fill = PatternFill(start_color='2E7D32', end_color='2E7D32', fill_type='solid')
-        header_fill = PatternFill(start_color='4CAF50', end_color='4CAF50', fill_type='solid')
+        ws.title = f"Registro Postura {mes}-{año}"
         
-        center_alignment = Alignment(horizontal='center', vertical='center')
+        # Configurar página
+        ws.page_setup.orientation = ws.ORIENTATION_LANDSCAPE
+        ws.page_setup.paperSize = ws.PAPERSIZE_A4
         
-        # Título principal
-        ws.merge_cells('A1:I1')
-        ws['A1'] = f'REPORTE DE {tipo_reporte.upper()}'
-        ws['A1'].font = title_font
-        ws['A1'].fill = title_fill
-        ws['A1'].alignment = center_alignment
+        # Estilos exactos del formato SENA
+        header_font = Font(name='Arial', size=10, bold=True)
+        normal_font = Font(name='Arial', size=9)
+        title_font = Font(name='Arial', size=11, bold=True)
+        small_font = Font(name='Arial', size=8)
         
-        # Fecha de generación
-        ws.merge_cells('A2:I2')
-        ws['A2'] = f'Generado el: {timezone.now().strftime("%d/%m/%Y %H:%M")}'
-        ws['A2'].font = Font(name='Arial', size=10, italic=True)
-        ws['A2'].alignment = center_alignment
+        border_thin = Border(
+            left=Side(style='thin'),
+            right=Side(style='thin'),
+            top=Side(style='thin'),
+            bottom=Side(style='thin')
+        )
         
-        # Resumen Estadístico
-        ws.merge_cells('A4:B4')
-        ws['A4'] = 'RESUMEN ESTADÍSTICO'
-        ws['A4'].font = header_font
-        ws['A4'].fill = header_fill
-        ws['A4'].alignment = center_alignment
+        border_thick = Border(
+            left=Side(style='thick'),
+            right=Side(style='thick'),
+            top=Side(style='thick'),
+            bottom=Side(style='thick')
+        )
         
-        # Estadísticas
-        stats_row = 5
-        ws[f'A{stats_row}'] = 'Total Producción:'
-        ws[f'B{stats_row}'] = f"{estadisticas.get('total_produccion', 0):,} huevos"
+        # Colores exactos del formato SENA
+        sena_green = PatternFill(start_color='30A900', end_color='30A900', fill_type='solid')
+        light_gray = PatternFill(start_color='F2F2F2', end_color='F2F2F2', fill_type='solid')
         
-        stats_row += 1
-        ws[f'A{stats_row}'] = 'Total Mortalidad:'
-        ws[f'B{stats_row}'] = f"{estadisticas.get('total_mortalidad', 0):,} aves"
+        # LOGO SENA - Insertar imagen si existe
+        try:
+            logo_path = os.path.join(settings.STATIC_ROOT or settings.STATICFILES_DIRS[0], 'img', 'logo-ico.ico')
+            if not os.path.exists(logo_path):
+                logo_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'logo-ico.ico')
+            
+            if os.path.exists(logo_path):
+                img = image.Image(logo_path)
+                img.width = 100
+                img.height = 100
+                ws.add_image(img, 'A1')
+        except:
+            # Si no se puede cargar la imagen, usar texto
+            pass
+                # Función helper para aplicar bordes a celdas combinadas
+        def aplicar_borde_completo(ws, rango, border_style):
+            """Aplica bordes a todas las celdas de un rango, incluso si están combinadas"""
+            from openpyxl.utils import range_boundaries
+            min_col, min_row, max_col, max_row = range_boundaries(rango)
+            
+            for row in range(min_row, max_row + 1):
+                for col in range(min_col, max_col + 1):
+                    ws.cell(row=row, column=col).border = border_style
+
+        # ENCABEZADO PRINCIPAL - Fila 1
+        ws.merge_cells('A1:A3')  # Espacio para logo SENA
+        ws['A1'].alignment = Alignment(horizontal='center', vertical='center')
+        aplicar_borde_completo(ws, 'A1:A3', border_thick)
         
-        stats_row += 1
-        ws[f'A{stats_row}'] = 'Consumo Promedio:'
-        ws[f'B{stats_row}'] = f"{estadisticas.get('consumo_promedio', 0):.2f} kg/día"
+
+        # Luego usar así:
+        ws.merge_cells('B1:M3')
+        ws['B1'] = 'Granja Avícola La Salada'
+        ws['B1'].font = Font(name='Arial', size=14, bold=True)
+        ws['B1'].alignment = Alignment(horizontal='center', vertical='center')
+        aplicar_borde_completo(ws, 'B1:M3', border_thick)
         
-        # Datos Detallados
-        data_start_row = stats_row + 3
-        ws.merge_cells(f'A{data_start_row}:I{data_start_row}')
-        ws[f'A{data_start_row}'] = 'DATOS DETALLADOS'
-        ws[f'A{data_start_row}'].font = header_font
-        ws[f'A{data_start_row}'].fill = header_fill
-        ws[f'A{data_start_row}'].alignment = center_alignment
+        ws.merge_cells('N1:P3')
+        ws['N1'] = 'CENTRO DE LOS\nRECURSOS\nNATURALES\nRENOVABLES'
+        ws['N1'].font = Font(name='Arial', size=9, bold=True)
+        ws['N1'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+        aplicar_borde_completo(ws, 'N1:P3', border_thick)
+
+
+
         
-        # Encabezados de datos
-        headers_row = data_start_row + 1
-        headers = ['Fecha', 'Lote', 'AAA', 'AA', 'A', 'B', 'C', 'Total', 'Mortalidad']
+        # Fila 4: Registro ICA
+        ws.merge_cells('A4:P4')
+        ws['A4'] = 'Registro ICA 051290274'
+        ws['A4'].font = Font(name='Arial', size=11, bold=True)
+        ws['A4'].alignment = Alignment(horizontal='center', vertical='center')
+        aplicar_borde_completo(ws, 'A4:P4', border_thick)
         
-        for col, header in enumerate(headers, 1):
-            cell = ws.cell(row=headers_row, column=col)
-            cell.value = header
-            cell.font = header_font
-            cell.fill = header_fill
-            cell.alignment = center_alignment
+        # Fila 5: Vacía
+        ws.row_dimensions[5].height = 5
         
-        # Datos
+        # Fila 6: Título del reporte
+        ws.merge_cells('A6:P6')
+        ws['A6'] = 'REGISTRO MENSUAL DE POSTURA'
+        ws['A6'].font = Font(name='Arial', size=12, bold=True)
+        ws['A6'].alignment = Alignment(horizontal='center', vertical='center')
+        aplicar_borde_completo(ws, 'A6:P6', border_thick)
+        ws['A6'].fill = sena_green
+        
+        # Fila 7: Versión
+        ws.merge_cells('A7:P7')
+        ws['A7'] = 'Versión: 2020-01'
+        ws['A7'].font = Font(name='Arial', size=8)
+        ws['A7'].alignment = Alignment(horizontal='center', vertical='center')
+        aplicar_borde_completo(ws, 'A7:P7', border_thick)
+        
+        # Fila 8: Información del lote - Primera línea
+        info_labels = [
+            ('A8', 'Mes:', 'B8'),
+            ('C8', 'Galpón:', 'D8'), 
+            ('E8', 'Sistema:', 'F8'),
+            ('G8', 'Línea:', 'H8')
+        ]
+        
+        for label_cell, label_text, value_cell in info_labels:
+            ws[label_cell] = label_text
+            ws[label_cell].font = header_font
+            ws[label_cell].border = border_thin
+            ws[label_cell].fill = light_gray
+            
+            if label_text == 'Mes:':
+                ws[value_cell] = f'{mes:02d}'
+            elif label_text == 'Galpón:':
+                ws[value_cell] = str(lote.galpon) if lote else ''
+            elif label_text == 'Sistema:':
+                ws[value_cell] = 'Jaula'
+            elif label_text == 'Línea:':
+                ws[value_cell] = str(lote.linea_genetica) if lote and hasattr(lote, 'linea_genetica') else ''
+            
+            ws[value_cell].font = normal_font
+            aplicar_borde_completo(ws, value_cell, border_thin)
+        
+        # Fila 9: Información del lote - Segunda línea
+        ws['A9'] = 'Edad en semanas:'
+        ws['A9'].font = header_font
+        aplicar_borde_completo(ws, 'A9', border_thin)
+        ws['A9'].fill = light_gray
+        
+        edad_semanas = getattr(lote, 'edad_actual_semanas', 0) if lote else 0
+        ws['B9'] = f'{edad_semanas:.1f}'
+        ws['B9'].font = normal_font
+        aplicar_borde_completo(ws, 'B9', border_thin)
+        
+        ws['C9'] = 'Aves alojadas:'
+        ws['C9'].font = header_font
+        aplicar_borde_completo(ws, 'C9', border_thin)
+        ws['C9'].fill = light_gray
+        
+        ws['D9'] = lote.numero_aves_inicial if lote else 0
+        ws['D9'].font = normal_font
+        aplicar_borde_completo(ws, 'D9', border_thin)
+        
+        ws['E9'] = 'N° de aves al inicio del mes:'
+        ws['E9'].font = header_font
+        aplicar_borde_completo(ws, 'E9', border_thin)
+        ws['E9'].fill = light_gray
+        
+        ws['F9'] = lote.numero_aves_actual if lote else 0
+        ws['F9'].font = normal_font
+        aplicar_borde_completo(ws, 'F9', border_thin)
+        
+        # Fila 10: Vacía
+        ws.row_dimensions[10].height = 5
+        
+        # TABLA DE DATOS DIARIOS - Fila 11: Encabezados principales
+        # Día
+        ws.merge_cells('A11:A12')
+        ws['A11'] = 'Día'
+        ws['A11'].font = header_font
+        ws['A11'].alignment = Alignment(horizontal='center', vertical='center')
+        ws['A11'].fill = sena_green
+        aplicar_borde_completo(ws, 'A11:A12', border_thick)
+        
+        # PRODUCCIÓN (expandir para incluir promedio)
+        ws.merge_cells('B11:G11')
+        ws['B11'] = 'PRODUCCIÓN'
+        ws['B11'].font = header_font
+        ws['B11'].alignment = Alignment(horizontal='center', vertical='center')
+        ws['B11'].fill = sena_green
+        aplicar_borde_completo(ws, 'B11:G11', border_thick)
+        
+        # ALIMENTO (mover a H-I)
+        ws.merge_cells('H11:I11')
+        ws['H11'] = 'ALIMENTO'
+        ws['H11'].font = header_font
+        ws['H11'].alignment = Alignment(horizontal='center', vertical='center')
+        ws['H11'].fill = sena_green
+        aplicar_borde_completo(ws, 'H11:I11', border_thick)
+        
+        # BAJAS (mover a J-L)
+        ws.merge_cells('J11:L11')
+        ws['J11'] = 'BAJAS'
+        ws['J11'].font = header_font
+        ws['J11'].alignment = Alignment(horizontal='center', vertical='center')
+        ws['J11'].fill = sena_green
+        aplicar_borde_completo(ws, 'J11:L11', border_thick)
+        
+        # Existencia (mover a M)
+        ws.merge_cells('M11:M12')
+        ws['M11'] = 'Existencia'
+        ws['M11'].font = header_font
+        ws['M11'].alignment = Alignment(horizontal='center', vertical='center')
+        ws['M11'].fill = sena_green
+        aplicar_borde_completo(ws, 'M11:M12', border_thick)
+        
+        # OBSERVACIONES (mover a N-Q)
+        ws.merge_cells('N11:Q12')
+        ws['N11'] = 'OBSERVACIONES'
+        ws['N11'].font = header_font
+        ws['N11'].alignment = Alignment(horizontal='center', vertical='center')
+        ws['N11'].fill = sena_green
+        aplicar_borde_completo(ws, 'N11:Q12', border_thick)
+        
+        # Fila 12: Subencabezados (actualizar posiciones)
+        subencabezados = [
+            ('B12', '1a'),
+            ('C12', '2a'),
+            ('D12', '3a'),
+            ('E12', 'Rotos'),
+            ('F12', 'Total'),
+            ('G12', 'Promedio'),  # Nueva columna de promedio
+            ('H12', 'Kg'),        # Alimento movido
+            ('I12', 'Acumulado'), # Alimento acumulado movido
+            ('J12', 'Descar'),    # Bajas movido
+            ('K12', 'Elimin'),    # Bajas movido
+            ('L12', 'Total'),     # Total bajas movido
+        ]
+        
+        for celda, texto in subencabezados:
+            ws[celda] = texto
+            ws[celda].font = header_font
+            ws[celda].alignment = Alignment(horizontal='center', vertical='center')
+            ws[celda].fill = light_gray
+            aplicar_borde_completo(ws, celda, border_thin)
+        
+        # Obtener días del mes
+        dias_en_mes = monthrange(año, mes)[1]
+        
+        # Crear diccionario de bitácoras por día
+        bitacoras_por_dia = {}
         if datos:
-            for row_idx, bitacora in enumerate(datos, headers_row + 1):
-                total_prod = (bitacora.produccion_aaa + bitacora.produccion_aa + 
-                            bitacora.produccion_a + bitacora.produccion_b + bitacora.produccion_c)
-                
-                row_data = [
-                    bitacora.fecha.strftime('%d/%m/%Y'),
-                    bitacora.lote.nombre,
-                    bitacora.produccion_aaa,
-                    bitacora.produccion_aa,
-                    bitacora.produccion_a,
-                    bitacora.produccion_b,
-                    bitacora.produccion_c,
-                    total_prod,
-                    bitacora.mortalidad
-                ]
-                
-                for col_idx, value in enumerate(row_data, 1):
-                    cell = ws.cell(row=row_idx, column=col_idx)
-                    cell.value = value
-                    cell.font = data_font
-                    cell.alignment = center_alignment
+            for bitacora in datos:
+                if bitacora.fecha.month == mes and bitacora.fecha.year == año:
+                    bitacoras_por_dia[bitacora.fecha.day] = bitacora
         
-        # Ajustar ancho de columnas
-        from openpyxl.utils import get_column_letter
-        from openpyxl.cell import MergedCell
+        # LLENAR DATOS DIARIOS
+        fila_inicio_datos = 13
+        acumulado_alimento = 0
         
-        for col_num in range(1, ws.max_column + 1):
-            max_length = 0
-            column_letter = get_column_letter(col_num)
+        # Variables para totales
+        total_1a = 0
+        total_2a = 0
+        total_3a = 0
+        total_rotos = 0
+        total_alimento = 0
+        total_mortalidad = 0
+        
+        # Variable para calcular existencia correctamente
+        aves_iniciales_mes = lote.numero_aves_actual if lote else 0
+        mortalidad_acumulada = 0
+        
+        for dia in range(1, dias_en_mes + 1):
+            fila = fila_inicio_datos + dia - 1
             
-            for row in ws[column_letter]:
-                # Saltar celdas combinadas
-                if isinstance(row, MergedCell):
-                    continue
-                    
-                try:
-                    if len(str(row.value)) > max_length:
-                        max_length = len(str(row.value))
-                except:
-                    pass
+            # Día
+            ws[f'A{fila}'] = dia
+            ws[f'A{fila}'].alignment = Alignment(horizontal='center', vertical='center')
+            ws[f'A{fila}'].border = border_thin
+            ws[f'A{fila}'].font = normal_font
             
-            adjusted_width = min(max_length + 2, 50)
-            ws.column_dimensions[column_letter].width = adjusted_width
+            if dia in bitacoras_por_dia:
+                bitacora = bitacoras_por_dia[dia]
+                
+                # Producción (corregir mapeo según formato SENA)
+                # 1a = AAA (primera calidad)
+                produccion_1a = bitacora.produccion_aaa or 0
+                # 2a = AA (segunda calidad) 
+                produccion_2a = bitacora.produccion_aa or 0
+                # 3a = A + B + C (tercera calidad y menores)
+                produccion_3a = (bitacora.produccion_a or 0) + (bitacora.produccion_b or 0) + (bitacora.produccion_c or 0)
+                rotos = bitacora.huevos_rotos or 0
+                total_produccion_dia = produccion_1a + produccion_2a + produccion_3a + rotos
+                
+                # Acumular totales
+                total_1a += produccion_1a
+                total_2a += produccion_2a
+                total_3a += produccion_3a
+                total_rotos += rotos
+                
+                ws[f'B{fila}'] = produccion_1a if produccion_1a > 0 else ''
+                ws[f'C{fila}'] = produccion_2a if produccion_2a > 0 else ''
+                ws[f'D{fila}'] = produccion_3a if produccion_3a > 0 else ''
+                ws[f'E{fila}'] = rotos if rotos > 0 else ''
+                ws[f'F{fila}'] = total_produccion_dia if total_produccion_dia > 0 else ''
+                
+                # Calcular promedio diario de producción (porcentaje) - COLUMNA G
+                promedio_dia = (total_produccion_dia / lote.numero_aves_actual * 100) if lote and lote.numero_aves_actual > 0 and total_produccion_dia > 0 else 0
+                ws[f'G{fila}'] = f'{promedio_dia:.1f}%' if promedio_dia > 0 else ''
+                
+                # Alimento (ahora en columnas H e I)
+                consumo_kg = float(bitacora.consumo_concentrado) if bitacora.consumo_concentrado else 0
+                acumulado_alimento += consumo_kg
+                total_alimento += consumo_kg
+                
+                ws[f'H{fila}'] = f'{consumo_kg:.1f}' if consumo_kg > 0 else ''
+                ws[f'I{fila}'] = f'{acumulado_alimento:.1f}' if acumulado_alimento > 0 else ''
+                
+                # Bajas (mortalidad) - ahora en columnas J, K, L
+                mortalidad_dia = bitacora.mortalidad or 0
+                mortalidad_acumulada += mortalidad_dia
+                total_mortalidad += mortalidad_dia
+                
+                ws[f'J{fila}'] = mortalidad_dia if mortalidad_dia > 0 else ''  # Descartes
+                ws[f'K{fila}'] = ''  # Eliminación (no tenemos este dato específico)
+                ws[f'L{fila}'] = mortalidad_dia if mortalidad_dia > 0 else ''  # Total bajas
+                
+                # Existencia (aves restantes) - ahora en columna M
+                aves_restantes = aves_iniciales_mes - mortalidad_acumulada
+                ws[f'M{fila}'] = aves_restantes if aves_restantes >= 0 else ''
+                
+                # Observaciones (ahora en columnas N:Q)
+                observaciones = bitacora.observaciones[:100] if bitacora.observaciones else ''
+                ws.merge_cells(f'N{fila}:Q{fila}')
+                ws[f'N{fila}'] = observaciones
+            else:
+                # Si no hay bitácora para este día, mantener existencia del día anterior
+                if dia > 1:
+                    fila_anterior = fila - 1
+                    try:
+                        existencia_anterior = ws[f'M{fila_anterior}'].value
+                        if existencia_anterior:
+                            ws[f'M{fila}'] = existencia_anterior
+                    except:
+                        pass
+            
+            # Aplicar bordes y formato a toda la fila (actualizar rango de columnas)
+            for col in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M']:
+                ws[f'{col}{fila}'].border = border_thin
+                ws[f'{col}{fila}'].font = normal_font
+                ws[f'{col}{fila}'].alignment = Alignment(horizontal='center', vertical='center')
+            
+            # Formato especial para observaciones (actualizar rango)
+            for col in ['N', 'O', 'P', 'Q']:
+                ws[f'{col}{fila}'].border = border_thin
+                ws[f'{col}{fila}'].font = normal_font
+                ws[f'{col}{fila}'].alignment = Alignment(horizontal='left', vertical='center')
         
-        # Guardar en buffer
-        buffer = io.BytesIO()
-        wb.save(buffer)
-        buffer.seek(0)
+        # FILA TOTAL (actualizar todas las columnas)
+        fila_total = fila_inicio_datos + dias_en_mes
+        ws[f'A{fila_total}'] = 'TOTAL'
+        ws[f'A{fila_total}'].font = header_font
+        ws[f'A{fila_total}'].fill = sena_green
+        ws[f'A{fila_total}'].alignment = Alignment(horizontal='center', vertical='center')
+        aplicar_borde_completo(ws, f'A{fila_total}:Q{fila_total}', border_thick)
         
-        # Crear respuesta HTTP
+        total_general = total_1a + total_2a + total_3a + total_rotos
+        promedio_total = (total_general / (lote.numero_aves_actual * dias_en_mes) * 100) if lote and lote.numero_aves_actual > 0 else 0
+        
+        ws[f'B{fila_total}'] = total_1a if total_1a > 0 else ''
+        ws[f'C{fila_total}'] = total_2a if total_2a > 0 else ''
+        ws[f'D{fila_total}'] = total_3a if total_3a > 0 else ''
+        ws[f'E{fila_total}'] = total_rotos if total_rotos > 0 else ''
+        ws[f'F{fila_total}'] = total_general if total_general > 0 else ''
+        ws[f'G{fila_total}'] = f'{promedio_total:.1f}%' if promedio_total > 0 else ''  # Promedio total
+        
+        # Total alimento (ahora en H)
+        ws[f'H{fila_total}'] = f'{total_alimento:.1f}' if total_alimento > 0 else ''
+        
+        # Total bajas (ahora en L)
+        ws[f'L{fila_total}'] = total_mortalidad if total_mortalidad > 0 else ''
+        
+        # Aplicar formato a fila total (actualizar rango de columnas)
+        for col in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q']:
+            ws[f'{col}{fila_total}'].border = border_thin
+            ws[f'{col}{fila_total}'].font = header_font
+            ws[f'{col}{fila_total}'].fill = sena_green
+            if col in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M']:
+                ws[f'{col}{fila_total}'].alignment = Alignment(horizontal='center', vertical='center')
+        
+        # RESUMEN MENSUAL
+        fila_resumen = fila_total + 2
+        ws.merge_cells(f'A{fila_resumen}:P{fila_resumen}')
+        ws[f'A{fila_resumen}'] = 'RESUMEN MENSUAL'
+        ws[f'A{fila_resumen}'].font = Font(name='Arial', size=12, bold=True)
+        ws[f'A{fila_resumen}'].fill = sena_green
+        ws[f'A{fila_resumen}'].alignment = Alignment(horizontal='center', vertical='center')
+        aplicar_borde_completo(ws, f'A{fila_resumen}:P{fila_resumen}', border_thick)
+        
+        # Calcular porcentajes y estadísticas
+        if lote and lote.numero_aves_actual > 0:
+            # Porcentaje de postura
+            porcentaje_postura = (total_general / (lote.numero_aves_actual * dias_en_mes)) * 100
+            
+            # Consumo promedio por ave
+            consumo_promedio = total_alimento / lote.numero_aves_actual if lote.numero_aves_actual > 0 else 0
+            
+            # Mortalidad porcentual
+            mortalidad_porcentual = (total_mortalidad / lote.numero_aves_inicial) * 100 if lote.numero_aves_inicial > 0 else 0
+            
+            # Datos del resumen
+            resumen_datos = [
+                (f'A{fila_resumen + 1}', 'PRODUCCIÓN TOTAL:', f'B{fila_resumen + 1}', total_general, f'D{fila_resumen + 1}', '% DE PRODUCCIÓN:', f'E{fila_resumen + 1}', f'{porcentaje_postura:.1f}%'),
+                (f'A{fila_resumen + 2}', 'CONSUMO TOTAL:', f'B{fila_resumen + 2}', f'{total_alimento:.1f}', f'D{fila_resumen + 2}', '% DE MORTALIDAD:', f'E{fila_resumen + 2}', f'{mortalidad_porcentual:.2f}%'),
+                (f'A{fila_resumen + 3}', 'CONVERSIÓN:', f'B{fila_resumen + 3}', f'{consumo_promedio:.2f}', f'D{fila_resumen + 3}', '', f'E{fila_resumen + 3}', ''),
+            ]
+            
+            for datos_fila in resumen_datos:
+                for i in range(0, len(datos_fila), 2):
+                    if i + 1 < len(datos_fila):
+                        celda = datos_fila[i]
+                        valor = datos_fila[i + 1]
+                        ws[celda] = valor
+                        ws[celda].font = header_font if 'TOTAL' in str(valor) or '%' in str(valor) else normal_font
+                        aplicar_borde_completo(ws, celda, border_thin)
+                        if i == 0 or i == 4:  # Labels
+                            ws[celda].fill = light_gray
+        
+        # Fila final con firmas
+        fila_firmas = fila_resumen + 5
+        ws[f'A{fila_firmas}'] = 'OBSERVACIONES:'
+        ws[f'A{fila_firmas}'].font = header_font
+        ws[f'A{fila_firmas}'].border = border_thin
+        ws[f'A{fila_firmas}'].fill = light_gray
+        
+        ws.merge_cells(f'B{fila_firmas}:P{fila_firmas}')
+        aplicar_borde_completo(ws, f'B{fila_firmas}:P{fila_firmas}', border_thin)
+        
+        # Firmas
+        fila_firma = fila_firmas + 2
+        ws[f'A{fila_firma}'] = 'Elaboró: Sergio Buitrago'
+        ws[f'A{fila_firma}'].font = small_font
+        ws[f'A{fila_firma}'].alignment = Alignment(horizontal='center', vertical='center')
+        ws[f'A{fila_firmas}'].border = border_thin
+        
+        ws[f'M{fila_firma}'] = 'Administrador Unidades Agropecuarias'
+        ws[f'M{fila_firma}'].font = small_font
+        ws[f'M{fila_firma}'].alignment = Alignment(horizontal='right', vertical='center')
+        ws[f'M{fila_firma}'].border = border_thin
+        
+        # Ajustar anchos de columna (actualizar para nueva estructura)
+        column_widths = {
+            'A': 21,   # Día
+            'B': 19,  # 1a
+            'C': 19,  # 2a
+            'D': 19,  # 3a
+            'E': 25,  # Rotos
+            'F': 12,  # Total
+            'G': 12,  # Promedio (nueva columna)
+            'H': 12,  # Kg (movido)
+            'I': 12,  # Acumulado (movido)
+            'J': 10,  # Descartes (movido)
+            'K': 10,  # Eliminación (movido)
+            'L': 10,  # Total bajas (movido)
+            'M': 12,  # Existencia (movido)
+            'N': 15,  # Observaciones (movido)
+            'O': 15,  # Observaciones
+            'P': 15,  # Observaciones
+            'Q': 15,  # Observaciones
+        }
+        
+        for col, ancho in column_widths.items():
+            ws.column_dimensions[col].width = ancho
+        
+        # Ajustar alturas de fila
+        ws.row_dimensions[1].height = 25
+        ws.row_dimensions[2].height = 25
+        ws.row_dimensions[3].height = 25
+        ws.row_dimensions[4].height = 20
+        ws.row_dimensions[6].height = 20
+        ws.row_dimensions[11].height = 20
+        ws.row_dimensions[12].height = 20
+        
+        # Configurar respuesta HTTP
         response = HttpResponse(
-            buffer.getvalue(),
             content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         )
-        response['Content-Disposition'] = f'attachment; filename="reporte_{tipo_reporte}_{timezone.now().strftime("%Y%m%d_%H%M")}.xlsx"'
         
+        lote_codigo = lote.codigo if lote else 'General'
+        nombre_archivo = f'Registro_Postura_SENA_{lote_codigo}_{mes:02d}_{año}.xlsx'
+        response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
+        
+        wb.save(response)
         return response
         
     except Exception as e:
-        from django.http import HttpResponseServerError
-        import traceback
         error_detail = traceback.format_exc()
         return HttpResponseServerError(f"Error al generar archivo Excel: {str(e)}\n{error_detail}")
