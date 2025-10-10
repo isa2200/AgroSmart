@@ -629,32 +629,37 @@ def lote_detail(request, pk):
 @login_required
 @acceso_modulo_aves_required
 def inventario_huevos(request):
-    """Vista de inventario de huevos."""
-    from django.db.models import Sum
-    
+    """
+    Vista para mostrar el inventario actual de huevos con alertas de stock bajo
+    y movimientos recientes.
+    """
     inventarios = InventarioHuevos.objects.all()
     
-    # Calcular total de gallinas para mostrar en el contexto
-    total_gallinas = LoteAves.objects.filter(
-        is_active=True,
-        estado='postura'
-    ).aggregate(total=Sum('numero_aves_actual'))['total'] or 0
-    
-    # Movimientos recientes - obtener detalles en lugar de movimientos principales
+    # Obtener movimientos recientes (últimos 30 días por defecto)
+    fecha_limite = timezone.now() - timedelta(days=30)
     movimientos_recientes = DetalleMovimientoHuevos.objects.select_related(
-        'movimiento__usuario_registro', 'movimiento'
-    ).order_by('-movimiento__fecha')[:20]
+        'movimiento', 'movimiento__usuario_registro'
+    ).filter(
+        movimiento__fecha__gte=fecha_limite
+    ).order_by('-movimiento__fecha', '-movimiento__id')[:50]  # Limitar a 50 registros
     
-    # Estadísticas de stock automático
-    inventarios_automaticos = inventarios.filter(stock_automatico=True).count()
-    inventarios_manuales = inventarios.filter(stock_automatico=False).count()
+    # Alertas de stock bajo
+    alertas_stock = []
+    for inventario in inventarios:
+        if inventario.cantidad_actual <= inventario.cantidad_minima:
+            alertas_stock.append({
+                'categoria': inventario.get_categoria_display(),
+                'cantidad_actual': inventario.cantidad_actual,
+                'stock_minimo': inventario.cantidad_minima,
+                'diferencia': inventario.cantidad_minima - inventario.cantidad_actual,
+                'porcentaje': (inventario.cantidad_actual / inventario.cantidad_minima * 100) if inventario.cantidad_minima > 0 else 0
+            })
     
     context = {
         'inventarios': inventarios,
         'movimientos_recientes': movimientos_recientes,
-        'total_gallinas': total_gallinas,
-        'inventarios_automaticos': inventarios_automaticos,
-        'inventarios_manuales': inventarios_manuales,
+        'alertas_stock': alertas_stock,
+        'total_alertas': len(alertas_stock),
     }
     
     return render(request, 'aves/inventario_huevos.html', context)
@@ -1354,6 +1359,31 @@ def plan_vacunacion_detail(request, pk):
     }
     
     return render(request, 'aves/plan_vacunacion_detail.html', context)
+
+
+@login_required
+@role_required(['superusuario', 'admin_aves', 'solo_vista'])
+def movimiento_huevos_detail(request, pk):
+    """
+    Vista para mostrar los detalles de un movimiento de huevos (solo lectura).
+    """
+    movimiento = get_object_or_404(MovimientoHuevos, pk=pk)
+    detalles = DetalleMovimientoHuevos.objects.filter(movimiento=movimiento)
+    
+    # Calcular totales
+    total_docenas = sum(detalle.cantidad_docenas for detalle in detalles)
+    total_unidades = sum(detalle.cantidad_unidades for detalle in detalles)
+    total_valor = sum(detalle.subtotal for detalle in detalles)
+    
+    context = {
+        'movimiento': movimiento,
+        'detalles': detalles,
+        'total_docenas': total_docenas,
+        'total_unidades': total_unidades,
+        'total_valor': total_valor,
+    }
+    
+    return render(request, 'aves/movimiento_huevos_detail.html', context)
 
 
 @login_required

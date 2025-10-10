@@ -70,7 +70,7 @@
                     <tbody>
                         {% for movimiento in movimientos %}
                             <tr>
-                                <td>{{ movimiento.fecha|date:"d/m/Y H:i" }}</td>
+                                <td>{{ movimiento.fecha|date:"d/m/Y" }}</td>
                                 <td>
                                     <span class="badge bg-{% if movimiento.tipo_movimiento == 'venta' %}success{% elif movimiento.tipo_movimiento == 'autoconsumo' %}warning{% elif movimiento.tipo_movimiento == 'baja' %}danger{% else %}info{% endif %}">
                                         {{ movimiento.get_tipo_movimiento_display }}
@@ -148,7 +148,7 @@
                 <div class="modal-body">
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <strong>Fecha:</strong> {{ movimiento.fecha|date:"d/m/Y H:i" }}
+                            <strong>Fecha:</strong> {{ movimiento.fecha|date:"d/m/Y" }}
                         </div>
                         <div class="col-md-6">
                             <strong>Tipo:</strong> {{ movimiento.get_tipo_movimiento_display }}

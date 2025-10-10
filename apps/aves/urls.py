@@ -29,6 +29,7 @@ urlpatterns = [
     path('inventario-huevos/', views.inventario_huevos, name='inventario_huevos'),
     path('movimiento-huevos/', views.movimiento_huevos_list, name='movimiento_huevos_list'),
     path('movimiento-huevos/nuevo/', views.movimiento_huevos_create, name='movimiento_huevos_create'),
+    path('movimiento-huevos/<int:pk>/', views.movimiento_huevos_detail, name='movimiento_huevos_detail'),
     path('actualizar-stock-automatico/', views.actualizar_stock_automatico, name='actualizar_stock_automatico'),
     path('configurar-stock-automatico/<int:inventario_id>/', views.configurar_stock_automatico, name='configurar_stock_automatico'),
     

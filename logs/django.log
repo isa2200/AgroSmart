@@ -15207,3 +15207,524 @@ INFO 2025-10-09 21:46:18,794 basehttp 6752 11360 "GET /aves/alertas/ HTTP/1.1" 2
 INFO 2025-10-09 21:46:19,301 basehttp 6752 11360 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29163
 INFO 2025-10-09 21:46:20,142 basehttp 6752 11360 "GET /aves/bitacora/ HTTP/1.1" 200 31023
 INFO 2025-10-09 21:46:22,327 basehttp 6752 11360 "GET /aves/ HTTP/1.1" 200 53448
+INFO 2025-10-09 21:47:28,955 basehttp 6752 11360 "GET /aves/inventario-huevos/ HTTP/1.1" 200 44451
+INFO 2025-10-09 21:52:29,098 basehttp 6752 13640 "GET /aves/inventario-huevos/ HTTP/1.1" 200 44451
+INFO 2025-10-09 21:55:31,660 autoreload 6752 7268 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-09 21:55:32,836 autoreload 4300 6644 Watching for file changes with StatReloader
+INFO 2025-10-09 21:56:09,506 autoreload 4300 6644 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-09 21:56:10,708 autoreload 1612 5192 Watching for file changes with StatReloader
+INFO 2025-10-09 21:56:25,137 autoreload 1612 5192 C:\Users\bp877\TRAE\AgroSmart\apps\aves\urls.py changed, reloading.
+INFO 2025-10-09 21:56:26,342 autoreload 2112 14664 Watching for file changes with StatReloader
+INFO 2025-10-09 21:56:55,727 autoreload 2112 14664 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-09 21:56:56,871 autoreload 7908 13460 Watching for file changes with StatReloader
+INFO 2025-10-09 21:57:29,532 basehttp 7908 13888 "GET /aves/inventario-huevos/ HTTP/1.1" 200 44451
+INFO 2025-10-09 22:00:34,006 autoreload 7908 13460 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-09 22:00:35,126 autoreload 18060 22344 Watching for file changes with StatReloader
+ERROR 2025-10-09 22:01:12,063 log 18060 13704 Internal Server Error: /aves/inventario-huevos/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 118, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 648, in inventario_huevos
+    for inventario in inventarios:
+                      ^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 398, in __iter__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1881, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 1549, in execute_sql
+    sql, params = self.as_sql()
+                  ~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 736, in as_sql
+    extra_select, order_by, group_by = self.pre_sql_setup(
+                                       ~~~~~~~~~~~~~~~~~~^
+        with_col_aliases=with_col_aliases or bool(combinator),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 84, in pre_sql_setup
+    self.setup_query(with_col_aliases=with_col_aliases)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 73, in setup_query
+    self.select, self.klass_info, self.annotation_col_map = self.get_select(
+                                                            ~~~~~~~~~~~~~~~^
+        with_col_aliases=with_col_aliases,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 279, in get_select
+    related_klass_infos = self.get_related_selections(select, select_mask)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 1367, in get_related_selections
+    raise FieldError(
+    ...<6 lines>...
+    )
+django.core.exceptions.FieldError: Invalid field name(s) given in select_related: 'categoria_huevo'. Choices are: (none)
+ERROR 2025-10-09 22:01:12,118 basehttp 18060 13704 "GET /aves/inventario-huevos/ HTTP/1.1" 500 142455
+INFO 2025-10-09 22:01:12,137 basehttp 18060 2740 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:01:12,138 basehttp 18060 13704 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:01:12,213 basehttp 18060 13704 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 22:01:12,241 basehttp 18060 13704 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-09 22:01:12,292 log 18060 13704 Not Found: /favicon.ico
+WARNING 2025-10-09 22:01:12,293 basehttp 18060 13704 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-09 22:02:57,005 autoreload 10224 2172 Watching for file changes with StatReloader
+INFO 2025-10-09 22:02:59,263 basehttp 10224 22204 "GET / HTTP/1.1" 200 36020
+INFO 2025-10-09 22:03:05,781 basehttp 10224 22204 "GET /aves/ HTTP/1.1" 200 53448
+ERROR 2025-10-09 22:03:07,479 log 10224 22204 Internal Server Error: /aves/inventario-huevos/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 118, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 649, in inventario_huevos
+    if inventario.cantidad_docenas <= inventario.stock_minimo_docenas:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'InventarioHuevos' object has no attribute 'cantidad_docenas'. Did you mean: 'cantidad_actual'?
+ERROR 2025-10-09 22:03:07,521 basehttp 10224 22204 "GET /aves/inventario-huevos/ HTTP/1.1" 500 96412
+INFO 2025-10-09 22:06:35,355 autoreload 10224 2172 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-09 22:06:36,525 autoreload 6020 3632 Watching for file changes with StatReloader
+INFO 2025-10-09 22:06:53,347 basehttp 6020 3880 "GET /aves/inventario-huevos/ HTTP/1.1" 200 50761
+INFO 2025-10-09 22:06:53,368 basehttp 6020 14576 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:06:53,368 basehttp 6020 3880 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:06:53,573 basehttp 6020 3880 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 22:06:53,584 basehttp 6020 3880 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+ERROR 2025-10-09 22:07:24,761 log 6020 3880 Internal Server Error: /aves/movimiento-huevos/5/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 1374, in movimiento_huevos_detail
+    total_docenas = sum(detalle.cantidad_docenas for detalle in detalles)
+                                                                ^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 398, in __iter__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1881, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 1549, in execute_sql
+    sql, params = self.as_sql()
+                  ~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 736, in as_sql
+    extra_select, order_by, group_by = self.pre_sql_setup(
+                                       ~~~~~~~~~~~~~~~~~~^
+        with_col_aliases=with_col_aliases or bool(combinator),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 84, in pre_sql_setup
+    self.setup_query(with_col_aliases=with_col_aliases)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 73, in setup_query
+    self.select, self.klass_info, self.annotation_col_map = self.get_select(
+                                                            ~~~~~~~~~~~~~~~^
+        with_col_aliases=with_col_aliases,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 279, in get_select
+    related_klass_infos = self.get_related_selections(select, select_mask)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\compiler.py", line 1200, in get_related_selections
+    raise FieldError(
+    ...<6 lines>...
+    )
+django.core.exceptions.FieldError: Non-relational field given in select_related: 'categoria_huevo'. Choices are: movimiento
+ERROR 2025-10-09 22:07:24,812 basehttp 6020 3880 "GET /aves/movimiento-huevos/5/ HTTP/1.1" 500 140108
+WARNING 2025-10-09 22:07:24,948 log 6020 3880 Not Found: /favicon.ico
+WARNING 2025-10-09 22:07:24,949 basehttp 6020 3880 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-09 22:09:06,795 autoreload 6020 3632 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-09 22:09:08,019 autoreload 21348 3064 Watching for file changes with StatReloader
+INFO 2025-10-09 22:09:09,759 basehttp 21348 18212 "GET /aves/movimiento-huevos/5/ HTTP/1.1" 200 24123
+INFO 2025-10-09 22:09:09,783 basehttp 21348 18212 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:09:09,783 basehttp 21348 4472 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:09:10,159 basehttp 21348 4472 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 22:09:10,164 basehttp 21348 4472 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+ERROR 2025-10-09 22:09:17,701 log 21348 4472 Internal Server Error: /aves/movimiento-huevos/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 1348, in movimiento_huevos_list
+    return render(request, 'aves/movimiento_huevos_list.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+           ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+                    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1064, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 742, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaultfilters.py", line 785, in date
+    return formats.date_format(value, arg)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\formats.py", line 158, in date_format
+    return dateformat.format(
+           ~~~~~~~~~~~~~~~~~^
+        value, get_format(format or "DATE_FORMAT", use_l10n=use_l10n)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\dateformat.py", line 324, in format
+    return df.format(format_string)
+           ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\dateformat.py", line 44, in format
+    raise TypeError(
+    ...<2 lines>...
+    )
+TypeError: The format for date objects may not contain time-related format specifiers (found 'H').
+ERROR 2025-10-09 22:09:17,780 basehttp 21348 4472 "GET /aves/movimiento-huevos/ HTTP/1.1" 500 224913
+WARNING 2025-10-09 22:09:17,932 log 21348 4472 Not Found: /favicon.ico
+WARNING 2025-10-09 22:09:17,933 basehttp 21348 4472 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-09 22:11:13,322 basehttp 21348 4472 "GET /aves/movimiento-huevos/ HTTP/1.1" 200 42002
+INFO 2025-10-09 22:11:13,348 basehttp 21348 18212 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:11:13,348 basehttp 21348 4472 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:11:13,999 basehttp 21348 18212 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 22:11:14,016 basehttp 21348 18212 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 22:11:19,697 basehttp 21348 18212 "GET /aves/ HTTP/1.1" 200 53448
+INFO 2025-10-09 22:11:22,059 basehttp 21348 18212 "GET /aves/inventario-huevos/ HTTP/1.1" 200 50759
+INFO 2025-10-09 22:11:46,922 basehttp 21348 18212 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 49960
+INFO 2025-10-09 22:11:59,284 basehttp 21348 18212 "GET /aves/inventario-huevos/ HTTP/1.1" 200 50760
+INFO 2025-10-09 22:14:00,721 basehttp 21348 18212 "GET /aves/inventario-huevos/ HTTP/1.1" 200 51115
+INFO 2025-10-09 22:14:00,742 basehttp 21348 4472 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:14:00,742 basehttp 21348 18212 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:14:01,124 basehttp 21348 4472 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 22:14:01,135 basehttp 21348 4472 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 22:14:01,547 basehttp 21348 4472 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-09 22:14:02,471 basehttp 21348 4472 "GET /aves/inventario-huevos/ HTTP/1.1" 200 51114
+INFO 2025-10-09 22:14:02,491 basehttp 21348 18212 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:14:02,492 basehttp 21348 4472 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:14:02,749 basehttp 21348 18212 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 22:14:02,749 basehttp 21348 4472 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 22:14:02,969 basehttp 21348 4472 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+ERROR 2025-10-09 22:16:08,911 log 21348 4472 Internal Server Error: /aves/inventario-huevos/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 505, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 118, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 665, in inventario_huevos
+    return render(request, 'aves/inventario_huevos.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 507, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 568, in invalid_block_tag
+    raise self.error(
+    ...<3 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 695: 'endblock'. Did you forget to register or load this tag?
+ERROR 2025-10-09 22:16:08,985 basehttp 21348 4472 "GET /aves/inventario-huevos/ HTTP/1.1" 500 208392
+INFO 2025-10-09 22:16:09,005 basehttp 21348 18212 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:16:09,006 basehttp 21348 4472 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:16:09,055 basehttp 21348 4472 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 22:16:09,094 basehttp 21348 4472 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-09 22:16:09,144 log 21348 4472 Not Found: /favicon.ico
+WARNING 2025-10-09 22:16:09,145 basehttp 21348 4472 "GET /favicon.ico HTTP/1.1" 404 16922
+ERROR 2025-10-09 22:18:40,748 log 21348 4472 Internal Server Error: /aves/inventario-huevos/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 505, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 118, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 665, in inventario_huevos
+    return render(request, 'aves/inventario_huevos.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 507, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 568, in invalid_block_tag
+    raise self.error(
+    ...<3 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 695: 'endblock'. Did you forget to register or load this tag?
+ERROR 2025-10-09 22:18:40,821 basehttp 21348 4472 "GET /aves/inventario-huevos/ HTTP/1.1" 500 208393
+INFO 2025-10-09 22:18:40,840 basehttp 21348 18212 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:18:40,840 basehttp 21348 4472 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:18:40,875 basehttp 21348 4472 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 22:18:40,901 basehttp 21348 4472 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-09 22:18:40,954 log 21348 4472 Not Found: /favicon.ico
+WARNING 2025-10-09 22:18:40,954 basehttp 21348 4472 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-09 22:20:20,152 basehttp 21348 4472 "GET /aves/inventario-huevos/ HTTP/1.1" 200 60182
+INFO 2025-10-09 22:20:20,177 basehttp 21348 18212 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:20:20,177 basehttp 21348 4472 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:20:20,525 basehttp 21348 4472 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 22:20:20,542 basehttp 21348 4472 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 22:20:20,909 basehttp 21348 4472 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+ERROR 2025-10-09 22:21:12,319 log 21348 4472 Internal Server Error: /aves/inventario-huevos/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 505, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 118, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 665, in inventario_huevos
+    return render(request, 'aves/inventario_huevos.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 507, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 568, in invalid_block_tag
+    raise self.error(
+    ...<3 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 695: 'endblock'. Did you forget to register or load this tag?
+ERROR 2025-10-09 22:21:12,441 basehttp 21348 4472 "GET /aves/inventario-huevos/ HTTP/1.1" 500 208393
+INFO 2025-10-09 22:21:12,500 basehttp 21348 4472 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:21:12,523 basehttp 21348 18212 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:21:12,538 basehttp 21348 18212 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 22:21:12,583 basehttp 21348 18212 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-09 22:21:12,635 log 21348 18212 Not Found: /favicon.ico
+WARNING 2025-10-09 22:21:12,635 basehttp 21348 18212 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-09 22:21:26,622 basehttp 21348 18212 "GET /aves/inventario-huevos/ HTTP/1.1" 200 60182
+INFO 2025-10-09 22:21:26,648 basehttp 21348 4472 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:21:26,648 basehttp 21348 18212 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:21:27,034 basehttp 21348 4472 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 22:21:27,052 basehttp 21348 4472 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 22:21:27,413 basehttp 21348 4472 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-09 22:22:57,271 basehttp 21348 4472 "GET /aves/inventario-huevos/ HTTP/1.1" 200 51114
+INFO 2025-10-09 22:22:57,292 basehttp 21348 18212 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:22:57,293 basehttp 21348 4472 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:22:57,570 basehttp 21348 4472 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 22:22:57,590 basehttp 21348 4472 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 22:22:58,188 basehttp 21348 4472 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-09 22:27:07,808 basehttp 21348 4472 "GET /aves/inventario-huevos/ HTTP/1.1" 200 48014
+INFO 2025-10-09 22:27:07,829 basehttp 21348 18212 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:27:07,830 basehttp 21348 4472 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:27:08,327 basehttp 21348 4472 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 22:27:08,335 basehttp 21348 4472 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 22:27:08,694 basehttp 21348 4472 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-09 22:27:32,822 basehttp 21348 4472 "GET /aves/movimiento-huevos/5/ HTTP/1.1" 200 24122
+INFO 2025-10-09 22:27:34,950 basehttp 21348 4472 "GET /aves/inventario-huevos/ HTTP/1.1" 200 48013
+INFO 2025-10-09 22:27:36,866 basehttp 21348 4472 "GET /aves/movimiento-huevos/1/ HTTP/1.1" 200 24120
+INFO 2025-10-09 22:27:55,772 basehttp 21348 4472 "GET /aves/inventario-huevos/ HTTP/1.1" 200 48013
+INFO 2025-10-09 22:28:00,658 basehttp 21348 4472 "GET /aves/movimiento-huevos/2/ HTTP/1.1" 200 24120
+INFO 2025-10-09 22:28:04,560 basehttp 21348 4472 "GET /aves/inventario-huevos/ HTTP/1.1" 200 48013
+INFO 2025-10-09 22:28:06,317 basehttp 21348 4472 "GET /aves/movimiento-huevos/5/ HTTP/1.1" 200 24122
+INFO 2025-10-09 22:30:41,136 basehttp 21348 4472 "GET /aves/movimiento-huevos/5/ HTTP/1.1" 200 24125
+INFO 2025-10-09 22:30:41,157 basehttp 21348 18212 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:30:41,157 basehttp 21348 4472 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:30:41,207 basehttp 21348 4472 "GET /aves/movimiento-huevos/5/ HTTP/1.1" 200 24125
+INFO 2025-10-09 22:30:41,232 basehttp 21348 18212 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:30:41,233 basehttp 21348 4472 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:30:41,549 basehttp 21348 4472 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 22:30:41,551 basehttp 21348 18212 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 22:30:41,570 basehttp 21348 18212 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-09 22:30:47,943 basehttp 21348 18212 "GET /aves/inventario-huevos/ HTTP/1.1" 200 48013
+INFO 2025-10-09 22:30:49,867 basehttp 21348 18212 "GET /aves/movimiento-huevos/2/ HTTP/1.1" 200 24122
+INFO 2025-10-09 22:30:55,567 basehttp 21348 18212 "GET /aves/inventario-huevos/ HTTP/1.1" 200 48013
