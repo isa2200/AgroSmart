@@ -100,14 +100,20 @@ class BitacoraDiaria(BaseModel):
     # Información del lote
     semana_vida = models.PositiveIntegerField('Semana de vida', null=True, blank=True)
     
-    # Producción por categoría
+    # Recolecciones de huevos (nuevos campos)
+    recoleccion_1 = models.PositiveIntegerField('Primera recolección', default=0, help_text='Cantidad total de huevos en la primera recolección')
+    recoleccion_2 = models.PositiveIntegerField('Segunda recolección', default=0, help_text='Cantidad total de huevos en la segunda recolección')
+    recoleccion_3 = models.PositiveIntegerField('Tercera recolección', default=0, help_text='Cantidad total de huevos en la tercera recolección')
+    huevos_rotos = models.PositiveIntegerField('Huevos rotos', default=0, help_text='Cantidad total de huevos rotos en el día')
+    
+    # Clasificación de huevos por tipo
     produccion_aaa = models.PositiveIntegerField('Producción AAA', default=0)
     produccion_aa = models.PositiveIntegerField('Producción AA', default=0)
     produccion_a = models.PositiveIntegerField('Producción A', default=0)
     produccion_b = models.PositiveIntegerField('Producción B', default=0)
     produccion_c = models.PositiveIntegerField('Producción C', default=0)
     
-    # Mortalidad y consumo
+    # Mortalidad
     mortalidad = models.PositiveIntegerField('Mortalidad', default=0)
     causa_mortalidad = models.CharField('Causa de mortalidad', max_length=200, blank=True)
     consumo_concentrado = models.DecimalField('Consumo concentrado (kg)', max_digits=10, decimal_places=2, default=0)
@@ -125,29 +131,69 @@ class BitacoraDiaria(BaseModel):
         return f"{self.lote.codigo} - {self.fecha}"
     
     @property
+    def total_recolecciones(self):
+        """Calcula el total de huevos recolectados en todas las recolecciones."""
+        return self.recoleccion_1 + self.recoleccion_2 + self.recoleccion_3
+    
+    @property
     def produccion_total(self):
-        """Calcula la producción total del día."""
-        return (self.produccion_aaa + self.produccion_aa + self.produccion_a + 
-                self.produccion_b + self.produccion_c)
+        """Calcula la producción total de huevos clasificados."""
+        return self.produccion_aaa + self.produccion_aa + self.produccion_a + self.produccion_b + self.produccion_c
     
     @property
     def porcentaje_postura(self):
-        """Calcula el porcentaje de postura."""
+        """Calcula el porcentaje de postura del lote."""
         if self.lote.numero_aves_actual > 0:
-            return (self.produccion_total / self.lote.numero_aves_actual) * 100
+            return round((self.produccion_total / self.lote.numero_aves_actual) * 100, 2)
         return 0
+    
+    @property
+    def numero_recolecciones_realizadas(self):
+        """Cuenta cuántas recolecciones se realizaron en el día."""
+        recolecciones = 0
+        if self.recoleccion_1 > 0:
+            recolecciones += 1
+        if self.recoleccion_2 > 0:
+            recolecciones += 1
+        if self.recoleccion_3 > 0:
+            recolecciones += 1
+        return recolecciones
+    
+    def clean(self):
+        """Validaciones personalizadas."""
+        from django.core.exceptions import ValidationError
+        
+        # Validar que el total de huevos clasificados no exceda el total recolectado
+        total_clasificados = self.produccion_total
+        total_recolectado = self.total_recolecciones
+        
+        if total_clasificados > total_recolectado:
+            raise ValidationError(
+                f'El total de huevos clasificados ({total_clasificados}) no puede ser mayor '
+                f'al total recolectado ({total_recolectado})'
+            )
+        
+        # Validar que si hay huevos rotos, el total no exceda lo recolectado
+        if self.huevos_rotos > total_recolectado:
+            raise ValidationError(
+                f'Los huevos rotos ({self.huevos_rotos}) no pueden ser más que el total recolectado ({total_recolectado})'
+            )
     
     def save(self, *args, **kwargs):
         # Calcular semana de vida automáticamente si no se proporciona
-        if not self.semana_vida and self.lote.fecha_llegada:
+        if not self.semana_vida and self.lote:
             dias_vida = (self.fecha - self.lote.fecha_llegada).days
-            self.semana_vida = (dias_vida // 7) + 1
-            
+            self.semana_vida = max(1, round(dias_vida / 7))
+        
+        # Ejecutar validaciones personalizadas
+        self.clean()
+        
+        super().save(*args, **kwargs)
+        
         # Actualizar número de aves actual del lote si hay mortalidad
         if self.mortalidad > 0:
             self.lote.numero_aves_actual = max(0, self.lote.numero_aves_actual - self.mortalidad)
             self.lote.save()
-        super().save(*args, **kwargs)
 
 
 class TipoConcentrado(BaseModel):

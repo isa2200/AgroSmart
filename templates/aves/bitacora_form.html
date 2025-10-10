@@ -185,6 +185,62 @@
         font-size: 1.2rem;
     }
     
+    /* Grilla de recolecciones */
+    .recolecciones-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .recoleccion-item {
+        background: #fff;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    
+    .recoleccion-item:hover {
+        border-color: #17a2b8;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(23, 162, 184, 0.1);
+    }
+    
+    .recoleccion-item label {
+        display: block;
+        font-weight: 700;
+        color: #17a2b8;
+        margin-bottom: 8px;
+        font-size: 1rem;
+    }
+    
+    .recoleccion-item .form-control {
+        text-align: center;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    
+    /* Campo de huevos rotos */
+    .huevos-rotos-item {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        color: white;
+        border: none;
+    }
+    
+    .huevos-rotos-item label {
+        color: white !important;
+    }
+    
+    .huevos-rotos-item .form-control {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+    
     /* Estilos para errores */
     .text-danger {
         font-weight: 600;
@@ -281,7 +337,7 @@
             padding: 20px;
         }
         
-        .produccion-grid {
+        .produccion-grid, .recolecciones-grid {
             grid-template-columns: repeat(2, 1fr);
         }
         
@@ -292,7 +348,7 @@
     }
     
     @media (max-width: 576px) {
-        .produccion-grid {
+        .produccion-grid, .recolecciones-grid {
             grid-template-columns: 1fr;
         }
         
@@ -325,6 +381,7 @@
     .form-section:nth-child(2) { animation-delay: 0.2s; }
     .form-section:nth-child(3) { animation-delay: 0.3s; }
     .form-section:nth-child(4) { animation-delay: 0.4s; }
+    .form-section:nth-child(5) { animation-delay: 0.5s; }
 </style>
 {% endblock %}
 
@@ -388,36 +445,93 @@
                                 </div>
                             </div>
                             
-                            <!-- Producción de Huevos -->
+                            <!-- Recolecciones de Huevos -->
+                            <div class="form-section">
+                                <h6 class="section-header text-info">
+                                    <i class="fas fa-basket-shopping"></i>
+                                    Recolecciones de Huevos
+                                </h6>
+                                <div class="recolecciones-grid">
+                                    <div class="recoleccion-item">
+                                        <label for="{{ form.recoleccion_1.id_for_label }}">Primera Recolección</label>
+                                        {{ form.recoleccion_1|add_class:"form-control" }}
+                                        <small class="text-muted">{{ form.recoleccion_1.help_text }}</small>
+                                        {% if form.recoleccion_1.errors %}
+                                            <div class="text-danger">{{ form.recoleccion_1.errors.0 }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="recoleccion-item">
+                                        <label for="{{ form.recoleccion_2.id_for_label }}">Segunda Recolección</label>
+                                        {{ form.recoleccion_2|add_class:"form-control" }}
+                                        <small class="text-muted">{{ form.recoleccion_2.help_text }}</small>
+                                        {% if form.recoleccion_2.errors %}
+                                            <div class="text-danger">{{ form.recoleccion_2.errors.0 }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="recoleccion-item">
+                                        <label for="{{ form.recoleccion_3.id_for_label }}">Tercera Recolección</label>
+                                        {{ form.recoleccion_3|add_class:"form-control" }}
+                                        <small class="text-muted">{{ form.recoleccion_3.help_text }}</small>
+                                        {% if form.recoleccion_3.errors %}
+                                            <div class="text-danger">{{ form.recoleccion_3.errors.0 }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="recoleccion-item huevos-rotos-item">
+                                        <label for="{{ form.huevos_rotos.id_for_label }}">Huevos Rotos</label>
+                                        {{ form.huevos_rotos|add_class:"form-control" }}
+                                        <small class="text-muted">{{ form.huevos_rotos.help_text }}</small>
+                                        {% if form.huevos_rotos.errors %}
+                                            <div class="text-danger">{{ form.huevos_rotos.errors.0 }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Clasificación de Huevos -->
                             <div class="form-section">
                                 <h6 class="section-header text-success">
                                     <i class="fas fa-egg"></i>
-                                    Producción de Huevos
+                                    Clasificación de Huevos
                                 </h6>
                                 <div class="produccion-grid">
                                     <div class="produccion-item">
                                         <label for="{{ form.produccion_aaa.id_for_label }}">AAA</label>
                                         {{ form.produccion_aaa|add_class:"form-control" }}
+                                        {% if form.produccion_aaa.errors %}
+                                            <div class="text-danger">{{ form.produccion_aaa.errors.0 }}</div>
+                                        {% endif %}
                                     </div>
                                     <div class="produccion-item">
                                         <label for="{{ form.produccion_aa.id_for_label }}">AA</label>
                                         {{ form.produccion_aa|add_class:"form-control" }}
+                                        {% if form.produccion_aa.errors %}
+                                            <div class="text-danger">{{ form.produccion_aa.errors.0 }}</div>
+                                        {% endif %}
                                     </div>
                                     <div class="produccion-item">
                                         <label for="{{ form.produccion_a.id_for_label }}">A</label>
                                         {{ form.produccion_a|add_class:"form-control" }}
+                                        {% if form.produccion_a.errors %}
+                                            <div class="text-danger">{{ form.produccion_a.errors.0 }}</div>
+                                        {% endif %}
                                     </div>
                                     <div class="produccion-item">
                                         <label for="{{ form.produccion_b.id_for_label }}">B</label>
                                         {{ form.produccion_b|add_class:"form-control" }}
+                                        {% if form.produccion_b.errors %}
+                                            <div class="text-danger">{{ form.produccion_b.errors.0 }}</div>
+                                        {% endif %}
                                     </div>
                                     <div class="produccion-item">
                                         <label for="{{ form.produccion_c.id_for_label }}">C</label>
                                         {{ form.produccion_c|add_class:"form-control" }}
+                                        {% if form.produccion_c.errors %}
+                                            <div class="text-danger">{{ form.produccion_c.errors.0 }}</div>
+                                        {% endif %}
                                     </div>
                                     <div class="produccion-item total-produccion">
-                                        <label>Total</label>
-                                        <input type="text" class="form-control" id="totalProduccion" readonly>
+                                        <label>Total Clasificado</label>
+                                        <input type="text" class="form-control" id="totalClasificado" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -537,8 +651,17 @@
 {% block extra_js %}
 <script>
 $(document).ready(function() {
-    // Calcular total de producción automáticamente
-    function calcularTotal() {
+    // Calcular total de recolecciones automáticamente
+    function calcularTotalRecolecciones() {
+        const rec1 = parseInt($('#id_recoleccion_1').val()) || 0;
+        const rec2 = parseInt($('#id_recoleccion_2').val()) || 0;
+        const rec3 = parseInt($('#id_recoleccion_3').val()) || 0;
+        
+        return rec1 + rec2 + rec3;
+    }
+    
+    // Calcular total de clasificación automáticamente
+    function calcularTotalClasificado() {
         const aaa = parseInt($('#id_produccion_aaa').val()) || 0;
         const aa = parseInt($('#id_produccion_aa').val()) || 0;
         const a = parseInt($('#id_produccion_a').val()) || 0;
@@ -546,14 +669,35 @@ $(document).ready(function() {
         const c = parseInt($('#id_produccion_c').val()) || 0;
         
         const total = aaa + aa + a + b + c;
-        $('#totalProduccion').val(total);
+        $('#totalClasificado').val(total);
+        return total;
     }
     
-    // Eventos para calcular total
-    $('#id_produccion_aaa, #id_produccion_aa, #id_produccion_a, #id_produccion_b, #id_produccion_c').on('input', calcularTotal);
+    // Validar que el total clasificado no exceda el total recolectado
+    function validarTotales() {
+        const totalRecolectado = calcularTotalRecolecciones();
+        const totalClasificado = calcularTotalClasificado();
+        
+        if (totalClasificado > totalRecolectado && totalRecolectado > 0) {
+            $('#totalClasificado').addClass('is-invalid');
+            return false;
+        } else {
+            $('#totalClasificado').removeClass('is-invalid');
+            return true;
+        }
+    }
     
-    // Calcular total inicial
-    calcularTotal();
+    // Eventos para calcular totales
+    $('#id_recoleccion_1, #id_recoleccion_2, #id_recoleccion_3').on('input', function() {
+        validarTotales();
+    });
+    
+    $('#id_produccion_aaa, #id_produccion_aa, #id_produccion_a, #id_produccion_b, #id_produccion_c').on('input', function() {
+        validarTotales();
+    });
+    
+    // Calcular totales iniciales
+    validarTotales();
     
     // Validación de mortalidad
     $('#id_mortalidad').on('input', function() {
@@ -572,9 +716,26 @@ $(document).ready(function() {
         }
     });
     
-    // Validación adicional para justificación en edición
-    {% if is_edit %}
+    // Validación del formulario antes de enviar
     $('#bitacoraForm').on('submit', function(e) {
+        // Validar que al menos una recolección tenga valor
+        const totalRecolectado = calcularTotalRecolecciones();
+        if (totalRecolectado === 0) {
+            e.preventDefault();
+            alert('Debe registrar al menos una recolección de huevos.');
+            $('#id_recoleccion_1').focus();
+            return false;
+        }
+        
+        // Validar totales
+        if (!validarTotales()) {
+            e.preventDefault();
+            alert('El total de huevos clasificados no puede ser mayor al total recolectado.');
+            return false;
+        }
+        
+        {% if is_edit %}
+        // Validación adicional para justificación en edición
         const justificacion = $('#justificacion').val().trim();
         
         if (!justificacion) {
@@ -592,8 +753,10 @@ $(document).ready(function() {
             $('#justificacion').focus();
             return false;
         }
+        {% endif %}
     });
     
+    {% if is_edit %}
     // Validación en tiempo real para justificación
     $('#justificacion').on('input blur', function() {
         const valor = $(this).val().trim();
@@ -613,11 +776,11 @@ $(document).ready(function() {
         $('#id_fecha').val(hoy);
     }
     
-    // Animación suave para los campos de producción
-    $('.produccion-item input').on('focus', function() {
-        $(this).closest('.produccion-item').addClass('shadow-lg');
+    // Animación suave para los campos
+    $('.produccion-item input, .recoleccion-item input').on('focus', function() {
+        $(this).closest('.produccion-item, .recoleccion-item').addClass('shadow-lg');
     }).on('blur', function() {
-        $(this).closest('.produccion-item').removeClass('shadow-lg');
+        $(this).closest('.produccion-item, .recoleccion-item').removeClass('shadow-lg');
     });
 });
 </script>

@@ -15,24 +15,72 @@ class BitacoraDiariaForm(forms.ModelForm):
     class Meta:
         model = BitacoraDiaria
         fields = [
-            'lote', 'fecha', 'semana_vida', 'produccion_aaa', 'produccion_aa', 'produccion_a',
-            'produccion_b', 'produccion_c', 'mortalidad', 'causa_mortalidad', 
-            'consumo_concentrado', 'observaciones'
+            'lote', 'fecha', 'semana_vida', 
+            'recoleccion_1', 'recoleccion_2', 'recoleccion_3', 'huevos_rotos',
+            'produccion_aaa', 'produccion_aa', 'produccion_a', 'produccion_b', 'produccion_c', 
+            'mortalidad', 'causa_mortalidad', 'consumo_concentrado', 'observaciones'
         ]
         widgets = {
             'fecha': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'lote': forms.Select(attrs={'class': 'form-control'}),
             'semana_vida': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'}),
-            'produccion_aaa': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
-            'produccion_aa': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
-            'produccion_a': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
-            'produccion_b': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
-            'produccion_c': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            
+            # Recolecciones
+            'recoleccion_1': forms.NumberInput(attrs={
+                'class': 'form-control recoleccion-input', 
+                'min': '0',
+                'placeholder': '0'
+            }),
+            'recoleccion_2': forms.NumberInput(attrs={
+                'class': 'form-control recoleccion-input', 
+                'min': '0',
+                'placeholder': '0'
+            }),
+            'recoleccion_3': forms.NumberInput(attrs={
+                'class': 'form-control recoleccion-input', 
+                'min': '0',
+                'placeholder': '0'
+            }),
+            'huevos_rotos': forms.NumberInput(attrs={
+                'class': 'form-control', 
+                'min': '0',
+                'placeholder': '0'
+            }),
+            
+            # Clasificación de huevos
+            'produccion_aaa': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
+            'produccion_aa': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
+            'produccion_a': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
+            'produccion_b': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
+            'produccion_c': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
+            
             'mortalidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'causa_mortalidad': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: Enfermedad, Accidente, etc.'}),
             'consumo_concentrado': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0'}),
             'observaciones': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
+        
+        help_texts = {
+            'recoleccion_1': 'Cantidad total de huevos en la primera recolección del día',
+            'recoleccion_2': 'Cantidad total de huevos en la segunda recolección del día (opcional)',
+            'recoleccion_3': 'Cantidad total de huevos en la tercera recolección del día (opcional)',
+            'huevos_rotos': 'Total de huevos rotos encontrados durante el día',
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Hacer que solo la primera recolección sea obligatoria
+        self.fields['recoleccion_1'].required = True
+        self.fields['recoleccion_2'].required = False
+        self.fields['recoleccion_3'].required = False
+        
+        # Agregar clases CSS para JavaScript
+        for field_name in ['recoleccion_1', 'recoleccion_2', 'recoleccion_3']:
+            self.fields[field_name].widget.attrs['data-recoleccion'] = 'true'
+        
+        for field_name in ['produccion_aaa', 'produccion_aa', 'produccion_a', 'produccion_b', 'produccion_c']:
+            self.fields[field_name].widget.attrs['data-clasificacion'] = 'true'
     
     def clean(self):
         cleaned_data = super().clean()
@@ -49,6 +97,39 @@ class BitacoraDiariaForm(forms.ModelForm):
         
         if mortalidad > 0 and not causa_mortalidad:
             raise ValidationError("Debe especificar la causa de mortalidad cuando hay aves muertas.")
+        
+        # Validar recolecciones
+        recoleccion_1 = cleaned_data.get('recoleccion_1', 0)
+        recoleccion_2 = cleaned_data.get('recoleccion_2', 0)
+        recoleccion_3 = cleaned_data.get('recoleccion_3', 0)
+        huevos_rotos = cleaned_data.get('huevos_rotos', 0)
+        
+        # Al menos debe haber una recolección
+        if recoleccion_1 == 0 and recoleccion_2 == 0 and recoleccion_3 == 0:
+            raise ValidationError("Debe registrar al menos una recolección de huevos.")
+        
+        # Calcular totales
+        total_recolectado = recoleccion_1 + recoleccion_2 + recoleccion_3
+        total_clasificado = (
+            cleaned_data.get('produccion_aaa', 0) +
+            cleaned_data.get('produccion_aa', 0) +
+            cleaned_data.get('produccion_a', 0) +
+            cleaned_data.get('produccion_b', 0) +
+            cleaned_data.get('produccion_c', 0)
+        )
+        
+        # Validar que el total clasificado no exceda el total recolectado
+        if total_clasificado > total_recolectado:
+            raise ValidationError(
+                f"El total de huevos clasificados ({total_clasificado}) no puede ser mayor "
+                f"al total recolectado ({total_recolectado})."
+            )
+        
+        # Validar huevos rotos
+        if huevos_rotos > total_recolectado:
+            raise ValidationError(
+                f"Los huevos rotos ({huevos_rotos}) no pueden ser más que el total recolectado ({total_recolectado})."
+            )
         
         return cleaned_data
 
@@ -368,7 +449,7 @@ class PlanVacunacionForm(forms.ModelForm):
 
 
 class BitacoraDiariaEditForm(forms.ModelForm):
-    """Formulario para editar bitácora diaria con justificación obligatoria."""
+    """Formulario para editar bitácora diaria con justificación."""
     
     justificacion = forms.CharField(
         label='Justificación de la modificación',
@@ -389,19 +470,41 @@ class BitacoraDiariaEditForm(forms.ModelForm):
     class Meta:
         model = BitacoraDiaria
         fields = [
-            'lote', 'fecha', 'semana_vida', 'produccion_aaa', 'produccion_aa', 'produccion_a',
-            'produccion_b', 'produccion_c', 'mortalidad', 'causa_mortalidad', 
-            'consumo_concentrado', 'observaciones'
+            'lote', 'fecha', 'semana_vida',
+            'recoleccion_1', 'recoleccion_2', 'recoleccion_3', 'huevos_rotos',
+            'produccion_aaa', 'produccion_aa', 'produccion_a', 'produccion_b', 'produccion_c',
+            'mortalidad', 'causa_mortalidad', 'consumo_concentrado', 'observaciones'
         ]
         widgets = {
             'fecha': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'lote': forms.Select(attrs={'class': 'form-control'}),
             'semana_vida': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'}),
-            'produccion_aaa': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
-            'produccion_aa': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
-            'produccion_a': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
-            'produccion_b': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
-            'produccion_c': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            
+            # Recolecciones
+            'recoleccion_1': forms.NumberInput(attrs={
+                'class': 'form-control recoleccion-input', 
+                'min': '0',
+                'data-recoleccion': 'true'
+            }),
+            'recoleccion_2': forms.NumberInput(attrs={
+                'class': 'form-control recoleccion-input', 
+                'min': '0',
+                'data-recoleccion': 'true'
+            }),
+            'recoleccion_3': forms.NumberInput(attrs={
+                'class': 'form-control recoleccion-input', 
+                'min': '0',
+                'data-recoleccion': 'true'
+            }),
+            'huevos_rotos': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            
+            # Clasificación
+            'produccion_aaa': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0', 'data-clasificacion': 'true'}),
+            'produccion_aa': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0', 'data-clasificacion': 'true'}),
+            'produccion_a': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0', 'data-clasificacion': 'true'}),
+            'produccion_b': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0', 'data-clasificacion': 'true'}),
+            'produccion_c': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0', 'data-clasificacion': 'true'}),
+            
             'mortalidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'causa_mortalidad': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: Enfermedad, Accidente, etc.'}),
             'consumo_concentrado': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0'}),
@@ -410,11 +513,54 @@ class BitacoraDiariaEditForm(forms.ModelForm):
     
     def clean_justificacion(self):
         justificacion = self.cleaned_data.get('justificacion', '').strip()
-        if not justificacion:
-            raise forms.ValidationError('La justificación de la modificación es obligatoria.')
         if len(justificacion) < 10:
-            raise forms.ValidationError('La justificación debe tener al menos 10 caracteres.')
+            raise ValidationError('La justificación debe tener al menos 10 caracteres.')
         return justificacion
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        # Aplicar las mismas validaciones que BitacoraDiariaForm
+        fecha = cleaned_data.get('fecha')
+        if fecha and fecha > timezone.now().date():
+            raise ValidationError("No se puede registrar información en fechas futuras.")
+        
+        mortalidad = cleaned_data.get('mortalidad', 0)
+        causa_mortalidad = cleaned_data.get('causa_mortalidad', '').strip()
+        
+        if mortalidad > 0 and not causa_mortalidad:
+            raise ValidationError("Debe especificar la causa de mortalidad cuando hay aves muertas.")
+        
+        # Validar recolecciones
+        recoleccion_1 = cleaned_data.get('recoleccion_1', 0)
+        recoleccion_2 = cleaned_data.get('recoleccion_2', 0)
+        recoleccion_3 = cleaned_data.get('recoleccion_3', 0)
+        huevos_rotos = cleaned_data.get('huevos_rotos', 0)
+        
+        if recoleccion_1 == 0 and recoleccion_2 == 0 and recoleccion_3 == 0:
+            raise ValidationError("Debe registrar al menos una recolección de huevos.")
+        
+        total_recolectado = recoleccion_1 + recoleccion_2 + recoleccion_3
+        total_clasificado = (
+            cleaned_data.get('produccion_aaa', 0) +
+            cleaned_data.get('produccion_aa', 0) +
+            cleaned_data.get('produccion_a', 0) +
+            cleaned_data.get('produccion_b', 0) +
+            cleaned_data.get('produccion_c', 0)
+        )
+        
+        if total_clasificado > total_recolectado:
+            raise ValidationError(
+                f"El total de huevos clasificados ({total_clasificado}) no puede ser mayor "
+                f"al total recolectado ({total_recolectado})."
+            )
+        
+        if huevos_rotos > total_recolectado:
+            raise ValidationError(
+                f"Los huevos rotos ({huevos_rotos}) no pueden ser más que el total recolectado ({total_recolectado})."
+            )
+        
+        return cleaned_data
 
 
 class JustificacionForm(forms.Form):

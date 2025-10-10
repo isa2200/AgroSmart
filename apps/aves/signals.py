@@ -44,6 +44,10 @@ def registrar_modificaciones(sender, instance, **kwargs):
     if not sender._meta.app_label == 'aves':
         return
     
+    # Excluir BitacoraDiaria ya que se maneja manualmente en la vista con justificación
+    if sender.__name__ == 'BitacoraDiaria':
+        return
+    
     # Solo si el objeto ya existe (es una modificación)
     if instance.pk:
         try:

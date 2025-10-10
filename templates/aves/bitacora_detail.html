@@ -95,6 +95,55 @@
 
         <div class="card mt-4">
             <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-basket-shopping me-2"></i>Recolecciones de Huevos</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <h4 class="text-primary">{{ bitacora.recoleccion_1 }}</h4>
+                            <small>Primera Recolección</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <h4 class="text-info">{{ bitacora.recoleccion_2 }}</h4>
+                            <small>Segunda Recolección</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <h4 class="text-warning">{{ bitacora.recoleccion_3 }}</h4>
+                            <small>Tercera Recolección</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <h4 class="text-success">{{ bitacora.total_recolecciones }}</h4>
+                            <small><strong>TOTAL RECOLECTADO</strong></small>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="text-center">
+                            <h4 class="text-danger">{{ bitacora.huevos_rotos }}</h4>
+                            <small>Huevos Rotos</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="text-center">
+                            <h4 class="text-dark">{{ bitacora.produccion_total }}</h4>
+                            <small><strong>HUEVOS CLASIFICADOS</strong></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-egg me-2"></i>Producción por Categoría</h5>
             </div>
             <div class="card-body">

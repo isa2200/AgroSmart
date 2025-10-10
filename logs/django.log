@@ -15847,3 +15847,192 @@ INFO 2025-10-09 23:23:12,383 basehttp 13544 3708 "GET /static/debug_toolbar/css/
 INFO 2025-10-09 23:23:12,400 basehttp 13544 3708 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
 INFO 2025-10-09 23:23:13,085 basehttp 13544 3708 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
 INFO 2025-10-09 23:27:52,444 basehttp 13544 3708 "GET /aves/reportes/produccion/exportar/?lote=&fecha_desde=2025-09-09&fecha_hasta=2025-10-09&formato=excel HTTP/1.1" 200 5706
+INFO 2025-10-10 07:32:02,408 autoreload 20372 2572 Watching for file changes with StatReloader
+INFO 2025-10-10 07:32:05,744 basehttp 20372 18516 "GET / HTTP/1.1" 200 36089
+INFO 2025-10-10 07:32:13,507 basehttp 20372 18516 "GET /aves/ HTTP/1.1" 200 53448
+INFO 2025-10-10 07:32:26,182 basehttp 20372 18516 "GET /aves/bitacora/ HTTP/1.1" 200 31023
+INFO 2025-10-10 07:32:33,177 basehttp 20372 18516 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29163
+INFO 2025-10-10 07:32:34,478 basehttp 20372 18516 "GET /aves/lotes/ HTTP/1.1" 200 35830
+INFO 2025-10-10 07:32:39,105 basehttp 20372 18516 "GET /aves/inventario-huevos/ HTTP/1.1" 200 48015
+INFO 2025-10-10 07:33:56,559 basehttp 20372 18516 "GET /aves/alertas/ HTTP/1.1" 200 51758
+INFO 2025-10-10 07:33:56,592 basehttp 20372 18516 "GET /static/aves/js/alertas.js HTTP/1.1" 304 0
+INFO 2025-10-10 07:33:57,256 basehttp 20372 18516 "GET /aves/reportes/ HTTP/1.1" 200 26235
+INFO 2025-10-10 07:33:59,432 basehttp 20372 18516 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26578
+INFO 2025-10-10 07:34:01,786 basehttp 20372 18516 "GET /aves/ HTTP/1.1" 200 53448
+INFO 2025-10-10 07:34:04,881 basehttp 20372 18516 "GET /aves/reportes/ HTTP/1.1" 200 26235
+INFO 2025-10-10 08:12:25,478 basehttp 20372 21424 "GET /aves/ HTTP/1.1" 200 53449
+INFO 2025-10-10 08:12:26,688 basehttp 20372 21424 "GET /static/img/logo-ico.ico HTTP/1.1" 304 0
+INFO 2025-10-10 08:12:41,650 basehttp 20372 21424 "GET /aves/bitacora/ HTTP/1.1" 200 31023
+INFO 2025-10-10 08:12:44,151 basehttp 20372 21424 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 34931
+INFO 2025-10-10 08:12:59,330 basehttp 20372 21424 "GET /aves/bitacora/ HTTP/1.1" 200 31023
+INFO 2025-10-10 08:13:00,602 basehttp 20372 21424 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29163
+INFO 2025-10-10 08:13:01,181 basehttp 20372 21424 "GET /aves/inventario-huevos/ HTTP/1.1" 200 48015
+INFO 2025-10-10 08:13:07,265 basehttp 20372 21424 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 49961
+INFO 2025-10-10 08:32:52,313 basehttp 20372 14956 "GET /aves/alertas/ HTTP/1.1" 200 51759
+INFO 2025-10-10 08:32:52,353 basehttp 20372 14956 "GET /static/aves/css/alertas.css HTTP/1.1" 304 0
+INFO 2025-10-10 08:32:52,353 basehttp 20372 18968 "GET /static/aves/js/alertas.js HTTP/1.1" 304 0
+INFO 2025-10-10 08:33:00,341 basehttp 20372 18968 "GET /aves/reportes/ HTTP/1.1" 200 26235
+INFO 2025-10-10 08:33:03,868 basehttp 20372 18968 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26578
+INFO 2025-10-10 09:07:10,773 autoreload 3768 1904 Watching for file changes with StatReloader
+INFO 2025-10-10 09:07:13,508 basehttp 3768 19016 "GET /aves/ HTTP/1.1" 200 53450
+INFO 2025-10-10 09:07:18,567 basehttp 3768 19016 "GET /aves/bitacora/ HTTP/1.1" 200 31023
+INFO 2025-10-10 09:07:20,422 basehttp 3768 19016 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29163
+INFO 2025-10-10 09:07:23,195 basehttp 3768 19016 "GET /aves/inventario-huevos/ HTTP/1.1" 200 48015
+INFO 2025-10-10 09:07:24,540 basehttp 3768 19016 "GET /aves/alertas/ HTTP/1.1" 200 51757
+INFO 2025-10-10 09:07:25,541 basehttp 3768 19016 "GET /aves/reportes/ HTTP/1.1" 200 26235
+INFO 2025-10-10 09:07:28,411 basehttp 3768 19016 "GET /aves/ HTTP/1.1" 200 53448
+INFO 2025-10-10 09:08:43,185 basehttp 3768 19016 "GET /aves/inventario-huevos/ HTTP/1.1" 200 48014
+INFO 2025-10-10 09:08:48,558 basehttp 3768 19016 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29163
+INFO 2025-10-10 09:08:51,123 basehttp 3768 19016 "GET /aves/bitacora/ HTTP/1.1" 200 31023
+INFO 2025-10-10 09:08:51,597 basehttp 3768 19016 "GET /aves/reportes/ HTTP/1.1" 200 26235
+INFO 2025-10-10 09:08:52,682 basehttp 3768 19016 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26578
+ERROR 2025-10-10 09:09:40,119 log 3768 19016 Internal Server Error: /aves/reportes/produccion/exportar/
+ERROR 2025-10-10 09:09:40,120 basehttp 3768 19016 "GET /aves/reportes/produccion/exportar/?&formato=pdf HTTP/1.1" 500 95
+WARNING 2025-10-10 09:09:40,260 log 3768 19016 Not Found: /favicon.ico
+WARNING 2025-10-10 09:09:40,260 basehttp 3768 19016 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-10 09:11:54,003 autoreload 3768 1904 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-10 09:11:56,647 autoreload 15316 2272 Watching for file changes with StatReloader
+INFO 2025-10-10 09:12:00,487 basehttp 15316 12036 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26579
+INFO 2025-10-10 09:12:00,532 basehttp 15316 12036 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-10 09:12:00,559 basehttp 15316 19392 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-10 09:12:00,823 basehttp 15316 19392 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-10 09:12:00,844 basehttp 15316 12036 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-10 09:12:01,240 basehttp 15316 12036 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-10 09:12:02,248 basehttp 15316 12036 "GET /aves/reportes/produccion/exportar/?&formato=pdf HTTP/1.1" 200 2435
+INFO 2025-10-10 09:14:04,521 basehttp 15316 12036 "GET /aves/bitacora/ HTTP/1.1" 200 31023
+INFO 2025-10-10 09:14:06,204 basehttp 15316 12036 "GET /aves/ HTTP/1.1" 200 53448
+INFO 2025-10-10 09:14:12,663 basehttp 15316 12036 "GET /aves/bitacora/ HTTP/1.1" 200 31023
+INFO 2025-10-10 09:14:14,711 basehttp 15316 12036 "GET /aves/bitacora/5/ HTTP/1.1" 200 49374
+INFO 2025-10-10 09:14:40,373 basehttp 15316 12036 "GET /aves/bitacora/5/editar/ HTTP/1.1" 200 37364
+INFO 2025-10-10 09:14:42,670 basehttp 15316 12036 "GET /aves/bitacora/ HTTP/1.1" 200 31023
+INFO 2025-10-10 09:14:43,512 basehttp 15316 12036 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29163
+INFO 2025-10-10 09:14:44,738 basehttp 15316 12036 "GET /aves/lotes/ HTTP/1.1" 200 35831
+INFO 2025-10-10 09:14:48,606 basehttp 15316 12036 "GET /aves/inventario-huevos/ HTTP/1.1" 200 48014
+INFO 2025-10-10 09:14:52,075 basehttp 15316 12036 "GET /aves/movimiento-huevos/nuevo/ HTTP/1.1" 200 49961
+INFO 2025-10-10 09:15:17,683 basehttp 15316 12036 "GET /aves/inventario-huevos/ HTTP/1.1" 200 48014
+INFO 2025-10-10 09:15:21,081 basehttp 15316 12036 "GET /aves/movimiento-huevos/5/ HTTP/1.1" 200 24125
+INFO 2025-10-10 09:15:26,508 basehttp 15316 12036 "GET /aves/inventario-huevos/ HTTP/1.1" 200 48013
+INFO 2025-10-10 09:15:27,486 basehttp 15316 12036 "GET /aves/alertas/ HTTP/1.1" 200 51757
+INFO 2025-10-10 09:15:52,566 basehttp 15316 12036 "GET /aves/reportes/ HTTP/1.1" 200 26235
+INFO 2025-10-10 09:15:57,380 basehttp 15316 12036 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26578
+INFO 2025-10-10 09:18:14,521 basehttp 15316 12036 "GET /aves/reportes/ HTTP/1.1" 200 26235
+INFO 2025-10-10 09:19:09,025 basehttp 15316 12036 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26578
+INFO 2025-10-10 09:19:15,727 basehttp 15316 12036 "GET /aves/reportes/ HTTP/1.1" 200 26235
+INFO 2025-10-10 09:28:13,552 basehttp 15316 10016 "GET /aves/bitacora/ HTTP/1.1" 200 31023
+INFO 2025-10-10 09:28:14,686 basehttp 15316 10016 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 34930
+INFO 2025-10-10 09:37:33,963 autoreload 15316 2272 C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py changed, reloading.
+INFO 2025-10-10 09:37:35,488 autoreload 16876 1256 Watching for file changes with StatReloader
+INFO 2025-10-10 09:38:09,509 autoreload 16876 1256 C:\Users\bp877\TRAE\AgroSmart\apps\aves\forms.py changed, reloading.
+INFO 2025-10-10 09:38:11,261 autoreload 12000 7380 Watching for file changes with StatReloader
+INFO 2025-10-10 09:38:39,030 autoreload 12000 7380 C:\Users\bp877\TRAE\AgroSmart\apps\aves\forms.py changed, reloading.
+INFO 2025-10-10 09:38:40,604 autoreload 6228 12388 Watching for file changes with StatReloader
+INFO 2025-10-10 09:42:17,944 autoreload 15980 18264 Watching for file changes with StatReloader
+INFO 2025-10-10 09:43:08,462 basehttp 15980 20196 "GET / HTTP/1.1" 200 35697
+INFO 2025-10-10 09:43:15,581 basehttp 15980 20196 "GET /aves/ HTTP/1.1" 200 53448
+INFO 2025-10-10 09:43:22,622 basehttp 15980 20196 "GET /aves/bitacora/ HTTP/1.1" 200 31023
+INFO 2025-10-10 09:43:24,044 basehttp 15980 20196 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 35160
+INFO 2025-10-10 09:47:16,912 basehttp 15980 20196 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 41539
+INFO 2025-10-10 09:47:16,931 basehttp 15980 14036 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-10 09:47:16,931 basehttp 15980 20196 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-10 09:47:17,070 basehttp 15980 14036 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-10 09:47:17,076 basehttp 15980 20196 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-10 09:47:17,098 basehttp 15980 20196 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+ERROR 2025-10-10 09:52:11,997 log 15980 20196 Internal Server Error: /aves/bitacora/nueva/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 118, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 78, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py", line 334, in bitacora_diaria_create
+    bitacora.save()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\models.py", line 191, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\core\models.py", line 25, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\base.py", line 814, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\base.py", line 892, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\dispatch\dispatcher.py", line 177, in send
+    (receiver, receiver(signal=self, sender=sender, **named))
+               ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\aves\signals.py", line 17, in procesar_bitacora_diaria
+    generar_alertas(instance)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^
+TypeError: generar_alertas() takes 0 positional arguments but 1 was given
+ERROR 2025-10-10 09:52:12,066 basehttp 15980 20196 "POST /aves/bitacora/nueva/ HTTP/1.1" 500 129297
+WARNING 2025-10-10 09:52:12,263 log 15980 20196 Not Found: /favicon.ico
+WARNING 2025-10-10 09:52:12,263 basehttp 15980 20196 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-10 09:54:35,400 autoreload 15980 18264 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-10 09:54:36,810 autoreload 20120 2496 Watching for file changes with StatReloader
+INFO 2025-10-10 09:54:49,447 basehttp 20120 6524 "POST /aves/bitacora/nueva/ HTTP/1.1" 200 41890
+INFO 2025-10-10 09:57:26,973 autoreload 20120 2496 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-10 09:57:28,424 autoreload 17480 16828 Watching for file changes with StatReloader
+INFO 2025-10-10 09:57:33,074 basehttp 17480 4576 "POST /aves/bitacora/nueva/ HTTP/1.1" 200 41901
+INFO 2025-10-10 09:57:33,103 basehttp 17480 7872 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-10 09:57:33,103 basehttp 17480 4576 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-10 09:57:33,241 basehttp 17480 7872 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-10 09:57:33,243 basehttp 17480 4576 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-10 09:57:33,274 basehttp 17480 4576 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-10 09:57:46,008 basehttp 17480 4576 "GET /aves/bitacora/ HTTP/1.1" 200 32619
+INFO 2025-10-10 09:57:50,250 basehttp 17480 4576 "GET /aves/bitacora/6/ HTTP/1.1" 200 25837
+INFO 2025-10-10 10:00:25,123 basehttp 17480 4576 "GET /aves/bitacora/6/ HTTP/1.1" 200 27907
+INFO 2025-10-10 10:00:25,148 basehttp 17480 7872 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-10 10:00:25,148 basehttp 17480 4576 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-10 10:00:25,429 basehttp 17480 7872 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-10 10:00:25,443 basehttp 17480 7872 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-10 10:00:25,733 basehttp 17480 7872 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-10 10:00:50,816 basehttp 17480 20024 "GET /aves/bitacora/6/editar/ HTTP/1.1" 200 43862
+INFO 2025-10-10 10:01:51,674 basehttp 17480 20024 "POST /aves/bitacora/6/editar/ HTTP/1.1" 302 0
+INFO 2025-10-10 10:01:51,737 basehttp 17480 20024 "GET /aves/bitacora/6/ HTTP/1.1" 200 60382
+INFO 2025-10-10 10:04:57,619 autoreload 17480 16828 C:\Users\bp877\TRAE\AgroSmart\apps\aves\signals.py changed, reloading.
+INFO 2025-10-10 10:04:59,149 autoreload 13772 19312 Watching for file changes with StatReloader
+INFO 2025-10-10 10:06:11,374 autoreload 19760 15096 Watching for file changes with StatReloader
+INFO 2025-10-10 10:06:13,005 basehttp 19760 20224 "GET / HTTP/1.1" 200 35995
+INFO 2025-10-10 10:06:19,491 basehttp 19760 20224 "GET /aves/ HTTP/1.1" 200 53465
+INFO 2025-10-10 10:06:21,688 basehttp 19760 20224 "GET /aves/inventario-huevos/ HTTP/1.1" 200 48013
+INFO 2025-10-10 10:06:25,009 basehttp 19760 20224 "GET /aves/bitacora/ HTTP/1.1" 200 32619
+INFO 2025-10-10 10:06:27,264 basehttp 19760 20224 "GET /aves/bitacora/6/ HTTP/1.1" 200 60382
+INFO 2025-10-10 10:06:35,513 basehttp 19760 20224 "GET /aves/bitacora/6/editar/ HTTP/1.1" 200 43862
+INFO 2025-10-10 10:06:53,964 basehttp 19760 20224 "POST /aves/bitacora/6/editar/ HTTP/1.1" 302 0
+INFO 2025-10-10 10:06:54,021 basehttp 19760 20224 "GET /aves/bitacora/6/ HTTP/1.1" 200 64092
+INFO 2025-10-10 10:08:55,338 autoreload 19760 15096 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-10 10:08:56,641 autoreload 18692 2188 Watching for file changes with StatReloader
+INFO 2025-10-10 10:09:08,419 basehttp 18692 18496 "GET /aves/bitacora/6/ HTTP/1.1" 200 64093
+INFO 2025-10-10 10:09:08,440 basehttp 18692 14168 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-10 10:09:08,441 basehttp 18692 18496 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-10 10:09:08,655 basehttp 18692 14168 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-10 10:09:08,661 basehttp 18692 14168 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-10 10:09:09,078 basehttp 18692 14168 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-10 10:09:11,995 basehttp 18692 14168 "GET /aves/bitacora/6/editar/ HTTP/1.1" 200 44161
+INFO 2025-10-10 10:09:31,800 basehttp 18692 14168 "POST /aves/bitacora/6/editar/ HTTP/1.1" 302 0
+INFO 2025-10-10 10:09:31,857 basehttp 18692 14168 "GET /aves/bitacora/6/ HTTP/1.1" 200 67822
+INFO 2025-10-10 10:10:44,022 basehttp 18692 14168 "GET /aves/bitacora/ HTTP/1.1" 200 32619
+INFO 2025-10-10 10:10:46,273 basehttp 18692 14168 "GET /aves/bitacora/nueva/ HTTP/1.1" 200 41838
+INFO 2025-10-10 10:10:54,980 basehttp 18692 14168 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29163
+INFO 2025-10-10 10:10:56,160 basehttp 18692 14168 "GET /aves/lotes/ HTTP/1.1" 200 35829

@@ -19,22 +19,64 @@ from openpyxl.chart import BarChart, LineChart, Reference
 from .models import AlertaSistema, InventarioHuevos, LoteAves
 
 
-def generar_alertas():
+def generar_alertas(bitacora_instance=None):
     """Genera alertas automáticas del sistema."""
     alertas_generadas = []
     
-    # Alerta por baja producción
-    lotes_activos = LoteAves.objects.filter(is_active=True, estado='postura')
-    for lote in lotes_activos:
-        # Lógica para detectar baja producción
-        pass
+    if bitacora_instance:
+        # Alerta por baja producción basada en la bitácora
+        lote = bitacora_instance.lote
+        total_produccion = (
+            bitacora_instance.produccion_aaa + 
+            bitacora_instance.produccion_aa + 
+            bitacora_instance.produccion_a + 
+            bitacora_instance.produccion_b + 
+            bitacora_instance.produccion_c
+        )
+        
+        # Ejemplo: alerta si la producción es muy baja
+        if total_produccion < 100:  # Ajustar según criterios
+            try:
+                alerta, created = AlertaSistema.objects.get_or_create(
+                    tipo='baja_produccion',
+                    lote=lote,
+                    fecha=bitacora_instance.fecha,
+                    defaults={
+                        'mensaje': f'Baja producción detectada en lote {lote.nombre}: {total_produccion} huevos',
+                        'nivel': 'warning',
+                        'activa': True
+                    }
+                )
+                if created:
+                    alertas_generadas.append(alerta)
+            except Exception:
+                pass
+        
+        # Alerta por alta mortalidad
+        if bitacora_instance.mortalidad > 5:  # Ajustar según criterios
+            try:
+                alerta, created = AlertaSistema.objects.get_or_create(
+                    tipo='alta_mortalidad',
+                    lote=lote,
+                    fecha=bitacora_instance.fecha,
+                    defaults={
+                        'mensaje': f'Alta mortalidad detectada en lote {lote.nombre}: {bitacora_instance.mortalidad} aves',
+                        'nivel': 'danger',
+                        'activa': True
+                    }
+                )
+                if created:
+                    alertas_generadas.append(alerta)
+            except Exception:
+                pass
     
     return alertas_generadas
 
 
-def actualizar_inventario_huevos(lote, produccion_data):
+def actualizar_inventario_huevos(bitacora_instance):
     """Actualiza el inventario de huevos automáticamente."""
     try:
+        lote = bitacora_instance.lote
         inventario, created = InventarioHuevos.objects.get_or_create(
             lote=lote,
             defaults={
@@ -47,12 +89,12 @@ def actualizar_inventario_huevos(lote, produccion_data):
             }
         )
         
-        # Actualizar stocks
-        inventario.stock_aaa += produccion_data.get('produccion_aaa', 0)
-        inventario.stock_aa += produccion_data.get('produccion_aa', 0)
-        inventario.stock_a += produccion_data.get('produccion_a', 0)
-        inventario.stock_b += produccion_data.get('produccion_b', 0)
-        inventario.stock_c += produccion_data.get('produccion_c', 0)
+        # Actualizar stocks con la producción de la bitácora
+        inventario.stock_aaa += bitacora_instance.produccion_aaa
+        inventario.stock_aa += bitacora_instance.produccion_aa
+        inventario.stock_a += bitacora_instance.produccion_a
+        inventario.stock_b += bitacora_instance.produccion_b
+        inventario.stock_c += bitacora_instance.produccion_c
         inventario.save()
         
         return True
@@ -100,24 +142,36 @@ def exportar_reporte_pdf(tipo_reporte, datos, estadisticas):
             ('GRID', (0, 0), (-1, -1), 1, colors.black)
         ]))
         
+        story.append(Paragraph("Resumen Estadístico", styles['Heading2']))
         story.append(stats_table)
         story.append(Spacer(1, 20))
         
         # Datos detallados
         if datos:
-            detail_data = [['Fecha', 'Lote', 'Producción AAA', 'Producción AA', 'Producción A', 'Mortalidad']]
-            for bitacora in datos[:50]:  # Limitar a 50 registros
-                detail_data.append([
+            story.append(Paragraph("Datos Detallados", styles['Heading2']))
+            
+            # Preparar datos para la tabla
+            table_data = [['Fecha', 'Lote', 'AAA', 'AA', 'A', 'B', 'C', 'Total', 'Mortalidad']]
+            
+            for bitacora in datos:
+                total_prod = (bitacora.produccion_aaa + bitacora.produccion_aa + 
+                            bitacora.produccion_a + bitacora.produccion_b + bitacora.produccion_c)
+                
+                table_data.append([
                     bitacora.fecha.strftime('%d/%m/%Y'),
-                    bitacora.lote.codigo,
-                    str(bitacora.produccion_aaa or 0),
-                    str(bitacora.produccion_aa or 0),
-                    str(bitacora.produccion_a or 0),
-                    str(bitacora.mortalidad or 0),
+                    str(bitacora.lote.nombre),
+                    str(bitacora.produccion_aaa),
+                    str(bitacora.produccion_aa),
+                    str(bitacora.produccion_a),
+                    str(bitacora.produccion_b),
+                    str(bitacora.produccion_c),
+                    str(total_prod),
+                    str(bitacora.mortalidad)
                 ])
             
-            detail_table = Table(detail_data)
-            detail_table.setStyle(TableStyle([
+            # Crear tabla
+            data_table = Table(table_data)
+            data_table.setStyle(TableStyle([
                 ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
                 ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
@@ -125,16 +179,19 @@ def exportar_reporte_pdf(tipo_reporte, datos, estadisticas):
                 ('FONTSIZE', (0, 0), (-1, 0), 10),
                 ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
                 ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-                ('GRID', (0, 0), (-1, -1), 1, colors.black)
+                ('GRID', (0, 0), (-1, -1), 1, colors.black),
+                ('FONTSIZE', (0, 1), (-1, -1), 8),
             ]))
             
-            story.append(detail_table)
+            story.append(data_table)
     
+    # Construir PDF
     doc.build(story)
     buffer.seek(0)
     
+    # Crear respuesta HTTP
     response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="reporte_{tipo_reporte}_{timezone.now().strftime("%Y%m%d")}.pdf"'
+    response['Content-Disposition'] = f'attachment; filename="reporte_{tipo_reporte}_{timezone.now().strftime("%Y%m%d_%H%M")}.pdf"'
     
     return response
 
@@ -142,119 +199,113 @@ def exportar_reporte_pdf(tipo_reporte, datos, estadisticas):
 def exportar_reporte_excel(tipo_reporte, datos, estadisticas, filtros=None):
     """Exporta reportes a Excel con formato mejorado."""
     try:
-        from openpyxl.cell.cell import MergedCell
-        
+        # Crear workbook y worksheet
         wb = openpyxl.Workbook()
         ws = wb.active
         ws.title = f"Reporte {tipo_reporte.title()}"
         
         # Estilos
-        header_font = Font(bold=True, color="FFFFFF")
-        header_fill = PatternFill(start_color="366092", end_color="366092", fill_type="solid")
-        center_alignment = Alignment(horizontal="center", vertical="center")
+        title_font = Font(name='Arial', size=16, bold=True, color='FFFFFF')
+        header_font = Font(name='Arial', size=12, bold=True, color='FFFFFF')
+        data_font = Font(name='Arial', size=10)
         
-        # Título
-        ws['A1'] = f"Reporte de {tipo_reporte.title()}"
-        ws['A1'].font = Font(bold=True, size=16)
-        ws.merge_cells('A1:F1')
+        title_fill = PatternFill(start_color='2E7D32', end_color='2E7D32', fill_type='solid')
+        header_fill = PatternFill(start_color='4CAF50', end_color='4CAF50', fill_type='solid')
+        
+        center_alignment = Alignment(horizontal='center', vertical='center')
+        
+        # Título principal
+        ws.merge_cells('A1:I1')
+        ws['A1'] = f'REPORTE DE {tipo_reporte.upper()}'
+        ws['A1'].font = title_font
+        ws['A1'].fill = title_fill
+        ws['A1'].alignment = center_alignment
         
         # Fecha de generación
-        ws['A2'] = f"Generado el: {timezone.now().strftime('%d/%m/%Y %H:%M')}"
-        ws.merge_cells('A2:F2')
+        ws.merge_cells('A2:I2')
+        ws['A2'] = f'Generado el: {timezone.now().strftime("%d/%m/%Y %H:%M")}'
+        ws['A2'].font = Font(name='Arial', size=10, italic=True)
+        ws['A2'].alignment = center_alignment
         
-        # Filtros aplicados
-        row = 4
-        if filtros:
-            ws[f'A{row}'] = "Filtros aplicados:"
-            ws[f'A{row}'].font = Font(bold=True)
-            row += 1
-            for key, value in filtros.items():
-                if value:
-                    ws[f'A{row}'] = f"{key.replace('_', ' ').title()}: {value}"
-                    row += 1
-            row += 1
+        # Resumen Estadístico
+        ws.merge_cells('A4:B4')
+        ws['A4'] = 'RESUMEN ESTADÍSTICO'
+        ws['A4'].font = header_font
+        ws['A4'].fill = header_fill
+        ws['A4'].alignment = center_alignment
         
-        if tipo_reporte == 'produccion':
-            # Estadísticas resumen
-            ws[f'A{row}'] = "Resumen Estadístico"
-            ws[f'A{row}'].font = Font(bold=True, size=14)
-            row += 2
-            
-            stats_headers = ['Estadística', 'Valor']
-            for col, header in enumerate(stats_headers, 1):
-                cell = ws.cell(row=row, column=col, value=header)
-                cell.font = header_font
-                cell.fill = header_fill
-                cell.alignment = center_alignment
-            
-            row += 1
-            # Corregido para manejar valores None
-            total_prod = estadisticas.get('total_produccion', 0) or 0
-            total_mort = estadisticas.get('total_mortalidad', 0) or 0
-            consumo_prom = estadisticas.get('consumo_promedio', 0) or 0
-            
-            stats_data = [
-                ['Total Producción', f"{total_prod:,} huevos"],
-                ['Total Mortalidad', f"{total_mort:,} aves"],
-                ['Consumo Promedio', f"{consumo_prom:.2f} kg/día"],
-            ]
-            
-            for stat_row in stats_data:
-                for col, value in enumerate(stat_row, 1):
-                    ws.cell(row=row, column=col, value=value)
-                row += 1
-            
-            row += 2
-            
-            # Datos detallados
-            ws[f'A{row}'] = "Datos Detallados"
-            ws[f'A{row}'].font = Font(bold=True, size=14)
-            row += 2
-            
-            headers = ['Fecha', 'Lote', 'Galpón', 'Producción AAA', 'Producción AA', 'Producción A', 'Producción B', 'Producción C', 'Total Huevos', 'Mortalidad', 'Consumo']
-            for col, header in enumerate(headers, 1):
-                cell = ws.cell(row=row, column=col, value=header)
-                cell.font = header_font
-                cell.fill = header_fill
-                cell.alignment = center_alignment
-            
-            row += 1
-            for bitacora in datos:
-                try:
-                    data_row = [
-                        bitacora.fecha.strftime('%d/%m/%Y'),
-                        str(bitacora.lote.codigo),
-                        str(bitacora.lote.galpon),
-                        int(bitacora.produccion_aaa or 0),
-                        int(bitacora.produccion_aa or 0),
-                        int(bitacora.produccion_a or 0),
-                        int(bitacora.produccion_b or 0),
-                        int(bitacora.produccion_c or 0),
-                        int((bitacora.produccion_aaa or 0) + (bitacora.produccion_aa or 0) + (bitacora.produccion_a or 0) + (bitacora.produccion_b or 0) + (bitacora.produccion_c or 0)),
-                        int(bitacora.mortalidad or 0),
-                        float(bitacora.consumo_concentrado or 0),
-                    ]
-                    for col, value in enumerate(data_row, 1):
-                        ws.cell(row=row, column=col, value=value)
-                    row += 1
-                except Exception as e:
-                    # Si hay error con una fila, continuar con la siguiente
-                    print(f"Error procesando bitácora {bitacora.id}: {e}")
-                    continue
+        # Estadísticas
+        stats_row = 5
+        ws[f'A{stats_row}'] = 'Total Producción:'
+        ws[f'B{stats_row}'] = f"{estadisticas.get('total_produccion', 0):,} huevos"
         
-        # Ajustar ancho de columnas - corregido para manejar MergedCell
+        stats_row += 1
+        ws[f'A{stats_row}'] = 'Total Mortalidad:'
+        ws[f'B{stats_row}'] = f"{estadisticas.get('total_mortalidad', 0):,} aves"
+        
+        stats_row += 1
+        ws[f'A{stats_row}'] = 'Consumo Promedio:'
+        ws[f'B{stats_row}'] = f"{estadisticas.get('consumo_promedio', 0):.2f} kg/día"
+        
+        # Datos Detallados
+        data_start_row = stats_row + 3
+        ws.merge_cells(f'A{data_start_row}:I{data_start_row}')
+        ws[f'A{data_start_row}'] = 'DATOS DETALLADOS'
+        ws[f'A{data_start_row}'].font = header_font
+        ws[f'A{data_start_row}'].fill = header_fill
+        ws[f'A{data_start_row}'].alignment = center_alignment
+        
+        # Encabezados de datos
+        headers_row = data_start_row + 1
+        headers = ['Fecha', 'Lote', 'AAA', 'AA', 'A', 'B', 'C', 'Total', 'Mortalidad']
+        
+        for col, header in enumerate(headers, 1):
+            cell = ws.cell(row=headers_row, column=col)
+            cell.value = header
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.alignment = center_alignment
+        
+        # Datos
+        if datos:
+            for row_idx, bitacora in enumerate(datos, headers_row + 1):
+                total_prod = (bitacora.produccion_aaa + bitacora.produccion_aa + 
+                            bitacora.produccion_a + bitacora.produccion_b + bitacora.produccion_c)
+                
+                row_data = [
+                    bitacora.fecha.strftime('%d/%m/%Y'),
+                    bitacora.lote.nombre,
+                    bitacora.produccion_aaa,
+                    bitacora.produccion_aa,
+                    bitacora.produccion_a,
+                    bitacora.produccion_b,
+                    bitacora.produccion_c,
+                    total_prod,
+                    bitacora.mortalidad
+                ]
+                
+                for col_idx, value in enumerate(row_data, 1):
+                    cell = ws.cell(row=row_idx, column=col_idx)
+                    cell.value = value
+                    cell.font = data_font
+                    cell.alignment = center_alignment
+        
+        # Ajustar ancho de columnas
+        from openpyxl.utils import get_column_letter
+        from openpyxl.cell import MergedCell
+        
         for col_num in range(1, ws.max_column + 1):
             max_length = 0
-            column_letter = openpyxl.utils.get_column_letter(col_num)
+            column_letter = get_column_letter(col_num)
             
-            for row_num in range(1, ws.max_row + 1):
-                cell = ws.cell(row=row_num, column=col_num)
+            for row in ws[column_letter]:
                 # Saltar celdas combinadas
-                if isinstance(cell, MergedCell):
+                if isinstance(row, MergedCell):
                     continue
+                    
                 try:
-                    if cell.value and len(str(cell.value)) > max_length:
-                        max_length = len(str(cell.value))
+                    if len(str(row.value)) > max_length:
+                        max_length = len(str(row.value))
                 except:
                     pass
             
@@ -266,6 +317,7 @@ def exportar_reporte_excel(tipo_reporte, datos, estadisticas, filtros=None):
         wb.save(buffer)
         buffer.seek(0)
         
+        # Crear respuesta HTTP
         response = HttpResponse(
             buffer.getvalue(),
             content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -274,9 +326,6 @@ def exportar_reporte_excel(tipo_reporte, datos, estadisticas, filtros=None):
         
         return response
         
-    except ImportError as e:
-        from django.http import HttpResponseServerError
-        return HttpResponseServerError(f"openpyxl no está instalado. Error: {str(e)}")
     except Exception as e:
         from django.http import HttpResponseServerError
         import traceback

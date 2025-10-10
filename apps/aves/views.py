@@ -329,20 +329,41 @@ def bitacora_diaria_create(request):
     if request.method == 'POST':
         form = BitacoraDiariaForm(request.POST)
         if form.is_valid():
-            bitacora = form.save(commit=False)
-            bitacora.usuario_registro = request.user
-            bitacora.save()
-            
-            # Actualizar inventario de huevos
-            actualizar_inventario_huevos(bitacora)
-            
-            # Generar alertas automáticas
-            generar_alertas(bitacora)
-            
-            messages.success(request, 'Bitácora diaria registrada exitosamente.')
-            return redirect('aves:bitacora_list')
+            try:
+                bitacora = form.save(commit=False)
+                bitacora.usuario_registro = request.user
+                bitacora.save()
+                
+                # Actualizar inventario de huevos
+                actualizar_inventario_huevos(bitacora)
+                
+                # Generar alertas automáticas
+                generar_alertas(bitacora)
+                
+                messages.success(request, 'Bitácora diaria registrada exitosamente.')
+                return redirect('aves:bitacora_list')
+            except Exception as e:
+                messages.error(request, f'Error al guardar la bitácora: {str(e)}')
         else:
-            messages.error(request, 'Error al registrar la bitácora. Verifique los datos.')
+            # Mostrar errores específicos del formulario
+            error_messages = []
+            
+            # Errores de campos específicos
+            for field, errors in form.errors.items():
+                if field == '__all__':
+                    for error in errors:
+                        error_messages.append(f"Error general: {error}")
+                else:
+                    field_label = form.fields[field].label or field
+                    for error in errors:
+                        error_messages.append(f"{field_label}: {error}")
+            
+            # Mostrar todos los errores
+            if error_messages:
+                for error_msg in error_messages:
+                    messages.error(request, error_msg)
+            else:
+                messages.error(request, 'Error al registrar la bitácora. Verifique los datos.')
     else:
         form = BitacoraDiariaForm()
     
@@ -1242,7 +1263,7 @@ def exportar_reporte_produccion(request):
         if formato == 'excel':
             return exportar_reporte_excel('produccion', bitacoras, stats, filtros)
         elif formato == 'pdf':
-            return exportar_reporte_pdf('produccion', bitacoras, stats, filtros)
+            return exportar_reporte_pdf('produccion', bitacoras, stats)
         else:
             return HttpResponseServerError("Formato no válido")
             
@@ -1278,6 +1299,17 @@ def bitacora_edit(request, pk):
     bitacora = get_object_or_404(BitacoraDiaria, pk=pk)
     
     if request.method == 'POST':
+        # CAPTURAR VALORES ANTERIORES ANTES DE VALIDAR EL FORMULARIO
+        valores_anteriores_originales = {}
+        for field in BitacoraDiariaEditForm._meta.fields:
+            if field != 'justificacion':  # Excluir justificación
+                valor = getattr(bitacora, field)
+                # Convertir objetos date a string para JSON serialization
+                if hasattr(valor, 'isoformat'):
+                    valores_anteriores_originales[field] = valor.isoformat()
+                else:
+                    valores_anteriores_originales[field] = valor
+        
         form = BitacoraDiariaEditForm(request.POST, instance=bitacora)
         
         if form.is_valid():
@@ -1288,21 +1320,18 @@ def bitacora_edit(request, pk):
                 messages.info(request, 'No se detectaron cambios en la bitácora.')
                 return redirect('aves:bitacora_detail', pk=bitacora.id)
             
-            # Registrar modificación antes de guardar
+            # Preparar valores para el registro de modificación
             valores_anteriores = {}
             valores_nuevos = {}
             
             for field in changed_data:
-                valor_anterior = getattr(bitacora, field)
-                valor_nuevo = form.cleaned_data[field]
+                # Usar los valores originales capturados antes de la validación
+                valores_anteriores[field] = valores_anteriores_originales.get(field)
                 
-                # Convertir objetos date a string para JSON serialization
-                if hasattr(valor_anterior, 'isoformat'):
-                    valor_anterior = valor_anterior.isoformat()
+                # Obtener el valor nuevo del formulario
+                valor_nuevo = form.cleaned_data[field]
                 if hasattr(valor_nuevo, 'isoformat'):
                     valor_nuevo = valor_nuevo.isoformat()
-                
-                valores_anteriores[field] = valor_anterior
                 valores_nuevos[field] = valor_nuevo
             
             bitacora_actualizada = form.save()
