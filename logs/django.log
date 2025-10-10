@@ -15728,3 +15728,122 @@ INFO 2025-10-09 22:30:41,570 basehttp 21348 18212 "GET /static/img/logo-ico.ico 
 INFO 2025-10-09 22:30:47,943 basehttp 21348 18212 "GET /aves/inventario-huevos/ HTTP/1.1" 200 48013
 INFO 2025-10-09 22:30:49,867 basehttp 21348 18212 "GET /aves/movimiento-huevos/2/ HTTP/1.1" 200 24122
 INFO 2025-10-09 22:30:55,567 basehttp 21348 18212 "GET /aves/inventario-huevos/ HTTP/1.1" 200 48013
+INFO 2025-10-09 22:31:07,847 basehttp 21348 18212 "GET /aves/alertas/ HTTP/1.1" 200 52195
+INFO 2025-10-09 22:31:38,955 basehttp 21348 18212 "GET /aves/alertas/ HTTP/1.1" 200 52195
+INFO 2025-10-09 22:32:10,061 basehttp 21348 18212 "GET /aves/alertas/ HTTP/1.1" 200 52195
+INFO 2025-10-09 22:32:41,165 basehttp 21348 18212 "GET /aves/alertas/ HTTP/1.1" 200 52195
+INFO 2025-10-09 22:33:12,271 basehttp 21348 18212 "GET /aves/alertas/ HTTP/1.1" 200 52195
+INFO 2025-10-09 22:34:10,981 basehttp 21348 18212 "GET /aves/alertas/ HTTP/1.1" 200 52195
+INFO 2025-10-09 22:34:42,097 basehttp 21348 18212 "GET /aves/alertas/ HTTP/1.1" 200 52195
+INFO 2025-10-09 22:35:13,202 basehttp 21348 18212 "GET /aves/alertas/ HTTP/1.1" 200 52195
+INFO 2025-10-09 22:35:44,325 basehttp 21348 18212 "GET /aves/alertas/ HTTP/1.1" 200 52361
+INFO 2025-10-09 22:36:15,442 basehttp 21348 18212 "GET /aves/alertas/ HTTP/1.1" 200 52361
+INFO 2025-10-09 22:36:46,536 basehttp 21348 18212 "GET /aves/alertas/ HTTP/1.1" 200 52361
+INFO 2025-10-09 22:37:17,654 basehttp 21348 18212 "GET /aves/alertas/ HTTP/1.1" 200 52361
+INFO 2025-10-09 22:37:37,253 autoreload 21348 3064 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-09 22:37:38,441 autoreload 21084 13496 Watching for file changes with StatReloader
+INFO 2025-10-09 22:37:49,025 basehttp 21084 6976 "GET /aves/alertas/ HTTP/1.1" 200 52362
+INFO 2025-10-09 22:38:20,140 basehttp 21084 6976 "GET /aves/alertas/ HTTP/1.1" 200 52361
+INFO 2025-10-09 22:38:51,253 basehttp 21084 6976 "GET /aves/alertas/ HTTP/1.1" 200 52361
+INFO 2025-10-09 22:39:22,410 basehttp 21084 6976 "GET /aves/alertas/ HTTP/1.1" 200 52361
+INFO 2025-10-09 22:39:53,528 basehttp 21084 6976 "GET /aves/alertas/ HTTP/1.1" 200 52361
+INFO 2025-10-09 22:40:13,138 basehttp 21084 6976 "GET /aves/alertas/ HTTP/1.1" 200 52361
+INFO 2025-10-09 22:40:13,162 basehttp 21084 6976 "GET /static/aves/css/alertas.css HTTP/1.1" 200 3425
+INFO 2025-10-09 22:40:13,163 basehttp 21084 3036 "GET /static/aves/js/alertas.js HTTP/1.1" 200 15478
+INFO 2025-10-09 22:40:13,164 basehttp 21084 3164 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:40:13,165 basehttp 21084 13484 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:40:13,589 basehttp 21084 13484 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 22:40:13,608 basehttp 21084 13484 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 22:40:14,016 basehttp 21084 13484 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-09 22:40:44,680 basehttp 21084 13484 "GET /aves/alertas/ HTTP/1.1" 200 52361
+INFO 2025-10-09 22:40:44,697 basehttp 21084 13484 "GET /static/aves/js/alertas.js HTTP/1.1" 304 0
+INFO 2025-10-09 22:41:15,824 basehttp 21084 13484 "GET /aves/alertas/ HTTP/1.1" 200 51757
+INFO 2025-10-09 22:41:15,844 basehttp 21084 13484 "GET /static/aves/js/alertas.js HTTP/1.1" 304 0
+INFO 2025-10-09 22:41:19,547 basehttp 21084 13484 "GET /aves/alertas/ HTTP/1.1" 200 51757
+INFO 2025-10-09 22:41:19,569 basehttp 21084 13484 "GET /static/aves/css/alertas.css HTTP/1.1" 200 3425
+INFO 2025-10-09 22:41:19,570 basehttp 21084 3036 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:41:19,571 basehttp 21084 3164 "GET /static/aves/js/alertas.js HTTP/1.1" 200 15478
+INFO 2025-10-09 22:41:19,571 basehttp 21084 6976 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:41:19,839 basehttp 21084 6976 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 22:41:19,846 basehttp 21084 6976 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 22:41:20,372 basehttp 21084 6976 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-09 22:41:50,912 basehttp 21084 6976 "GET /aves/alertas/ HTTP/1.1" 200 51757
+INFO 2025-10-09 22:41:50,932 basehttp 21084 6976 "GET /static/aves/js/alertas.js HTTP/1.1" 304 0
+INFO 2025-10-09 22:51:32,404 basehttp 21084 6320 "GET /aves/alertas/ HTTP/1.1" 200 51757
+INFO 2025-10-09 22:51:32,427 basehttp 21084 6320 "GET /static/aves/css/alertas.css HTTP/1.1" 200 3425
+INFO 2025-10-09 22:51:32,428 basehttp 21084 14912 "GET /static/aves/js/alertas.js HTTP/1.1" 200 15478
+INFO 2025-10-09 22:51:32,429 basehttp 21084 6548 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 22:51:32,429 basehttp 21084 21268 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 22:51:34,189 basehttp 21084 21268 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 22:51:34,197 basehttp 21084 21268 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 22:51:34,932 basehttp 21084 21268 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-09 22:51:40,405 basehttp 21084 21268 "GET /aves/reportes/ HTTP/1.1" 200 26235
+INFO 2025-10-09 22:51:41,867 basehttp 21084 21268 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26205
+INFO 2025-10-09 22:58:35,034 autoreload 21084 13496 C:\Users\bp877\TRAE\AgroSmart\apps\aves\urls.py changed, reloading.
+INFO 2025-10-09 22:58:36,435 autoreload 20384 22084 Watching for file changes with StatReloader
+INFO 2025-10-09 22:59:31,950 autoreload 20384 22084 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-09 22:59:33,237 autoreload 17588 1380 Watching for file changes with StatReloader
+INFO 2025-10-09 23:00:12,223 autoreload 17588 1380 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-09 23:00:13,489 autoreload 4840 16784 Watching for file changes with StatReloader
+INFO 2025-10-09 23:00:43,635 basehttp 4840 2352 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26579
+INFO 2025-10-09 23:00:43,657 basehttp 4840 20012 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 23:00:43,657 basehttp 4840 2352 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 23:00:44,280 basehttp 4840 20012 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 23:00:44,298 basehttp 4840 20012 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 23:00:44,800 basehttp 4840 20012 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-09 23:00:47,879 basehttp 4840 20012 "GET /aves/reportes/produccion/exportar/?&formato=excel HTTP/1.1" 302 0
+INFO 2025-10-09 23:00:47,928 basehttp 4840 20012 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26578
+INFO 2025-10-09 23:03:59,052 autoreload 4840 16784 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-09 23:04:00,250 autoreload 5160 16076 Watching for file changes with StatReloader
+INFO 2025-10-09 23:07:49,181 autoreload 5160 16076 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-09 23:07:50,261 autoreload 20352 7900 Watching for file changes with StatReloader
+INFO 2025-10-09 23:08:23,691 autoreload 20352 7900 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-09 23:08:24,801 autoreload 16092 6084 Watching for file changes with StatReloader
+INFO 2025-10-09 23:08:47,743 autoreload 16092 6084 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-09 23:08:48,943 autoreload 17232 21292 Watching for file changes with StatReloader
+INFO 2025-10-09 23:08:58,656 basehttp 17232 7860 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26579
+INFO 2025-10-09 23:08:58,677 basehttp 17232 1868 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 23:08:58,677 basehttp 17232 7860 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 23:08:59,068 basehttp 17232 1868 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 23:08:59,087 basehttp 17232 1868 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 23:08:59,518 basehttp 17232 1868 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+ERROR 2025-10-09 23:09:01,973 log 17232 1868 Internal Server Error: /aves/reportes/produccion/exportar/
+ERROR 2025-10-09 23:09:01,974 basehttp 17232 1868 "GET /aves/reportes/produccion/exportar/?&formato=excel HTTP/1.1" 500 4906
+WARNING 2025-10-09 23:09:02,057 log 17232 1868 Not Found: /favicon.ico
+WARNING 2025-10-09 23:09:02,058 basehttp 17232 1868 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-09 23:16:01,802 autoreload 17232 21292 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-09 23:16:02,876 autoreload 18576 21776 Watching for file changes with StatReloader
+INFO 2025-10-09 23:16:52,246 autoreload 18576 21776 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-09 23:16:53,484 autoreload 22280 20716 Watching for file changes with StatReloader
+INFO 2025-10-09 23:17:09,396 basehttp 22280 1496 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26579
+INFO 2025-10-09 23:17:09,417 basehttp 22280 12396 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 23:17:09,417 basehttp 22280 1496 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 23:17:09,598 basehttp 22280 1496 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 23:17:09,604 basehttp 22280 1496 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 23:17:09,973 basehttp 22280 1496 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-09 23:17:28,311 basehttp 22280 1496 "GET /aves/reportes/produccion/?lote=&fecha_desde=2025-09-09&fecha_hasta=2025-10-09 HTTP/1.1" 200 26776
+ERROR 2025-10-09 23:17:34,036 log 22280 1496 Internal Server Error: /aves/reportes/produccion/exportar/
+ERROR 2025-10-09 23:17:34,036 basehttp 22280 1496 "GET /aves/reportes/produccion/exportar/?lote=&fecha_desde=2025-09-09&fecha_hasta=2025-10-09&formato=excel HTTP/1.1" 500 358
+WARNING 2025-10-09 23:17:34,107 log 22280 1496 Not Found: /favicon.ico
+WARNING 2025-10-09 23:17:34,108 basehttp 22280 1496 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-09 23:19:10,966 autoreload 22280 20716 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-09 23:19:12,130 autoreload 16700 12092 Watching for file changes with StatReloader
+INFO 2025-10-09 23:19:51,775 basehttp 16700 4584 "GET /aves/reportes/produccion/?lote=&fecha_desde=2025-09-09&fecha_hasta=2025-10-09 HTTP/1.1" 200 26777
+INFO 2025-10-09 23:19:51,797 basehttp 16700 4584 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 23:19:51,797 basehttp 16700 21860 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 23:19:52,199 basehttp 16700 4584 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 23:19:52,209 basehttp 16700 4584 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 23:19:52,591 basehttp 16700 4584 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+ERROR 2025-10-09 23:19:54,162 log 16700 4584 Internal Server Error: /aves/reportes/produccion/exportar/
+ERROR 2025-10-09 23:19:54,162 basehttp 16700 4584 "GET /aves/reportes/produccion/exportar/?lote=&fecha_desde=2025-09-09&fecha_hasta=2025-10-09&formato=excel HTTP/1.1" 500 372
+WARNING 2025-10-09 23:19:54,240 log 16700 4584 Not Found: /favicon.ico
+WARNING 2025-10-09 23:19:54,240 basehttp 16700 4584 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-09 23:21:42,467 autoreload 16700 12092 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-09 23:21:43,715 autoreload 13544 14572 Watching for file changes with StatReloader
+INFO 2025-10-09 23:23:12,189 basehttp 13544 3708 "GET /aves/reportes/produccion/?lote=&fecha_desde=2025-09-09&fecha_hasta=2025-10-09 HTTP/1.1" 200 26777
+INFO 2025-10-09 23:23:12,211 basehttp 13544 12300 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-09 23:23:12,211 basehttp 13544 3708 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-09 23:23:12,383 basehttp 13544 3708 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-09 23:23:12,400 basehttp 13544 3708 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-09 23:23:13,085 basehttp 13544 3708 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-09 23:27:52,444 basehttp 13544 3708 "GET /aves/reportes/produccion/exportar/?lote=&fecha_desde=2025-09-09&fecha_hasta=2025-10-09&formato=excel HTTP/1.1" 200 5706

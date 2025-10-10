@@ -5,14 +5,16 @@ Vistas para el módulo avícola.
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import JsonResponse, HttpResponse
-from django.db.models import Sum, Avg
+from django.http import JsonResponse, HttpResponse, HttpResponseServerError
+from django.db.models import Sum, Avg, Value, IntegerField, DecimalField
+from django.db.models.functions import Coalesce
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ValidationError
 from datetime import timedelta
 import json
+import traceback
 
 from apps.usuarios.decorators import role_required, acceso_modulo_aves_required, puede_editar_required, puede_eliminar_required, veterinario_required
 from .models import *
@@ -1003,56 +1005,78 @@ def alertas_list(request):
 @require_http_methods(["POST"])
 def marcar_alerta_leida(request, pk):
     """Marcar alerta como leída."""
-    alerta = get_object_or_404(AlertaSistema, pk=pk)
-    alerta.leida = True
-    alerta.save()
-    return JsonResponse({'success': True})
+    try:
+        alerta = get_object_or_404(AlertaSistema, pk=pk)
+        alerta.leida = True
+        alerta.save()
+        return JsonResponse({'success': True, 'message': 'Alerta marcada como leída'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
 
 
 @login_required
 @require_http_methods(["POST"])
 def marcar_alerta_resuelta(request, pk):
     """Marcar alerta como resuelta (desactivar)."""
-    alerta = get_object_or_404(AlertaSistema, pk=pk)
-    alerta.is_active = False
-    alerta.save()
-    return JsonResponse({'success': True})
+    try:
+        alerta = get_object_or_404(AlertaSistema, pk=pk)
+        alerta.is_active = False
+        alerta.save()
+        return JsonResponse({'success': True, 'message': 'Alerta marcada como resuelta'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
 
 
 @login_required
 @require_http_methods(["POST"])
 def marcar_alertas_masivo(request):
     """Marcar múltiples alertas como leídas o resueltas."""
-    import json
-    data = json.loads(request.body)
-    
-    # Corregir los nombres de parámetros
-    alertas_ids = data.get('alertas_ids', []) or data.get('alertas', [])
-    accion = data.get('accion')
-    
-    # Si es "todas", obtener todas las alertas activas
-    if alertas_ids == 'todas':
-        alertas = AlertaSistema.objects.filter(is_active=True)
+    try:
+        import json
+        data = json.loads(request.body)
+        
+        # Corregir los nombres de parámetros
+        alertas_ids = data.get('alertas_ids', []) or data.get('alertas', [])
+        accion = data.get('accion')
+        
+        if not accion:
+            return JsonResponse({'success': False, 'error': 'Acción no especificada'})
+        
+        # Si es "todas", obtener todas las alertas activas
+        if alertas_ids == 'todas':
+            alertas = AlertaSistema.objects.filter(is_active=True)
+            count = alertas.count()
+            if accion == 'leida':
+                alertas.update(leida=True)
+            elif accion == 'resuelta':
+                alertas.update(is_active=False)
+            else:
+                return JsonResponse({'success': False, 'error': 'Acción no válida'})
+            return JsonResponse({'success': True, 'count': count})
+        
+        # Si son IDs específicos
+        if not alertas_ids:
+            return JsonResponse({'success': False, 'error': 'No se especificaron alertas'})
+        
+        alertas = AlertaSistema.objects.filter(id__in=alertas_ids)
+        count = alertas.count()
+        
+        if count == 0:
+            return JsonResponse({'success': False, 'error': 'No se encontraron alertas válidas'})
+        
         if accion == 'leida':
             alertas.update(leida=True)
         elif accion == 'resuelta':
             alertas.update(is_active=False)
-        return JsonResponse({'success': True, 'count': alertas.count()})
-    
-    # Si son IDs específicos
-    if not alertas_ids or not accion:
-        return JsonResponse({'success': False, 'error': 'Datos incompletos'})
-    
-    alertas = AlertaSistema.objects.filter(id__in=alertas_ids)
-    
-    if accion == 'leida':
-        alertas.update(leida=True)
-    elif accion == 'resuelta':
-        alertas.update(is_active=False)
-    else:
-        return JsonResponse({'success': False, 'error': 'Acción no válida'})
-    
-    return JsonResponse({'success': True, 'count': len(alertas_ids)})
+        else:
+            return JsonResponse({'success': False, 'error': 'Acción no válida'})
+        
+        return JsonResponse({'success': True, 'count': count})
+        
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'error': 'Datos JSON inválidos'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
 
 
 @login_required
@@ -1147,15 +1171,8 @@ def reporte_produccion(request):
     }
     
     # Exportar según formato
-    if formato == 'pdf':
-        return exportar_reporte_pdf('produccion', bitacoras, stats)
-    elif formato == 'excel':
-        filtros = {
-            'lote': lote_id,
-            'fecha_desde': fecha_desde,
-            'fecha_hasta': fecha_hasta,
-        }
-        return exportar_reporte_excel('produccion', bitacoras, stats, filtros)
+    if formato != 'html':
+        return exportar_reporte_produccion(request)
     
     context = {
         'datos_reporte': datos_reporte,  # Cambiado de 'bitacoras' a 'datos_reporte'
@@ -1171,6 +1188,68 @@ def reporte_produccion(request):
     }
     
     return render(request, 'aves/reporte_produccion.html', context)
+
+
+@login_required
+@acceso_modulo_aves_required
+@role_required(['superusuario', 'admin_aves', 'solo_vista'])
+def exportar_reporte_produccion(request):
+    try:
+        # Obtener parámetros
+        lote_id = request.GET.get('lote')
+        fecha_inicio = request.GET.get('fecha_inicio')
+        fecha_fin = request.GET.get('fecha_fin')
+        formato = request.GET.get('formato', 'excel')
+        
+        # Filtrar bitácoras
+        bitacoras = BitacoraDiaria.objects.all()
+        
+        if lote_id:
+            bitacoras = bitacoras.filter(lote_id=lote_id)
+        if fecha_inicio:
+            bitacoras = bitacoras.filter(fecha__gte=fecha_inicio)
+        if fecha_fin:
+            bitacoras = bitacoras.filter(fecha__lte=fecha_fin)
+        
+        # Calcular estadísticas - corregido para evitar None y especificar output_field
+        stats = bitacoras.aggregate(
+            total_produccion=Sum(
+                Coalesce('produccion_aaa', Value(0)) + 
+                Coalesce('produccion_aa', Value(0)) + 
+                Coalesce('produccion_a', Value(0)) + 
+                Coalesce('produccion_b', Value(0)) + 
+                Coalesce('produccion_c', Value(0)),
+                output_field=IntegerField()
+            ),
+            total_mortalidad=Sum(Coalesce('mortalidad', Value(0)), output_field=IntegerField()),
+            consumo_promedio=Avg(Coalesce('consumo_concentrado', Value(0)), output_field=DecimalField()),
+        )
+        
+        # Asegurar que no hay valores None
+        stats = {
+            'total_produccion': stats.get('total_produccion') or 0,
+            'total_mortalidad': stats.get('total_mortalidad') or 0,
+            'consumo_promedio': stats.get('consumo_promedio') or 0,
+        }
+        
+        # Exportar según formato
+        filtros = {
+            'lote': lote_id,
+            'fecha_inicio': fecha_inicio,
+            'fecha_fin': fecha_fin,
+        }
+        
+        if formato == 'excel':
+            return exportar_reporte_excel('produccion', bitacoras, stats, filtros)
+        elif formato == 'pdf':
+            return exportar_reporte_pdf('produccion', bitacoras, stats, filtros)
+        else:
+            return HttpResponseServerError("Formato no válido")
+            
+    except Exception as e:
+        error_msg = f"Error al exportar reporte: {str(e)}"
+        print(f"Error completo: {traceback.format_exc()}")
+        return HttpResponseServerError(error_msg)
 
 
 @login_required

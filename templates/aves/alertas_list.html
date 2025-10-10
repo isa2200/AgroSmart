@@ -8,6 +8,8 @@
 {% endblock %}
 
 {% block content %}
+<!-- Agregar CSRF token para JavaScript -->
+{% csrf_token %}
 <div class="container-fluid">
     <!-- Header con Estadísticas -->
     <div class="row mb-4">
@@ -26,7 +28,7 @@
             
             <!-- Estadísticas de Alertas -->
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card bg-danger text-white">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
@@ -39,7 +41,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card bg-warning text-white">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
@@ -52,7 +54,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card bg-info text-white">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
@@ -61,19 +63,6 @@
                                     <p class="mb-0">No Leídas</p>
                                 </div>
                                 <i class="fas fa-info-circle fa-2x"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card bg-secondary text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h4 class="mb-0">{{ stats.total }}</h4>
-                                    <p class="mb-0">Total</p>
-                                </div>
-                                <i class="fas fa-bell fa-2x"></i>
                             </div>
                         </div>
                     </div>

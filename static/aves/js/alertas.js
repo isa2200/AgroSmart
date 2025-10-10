@@ -1,13 +1,21 @@
 // JavaScript para el Centro de Alertas
 document.addEventListener('DOMContentLoaded', function() {
-    // Elementos del DOM
+    // Verificar que los elementos existen antes de agregar event listeners
     const btnRefresh = document.getElementById('btnRefresh');
     const btnMarkAllRead = document.getElementById('btnMarkAllRead');
     const btnMarcarLeidas = document.getElementById('btnMarcarLeidas');
     const btnMarcarResueltas = document.getElementById('btnMarcarResueltas');
     const filtrosForm = document.getElementById('filtrosForm');
-    const checkboxes = document.querySelectorAll('.alerta-checkbox'); // Corregido
+    const checkboxes = document.querySelectorAll('.alerta-checkbox');
     const selectAll = document.getElementById('selectAll');
+
+    // Verificar que tenemos CSRF token
+    const csrfToken = getCookie('csrftoken');
+    if (!csrfToken) {
+        console.error('CSRF token no encontrado');
+        showNotification('Error de configuración: Token CSRF no encontrado', 'error');
+        return;
+    }
 
     // Auto-refresh cada 30 segundos
     let autoRefreshInterval;
@@ -51,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Event listeners
+    // Event listeners con verificación de existencia
     if (btnRefresh) {
         btnRefresh.addEventListener('click', refreshAlertas);
     }
@@ -79,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function updateBulkActions() {
-        const selectedCount = document.querySelectorAll('.alerta-checkbox:checked').length; // Corregido
+        const selectedCount = document.querySelectorAll('.alerta-checkbox:checked').length;
         
         if (btnMarcarLeidas) {
             btnMarcarLeidas.disabled = selectedCount === 0;
@@ -205,9 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
             hideLoading();
             if (data.success) {
                 showNotification('Todas las alertas han sido marcadas como leídas', 'success');
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1500);
+                setTimeout(() => window.location.reload(), 1000);
             } else {
                 showNotification('Error al marcar las alertas: ' + data.error, 'error');
             }
@@ -217,62 +223,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
             showNotification('Error de conexión', 'error');
         });
-    }
-
-    // Utilidades
-    function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-    function showLoading(message) {
-        // Crear o mostrar indicador de carga
-        let loadingDiv = document.getElementById('loadingIndicator');
-        if (!loadingDiv) {
-            loadingDiv = document.createElement('div');
-            loadingDiv.id = 'loadingIndicator';
-            loadingDiv.className = 'alert alert-info position-fixed top-0 start-50 translate-middle-x mt-3';
-            loadingDiv.style.zIndex = '9999';
-            document.body.appendChild(loadingDiv);
-        }
-        loadingDiv.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i>${message}`;
-        loadingDiv.style.display = 'block';
-    }
-
-    function hideLoading() {
-        const loadingDiv = document.getElementById('loadingIndicator');
-        if (loadingDiv) {
-            loadingDiv.style.display = 'none';
-        }
-    }
-
-    function showNotification(message, type) {
-        // Crear notificación toast
-        const toastDiv = document.createElement('div');
-        toastDiv.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'warning'} position-fixed top-0 end-0 mt-3 me-3`;
-        toastDiv.style.zIndex = '9999';
-        toastDiv.innerHTML = `
-            ${message}
-            <button type="button" class="btn-close ms-2" onclick="this.parentElement.remove()"></button>
-        `;
-        document.body.appendChild(toastDiv);
-        
-        // Auto-remover después de 5 segundos
-        setTimeout(() => {
-            if (toastDiv.parentElement) {
-                toastDiv.remove();
-            }
-        }, 5000);
     }
 
     // Animaciones de entrada
@@ -290,6 +240,69 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Funciones de utilidad (fuera del DOMContentLoaded)
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    // Fallback: intentar obtener desde el meta tag o input hidden
+    if (!cookieValue) {
+        const csrfInput = document.querySelector('[name=csrfmiddlewaretoken]');
+        if (csrfInput) {
+            cookieValue = csrfInput.value;
+        }
+    }
+    return cookieValue;
+}
+
+function showLoading(message) {
+    // Crear o mostrar indicador de carga
+    let loadingDiv = document.getElementById('loadingIndicator');
+    if (!loadingDiv) {
+        loadingDiv = document.createElement('div');
+        loadingDiv.id = 'loadingIndicator';
+        loadingDiv.className = 'alert alert-info position-fixed top-0 start-50 translate-middle-x mt-3';
+        loadingDiv.style.zIndex = '9999';
+        document.body.appendChild(loadingDiv);
+    }
+    loadingDiv.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i>${message}`;
+    loadingDiv.style.display = 'block';
+}
+
+function hideLoading() {
+    const loadingDiv = document.getElementById('loadingIndicator');
+    if (loadingDiv) {
+        loadingDiv.style.display = 'none';
+    }
+}
+
+function showNotification(message, type) {
+    // Crear notificación toast
+    const toastDiv = document.createElement('div');
+    toastDiv.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'warning'} position-fixed top-0 end-0 mt-3 me-3`;
+    toastDiv.style.zIndex = '9999';
+    toastDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close ms-2" onclick="this.parentElement.remove()"></button>
+    `;
+    document.body.appendChild(toastDiv);
+    
+    // Auto-remover después de 5 segundos
+    setTimeout(() => {
+        if (toastDiv.parentElement) {
+            toastDiv.remove();
+        }
+    }, 5000);
+}
 
 // Funciones globales para uso en templates
 function marcarLeida(alertaId) {
