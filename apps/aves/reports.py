@@ -14,7 +14,7 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
-# Importaciones para PDF y Excel
+# Importaciones para Excel
 try:
     from reportlab.lib import colors
     from reportlab.lib.pagesizes import letter, A4
@@ -187,119 +187,6 @@ class ReporteAvicola:
             queryset = queryset.filter(fecha_programada__lte=self.fecha_fin)
             
         return queryset.select_related('lote', 'tipo_vacuna', 'veterinario').order_by('-fecha_programada')
-    
-    def generar_pdf_produccion(self, nombre_archivo="reporte_produccion.pdf"):
-        """
-        Genera reporte PDF de producción
-        """
-        if not REPORTLAB_AVAILABLE:
-            raise ImportError("ReportLab no está disponible")
-            
-        buffer = io.BytesIO()
-        doc = SimpleDocTemplate(buffer, pagesize=A4)
-        styles = getSampleStyleSheet()
-        story = []
-        
-        # Título
-        titulo_style = ParagraphStyle(
-            'CustomTitle',
-            parent=styles['Heading1'],
-            fontSize=18,
-            spaceAfter=30,
-            alignment=1  # Centrado
-        )
-        story.append(Paragraph("Reporte de Producción Avícola", titulo_style))
-        story.append(Spacer(1, 20))
-        
-        # Información del reporte
-        info_data = [
-            ['Fecha de generación:', datetime.now().strftime('%d/%m/%Y %H:%M')],
-            ['Período:', f"{self.fecha_inicio or 'N/A'} - {self.fecha_fin or 'N/A'}"],
-        ]
-        info_table = Table(info_data, colWidths=[2*inch, 3*inch])
-        info_table.setStyle(TableStyle([
-            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-            ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
-            ('FONTSIZE', (0, 0), (-1, -1), 10),
-        ]))
-        story.append(info_table)
-        story.append(Spacer(1, 20))
-        
-        # Resumen estadístico
-        resumen = self.obtener_resumen_produccion()
-        story.append(Paragraph("Resumen Estadístico", styles['Heading2']))
-        
-        resumen_data = [
-            ['Concepto', 'Valor'],
-            ['Total de huevos producidos', f"{resumen['total_huevos']:,}"],
-            ['Producción AAA', f"{resumen['produccion_aaa']:,} ({resumen['porcentaje_aaa']}%)"],
-            ['Producción AA', f"{resumen['produccion_aa']:,} ({resumen['porcentaje_aa']}%)"],
-            ['Producción A', f"{resumen['produccion_a']:,} ({resumen['porcentaje_a']}%)"],
-            ['Producción B', f"{resumen['produccion_b']:,} ({resumen['porcentaje_b']}%)"],
-            ['Producción C', f"{resumen['produccion_c']:,} ({resumen['porcentaje_c']}%)"],
-            ['Total mortalidad', f"{resumen['total_mortalidad']:,}"],
-            ['Días registrados', f"{resumen['dias_registrados']}"],
-            ['Promedio diario', f"{resumen['promedio_diario']:,}"],
-            ['% Postura promedio', f"{resumen['porcentaje_postura']}%"],
-        ]
-        
-        resumen_table = Table(resumen_data, colWidths=[3*inch, 2*inch])
-        resumen_table.setStyle(TableStyle([
-            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-            ('FONTSIZE', (0, 0), (-1, -1), 9),
-            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-            ('GRID', (0, 0), (-1, -1), 1, colors.black)
-        ]))
-        story.append(resumen_table)
-        story.append(Spacer(1, 20))
-        
-        # Datos detallados de producción
-        story.append(Paragraph("Detalle de Producción Diaria", styles['Heading2']))
-        datos_produccion = self.obtener_datos_produccion_diaria()
-        
-        if datos_produccion:
-            # Encabezados de la tabla
-            headers = ['Fecha', 'Lote', 'Galpón', 'AAA', 'AA', 'A', 'B', 'C', 'Total', 'Mortalidad']
-            data = [headers]
-            
-            for dato in datos_produccion[:50]:  # Limitar a 50 registros para el PDF
-                total_huevos = dato.produccion_aaa + dato.produccion_aa + dato.produccion_a + dato.produccion_b + dato.produccion_c
-                data.append([
-                    dato.fecha.strftime('%d/%m/%Y'),
-                    dato.lote.codigo,
-                    dato.lote.galpon,
-                    str(dato.produccion_aaa),
-                    str(dato.produccion_aa),
-                    str(dato.produccion_a),
-                    str(dato.produccion_b),
-                    str(dato.produccion_c),
-                    str(total_huevos),
-                    str(dato.mortalidad)
-                ])
-            
-            produccion_table = Table(data, colWidths=[0.8*inch, 0.8*inch, 0.8*inch, 0.5*inch, 0.5*inch, 0.5*inch, 0.5*inch, 0.5*inch, 0.6*inch, 0.6*inch])
-            produccion_table.setStyle(TableStyle([
-                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                ('FONTSIZE', (0, 0), (-1, -1), 8),
-                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-                ('GRID', (0, 0), (-1, -1), 1, colors.black)
-            ]))
-            story.append(produccion_table)
-        
-        doc.build(story)
-        buffer.seek(0)
-        
-        response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
-        response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
-        return response
     
     def generar_excel_produccion(self, nombre_archivo="reporte_produccion.xlsx"):
         """

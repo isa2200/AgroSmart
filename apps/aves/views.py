@@ -19,7 +19,7 @@ import traceback
 from apps.usuarios.decorators import role_required, acceso_modulo_aves_required, puede_editar_required, puede_eliminar_required, veterinario_required
 from .models import *
 from .forms import *
-from .utils import generar_alertas, actualizar_inventario_huevos, exportar_reporte_pdf, exportar_reporte_excel
+from .utils import generar_alertas, actualizar_inventario_huevos, exportar_reporte_excel
 
 
 @login_required
@@ -1218,8 +1218,8 @@ def exportar_reporte_produccion(request):
     try:
         # Obtener parámetros
         lote_id = request.GET.get('lote')
-        fecha_inicio = request.GET.get('fecha_inicio')
-        fecha_fin = request.GET.get('fecha_fin')
+        fecha_inicio = request.GET.get('fecha_inicio') or request.GET.get('fecha_desde')
+        fecha_fin = request.GET.get('fecha_fin') or request.GET.get('fecha_hasta')
         formato = request.GET.get('formato', 'excel')
         
         # Filtrar bitácoras
@@ -1262,10 +1262,8 @@ def exportar_reporte_produccion(request):
         
         if formato == 'excel':
             return exportar_reporte_excel('produccion', bitacoras, stats, filtros)
-        elif formato == 'pdf':
-            return exportar_reporte_pdf('produccion', bitacoras, stats)
         else:
-            return HttpResponseServerError("Formato no válido")
+            return HttpResponseServerError("La exportación a PDF ha sido deshabilitada. Solo está disponible Excel.")
             
     except Exception as e:
         error_msg = f"Error al exportar reporte: {str(e)}"

@@ -16601,3 +16601,194 @@ INFO 2025-10-10 15:09:23,405 autoreload 17600 11844 C:\Users\bp877\TRAE\AgroSmar
 INFO 2025-10-10 15:09:24,953 autoreload 6480 17528 Watching for file changes with StatReloader
 INFO 2025-10-10 15:09:26,892 autoreload 6480 17528 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
 INFO 2025-10-10 15:09:28,173 autoreload 11936 14844 Watching for file changes with StatReloader
+INFO 2025-10-10 15:14:27,479 basehttp 11936 22348 "GET /aves/reportes/ HTTP/1.1" 200 27019
+INFO 2025-10-10 15:14:29,127 basehttp 11936 22348 "GET /aves/alertas/ HTTP/1.1" 200 51551
+INFO 2025-10-10 15:14:29,151 basehttp 11936 22348 "GET /static/aves/js/alertas.js HTTP/1.1" 304 0
+INFO 2025-10-10 15:14:30,276 basehttp 11936 22348 "GET /aves/reportes/ HTTP/1.1" 200 27018
+INFO 2025-10-10 15:14:38,476 basehttp 11936 22348 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26779
+INFO 2025-10-10 15:14:44,662 basehttp 11936 22348 "GET /aves/ HTTP/1.1" 200 51460
+INFO 2025-10-12 18:32:45,379 autoreload 15832 20420 Watching for file changes with StatReloader
+INFO 2025-10-12 18:34:08,652 autoreload 18220 12600 Watching for file changes with StatReloader
+INFO 2025-10-12 18:34:17,801 basehttp 18220 5640 "GET / HTTP/1.1" 200 35697
+INFO 2025-10-12 18:34:41,333 basehttp 18220 5640 "GET /aves/ HTTP/1.1" 200 51456
+INFO 2025-10-12 18:34:42,539 basehttp 18220 5640 "GET /static/img/logo-ico.ico HTTP/1.1" 304 0
+INFO 2025-10-12 18:34:42,863 basehttp 18220 5640 "GET /aves/reportes/ HTTP/1.1" 200 27018
+INFO 2025-10-12 18:34:51,116 basehttp 18220 5640 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26779
+INFO 2025-10-12 18:34:54,532 basehttp 18220 5640 "GET /aves/reportes/produccion/exportar/?&formato=excel HTTP/1.1" 200 52760
+INFO 2025-10-12 18:37:33,004 autoreload 18220 12600 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-12 18:37:34,612 autoreload 17120 19088 Watching for file changes with StatReloader
+INFO 2025-10-12 18:37:37,503 autoreload 17120 19088 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-12 18:37:38,828 autoreload 19168 17108 Watching for file changes with StatReloader
+INFO 2025-10-12 18:37:40,598 autoreload 19168 17108 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-12 18:37:42,029 autoreload 1124 18872 Watching for file changes with StatReloader
+INFO 2025-10-12 18:37:44,012 autoreload 1124 18872 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-12 18:37:45,247 autoreload 3048 2432 Watching for file changes with StatReloader
+INFO 2025-10-12 18:38:01,892 autoreload 3048 2432 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-12 18:38:03,441 autoreload 17672 18536 Watching for file changes with StatReloader
+INFO 2025-10-12 18:38:10,551 autoreload 17672 18536 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-12 18:38:11,962 autoreload 19848 13524 Watching for file changes with StatReloader
+INFO 2025-10-12 18:38:21,201 autoreload 19848 13524 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-12 18:38:22,580 autoreload 15052 6504 Watching for file changes with StatReloader
+INFO 2025-10-12 18:38:54,064 autoreload 15052 6504 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-12 18:38:55,352 autoreload 18208 2272 Watching for file changes with StatReloader
+INFO 2025-10-12 18:39:01,378 autoreload 18208 2272 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-12 18:39:02,703 autoreload 5880 4372 Watching for file changes with StatReloader
+INFO 2025-10-12 18:39:08,691 autoreload 5880 4372 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-12 18:39:10,098 autoreload 17528 1628 Watching for file changes with StatReloader
+INFO 2025-10-12 18:39:14,989 autoreload 17528 1628 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-12 18:39:16,396 autoreload 12064 19884 Watching for file changes with StatReloader
+INFO 2025-10-12 18:39:20,162 basehttp 12064 9616 "GET /aves/reportes/produccion/exportar/?&formato=excel HTTP/1.1" 200 52663
+INFO 2025-10-12 18:39:55,990 basehttp 12064 9616 "GET /aves/ HTTP/1.1" 200 51456
+INFO 2025-10-12 18:44:57,203 basehttp 12064 19868 "GET /aves/ HTTP/1.1" 200 51456
+INFO 2025-10-12 18:48:53,370 basehttp 12064 19868 "GET /aves/bitacora/ HTTP/1.1" 200 32619
+INFO 2025-10-12 18:48:54,599 basehttp 12064 19868 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29164
+INFO 2025-10-12 18:48:55,732 basehttp 12064 19868 "GET /aves/inventario-huevos/ HTTP/1.1" 200 47708
+INFO 2025-10-12 18:48:57,361 basehttp 12064 19868 "GET /aves/alertas/ HTTP/1.1" 200 51551
+INFO 2025-10-12 18:48:57,385 basehttp 12064 19868 "GET /static/aves/css/alertas.css HTTP/1.1" 304 0
+INFO 2025-10-12 18:48:57,385 basehttp 12064 10172 "GET /static/aves/js/alertas.js HTTP/1.1" 304 0
+INFO 2025-10-12 18:48:58,340 basehttp 12064 10172 "GET /aves/inventario-huevos/ HTTP/1.1" 200 47707
+INFO 2025-10-12 18:49:02,095 basehttp 12064 10172 "GET /aves/movimiento-huevos/5/ HTTP/1.1" 200 24125
+INFO 2025-10-12 18:49:05,265 basehttp 12064 10172 "GET /aves/inventario-huevos/ HTTP/1.1" 200 47706
+INFO 2025-10-12 18:49:07,656 basehttp 12064 10172 "GET /aves/bitacora/ HTTP/1.1" 200 32619
+INFO 2025-10-12 18:49:09,153 basehttp 12064 10172 "GET /aves/bitacora/6/ HTTP/1.1" 200 67822
+INFO 2025-10-12 18:49:14,166 basehttp 12064 10172 "GET /aves/bitacora/ HTTP/1.1" 200 32619
+INFO 2025-10-12 18:49:15,178 basehttp 12064 10172 "GET /aves/lotes/nuevo/ HTTP/1.1" 200 29163
+INFO 2025-10-12 18:49:15,917 basehttp 12064 10172 "GET /aves/inventario-huevos/ HTTP/1.1" 200 47706
+INFO 2025-10-12 18:49:19,318 basehttp 12064 10172 "GET /aves/alertas/ HTTP/1.1" 200 51551
+INFO 2025-10-12 18:49:22,039 basehttp 12064 10172 "GET /aves/reportes/ HTTP/1.1" 200 27018
+INFO 2025-10-12 18:49:27,500 basehttp 12064 10172 "GET /aves/reportes/mortalidad/ HTTP/1.1" 200 23909
+INFO 2025-10-12 18:50:29,543 basehttp 12064 10172 "GET /aves/reportes/ HTTP/1.1" 200 23702
+INFO 2025-10-12 18:50:29,583 basehttp 12064 10172 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-12 18:50:29,605 basehttp 12064 19868 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-12 18:50:30,030 basehttp 12064 19868 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-12 18:50:30,062 basehttp 12064 19868 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-12 18:50:30,383 basehttp 12064 19868 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-12 18:50:58,962 basehttp 12064 19868 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26779
+INFO 2025-10-12 18:51:00,461 basehttp 12064 19868 "GET /aves/reportes/produccion/exportar/?&formato=pdf HTTP/1.1" 200 2739
+INFO 2025-10-12 18:59:28,860 autoreload 12064 19884 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-12 18:59:32,066 autoreload 9880 5272 Watching for file changes with StatReloader
+INFO 2025-10-12 19:03:09,176 autoreload 9880 5272 C:\Users\bp877\TRAE\AgroSmart\apps\aves\reports.py changed, reloading.
+INFO 2025-10-12 19:03:10,478 autoreload 20348 2500 Watching for file changes with StatReloader
+INFO 2025-10-12 19:03:20,454 autoreload 20348 2500 C:\Users\bp877\TRAE\AgroSmart\apps\aves\reports.py changed, reloading.
+INFO 2025-10-12 19:03:21,702 autoreload 8956 10916 Watching for file changes with StatReloader
+INFO 2025-10-12 19:03:28,738 autoreload 8956 10916 C:\Users\bp877\TRAE\AgroSmart\apps\aves\reports.py changed, reloading.
+INFO 2025-10-12 19:03:30,082 autoreload 1644 2008 Watching for file changes with StatReloader
+INFO 2025-10-12 19:03:35,723 autoreload 1644 2008 C:\Users\bp877\TRAE\AgroSmart\apps\aves\reports.py changed, reloading.
+INFO 2025-10-12 19:03:36,908 autoreload 12500 15428 Watching for file changes with StatReloader
+INFO 2025-10-12 19:05:01,251 autoreload 12500 15428 C:\Users\bp877\TRAE\AgroSmart\apps\aves\reports.py changed, reloading.
+INFO 2025-10-12 19:05:02,681 autoreload 21576 19576 Watching for file changes with StatReloader
+INFO 2025-10-12 19:08:33,922 autoreload 21576 19576 C:\Users\bp877\TRAE\AgroSmart\apps\aves\reports.py changed, reloading.
+INFO 2025-10-12 19:08:35,158 autoreload 12764 17396 Watching for file changes with StatReloader
+INFO 2025-10-12 19:09:02,505 autoreload 12764 17396 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-12 19:09:04,026 autoreload 21552 19828 Watching for file changes with StatReloader
+INFO 2025-10-12 19:09:11,274 autoreload 21552 19828 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-12 19:09:12,469 autoreload 21412 19252 Watching for file changes with StatReloader
+INFO 2025-10-12 19:09:14,290 autoreload 21412 19252 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-12 19:09:15,686 autoreload 3572 13128 Watching for file changes with StatReloader
+INFO 2025-10-12 19:10:08,619 basehttp 3572 11124 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26780
+INFO 2025-10-12 19:10:08,640 basehttp 3572 11124 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-12 19:10:08,641 basehttp 3572 4592 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-12 19:10:08,853 basehttp 3572 11124 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-12 19:10:08,860 basehttp 3572 11124 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-12 19:10:09,220 basehttp 3572 11124 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-12 19:10:11,077 basehttp 3572 11124 "GET /aves/reportes/ HTTP/1.1" 200 23697
+INFO 2025-10-12 19:10:12,391 basehttp 3572 11124 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26779
+INFO 2025-10-12 19:10:13,548 basehttp 3572 11124 "GET /aves/reportes/produccion/exportar/?&formato=pdf HTTP/1.1" 200 2741
+INFO 2025-10-12 19:13:14,141 autoreload 3572 13128 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-12 19:13:15,397 autoreload 16624 8704 Watching for file changes with StatReloader
+INFO 2025-10-12 19:13:43,814 autoreload 16624 8704 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-12 19:13:45,318 autoreload 20668 7960 Watching for file changes with StatReloader
+INFO 2025-10-12 19:13:50,048 basehttp 20668 15152 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26780
+INFO 2025-10-12 19:13:50,069 basehttp 20668 7552 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-12 19:13:50,070 basehttp 20668 15152 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-12 19:13:50,446 basehttp 20668 15152 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-12 19:13:50,455 basehttp 20668 15152 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-12 19:13:50,791 basehttp 20668 15152 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-12 19:13:51,934 basehttp 20668 15152 "GET /aves/reportes/produccion/exportar/?&formato=pdf HTTP/1.1" 200 2741
+INFO 2025-10-12 19:14:06,603 autoreload 10256 2512 Watching for file changes with StatReloader
+INFO 2025-10-12 19:14:08,902 basehttp 10256 15844 "GET / HTTP/1.1" 200 35696
+INFO 2025-10-12 19:14:10,676 basehttp 10256 15844 "GET /aves/ HTTP/1.1" 200 51456
+INFO 2025-10-12 19:14:12,855 basehttp 10256 15844 "GET /aves/reportes/ HTTP/1.1" 200 23697
+INFO 2025-10-12 19:14:14,237 basehttp 10256 15844 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26779
+INFO 2025-10-12 19:14:15,542 basehttp 10256 15844 "GET /aves/reportes/produccion/exportar/?&formato=pdf HTTP/1.1" 200 2741
+INFO 2025-10-12 19:14:19,313 basehttp 10256 15844 "GET /aves/reportes/produccion/exportar/?&formato=excel HTTP/1.1" 200 52663
+INFO 2025-10-12 19:17:16,073 autoreload 10256 2512 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-12 19:17:17,513 autoreload 13676 14212 Watching for file changes with StatReloader
+INFO 2025-10-12 19:17:34,372 basehttp 13676 12748 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26780
+INFO 2025-10-12 19:17:34,395 basehttp 13676 19876 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-12 19:17:34,395 basehttp 13676 12748 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-12 19:17:34,601 basehttp 13676 19876 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-12 19:17:34,609 basehttp 13676 19876 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-12 19:17:34,972 basehttp 13676 19876 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-12 19:17:36,543 basehttp 13676 19876 "GET /aves/reportes/produccion/exportar/?&formato=pdf HTTP/1.1" 200 2728
+INFO 2025-10-12 19:20:11,492 autoreload 13676 14212 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-12 19:20:12,921 autoreload 18840 9520 Watching for file changes with StatReloader
+INFO 2025-10-12 19:21:20,916 autoreload 18840 9520 C:\Users\bp877\TRAE\AgroSmart\apps\aves\reports.py changed, reloading.
+INFO 2025-10-12 19:21:22,332 autoreload 11568 8148 Watching for file changes with StatReloader
+INFO 2025-10-12 19:21:57,154 basehttp 11568 21144 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26780
+INFO 2025-10-12 19:21:57,175 basehttp 11568 2912 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-12 19:21:57,175 basehttp 11568 21144 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-12 19:21:57,544 basehttp 11568 21144 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-12 19:21:57,552 basehttp 11568 21144 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-12 19:21:57,866 basehttp 11568 21144 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-12 19:22:14,150 basehttp 11568 21144 "GET /aves/reportes/produccion/exportar/?&formato=pdf HTTP/1.1" 200 2938
+INFO 2025-10-12 19:26:00,075 autoreload 11568 8148 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views.py changed, reloading.
+INFO 2025-10-12 19:26:01,418 autoreload 14020 8720 Watching for file changes with StatReloader
+INFO 2025-10-12 19:26:45,699 autoreload 14020 8720 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-12 19:26:47,075 autoreload 16840 18472 Watching for file changes with StatReloader
+INFO 2025-10-12 19:27:26,295 autoreload 16840 18472 C:\Users\bp877\TRAE\AgroSmart\apps\aves\reports.py changed, reloading.
+INFO 2025-10-12 19:27:27,730 autoreload 1528 11688 Watching for file changes with StatReloader
+INFO 2025-10-12 19:27:33,826 autoreload 1528 11688 C:\Users\bp877\TRAE\AgroSmart\apps\aves\reports.py changed, reloading.
+INFO 2025-10-12 19:27:35,354 autoreload 17328 20852 Watching for file changes with StatReloader
+INFO 2025-10-12 19:28:08,052 autoreload 17328 20852 C:\Users\bp877\TRAE\AgroSmart\apps\aves\reports.py changed, reloading.
+INFO 2025-10-12 19:28:09,421 autoreload 15396 17576 Watching for file changes with StatReloader
+INFO 2025-10-12 19:28:17,772 autoreload 15396 17576 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-12 19:28:19,351 autoreload 12476 21308 Watching for file changes with StatReloader
+INFO 2025-10-12 19:28:23,369 autoreload 12476 21308 C:\Users\bp877\TRAE\AgroSmart\apps\aves\reports.py changed, reloading.
+INFO 2025-10-12 19:28:25,007 autoreload 19844 6644 Watching for file changes with StatReloader
+INFO 2025-10-12 19:28:41,665 autoreload 19844 6644 C:\Users\bp877\TRAE\AgroSmart\apps\aves\utils.py changed, reloading.
+INFO 2025-10-12 19:28:43,046 autoreload 9728 10972 Watching for file changes with StatReloader
+INFO 2025-10-12 19:29:17,691 autoreload 9728 10972 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-12 19:29:19,072 autoreload 8012 15924 Watching for file changes with StatReloader
+INFO 2025-10-12 19:29:54,714 autoreload 8012 15924 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-12 19:29:56,161 autoreload 9320 12664 Watching for file changes with StatReloader
+INFO 2025-10-12 19:30:02,167 autoreload 9320 12664 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-12 19:30:03,570 autoreload 2468 19308 Watching for file changes with StatReloader
+INFO 2025-10-12 19:30:06,321 autoreload 2468 19308 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-12 19:30:07,624 autoreload 19316 22440 Watching for file changes with StatReloader
+INFO 2025-10-12 19:30:11,710 autoreload 19316 22440 C:\Users\bp877\TRAE\AgroSmart\apps\aves\views_reports.py changed, reloading.
+INFO 2025-10-12 19:30:13,152 autoreload 16568 10632 Watching for file changes with StatReloader
+INFO 2025-10-12 19:31:15,348 autoreload 16568 10632 C:\Users\bp877\TRAE\AgroSmart\apps\reportes\models.py changed, reloading.
+INFO 2025-10-12 19:31:16,909 autoreload 15160 4416 Watching for file changes with StatReloader
+INFO 2025-10-12 19:31:24,039 autoreload 15160 4416 C:\Users\bp877\TRAE\AgroSmart\apps\reportes\models.py changed, reloading.
+INFO 2025-10-12 19:31:25,446 autoreload 21200 22476 Watching for file changes with StatReloader
+INFO 2025-10-12 19:31:27,187 autoreload 21200 22476 C:\Users\bp877\TRAE\AgroSmart\apps\reportes\models.py changed, reloading.
+INFO 2025-10-12 19:31:28,588 autoreload 13880 21540 Watching for file changes with StatReloader
+INFO 2025-10-12 19:33:53,647 basehttp 13880 11168 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26567
+INFO 2025-10-12 19:33:53,671 basehttp 13880 16828 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-12 19:33:53,672 basehttp 13880 11168 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-12 19:33:54,308 basehttp 13880 16828 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-12 19:33:54,317 basehttp 13880 16828 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-12 19:33:54,735 basehttp 13880 16828 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-12 19:33:55,370 basehttp 13880 16828 "GET /aves/reportes/ HTTP/1.1" 200 23691
+INFO 2025-10-12 19:33:56,506 basehttp 13880 16828 "GET /aves/reportes/produccion/ HTTP/1.1" 200 26566
+INFO 2025-10-12 19:33:57,966 basehttp 13880 16828 "GET /aves/reportes/produccion/exportar/?&formato=excel HTTP/1.1" 200 52662
+INFO 2025-10-12 19:34:32,136 basehttp 13880 16828 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-12 19:34:32,164 basehttp 13880 16828 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-12 19:34:32,194 basehttp 13880 16828 "GET /static/dashboard/css/login.css HTTP/1.1" 304 0
+INFO 2025-10-12 19:34:32,206 basehttp 13880 16828 "GET /static/img/logo-background.jpg HTTP/1.1" 304 0
+INFO 2025-10-12 19:34:32,206 basehttp 13880 11168 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 304 0
+INFO 2025-10-12 19:34:38,361 basehttp 13880 11168 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-12 19:34:38,433 basehttp 13880 11168 "GET / HTTP/1.1" 200 35971
+INFO 2025-10-12 19:34:42,455 basehttp 13880 11168 "GET /usuarios/lista/ HTTP/1.1" 200 25243
+INFO 2025-10-12 19:34:50,276 basehttp 13880 11168 "GET /usuarios/editar/3/ HTTP/1.1" 200 24788
+INFO 2025-10-12 19:34:54,715 basehttp 13880 11168 "POST /usuarios/editar/3/ HTTP/1.1" 302 0
+INFO 2025-10-12 19:34:54,755 basehttp 13880 11168 "GET /usuarios/lista/ HTTP/1.1" 200 25540
+INFO 2025-10-12 19:34:59,379 basehttp 13880 11168 "GET / HTTP/1.1" 200 35684
+INFO 2025-10-12 19:35:01,454 basehttp 13880 11168 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-12 19:35:01,473 basehttp 13880 11168 "GET /usuarios/login/ HTTP/1.1" 200 20514
+INFO 2025-10-12 19:35:06,683 basehttp 13880 11168 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-12 19:35:06,977 basehttp 13880 11168 "GET /aves/ HTTP/1.1" 200 50163
+INFO 2025-10-12 19:35:09,078 basehttp 13880 11168 "GET /aves/vacunacion/ HTTP/1.1" 200 27316
+INFO 2025-10-12 19:35:11,402 basehttp 13880 11168 "GET /aves/vacunacion/nuevo/ HTTP/1.1" 200 28641
+INFO 2025-10-12 19:35:13,069 basehttp 13880 11168 "GET /aves/vacunacion/ HTTP/1.1" 200 27315

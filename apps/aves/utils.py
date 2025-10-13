@@ -6,7 +6,6 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseServerError
-from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, A4
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
@@ -102,101 +101,6 @@ def actualizar_inventario_huevos(bitacora_instance):
         return True
     except Exception as e:
         return False
-
-
-def exportar_reporte_pdf(tipo_reporte, datos, estadisticas):
-    """Exporta reportes a PDF con formato mejorado."""
-    buffer = io.BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=A4)
-    styles = getSampleStyleSheet()
-    story = []
-    
-    # Título
-    title_style = styles['Title']
-    title = Paragraph(f"Reporte de {tipo_reporte.title()}", title_style)
-    story.append(title)
-    story.append(Spacer(1, 20))
-    
-    # Fecha de generación
-    fecha_style = styles['Normal']
-    fecha = Paragraph(f"Generado el: {timezone.now().strftime('%d/%m/%Y %H:%M')}", fecha_style)
-    story.append(fecha)
-    story.append(Spacer(1, 20))
-    
-    if tipo_reporte == 'produccion':
-        # Estadísticas resumen
-        stats_data = [
-            ['Estadística', 'Valor'],
-            ['Total Producción', f"{estadisticas.get('total_produccion', 0):,} huevos"],
-            ['Total Mortalidad', f"{estadisticas.get('total_mortalidad', 0):,} aves"],
-            ['Consumo Promedio', f"{estadisticas.get('consumo_promedio', 0):.2f} kg/día"],
-        ]
-        
-        stats_table = Table(stats_data)
-        stats_table.setStyle(TableStyle([
-            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-            ('FONTSIZE', (0, 0), (-1, 0), 14),
-            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-            ('GRID', (0, 0), (-1, -1), 1, colors.black)
-        ]))
-        
-        story.append(Paragraph("Resumen Estadístico", styles['Heading2']))
-        story.append(stats_table)
-        story.append(Spacer(1, 20))
-        
-        # Datos detallados
-        if datos:
-            story.append(Paragraph("Datos Detallados", styles['Heading2']))
-            
-            # Preparar datos para la tabla
-            table_data = [['Fecha', 'Lote', 'AAA', 'AA', 'A', 'B', 'C', 'Total', 'Mortalidad']]
-            
-            for bitacora in datos:
-                total_prod = (bitacora.produccion_aaa + bitacora.produccion_aa + 
-                            bitacora.produccion_a + bitacora.produccion_b + bitacora.produccion_c)
-                
-                table_data.append([
-                    bitacora.fecha.strftime('%d/%m/%Y'),
-                    str(bitacora.lote.codigo),
-                    str(bitacora.produccion_aaa),
-                    str(bitacora.produccion_aa),
-                    str(bitacora.produccion_a),
-                    str(bitacora.produccion_b),
-                    str(bitacora.produccion_c),
-                    str(total_prod),
-                    str(bitacora.mortalidad)
-                ])
-            
-            # Crear tabla
-            data_table = Table(table_data)
-            data_table.setStyle(TableStyle([
-                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                ('FONTSIZE', (0, 0), (-1, 0), 10),
-                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-                ('GRID', (0, 0), (-1, -1), 1, colors.black),
-                ('FONTSIZE', (0, 1), (-1, -1), 8),
-            ]))
-            
-            story.append(data_table)
-    
-    # Construir PDF
-    doc.build(story)
-    buffer.seek(0)
-    
-    # Crear respuesta HTTP
-    response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="reporte_{tipo_reporte}_{timezone.now().strftime("%Y%m%d_%H%M")}.pdf"'
-    
-    return response
-
 
 def exportar_reporte_excel(tipo_reporte, datos, estadisticas, filtros=None):
     """Exporta reportes a Excel en formato SENA oficial exacto."""
@@ -423,13 +327,13 @@ def exportar_reporte_excel(tipo_reporte, datos, estadisticas, filtros=None):
         ws['M11'].fill = sena_green
         aplicar_borde_completo(ws, 'M11:M12', border_thick)
         
-        # OBSERVACIONES (mover a N-Q)
-        ws.merge_cells('N11:Q12')
+        # OBSERVACIONES (mover a N-P)
+        ws.merge_cells('N11:P12')
         ws['N11'] = 'OBSERVACIONES'
         ws['N11'].font = header_font
         ws['N11'].alignment = Alignment(horizontal='center', vertical='center')
         ws['N11'].fill = sena_green
-        aplicar_borde_completo(ws, 'N11:Q12', border_thick)
+        aplicar_borde_completo(ws, 'N11:P12', border_thick)
         
         # Fila 12: Subencabezados (actualizar posiciones)
         subencabezados = [
@@ -538,9 +442,9 @@ def exportar_reporte_excel(tipo_reporte, datos, estadisticas, filtros=None):
                 aves_restantes = aves_iniciales_mes - mortalidad_acumulada
                 ws[f'M{fila}'] = aves_restantes if aves_restantes >= 0 else ''
                 
-                # Observaciones (ahora en columnas N:Q)
+                # Observaciones (ahora en columnas N:P)
                 observaciones = bitacora.observaciones[:100] if bitacora.observaciones else ''
-                ws.merge_cells(f'N{fila}:Q{fila}')
+                ws.merge_cells(f'N{fila}:P{fila}')
                 ws[f'N{fila}'] = observaciones
             else:
                 # Si no hay bitácora para este día, mantener existencia del día anterior
@@ -560,7 +464,7 @@ def exportar_reporte_excel(tipo_reporte, datos, estadisticas, filtros=None):
                 ws[f'{col}{fila}'].alignment = Alignment(horizontal='center', vertical='center')
             
             # Formato especial para observaciones (actualizar rango)
-            for col in ['N', 'O', 'P', 'Q']:
+            for col in ['N', 'O', 'P']: 
                 ws[f'{col}{fila}'].border = border_thin
                 ws[f'{col}{fila}'].font = normal_font
                 ws[f'{col}{fila}'].alignment = Alignment(horizontal='left', vertical='center')
@@ -571,7 +475,7 @@ def exportar_reporte_excel(tipo_reporte, datos, estadisticas, filtros=None):
         ws[f'A{fila_total}'].font = header_font
         ws[f'A{fila_total}'].fill = sena_green
         ws[f'A{fila_total}'].alignment = Alignment(horizontal='center', vertical='center')
-        aplicar_borde_completo(ws, f'A{fila_total}:Q{fila_total}', border_thick)
+        aplicar_borde_completo(ws, f'A{fila_total}:P{fila_total}', border_thick)
         
         total_general = total_1a + total_2a + total_3a + total_rotos
         promedio_total = (total_general / (lote.numero_aves_actual * dias_en_mes) * 100) if lote and lote.numero_aves_actual > 0 else 0
@@ -590,7 +494,7 @@ def exportar_reporte_excel(tipo_reporte, datos, estadisticas, filtros=None):
         ws[f'L{fila_total}'] = total_mortalidad if total_mortalidad > 0 else ''
         
         # Aplicar formato a fila total (actualizar rango de columnas)
-        for col in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q']:
+        for col in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']:
             ws[f'{col}{fila_total}'].border = border_thin
             ws[f'{col}{fila_total}'].font = header_font
             ws[f'{col}{fila_total}'].fill = sena_green
@@ -675,7 +579,6 @@ def exportar_reporte_excel(tipo_reporte, datos, estadisticas, filtros=None):
             'N': 15,  # Observaciones (movido)
             'O': 15,  # Observaciones
             'P': 15,  # Observaciones
-            'Q': 15,  # Observaciones
         }
         
         for col, ancho in column_widths.items():

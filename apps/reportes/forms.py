@@ -53,13 +53,12 @@ class FiltroReporteForm(forms.Form):
     
     formato_salida = forms.ChoiceField(
         choices=[
-            ('pdf', 'PDF'),
             ('excel', 'Excel'),
             ('csv', 'CSV')
         ],
         widget=forms.Select(attrs={'class': 'form-select'}),
         label='Formato de Salida',
-        initial='pdf'
+        initial='excel'
     )
     
     incluir_graficos = forms.BooleanField(

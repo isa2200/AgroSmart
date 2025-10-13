@@ -147,83 +147,6 @@ class GeneradorReportes:
         
         return datos
 
-    def generar_pdf(self, datos, nombre_archivo):
-        """
-        Genera un reporte en formato PDF.
-        """
-        if not REPORTLAB_AVAILABLE:
-            raise ImportError("ReportLab no está instalado. Instala con: pip install reportlab")
-        
-        buffer = io.BytesIO()
-        doc = SimpleDocTemplate(buffer, pagesize=letter)
-        story = []
-        styles = getSampleStyleSheet()
-        
-        # Título
-        titulo = Paragraph(f"Reporte de {self.tipo_reporte.title()}", styles['Title'])
-        story.append(titulo)
-        story.append(Spacer(1, 12))
-        
-        # Fecha de generación
-        fecha_generacion = Paragraph(
-            f"Generado el: {timezone.now().strftime('%d/%m/%Y %H:%M')}",
-            styles['Normal']
-        )
-        story.append(fecha_generacion)
-        story.append(Spacer(1, 12))
-        
-        # Contenido según tipo de reporte
-        if self.tipo_reporte == 'produccion':
-            self._agregar_tabla_produccion_pdf(story, datos, styles)
-        elif self.tipo_reporte == 'inventario':
-            self._agregar_tabla_inventario_pdf(story, datos, styles)
-        
-        # Construir PDF
-        doc.build(story)
-        buffer.seek(0)
-        
-        # Crear respuesta HTTP
-        response = HttpResponse(buffer, content_type='application/pdf')
-        response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}.pdf"'
-        
-        return response
-    
-    def _agregar_tabla_produccion_pdf(self, story, datos, styles):
-        """Agrega tabla de producción al PDF."""
-        if 'lotes' in datos and datos['lotes']:
-            # Encabezados
-            encabezados = ['Lote', 'Fecha', 'Total Producción', 'AAA', 'AA', 'A', 'B', 'C']
-            tabla_datos = [encabezados]
-            
-            # Datos
-            for item in datos['lotes']:
-                fila = [
-                    item.get('lote__codigo', ''),
-                    item.get('fecha', ''),
-                    str(item.get('total_produccion', 0)),
-                    str(item.get('produccion_aaa', 0)),
-                    str(item.get('produccion_aa', 0)),
-                    str(item.get('produccion_a', 0)),
-                    str(item.get('produccion_b', 0)),
-                    str(item.get('produccion_c', 0)),
-                ]
-                tabla_datos.append(fila)
-            
-            # Crear tabla
-            tabla = Table(tabla_datos)
-            tabla.setStyle(TableStyle([
-                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                ('FONTSIZE', (0, 0), (-1, 0), 14),
-                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-                ('GRID', (0, 0), (-1, -1), 1, colors.black)
-            ]))
-            
-            story.append(tabla)
-
     def generar_excel(self, datos, nombre_archivo):
         """
         Genera un reporte en formato Excel.
@@ -415,9 +338,7 @@ def generar_reporte_automatico(reporte_programado):
         # Generar archivo según formato
         nombre_archivo = f"{reporte_programado.tipo_reporte}_{timezone.now().strftime('%Y%m%d_%H%M%S')}"
         
-        if reporte_programado.formato == 'pdf':
-            archivo = generador.generar_pdf(datos, nombre_archivo)
-        elif reporte_programado.formato == 'excel':
+        if reporte_programado.formato == 'excel':
             archivo = generador.generar_excel(datos, nombre_archivo)
         elif reporte_programado.formato == 'csv':
             archivo = generador.generar_csv(datos, nombre_archivo)
@@ -491,13 +412,7 @@ def enviar_reporte_por_email(reporte_generado, emails_destino):
             from_email=settings.DEFAULT_FROM_EMAIL,
             to=emails_destino
         )
-        
-        # Adjuntar reporte
-        email.attach(
-            f"reporte_{timezone.now().strftime('%Y%m%d')}.pdf",
-            reporte_generado.content,
-            'application/pdf'
-        )
+
         
         # Enviar
         email.send()

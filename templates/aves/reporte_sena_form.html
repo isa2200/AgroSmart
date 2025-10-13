@@ -71,7 +71,7 @@
                             <div class="mb-3">
                                 <label for="nombre_granja" class="form-label">Nombre de la Granja</label>
                                 <input type="text" name="nombre_granja" id="nombre_granja" 
-                                       class="form-control" value="Granja Avícola La Salada">
+                                        class="form-control" value="Granja Avícola La Salada">
                             </div>
                         </div>
                         
@@ -79,16 +79,28 @@
                             <div class="mb-3">
                                 <label for="registro_ica" class="form-label">Registro ICA</label>
                                 <input type="text" name="registro_ica" id="registro_ica" 
-                                       class="form-control" value="051290274">
+                                        class="form-control" value="051290274">
                             </div>
                         </div>
                     </div>
                     
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle me-2"></i>
-                        <strong>Información:</strong> Este reporte generará un archivo Excel con el formato oficial SENA 
-                        para el registro mensual de postura. Incluye producción diaria, consumo de alimento, 
+                        <strong>Información:</strong> Este reporte generará un archivo en formato SENA 
+                        (Excel) para el registro mensual de postura. Incluye producción diaria, consumo de alimento, 
                         mortalidad y resumen mensual.
+                    </div>
+
+                    <!-- Nuevo selector de formato -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="formato" class="form-label">Formato de salida</label>
+                                <select name="formato" id="formato" class="form-select">
+                                    <option value="excel" selected>Excel (.xlsx)</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="d-flex justify-content-between">
@@ -96,7 +108,7 @@
                             <i class="fas fa-arrow-left me-2"></i>Volver
                         </a>
                         <button type="submit" class="btn btn-success">
-                            <i class="fas fa-download me-2"></i>Generar Reporte Excel
+                            <i class="fas fa-download me-2"></i>Generar Reporte
                         </button>
                     </div>
                 </form>

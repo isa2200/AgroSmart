@@ -98,12 +98,8 @@
         {% if datos_reporte %}
         <div class="btn-group">
             <a href="{% url 'aves:exportar_reporte_produccion' %}?{{ request.GET.urlencode }}&formato=excel" 
-               class="btn btn-success btn-sm" title="Exportar a Excel">
+                class="btn btn-success btn-sm" title="Exportar a Excel">
                 <i class="fas fa-file-excel me-2"></i>Excel
-            </a>
-            <a href="{% url 'aves:exportar_reporte_produccion' %}?{{ request.GET.urlencode }}&formato=pdf" 
-               class="btn btn-danger btn-sm" title="Exportar a PDF">
-                <i class="fas fa-file-pdf me-2"></i>PDF
             </a>
         </div>
         {% endif %}

@@ -40,54 +40,6 @@
         </div>
     </div>
     
-    <!-- Reporte SENA -->
-    <div class="col-md-6 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <div class="mb-3">
-                    <i class="fas fa-file-excel fa-3x text-success"></i>
-                </div>
-                <h5 class="card-title">Reporte SENA</h5>
-                <p class="card-text">Registro mensual de postura en formato oficial SENA para descarga en Excel.</p>
-                <a href="{% url 'aves:generar_reporte_sena' %}" class="btn btn-success">
-                    <i class="fas fa-file-excel me-2"></i>Generar Reporte SENA
-                </a>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Reporte de Mortalidad -->
-    <div class="col-md-6 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <div class="mb-3">
-                    <i class="fas fa-chart-pie fa-3x text-danger"></i>
-                </div>
-                <h5 class="card-title">Reporte de Mortalidad</h5>
-                <p class="card-text">Analiza las tasas de mortalidad por lote y identifica patrones.</p>
-                <a href="{% url 'aves:reporte_mortalidad' %}" class="btn btn-danger">
-                    <i class="fas fa-file-alt me-2"></i>Generar Reporte
-                </a>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Reporte de Consumo -->
-    <div class="col-md-6 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <div class="mb-3">
-                    <i class="fas fa-chart-bar fa-3x text-success"></i>
-                </div>
-                <h5 class="card-title">Reporte de Consumo</h5>
-                <p class="card-text">Monitorea el consumo de alimento y agua por lote.</p>
-                <a href="{% url 'aves:reporte_consumo' %}" class="btn btn-success">
-                    <i class="fas fa-file-alt me-2"></i>Generar Reporte
-                </a>
-            </div>
-        </div>
-    </div>
-    
     <!-- Reporte de Vacunación -->
     <div class="col-md-6 mb-4">
         <div class="card h-100">
@@ -103,39 +55,6 @@
             </div>
         </div>
     </div>
-    
-    <!-- Reporte Comparativo -->
-    <div class="col-md-6 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <div class="mb-3">
-                    <i class="fas fa-balance-scale fa-3x text-warning"></i>
-                </div>
-                <h5 class="card-title">Reporte Comparativo</h5>
-                <p class="card-text">Compara el rendimiento entre diferentes lotes.</p>
-                <a href="{% url 'aves:reporte_comparativo_lotes' %}" class="btn btn-warning">
-                    <i class="fas fa-file-alt me-2"></i>Generar Reporte
-                </a>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Exportar Datos Completos -->
-    <div class="col-md-6 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <div class="mb-3">
-                    <i class="fas fa-download fa-3x text-secondary"></i>
-                </div>
-                <h5 class="card-title">Exportar Datos Completos</h5>
-                <p class="card-text">Descarga todos los datos del módulo avícola.</p>
-                <a href="{% url 'aves:exportar_datos_completos' %}" class="btn btn-secondary">
-                    <i class="fas fa-download me-2"></i>Exportar Datos
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="row mt-4">
     <div class="col-12">
@@ -146,7 +65,7 @@
             <div class="card-body">
                 <p class="mb-0">
                     Los reportes te permiten analizar el rendimiento de tus lotes avícolas. 
-                    Cada reporte puede exportarse en formato PDF, Excel o CSV según tus necesidades.
+                    Cada reporte puede exportarse en formato Excel según tus necesidades.
                     Utiliza el dashboard para obtener una vista general en tiempo real de todos tus indicadores.
                     El reporte SENA genera un archivo Excel con el formato oficial para registro mensual de postura.
                 </p>

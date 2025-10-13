@@ -39,7 +39,6 @@ class ReporteGenerado(BaseModel):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     nombre_archivo = models.CharField(max_length=255)
     formato = models.CharField(max_length=10, choices=[
-        ('pdf', 'PDF'),
         ('excel', 'Excel'),
         ('csv', 'CSV'),
         ('html', 'HTML')
@@ -81,10 +80,9 @@ class ReporteProgramado(BaseModel):
     dia_mes = models.IntegerField(null=True, blank=True, help_text="Día del mes (1-31)")
     parametros = models.JSONField(default=dict)
     formato_salida = models.CharField(max_length=10, choices=[
-        ('pdf', 'PDF'),
         ('excel', 'Excel'),
         ('csv', 'CSV')
-    ], default='pdf')
+    ], default='excel')
     enviar_email = models.BooleanField(default=False)
     emails_destino = models.JSONField(default=list, help_text="Lista de emails para envío")
     ultima_ejecucion = models.DateTimeField(null=True, blank=True)

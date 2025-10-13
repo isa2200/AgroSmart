@@ -115,9 +115,7 @@ def generar_reporte_produccion(request):
         }
     
     # Exportar según formato solicitado
-    if formato == 'pdf':
-        return reporte.generar_pdf_produccion()
-    elif formato == 'excel':
+    if formato == 'excel':
         return reporte.generar_excel_produccion()
     elif formato == 'csv':
         return reporte.generar_csv_produccion()
@@ -521,9 +519,12 @@ def generar_reporte_sena(request):
         año = int(request.POST.get('año'))
         nombre_granja = request.POST.get('nombre_granja', 'Granja Avícola La Salada')
         registro_ica = request.POST.get('registro_ica', '051290274')
-        
+        formato = request.POST.get('formato', 'excel')  # NUEVO
+
         try:
             from .reports import generar_reporte_sena_excel
+            if formato != 'excel':
+                return HttpResponse("La exportación a PDF ha sido deshabilitada. Solo está disponible Excel.", status=500)
             return generar_reporte_sena_excel(lote_id, mes, año, nombre_granja, registro_ica)
         except Exception as e:
             messages.error(request, f'Error al generar el reporte: {str(e)}')
