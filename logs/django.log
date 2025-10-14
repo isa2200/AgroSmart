@@ -16792,3 +16792,835 @@ INFO 2025-10-12 19:35:06,977 basehttp 13880 11168 "GET /aves/ HTTP/1.1" 200 5016
 INFO 2025-10-12 19:35:09,078 basehttp 13880 11168 "GET /aves/vacunacion/ HTTP/1.1" 200 27316
 INFO 2025-10-12 19:35:11,402 basehttp 13880 11168 "GET /aves/vacunacion/nuevo/ HTTP/1.1" 200 28641
 INFO 2025-10-12 19:35:13,069 basehttp 13880 11168 "GET /aves/vacunacion/ HTTP/1.1" 200 27315
+INFO 2025-10-12 20:09:54,903 basehttp 13880 7380 "POST /aves/vacunacion/2/aplicar/ HTTP/1.1" 200 17
+INFO 2025-10-12 20:09:54,954 basehttp 13880 7380 "GET /aves/vacunacion/ HTTP/1.1" 200 27096
+INFO 2025-10-13 20:36:37,295 autoreload 13288 17312 Watching for file changes with StatReloader
+INFO 2025-10-13 20:36:40,223 basehttp 13288 17524 "GET / HTTP/1.1" 200 36269
+INFO 2025-10-13 20:41:31,432 autoreload 13288 17312 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py changed, reloading.
+INFO 2025-10-13 20:41:33,148 autoreload 19992 2112 Watching for file changes with StatReloader
+INFO 2025-10-13 20:41:49,269 basehttp 19992 14976 "GET / HTTP/1.1" 200 35859
+INFO 2025-10-13 20:41:49,404 basehttp 19992 14976 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 20:41:52,198 basehttp 19992 14976 "GET / HTTP/1.1" 200 35858
+INFO 2025-10-13 20:41:52,221 basehttp 19992 14976 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 20:41:52,241 basehttp 19992 1336 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 20:41:52,266 basehttp 19992 17652 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 20:41:52,459 basehttp 19992 17652 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 20:41:52,462 basehttp 19992 1336 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 20:41:52,937 basehttp 19992 1336 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 20:41:55,280 basehttp 19992 1336 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-13 20:41:55,306 basehttp 19992 1336 "GET /usuarios/login/ HTTP/1.1" 200 20712
+INFO 2025-10-13 20:41:55,371 basehttp 19992 17652 "GET /static/reportes/js/messages.js HTTP/1.1" 304 0
+INFO 2025-10-13 20:41:55,371 basehttp 19992 1336 "GET /static/dashboard/css/login.css HTTP/1.1" 304 0
+INFO 2025-10-13 20:41:55,462 basehttp 19992 1336 "GET /static/img/logo-caricatura-login.jpg HTTP/1.1" 304 0
+INFO 2025-10-13 20:42:03,352 basehttp 19992 1336 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-13 20:42:03,748 basehttp 19992 1336 "GET /aves/ HTTP/1.1" 200 51109
+INFO 2025-10-13 20:42:03,790 basehttp 19992 1336 "GET /static/reportes/js/messages.js HTTP/1.1" 304 0
+INFO 2025-10-13 20:42:10,392 basehttp 19992 1336 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-13 20:42:10,416 basehttp 19992 1336 "GET /usuarios/login/ HTTP/1.1" 200 20712
+INFO 2025-10-13 20:42:10,446 basehttp 19992 1336 "GET /static/reportes/js/messages.js HTTP/1.1" 304 0
+INFO 2025-10-13 20:42:14,298 basehttp 19992 1336 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-13 20:42:14,350 basehttp 19992 1336 "GET / HTTP/1.1" 200 36631
+INFO 2025-10-13 20:42:26,946 basehttp 19992 1336 "GET /usuarios/lista/ HTTP/1.1" 200 25407
+INFO 2025-10-13 20:42:26,970 basehttp 19992 1336 "GET /static/reportes/js/messages.js HTTP/1.1" 304 0
+INFO 2025-10-13 20:42:29,457 basehttp 19992 1336 "GET /usuarios/editar/3/ HTTP/1.1" 200 24961
+INFO 2025-10-13 20:42:36,894 basehttp 19992 1336 "POST /usuarios/editar/3/ HTTP/1.1" 302 0
+INFO 2025-10-13 20:42:36,938 basehttp 19992 1336 "GET /usuarios/lista/ HTTP/1.1" 200 26209
+INFO 2025-10-13 20:42:36,970 basehttp 19992 1336 "GET /static/reportes/js/messages.js HTTP/1.1" 304 0
+INFO 2025-10-13 20:42:41,016 basehttp 19992 1336 "GET / HTTP/1.1" 200 35857
+INFO 2025-10-13 20:42:43,637 basehttp 19992 1336 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-13 20:42:43,657 basehttp 19992 1336 "GET /usuarios/login/ HTTP/1.1" 200 20712
+INFO 2025-10-13 20:42:43,686 basehttp 19992 1336 "GET /static/reportes/js/messages.js HTTP/1.1" 304 0
+INFO 2025-10-13 20:42:47,225 basehttp 19992 1336 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-13 20:42:47,279 basehttp 19992 1336 "GET / HTTP/1.1" 200 36644
+ERROR 2025-10-13 20:43:07,750 log 19992 1336 Internal Server Error: /reportes/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\reportes\views.py", line 29, in lista_reportes
+    return render(request, 'reportes/lista_reportes.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: reportes/lista_reportes.html
+ERROR 2025-10-13 20:43:07,797 basehttp 19992 1336 "GET /reportes/ HTTP/1.1" 500 109546
+WARNING 2025-10-13 20:43:08,000 log 19992 1336 Not Found: /favicon.ico
+WARNING 2025-10-13 20:43:08,001 basehttp 19992 1336 "GET /favicon.ico HTTP/1.1" 404 16922
+ERROR 2025-10-13 20:50:02,765 log 19992 14008 Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 505, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\dashboard\views.py", line 46, in dashboard_principal
+    return render(request, 'dashboard/principal.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 967, in do_if
+    nodelist = parser.parse(("endif",))
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 953, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 507, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 558, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 767: 'endblock', expected 'elif', 'else' or 'endif'. Did you forget to register or load this tag?
+ERROR 2025-10-13 20:50:02,859 basehttp 19992 14008 "GET / HTTP/1.1" 500 253187
+INFO 2025-10-13 20:50:02,877 basehttp 19992 9980 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 20:50:02,878 basehttp 19992 14008 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 20:50:02,957 basehttp 19992 14008 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 20:50:02,989 basehttp 19992 14008 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-13 20:50:03,058 log 19992 14008 Not Found: /favicon.ico
+WARNING 2025-10-13 20:50:03,058 basehttp 19992 14008 "GET /favicon.ico HTTP/1.1" 404 16922
+ERROR 2025-10-13 20:50:09,299 log 19992 14008 Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 505, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\dashboard\views.py", line 46, in dashboard_principal
+    return render(request, 'dashboard/principal.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 967, in do_if
+    nodelist = parser.parse(("endif",))
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 507, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 558, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 760: 'endblock', expected 'endif'. Did you forget to register or load this tag?
+ERROR 2025-10-13 20:50:09,391 basehttp 19992 14008 "GET / HTTP/1.1" 500 236951
+INFO 2025-10-13 20:50:09,411 basehttp 19992 9980 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 20:50:09,412 basehttp 19992 14008 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 20:50:09,458 basehttp 19992 14008 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 20:50:09,515 basehttp 19992 14008 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-13 20:50:09,574 log 19992 14008 Not Found: /favicon.ico
+WARNING 2025-10-13 20:50:09,574 basehttp 19992 14008 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-13 20:50:42,947 basehttp 19992 14008 "GET /usuarios/login/ HTTP/1.1" 302 0
+ERROR 2025-10-13 20:50:43,027 log 19992 14008 Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 505, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\dashboard\views.py", line 46, in dashboard_principal
+    return render(request, 'dashboard/principal.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 967, in do_if
+    nodelist = parser.parse(("endif",))
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 507, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 558, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 760: 'endblock', expected 'endif'. Did you forget to register or load this tag?
+ERROR 2025-10-13 20:50:43,120 basehttp 19992 14008 "GET / HTTP/1.1" 500 236937
+INFO 2025-10-13 20:50:43,172 basehttp 19992 14008 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 20:50:43,216 basehttp 19992 9980 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 20:50:43,216 basehttp 19992 14008 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 20:50:43,228 basehttp 19992 9980 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-13 20:50:43,285 log 19992 9980 Not Found: /favicon.ico
+WARNING 2025-10-13 20:50:43,285 basehttp 19992 9980 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-13 20:50:58,291 basehttp 19992 9980 "GET / HTTP/1.1" 200 35868
+INFO 2025-10-13 20:50:58,323 basehttp 19992 9980 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 20:50:58,324 basehttp 19992 14008 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 20:50:58,325 basehttp 19992 3536 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 20:50:58,597 basehttp 19992 14008 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 20:50:58,603 basehttp 19992 14008 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 20:50:59,057 basehttp 19992 14008 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 20:52:47,967 basehttp 19992 14008 "GET / HTTP/1.1" 200 35894
+INFO 2025-10-13 20:52:47,992 basehttp 19992 14008 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 20:52:47,992 basehttp 19992 3536 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 20:52:47,993 basehttp 19992 9980 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 20:52:48,236 basehttp 19992 9980 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 20:52:48,238 basehttp 19992 3536 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 20:52:48,647 basehttp 19992 3536 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+ERROR 2025-10-13 20:54:44,403 log 19992 3536 Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 505, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endif'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\dashboard\views.py", line 46, in dashboard_principal
+    return render(request, 'dashboard/principal.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 507, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 558, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 520: 'endif', expected 'endblock'. Did you forget to register or load this tag?
+ERROR 2025-10-13 20:54:44,483 basehttp 19992 3536 "GET / HTTP/1.1" 500 244592
+INFO 2025-10-13 20:54:44,507 basehttp 19992 3536 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 20:54:44,508 basehttp 19992 9980 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 20:54:44,597 basehttp 19992 9980 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 20:54:44,625 basehttp 19992 9980 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-13 20:54:44,683 log 19992 9980 Not Found: /favicon.ico
+WARNING 2025-10-13 20:54:44,684 basehttp 19992 9980 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-13 20:55:17,685 basehttp 19992 9980 "GET /usuarios/lista/ HTTP/1.1" 302 0
+INFO 2025-10-13 20:55:17,920 basehttp 19992 9980 "GET /aves/ HTTP/1.1" 200 52445
+INFO 2025-10-13 20:55:33,024 basehttp 19992 9980 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-13 20:55:33,057 basehttp 19992 9980 "GET /usuarios/login/ HTTP/1.1" 200 20712
+INFO 2025-10-13 20:55:33,089 basehttp 19992 9980 "GET /static/reportes/js/messages.js HTTP/1.1" 304 0
+INFO 2025-10-13 20:55:36,509 basehttp 19992 9980 "POST /usuarios/login/ HTTP/1.1" 302 0
+ERROR 2025-10-13 20:55:36,596 log 19992 9980 Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 505, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endif'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\decorators.py", line 32, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\bp877\TRAE\AgroSmart\apps\dashboard\views.py", line 46, in dashboard_principal
+    return render(request, 'dashboard/principal.html', context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ~~~~~~~~~~~~^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 507, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 558, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 520: 'endif', expected 'endblock'. Did you forget to register or load this tag?
+ERROR 2025-10-13 20:55:36,686 basehttp 19992 9980 "GET / HTTP/1.1" 500 244733
+WARNING 2025-10-13 20:58:28,684 log 19992 9980 Forbidden (CSRF token from POST incorrect.): /usuarios/login/
+WARNING 2025-10-13 20:58:28,715 basehttp 19992 9980 "POST /usuarios/login/ HTTP/1.1" 403 16003
+WARNING 2025-10-13 20:58:32,889 log 19992 9980 Forbidden (CSRF token from POST incorrect.): /usuarios/login/
+WARNING 2025-10-13 20:58:32,907 basehttp 19992 9980 "POST /usuarios/login/ HTTP/1.1" 403 16003
+INFO 2025-10-13 20:58:41,764 autoreload 20512 19036 Watching for file changes with StatReloader
+INFO 2025-10-13 20:58:43,213 basehttp 20512 1372 "GET / HTTP/1.1" 200 36372
+INFO 2025-10-13 20:58:43,323 basehttp 20512 1372 "GET /static/reportes/js/messages.js HTTP/1.1" 304 0
+INFO 2025-10-13 20:59:12,472 basehttp 20512 1372 "GET / HTTP/1.1" 200 35289
+INFO 2025-10-13 20:59:12,496 basehttp 20512 1372 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 20:59:12,497 basehttp 20512 10880 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 20:59:12,497 basehttp 20512 12628 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 20:59:12,672 basehttp 20512 12628 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 20:59:12,678 basehttp 20512 12628 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 20:59:13,012 basehttp 20512 12628 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:03:16,670 basehttp 20512 12628 "GET / HTTP/1.1" 200 32958
+INFO 2025-10-13 21:03:16,690 basehttp 20512 12628 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:03:16,690 basehttp 20512 1372 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:03:16,691 basehttp 20512 10880 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:03:17,358 basehttp 20512 1372 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:03:17,363 basehttp 20512 1372 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:03:17,846 basehttp 20512 1372 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:03:33,900 basehttp 20512 1372 "GET / HTTP/1.1" 200 33524
+INFO 2025-10-13 21:03:33,920 basehttp 20512 1372 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:03:33,920 basehttp 20512 12628 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:03:33,921 basehttp 20512 10880 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:03:34,082 basehttp 20512 10880 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:03:34,085 basehttp 20512 12628 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:03:34,379 basehttp 20512 12628 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+ERROR 2025-10-13 21:03:37,331 log 20512 12628 Internal Server Error: /usuarios/perfil/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: usuarios/perfil.html
+ERROR 2025-10-13 21:03:37,375 basehttp 20512 12628 "GET /usuarios/perfil/ HTTP/1.1" 500 101194
+WARNING 2025-10-13 21:03:37,565 log 20512 12628 Not Found: /favicon.ico
+WARNING 2025-10-13 21:03:37,565 basehttp 20512 12628 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-13 21:08:32,072 basehttp 20512 12628 "GET / HTTP/1.1" 200 33524
+INFO 2025-10-13 21:08:32,096 basehttp 20512 12628 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:08:32,096 basehttp 20512 1372 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:08:32,097 basehttp 20512 10880 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:08:32,539 basehttp 20512 1372 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:08:32,543 basehttp 20512 1372 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:08:32,885 basehttp 20512 1372 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:08:33,977 basehttp 20512 1372 "GET /usuarios/perfil/ HTTP/1.1" 200 17302
+INFO 2025-10-13 21:08:37,724 basehttp 20512 1372 "GET /usuarios/editar-perfil/ HTTP/1.1" 200 17086
+INFO 2025-10-13 21:08:40,893 basehttp 20512 1372 "GET /usuarios/editar-perfil/ HTTP/1.1" 200 17086
+INFO 2025-10-13 21:08:42,141 basehttp 20512 1372 "GET /usuarios/perfil/ HTTP/1.1" 200 17302
+INFO 2025-10-13 21:10:53,623 basehttp 20512 1372 "GET /usuarios/editar-perfil/ HTTP/1.1" 200 17086
+INFO 2025-10-13 21:11:04,690 basehttp 20512 1372 "GET /usuarios/perfil/ HTTP/1.1" 200 17302
+INFO 2025-10-13 21:15:17,361 autoreload 20512 19036 C:\Users\bp877\TRAE\AgroSmart\apps\usuarios\forms.py changed, reloading.
+INFO 2025-10-13 21:15:18,763 autoreload 19632 11704 Watching for file changes with StatReloader
+INFO 2025-10-13 21:15:38,398 basehttp 19632 13288 "GET /usuarios/perfil/ HTTP/1.1" 200 17303
+INFO 2025-10-13 21:15:38,425 basehttp 19632 13288 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:15:38,426 basehttp 19632 21436 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:15:38,427 basehttp 19632 11088 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:15:38,807 basehttp 19632 11088 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:15:38,814 basehttp 19632 11088 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:15:39,415 basehttp 19632 11088 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:15:40,708 basehttp 19632 11088 "GET / HTTP/1.1" 200 33524
+INFO 2025-10-13 21:15:42,491 basehttp 19632 11088 "GET /usuarios/perfil/ HTTP/1.1" 200 17302
+INFO 2025-10-13 21:15:45,499 basehttp 19632 11088 "GET /usuarios/editar-perfil/ HTTP/1.1" 200 17982
+INFO 2025-10-13 21:16:11,953 basehttp 19632 11088 "GET /usuarios/perfil/ HTTP/1.1" 200 17302
+INFO 2025-10-13 21:16:14,355 basehttp 19632 11088 "GET /usuarios/editar-perfil/ HTTP/1.1" 200 17982
+INFO 2025-10-13 21:16:16,581 basehttp 19632 11088 "GET /usuarios/perfil/ HTTP/1.1" 200 17302
+INFO 2025-10-13 21:16:17,810 basehttp 19632 11088 "GET /usuarios/editar-perfil/ HTTP/1.1" 200 17982
+INFO 2025-10-13 21:17:02,460 basehttp 19632 11088 "GET /usuarios/perfil/ HTTP/1.1" 200 17302
+INFO 2025-10-13 21:17:57,143 basehttp 19632 11088 "GET /usuarios/perfil/ HTTP/1.1" 200 17302
+INFO 2025-10-13 21:17:57,168 basehttp 19632 13288 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:17:57,169 basehttp 19632 11088 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:17:57,169 basehttp 19632 21436 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:17:57,612 basehttp 19632 21436 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:17:57,616 basehttp 19632 21436 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:17:58,069 basehttp 19632 21436 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:17:59,519 basehttp 19632 21436 "GET /usuarios/editar-perfil/ HTTP/1.1" 200 18200
+INFO 2025-10-13 21:18:03,587 basehttp 19632 21436 "POST /usuarios/editar-perfil/ HTTP/1.1" 302 0
+INFO 2025-10-13 21:18:03,620 basehttp 19632 21436 "GET /usuarios/perfil/ HTTP/1.1" 200 18146
+INFO 2025-10-13 21:18:03,692 basehttp 19632 21436 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview.png HTTP/1.1" 200 43128
+INFO 2025-10-13 21:18:08,269 basehttp 19632 21436 "GET / HTTP/1.1" 200 33524
+INFO 2025-10-13 21:18:09,990 basehttp 19632 21436 "GET / HTTP/1.1" 200 33524
+INFO 2025-10-13 21:18:12,517 basehttp 19632 21436 "GET /usuarios/perfil/ HTTP/1.1" 200 17364
+INFO 2025-10-13 21:18:12,576 basehttp 19632 21436 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview.png HTTP/1.1" 304 0
+INFO 2025-10-13 21:18:23,792 basehttp 19632 21436 "GET /usuarios/editar-perfil/ HTTP/1.1" 200 18804
+INFO 2025-10-13 21:18:23,844 basehttp 19632 21436 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview.png HTTP/1.1" 304 0
+INFO 2025-10-13 21:18:25,172 basehttp 19632 21436 "GET /usuarios/perfil/ HTTP/1.1" 200 17364
+INFO 2025-10-13 21:18:25,240 basehttp 19632 21436 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview.png HTTP/1.1" 304 0
+INFO 2025-10-13 21:18:25,701 basehttp 19632 21436 "GET /usuarios/editar-perfil/ HTTP/1.1" 200 18804
+INFO 2025-10-13 21:18:32,376 basehttp 19632 21436 "POST /usuarios/editar-perfil/ HTTP/1.1" 302 0
+INFO 2025-10-13 21:18:32,417 basehttp 19632 21436 "GET /usuarios/perfil/ HTTP/1.1" 200 18084
+ERROR 2025-10-13 21:21:23,171 log 19632 21436 Internal Server Error: /usuarios/perfil/
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 880, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+TypeError: 'PerfilUsuario' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 890, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'PerfilUsuario' object has no attribute 'usuario'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 896, in _resolve_lookup
+    current = current[int(bit)]
+                      ~~~^^^^^
+ValueError: invalid literal for int() with base 10: 'usuario'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\test\utils.py", line 112, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+           ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1064, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 736, in resolve
+    arg_vals.append(arg.resolve(context))
+                    ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 847, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\bp877\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 903, in _resolve_lookup
+    raise VariableDoesNotExist(
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )  # missing attribute
+    ^
+django.template.base.VariableDoesNotExist: Failed lookup for key [usuario] in <PerfilUsuario: Manuel Montoya - Administrador de Aves>
+ERROR 2025-10-13 21:21:23,248 basehttp 19632 21436 "GET /usuarios/perfil/ HTTP/1.1" 500 204483
+INFO 2025-10-13 21:21:23,270 basehttp 19632 13288 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:21:23,270 basehttp 19632 21436 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:21:23,311 basehttp 19632 13288 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:21:23,354 basehttp 19632 13288 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+WARNING 2025-10-13 21:21:23,408 log 19632 13288 Not Found: /favicon.ico
+WARNING 2025-10-13 21:21:23,409 basehttp 19632 13288 "GET /favicon.ico HTTP/1.1" 404 16922
+INFO 2025-10-13 21:22:48,969 basehttp 19632 13288 "GET /usuarios/perfil/ HTTP/1.1" 200 16959
+INFO 2025-10-13 21:22:48,997 basehttp 19632 13288 "GET /static/usuarios/css/perfil.css HTTP/1.1" 200 2740
+INFO 2025-10-13 21:22:48,997 basehttp 19632 21436 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:22:48,998 basehttp 19632 3108 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:22:49,000 basehttp 19632 11088 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:22:49,234 basehttp 19632 11088 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:22:49,238 basehttp 19632 11088 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:22:49,613 basehttp 19632 11088 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:22:51,605 basehttp 19632 11088 "GET /usuarios/editar-perfil/ HTTP/1.1" 200 18372
+INFO 2025-10-13 21:22:58,116 basehttp 19632 11088 "GET /usuarios/perfil/ HTTP/1.1" 200 16959
+INFO 2025-10-13 21:23:05,257 basehttp 19632 11088 "GET /usuarios/editar-perfil/ HTTP/1.1" 200 18372
+INFO 2025-10-13 21:23:05,274 basehttp 19632 11088 "GET /static/usuarios/css/perfil.css HTTP/1.1" 304 0
+INFO 2025-10-13 21:23:20,635 basehttp 19632 11088 "POST /usuarios/editar-perfil/ HTTP/1.1" 302 0
+INFO 2025-10-13 21:23:20,678 basehttp 19632 11088 "GET /usuarios/perfil/ HTTP/1.1" 200 17607
+INFO 2025-10-13 21:23:20,698 basehttp 19632 11088 "GET /static/usuarios/css/perfil.css HTTP/1.1" 304 0
+INFO 2025-10-13 21:23:20,748 basehttp 19632 11088 "GET /media/usuarios/fotos/logo-caricatura-login.png HTTP/1.1" 200 258353
+INFO 2025-10-13 21:23:27,811 basehttp 19632 11088 "GET / HTTP/1.1" 200 33524
+INFO 2025-10-13 21:26:08,535 basehttp 19632 11088 "GET / HTTP/1.1" 200 33817
+INFO 2025-10-13 21:26:08,562 basehttp 19632 21436 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:26:08,563 basehttp 19632 3108 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:26:08,564 basehttp 19632 13288 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:26:08,609 basehttp 19632 11088 "GET /media/usuarios/fotos/logo-caricatura-login.png HTTP/1.1" 200 258353
+INFO 2025-10-13 21:26:08,928 basehttp 19632 11088 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:26:08,929 basehttp 19632 13288 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:26:09,230 basehttp 19632 13288 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:27:34,906 basehttp 19632 13288 "GET / HTTP/1.1" 200 33834
+INFO 2025-10-13 21:27:34,933 basehttp 19632 3108 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:27:34,934 basehttp 19632 21436 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:27:34,934 basehttp 19632 11088 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:27:34,962 basehttp 19632 13288 "GET /media/usuarios/fotos/logo-caricatura-login.png HTTP/1.1" 200 258353
+INFO 2025-10-13 21:27:35,571 basehttp 19632 13288 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:27:35,574 basehttp 19632 13288 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:27:36,012 basehttp 19632 13288 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:28:02,157 basehttp 19632 13288 "GET / HTTP/1.1" 200 34513
+INFO 2025-10-13 21:28:02,182 basehttp 19632 11088 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:28:02,182 basehttp 19632 21436 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:28:02,184 basehttp 19632 3108 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:28:02,210 basehttp 19632 13288 "GET /media/usuarios/fotos/logo-caricatura-login.png HTTP/1.1" 200 258353
+INFO 2025-10-13 21:28:02,406 basehttp 19632 13288 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:28:02,409 basehttp 19632 21436 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:28:02,584 basehttp 19632 21436 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:28:07,118 basehttp 19632 21436 "GET /usuarios/perfil/ HTTP/1.1" 200 16825
+INFO 2025-10-13 21:28:07,141 basehttp 19632 21436 "GET /static/usuarios/css/perfil.css HTTP/1.1" 304 0
+INFO 2025-10-13 21:28:09,975 basehttp 19632 21436 "GET /usuarios/editar-perfil/ HTTP/1.1" 200 18923
+INFO 2025-10-13 21:28:18,117 basehttp 19632 21436 "POST /usuarios/editar-perfil/ HTTP/1.1" 302 0
+INFO 2025-10-13 21:28:18,157 basehttp 19632 21436 "GET /usuarios/perfil/ HTTP/1.1" 200 17623
+INFO 2025-10-13 21:28:18,224 basehttp 19632 21436 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview_OEXmNf0.png HTTP/1.1" 200 43128
+INFO 2025-10-13 21:28:19,767 basehttp 19632 21436 "GET / HTTP/1.1" 200 34529
+INFO 2025-10-13 21:28:19,819 basehttp 19632 21436 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview_OEXmNf0.png HTTP/1.1" 304 0
+INFO 2025-10-13 21:29:27,838 basehttp 19632 21436 "GET / HTTP/1.1" 200 34549
+INFO 2025-10-13 21:29:27,862 basehttp 19632 13288 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:29:27,873 basehttp 19632 13288 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:29:27,873 basehttp 19632 3108 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:29:27,893 basehttp 19632 21436 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview_OEXmNf0.png HTTP/1.1" 200 43128
+INFO 2025-10-13 21:29:28,118 basehttp 19632 21436 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:29:28,124 basehttp 19632 21436 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:29:28,475 basehttp 19632 21436 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:29:37,230 basehttp 19632 21436 "GET / HTTP/1.1" 200 34529
+INFO 2025-10-13 21:29:37,258 basehttp 19632 13288 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:29:37,258 basehttp 19632 3108 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:29:37,258 basehttp 19632 11088 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:29:37,292 basehttp 19632 21436 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview_OEXmNf0.png HTTP/1.1" 200 43128
+INFO 2025-10-13 21:29:37,446 basehttp 19632 21436 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:29:37,450 basehttp 19632 21436 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:29:37,660 basehttp 19632 21436 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:47:53,897 basehttp 19632 3672 "GET /aves/ HTTP/1.1" 200 51626
+INFO 2025-10-13 21:47:53,918 basehttp 19632 3672 "GET /static/reportes/js/messages.js HTTP/1.1" 304 0
+INFO 2025-10-13 21:52:00,235 basehttp 19632 3672 "GET / HTTP/1.1" 200 34529
+INFO 2025-10-13 21:52:00,284 basehttp 19632 3672 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview_OEXmNf0.png HTTP/1.1" 304 0
+INFO 2025-10-13 21:52:53,902 basehttp 19632 3672 "GET / HTTP/1.1" 200 34478
+INFO 2025-10-13 21:52:53,926 basehttp 19632 21900 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:52:53,933 basehttp 19632 21900 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:52:53,939 basehttp 19632 20928 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:52:53,959 basehttp 19632 3672 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview_OEXmNf0.png HTTP/1.1" 200 43128
+INFO 2025-10-13 21:52:54,508 basehttp 19632 3672 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:52:54,515 basehttp 19632 3672 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:52:55,056 basehttp 19632 3672 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:53:07,867 basehttp 19632 3672 "GET / HTTP/1.1" 200 34478
+INFO 2025-10-13 21:53:07,888 basehttp 19632 20928 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:53:07,897 basehttp 19632 20928 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:53:07,899 basehttp 19632 21900 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:53:07,916 basehttp 19632 3672 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview_OEXmNf0.png HTTP/1.1" 200 43128
+INFO 2025-10-13 21:53:08,055 basehttp 19632 3672 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:53:08,059 basehttp 19632 3672 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:53:08,324 basehttp 19632 3672 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:53:23,734 basehttp 19632 3672 "GET / HTTP/1.1" 200 34478
+INFO 2025-10-13 21:53:23,754 basehttp 19632 21900 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:53:23,760 basehttp 19632 21900 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:53:23,763 basehttp 19632 20928 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:53:23,782 basehttp 19632 3672 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview_OEXmNf0.png HTTP/1.1" 200 43128
+INFO 2025-10-13 21:53:23,863 basehttp 19632 3672 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:53:23,865 basehttp 19632 20928 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:53:24,191 basehttp 19632 20928 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:53:42,732 basehttp 19632 20928 "GET / HTTP/1.1" 200 34478
+INFO 2025-10-13 21:53:42,757 basehttp 19632 3672 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:53:42,758 basehttp 19632 21900 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:53:42,764 basehttp 19632 13380 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:53:42,784 basehttp 19632 20928 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview_OEXmNf0.png HTTP/1.1" 200 43128
+INFO 2025-10-13 21:53:42,896 basehttp 19632 20928 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:53:42,899 basehttp 19632 13380 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:53:43,243 basehttp 19632 13380 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:55:05,780 basehttp 19632 13380 "GET / HTTP/1.1" 200 34472
+INFO 2025-10-13 21:55:05,805 basehttp 19632 20928 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:55:05,817 basehttp 19632 20928 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:55:05,818 basehttp 19632 21900 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:55:05,837 basehttp 19632 13380 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview_OEXmNf0.png HTTP/1.1" 200 43128
+INFO 2025-10-13 21:55:06,077 basehttp 19632 13380 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:55:06,082 basehttp 19632 13380 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:55:06,697 basehttp 19632 13380 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:55:12,774 basehttp 19632 13380 "GET / HTTP/1.1" 200 34478
+INFO 2025-10-13 21:55:12,798 basehttp 19632 21900 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:55:12,804 basehttp 19632 20928 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:55:12,805 basehttp 19632 21900 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:55:12,830 basehttp 19632 13380 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview_OEXmNf0.png HTTP/1.1" 200 43128
+INFO 2025-10-13 21:55:12,979 basehttp 19632 13380 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:55:12,984 basehttp 19632 13380 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:55:13,308 basehttp 19632 13380 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:55:36,136 basehttp 19632 13380 "GET / HTTP/1.1" 200 34476
+INFO 2025-10-13 21:55:36,159 basehttp 19632 21900 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:55:36,168 basehttp 19632 21900 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:55:36,168 basehttp 19632 20928 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:55:36,189 basehttp 19632 13380 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview_OEXmNf0.png HTTP/1.1" 200 43128
+INFO 2025-10-13 21:55:36,283 basehttp 19632 13380 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:55:36,290 basehttp 19632 13380 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:55:36,472 basehttp 19632 13380 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:55:45,999 basehttp 19632 13380 "GET / HTTP/1.1" 200 34472
+INFO 2025-10-13 21:55:46,023 basehttp 19632 20928 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:55:46,024 basehttp 19632 21900 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:55:46,028 basehttp 19632 3672 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:55:46,053 basehttp 19632 13380 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview_OEXmNf0.png HTTP/1.1" 200 43128
+INFO 2025-10-13 21:55:46,170 basehttp 19632 13380 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:55:46,174 basehttp 19632 13380 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:55:46,365 basehttp 19632 13380 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:56:04,458 basehttp 19632 13380 "GET / HTTP/1.1" 200 34466
+INFO 2025-10-13 21:56:04,482 basehttp 19632 3672 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:56:04,488 basehttp 19632 3672 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:56:04,489 basehttp 19632 21900 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:56:04,520 basehttp 19632 13380 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview_OEXmNf0.png HTTP/1.1" 200 43128
+INFO 2025-10-13 21:56:04,611 basehttp 19632 13380 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:56:04,617 basehttp 19632 13380 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:56:04,797 basehttp 19632 13380 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128
+INFO 2025-10-13 21:56:13,545 basehttp 19632 13380 "GET /aves/ HTTP/1.1" 200 51626
+INFO 2025-10-13 21:56:17,285 basehttp 19632 13380 "GET /usuarios/logout/ HTTP/1.1" 302 0
+INFO 2025-10-13 21:56:17,313 basehttp 19632 13380 "GET /usuarios/login/ HTTP/1.1" 200 20712
+INFO 2025-10-13 21:56:22,068 basehttp 19632 13380 "POST /usuarios/login/ HTTP/1.1" 302 0
+INFO 2025-10-13 21:56:22,127 basehttp 19632 13380 "GET / HTTP/1.1" 200 35248
+INFO 2025-10-13 21:56:47,703 basehttp 19632 13380 "GET / HTTP/1.1" 200 34472
+INFO 2025-10-13 21:56:47,728 basehttp 19632 21900 "GET /static/debug_toolbar/js/toolbar.js HTTP/1.1" 200 14879
+INFO 2025-10-13 21:56:47,733 basehttp 19632 3672 "GET /static/reportes/js/messages.js HTTP/1.1" 200 466
+INFO 2025-10-13 21:56:47,734 basehttp 19632 20928 "GET /static/debug_toolbar/css/toolbar.css HTTP/1.1" 200 29468
+INFO 2025-10-13 21:56:47,758 basehttp 19632 13380 "GET /media/usuarios/fotos/logo-ico.ico-removebg-preview_OEXmNf0.png HTTP/1.1" 200 43128
+INFO 2025-10-13 21:56:47,917 basehttp 19632 13380 "GET /static/debug_toolbar/css/print.css HTTP/1.1" 200 43
+INFO 2025-10-13 21:56:47,922 basehttp 19632 13380 "GET /static/debug_toolbar/js/utils.js HTTP/1.1" 200 4700
+INFO 2025-10-13 21:56:48,313 basehttp 19632 13380 "GET /static/img/logo-ico.ico HTTP/1.1" 200 43128

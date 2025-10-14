@@ -334,7 +334,7 @@ class PerfilUsuarioForm(forms.ModelForm):
     """
     class Meta:
         model = PerfilUsuario
-        fields = ['rol', 'telefono', 'cedula', 'fecha_nacimiento', 'direccion', 'foto']
+        fields = ['telefono', 'cedula', 'fecha_nacimiento', 'direccion', 'foto']
         widgets = {
             'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
             'direccion': forms.Textarea(attrs={'rows': 3}),
@@ -344,7 +344,6 @@ class PerfilUsuarioForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            'rol',
             Row(
                 Column('cedula', css_class='form-group col-md-6 mb-0'),
                 Column('telefono', css_class='form-group col-md-6 mb-0'),

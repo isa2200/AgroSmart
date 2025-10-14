@@ -17,13 +17,13 @@ def role_required(allowed_roles):
         @wraps(view_func)
         def _wrapped_view(request, *args, **kwargs):
             if not request.user.is_authenticated:
-                messages.error(request, 'Debe iniciar sesión para acceder a esta página.')
+                messages.warning(request, 'Debe iniciar sesión para acceder a esta página.')
                 return redirect('usuarios:login')
             
             try:
                 perfil = request.user.perfilusuario
                 if perfil.rol not in allowed_roles:
-                    messages.error(request, f'No tiene permisos para realizar esta acción. Roles permitidos: {", ".join(allowed_roles)}')
+                    messages.warning(request, f'No tiene permisos para realizar esta acción. Roles permitidos: {", ".join(allowed_roles)}')
                     return redirect('aves:dashboard')  # Redirigir al dashboard de aves
             except Exception as e:
                 messages.error(request, f'Error al verificar permisos: Perfil de usuario no configurado correctamente.')
@@ -69,7 +69,7 @@ def puede_editar_required(view_func):
         try:
             perfil = request.user.perfilusuario
             if not perfil.puede_editar():
-                messages.error(request, 'No tiene permisos para editar contenido.')
+                messages.warning(request, 'No tiene permisos para editar contenido.')
                 return redirect('aves:dashboard')
         except:
             messages.error(request, 'Error al verificar permisos')
@@ -89,7 +89,7 @@ def puede_eliminar_required(view_func):
         try:
             perfil = request.user.perfilusuario
             if not perfil.puede_eliminar():
-                messages.error(request, 'No tiene permisos para eliminar registros.')
+                messages.warning(request, 'No tiene permisos para eliminar registros.')
                 return redirect('aves:dashboard')
         except:
             messages.error(request, 'Error al verificar permisos')
@@ -109,7 +109,7 @@ def acceso_modulo_aves_required(view_func):
         try:
             perfil = request.user.perfilusuario
             if not perfil.puede_acceder_modulo_aves():
-                messages.error(request, 'No tiene acceso al módulo avícola.')
+                messages.warning(request, 'No tiene acceso al módulo avícola.')
                 return redirect('dashboard:principal')  # Redirigir al dashboard principal
         except:
             messages.error(request, 'Error al verificar permisos')
@@ -134,7 +134,7 @@ def area_access_required(area):
                 if perfil.tiene_acceso_area(area):
                     return view_func(request, *args, **kwargs)
                 else:
-                    messages.error(request, f'No tienes acceso al área de {area}')
+                    messages.warning(request, f'No tienes acceso al área de {area}')
                     return redirect('aves:dashboard')
             except:
                 messages.error(request, 'Error al verificar permisos')

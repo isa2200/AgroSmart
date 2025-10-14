@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Mi Perfil - AgroSmart{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'usuarios/css/perfil.css' %}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="page-wrap">
+  <div class="container profile-container">
+
+    <div class="card-neutral">
+      <div class="card-section profile-header">
+        <div>
+          {% if perfil.foto %}
+            <img src="{{ perfil.foto.url }}" alt="Foto de perfil" class="avatar-xl">
+          {% else %}
+            <div class="avatar-xl d-flex align-items-center justify-content-center">
+              <span class="text-muted" style="font-weight:600;">
+                {% if perfil.user.first_name %}
+                  {{ perfil.user.first_name|slice:":1"|upper }}
+                {% else %}
+                  {{ perfil.user.username|slice:":1"|upper }}
+                {% endif %}
+              </span>
+            </div>
+          {% endif %}
+        </div>
+        <div class="name-block">
+          {% if perfil.user.get_full_name %}
+            <h1>{{ perfil.user.get_full_name }}</h1>
+          {% else %}
+            <h1>{{ perfil.user.username }}</h1>
+          {% endif %}
+          <div class="sub">{{ perfil.user.email }}</div>
+          <div class="mt-2">
+            <span class="badge-neutral">
+              Rol: {{ perfil.rol|default:"No definido" }}
+            </span>
+          </div>
+          <div class="actions header-actions mt-3">
+            <a href="{% url 'usuarios:editar_perfil' %}" class="btn btn-neutral">
+              <i class="fas fa-user-edit"></i> Editar Perfil
+            </a>
+            <a href="{% url 'dashboard:principal' %}" class="btn btn-outline-secondary">
+              <i class="fas fa-arrow-left"></i> Volver al Panel
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-section">
+        <div class="section-title">Información personal</div>
+        <ul class="list-clean">
+          <li>
+            <div class="label">Cédula</div>
+            <div class="value">{{ perfil.cedula|default:"No registrada" }}</div>
+          </li>
+          <li>
+            <div class="label">Teléfono</div>
+            <div class="value">{{ perfil.telefono|default:"No registrado" }}</div>
+          </li>
+          <li>
+            <div class="label">Fecha de nacimiento</div>
+            <div class="value">
+              {% if perfil.fecha_nacimiento %}
+                {{ perfil.fecha_nacimiento|date:"d/m/Y" }}
+              {% else %}
+                No registrada
+              {% endif %}
+            </div>
+          </li>
+          <li>
+            <div class="label">Dirección</div>
+            <div class="value">{{ perfil.direccion|default:"No registrada" }}</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card-section">
+        <div class="section-title">Cuenta</div>
+        <ul class="list-clean">
+          <li>
+            <div class="label">Usuario</div>
+            <div class="value">{{ perfil.user.username }}</div>
+          </li>
+          <li>
+            <div class="label">Correo</div>
+            <div class="value">{{ perfil.user.email }}</div>
+          </li>
+          <li>
+            <div class="label">Estado</div>
+            <div class="value">
+              {% if perfil.user.is_active %} Activa {% else %} Inactiva {% endif %}
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}{% endblock %}
