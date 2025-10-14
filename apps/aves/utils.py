@@ -2,22 +2,11 @@
 Utilidades para el módulo avícola.
 """
 
-from django.utils import timezone
-from django.contrib.auth.models import User
-from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseServerError
-from reportlab.lib.pagesizes import letter, A4
-from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
-from reportlab.lib.styles import getSampleStyleSheet
-import io
-import openpyxl
-from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
-from openpyxl.chart import BarChart, LineChart, Reference
 import traceback
 from calendar import monthrange
 
-from .models import AlertaSistema, InventarioHuevos, LoteAves
+from .models import AlertaSistema, InventarioHuevos
 
 
 def generar_alertas(bitacora_instance=None):
@@ -105,10 +94,13 @@ def actualizar_inventario_huevos(bitacora_instance):
 def exportar_reporte_excel(tipo_reporte, datos, estadisticas, filtros=None):
     """Exporta reportes a Excel en formato SENA oficial exacto."""
     try:
+        # Import perezoso: solo cuando realmente se exporta
+        import openpyxl
+        from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
         from openpyxl.drawing import image
         import os
         from django.conf import settings
-        
+
         # Crear workbook y worksheet
         wb = openpyxl.Workbook()
         ws = wb.active

@@ -36,3 +36,6 @@ if settings.DEBUG:
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
+
+# Servir MEDIA aunque DEBUG sea False (útil en Docker local)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

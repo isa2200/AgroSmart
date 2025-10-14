@@ -17,7 +17,7 @@ DATABASES = {
         'USER': 'root',  # Verifica que este sea tu usuario correcto
         'PASSWORD': '0000',  # Cambia por tu contraseña real de MySQL
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': '3307',
         'OPTIONS': {
             'sql_mode': 'traditional',
             'charset': 'utf8mb4',

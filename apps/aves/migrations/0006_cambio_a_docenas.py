@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('aves', '0005_add_tipo_field_safe'),
     ]
@@ -29,9 +28,19 @@ class Migration(migrations.Migration):
             name='precio_por_docena',
             field=models.DecimalField(blank=True, decimal_places=2, help_text='Precio por cada docena de huevos', max_digits=10, null=True, verbose_name='Precio por docena'),
         ),
-        migrations.AddField(
-            model_name='loteaves',
-            name='tipo',
-            field=models.CharField(choices=[('ponedoras', 'Ponedoras'), ('engorde', 'Engorde')], default='ponedoras', max_length=20, verbose_name='Tipo de lote'),
+        migrations.SeparateDatabaseAndState(
+            database_operations=[],
+            state_operations=[
+                migrations.AddField(
+                    model_name='loteaves',
+                    name='tipo',
+                    field=models.CharField(
+                        choices=[('ponedoras', 'Ponedoras'), ('engorde', 'Engorde')],
+                        default='ponedoras',
+                        max_length=20,
+                        verbose_name='Tipo de lote',
+                    ),
+                ),
+            ],
         ),
     ]
