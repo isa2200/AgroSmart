@@ -2,11 +2,11 @@
 Señales para el módulo avícola.
 """
 
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
 from django.contrib.auth.models import User
-from .models import BitacoraDiaria, MovimientoHuevos, RegistroModificacion
-from .utils import generar_alertas, actualizar_inventario_huevos
+from .models import BitacoraDiaria, MovimientoHuevos, DetalleMovimientoHuevos, RegistroModificacion
+from .utils import generar_alertas, actualizar_inventario_huevos, actualizar_inventario_por_movimiento
 
 
 @receiver(post_save, sender=BitacoraDiaria)
@@ -18,6 +18,35 @@ def procesar_bitacora_diaria(sender, instance, created, **kwargs):
         
         # Actualizar inventario de huevos
         actualizar_inventario_huevos(instance)
+
+
+@receiver(post_save, sender=DetalleMovimientoHuevos)
+def procesar_movimiento_huevos(sender, instance, created, **kwargs):
+    """Actualiza el inventario cuando se registra un movimiento de huevos."""
+    if created:
+        # Actualizar inventario restando la cantidad movida
+        actualizar_inventario_por_movimiento(instance)
+
+
+@receiver(post_delete, sender=DetalleMovimientoHuevos)
+def revertir_movimiento_huevos(sender, instance, **kwargs):
+    """Revierte el inventario cuando se elimina un movimiento de huevos."""
+    try:
+        from .models import InventarioHuevos
+        
+        # Obtener el inventario para la categoría
+        inventario = InventarioHuevos.objects.get(categoria=instance.categoria_huevo)
+        
+        # Devolver la cantidad al inventario (sumar lo que se había restado)
+        cantidad_unidades = instance.cantidad_unidades
+        inventario.cantidad_actual += cantidad_unidades
+        inventario.save()
+        
+    except InventarioHuevos.DoesNotExist:
+        # Si no existe el inventario, no hacer nada
+        pass
+    except Exception as e:
+        print(f"Error revirtiendo movimiento: {e}")
 
 
 from django.db.models.signals import pre_save, post_save

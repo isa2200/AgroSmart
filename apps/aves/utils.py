@@ -66,29 +66,84 @@ def generar_alertas(bitacora_instance=None):
 def actualizar_inventario_huevos(bitacora_instance):
     """Actualiza el inventario de huevos automáticamente."""
     try:
-        lote = bitacora_instance.lote
-        inventario, created = InventarioHuevos.objects.get_or_create(
-            lote=lote,
-            defaults={
-                'stock_aaa': 0,
-                'stock_aa': 0,
-                'stock_a': 0,
-                'stock_b': 0,
-                'stock_c': 0,
-                'stock_automatico': True
-            }
-        )
+        # Mapeo de categorías de huevos
+        categorias_produccion = {
+            'AAA': bitacora_instance.produccion_aaa,
+            'AA': bitacora_instance.produccion_aa,
+            'A': bitacora_instance.produccion_a,
+            'B': bitacora_instance.produccion_b,
+            'C': bitacora_instance.produccion_c,
+        }
         
-        # Actualizar stocks con la producción de la bitácora
-        inventario.stock_aaa += bitacora_instance.produccion_aaa
-        inventario.stock_aa += bitacora_instance.produccion_aa
-        inventario.stock_a += bitacora_instance.produccion_a
-        inventario.stock_b += bitacora_instance.produccion_b
-        inventario.stock_c += bitacora_instance.produccion_c
-        inventario.save()
+        # Actualizar inventario por cada categoría
+        for categoria, cantidad in categorias_produccion.items():
+            if cantidad > 0:  # Solo actualizar si hay producción
+                inventario, created = InventarioHuevos.objects.get_or_create(
+                    categoria=categoria,
+                    defaults={
+                        'cantidad_actual': 0,
+                        'cantidad_minima': 100,
+                        'stock_automatico': True,
+                        'factor_calculo': 0.75,
+                        'dias_stock': 3,
+                    }
+                )
+                
+                # Incrementar la cantidad actual
+                inventario.cantidad_actual += cantidad
+                inventario.save()
         
         return True
     except Exception as e:
+        print(f"Error actualizando inventario: {e}")
+        return False
+
+
+def actualizar_inventario_por_movimiento(detalle_movimiento):
+    """Actualiza el inventario cuando se registra un movimiento de huevos."""
+    try:
+        # Obtener o crear el inventario para la categoría
+        inventario, created = InventarioHuevos.objects.get_or_create(
+            categoria=detalle_movimiento.categoria_huevo,
+            defaults={
+                'cantidad_actual': 0,
+                'cantidad_minima': 100,
+                'stock_automatico': True,
+                'factor_calculo': 0.75,
+                'dias_stock': 3,
+            }
+        )
+        
+        # Determinar si es una salida o entrada basado en el tipo de movimiento
+        if hasattr(detalle_movimiento, 'movimiento'):
+            tipo_movimiento = detalle_movimiento.movimiento.tipo_movimiento
+        else:
+            # Para casos de reversión (cuando se elimina un movimiento)
+            tipo_movimiento = 'devolucion'  # Asumimos que es una devolución
+        
+        # Restar la cantidad movida (en unidades) solo para salidas
+        cantidad_unidades = detalle_movimiento.cantidad_unidades
+        
+        if tipo_movimiento in ['venta', 'autoconsumo', 'baja']:
+            # Es una salida - restar del inventario
+            inventario.cantidad_actual -= cantidad_unidades
+            print(f"Salida registrada: -{cantidad_unidades} unidades de {detalle_movimiento.categoria_huevo}")
+        else:  # devolución
+            # Es una entrada - sumar al inventario
+            inventario.cantidad_actual += cantidad_unidades
+            print(f"Entrada registrada: +{cantidad_unidades} unidades de {detalle_movimiento.categoria_huevo}")
+        
+        # Verificar que no quede en negativo para salidas
+        if inventario.cantidad_actual < 0 and tipo_movimiento in ['venta', 'autoconsumo', 'baja']:
+            print(f"Advertencia: Stock insuficiente para {detalle_movimiento.categoria_huevo}. "
+                  f"Stock resultante: {inventario.cantidad_actual}")
+            # Permitir que quede en negativo para registrar el faltante
+        
+        inventario.save()
+        return True
+        
+    except Exception as e:
+        print(f"Error actualizando inventario por movimiento: {e}")
         return False
 
 def exportar_reporte_excel(tipo_reporte, datos, estadisticas, filtros=None):

@@ -778,37 +778,10 @@ def movimiento_huevos_create(request):
                                         )
                                         continue
                                 
-                                # Guardar el detalle
+                                # Guardar el detalle (el inventario se actualiza automáticamente por señales)
                                 detalle.save()
                                 detalles_guardados += 1
-                                logger.info(f"Detalle {i} guardado con ID: {detalle.id}")
-                                
-                                # Actualizar inventario
-                                try:
-                                    inventario, created = InventarioHuevos.objects.get_or_create(
-                                        categoria=detalle.categoria_huevo,
-                                        defaults={
-                                            'cantidad_actual': 0,
-                                            'cantidad_minima': 100
-                                        }
-                                    )
-                                    
-                                    if created:
-                                        logger.info(f"Inventario creado para categoría {detalle.categoria_huevo}")
-                                    
-                                    cantidad_anterior = inventario.cantidad_actual
-                                    
-                                    if movimiento.tipo_movimiento in ['venta', 'autoconsumo', 'baja']:
-                                        inventario.cantidad_actual -= detalle.cantidad_unidades
-                                    else:  # devolución
-                                        inventario.cantidad_actual += detalle.cantidad_unidades
-                                    
-                                    inventario.save()
-                                    logger.info(f"Inventario actualizado para {detalle.categoria_huevo}: {cantidad_anterior} -> {inventario.cantidad_actual}")
-                                    
-                                except Exception as e:
-                                    logger.error(f"Error actualizando inventario: {str(e)}")
-                                    raise ValidationError(f"Error actualizando inventario: {str(e)}")
+                                logger.info(f"Detalle {i} guardado con ID: {detalle.id} - Inventario se actualizará automáticamente")
                                     
                             except ValidationError as e:
                                 logger.error(f"ValidationError en detalle {i}: {str(e)}")
