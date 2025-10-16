@@ -18,9 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from apps.core.views import csrf_test
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('csrf-test/', csrf_test, name='csrf_test'),
     path('', include('apps.dashboard.urls')),
     path('usuarios/', include('apps.usuarios.urls')),
     path('aves/', include('apps.aves.urls')),
