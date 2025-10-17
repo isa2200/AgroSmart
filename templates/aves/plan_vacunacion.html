@@ -73,9 +73,11 @@
                     <p class="text-muted">Gestión y seguimiento del programa de vacunación avícola</p>
                 </div>
                 <div>
+                    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'veterinario' %}
                     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalNuevaVacuna">
                         <i class="fas fa-plus"></i> Nueva Vacuna
                     </button>
+                    {% endif %}
                     <button class="btn btn-info" onclick="generarCalendario()">
                         <i class="fas fa-calendar-alt"></i> Calendario
                     </button>

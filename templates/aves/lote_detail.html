@@ -13,9 +13,14 @@
         <a href="{% url 'aves:dashboard' %}" class="btn btn-secondary">
             <i class="fas fa-arrow-left me-2"></i>Volver
         </a>
+        {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
+        <a href="{% url 'aves:lote_edit' lote.pk %}" class="btn btn-warning">
+            <i class="fas fa-edit me-2"></i>Editar
+        </a>
         <a href="{% url 'aves:bitacora_create' %}?lote={{ lote.id }}" class="btn btn-primary">
             <i class="fas fa-plus me-2"></i>Nueva Bitácora
         </a>
+        {% endif %}
     </div>
 {% endblock %}
 

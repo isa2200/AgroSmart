@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block page_actions %}
+    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
     <div class="btn-group">
         <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-primary">
             <i class="fas fa-plus me-2"></i>Nuevo Movimiento
@@ -17,6 +18,7 @@
             <i class="fas fa-sync-alt me-2"></i>Actualizar Stock Automático
         </button>
     </div>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -127,9 +129,11 @@
                         <li><a class="dropdown-item" href="#" data-days="all">Todos</a></li>
                     </ul>
                 </div>
+                {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
                 <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-primary btn-sm">
                     <i class="fas fa-plus me-1"></i>Nuevo Movimiento
                 </a>
+                {% endif %}
             </div>
         </div>
         <div class="card-body p-0">
@@ -187,9 +191,11 @@
                     <i class="fas fa-exchange-alt fa-3x text-muted mb-3"></i>
                     <h5 class="text-muted">No hay movimientos registrados</h5>
                     <p class="text-muted">Los movimientos de huevos aparecerán aquí</p>
+                    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
                     <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-primary">
                         <i class="fas fa-plus me-2"></i>Registrar Primer Movimiento
                     </a>
+                    {% endif %}
                 </div>
             {% endif %}
         </div>

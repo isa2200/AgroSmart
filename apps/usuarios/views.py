@@ -50,6 +50,11 @@ class LoginView(CreateView):
             password = form.cleaned_data['password']
             user = authenticate(username=username, password=password)
             if user:
+                # Verificar si el usuario está activo
+                if not user.is_active:
+                    messages.error(request, 'Tu cuenta está desactivada. Contacta al administrador.')
+                    return render(request, self.template_name, {'form': form})
+                
                 login(request, user)
                 # Registrar acceso
                 RegistroAcceso.objects.create(
@@ -76,6 +81,12 @@ class LoginView(CreateView):
                 except:
                     # Si no tiene perfil, redirigir al dashboard principal
                     return redirect('dashboard:principal')
+            else:
+                # Credenciales incorrectas
+                messages.error(request, 'Usuario o contraseña incorrectos. Por favor, verifica tus datos.')
+                # También agregar error específico al formulario
+                form.add_error(None, 'Las credenciales proporcionadas no son válidas.')
+        
         return render(request, self.template_name, {'form': form})
     
     def get_client_ip(self, request):

@@ -9,9 +9,11 @@
 {% endblock %}
 
 {% block page_actions %}
+    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
     <a href="{% url 'aves:bitacora_create' %}" class="btn btn-primary">
         <i class="fas fa-plus me-2"></i>Nueva Bitácora
     </a>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -101,9 +103,11 @@
                                     <a href="{% url 'aves:bitacora_detail' bitacora.id %}" class="btn btn-outline-info" title="Ver detalle">
                                         <i class="fas fa-eye"></i>
                                     </a>
+                                    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
                                     <a href="{% url 'aves:bitacora_edit' bitacora.id %}" class="btn btn-outline-warning" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
+                                    {% endif %}
                                 </div>
                             </td>
                         </tr>
@@ -145,9 +149,11 @@
                 <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
                 <h5 class="text-muted">No hay registros de bitácora</h5>
                 <p class="text-muted">Comienza creando tu primera bitácora diaria</p>
+                {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
                 <a href="{% url 'aves:bitacora_create' %}" class="btn btn-primary">
                     <i class="fas fa-plus me-2"></i>Crear Primera Bitácora
                 </a>
+                {% endif %}
             </div>
         {% endif %}
     </div>

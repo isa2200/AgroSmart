@@ -11,9 +11,11 @@
 {% endblock %}
 
 {% block page_actions %}
+    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
     <a href="{% url 'aves:bitacora_edit' bitacora.id %}" class="btn btn-warning">
         <i class="fas fa-edit me-2"></i>Editar
     </a>
+    {% endif %}
     <a href="{% url 'aves:bitacora_list' %}" class="btn btn-secondary">
         <i class="fas fa-arrow-left me-2"></i>Volver
     </a>

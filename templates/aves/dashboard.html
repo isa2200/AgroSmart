@@ -686,6 +686,7 @@
     </div>
 
     <!-- Acciones Rápidas -->
+    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
     <div class="dashboard-section">
         <div class="section-header">
             <h5 class="section-title">
@@ -726,6 +727,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
 </div>
 {% endblock %}
 

@@ -135,9 +135,11 @@
                         <a href="{% url 'aves:lote_list' %}" class="btn btn-secondary">
                             <i class="fas fa-times me-2"></i>Cancelar
                         </a>
+                        {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save me-2"></i>Guardar Lote
                         </button>
+                        {% endif %}
                     </div>
                 </form>
             </div>

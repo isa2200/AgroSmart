@@ -39,15 +39,34 @@ body {
                     <p class="login-subtitle">Sistema de gestion de unidades productivas</p>
                 </div>
 
-                <!-- Mensajes se muestran via toasts en base.html -->
+                <!-- Mensajes de error y éxito -->
                 {% if messages %}
                     {% for message in messages %}
                         <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                            <i class="fas fa-exclamation-triangle"></i>
+                            {% if message.tags == 'error' %}
+                                <i class="fas fa-exclamation-triangle"></i>
+                            {% elif message.tags == 'success' %}
+                                <i class="fas fa-check-circle"></i>
+                            {% elif message.tags == 'warning' %}
+                                <i class="fas fa-exclamation-circle"></i>
+                            {% else %}
+                                <i class="fas fa-info-circle"></i>
+                            {% endif %}
                             {{ message }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
                     {% endfor %}
+                {% endif %}
+
+                <!-- Errores generales del formulario -->
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
                 {% endif %}
 
                 <form method="post" class="login-form">
@@ -57,19 +76,21 @@ body {
                         <label for="{{ form.username.id_for_label }}" class="form-label">
                             <i class="fas fa-user"></i> Usuario
                         </label>
-                        <div class="input-group">
+                        <div class="input-group {% if form.username.errors %}has-error{% endif %}">
                             <span class="input-group-text">
                                 <i class="fas fa-user"></i>
                             </span>
                             <input type="text" 
                                    name="{{ form.username.name }}" 
                                    id="{{ form.username.id_for_label }}"
-                                   class="form-input"
+                                   class="form-input {% if form.username.errors %}is-invalid{% endif %}"
                                    placeholder="Tu nombre de usuario"
+                                   value="{{ form.username.value|default:'' }}"
                                    required>
                         </div>
                         {% if form.username.errors %}
                             <div class="form-error">
+                                <i class="fas fa-exclamation-circle"></i>
                                 {{ form.username.errors.0 }}
                             </div>
                         {% endif %}
@@ -79,22 +100,23 @@ body {
                         <label for="{{ form.password.id_for_label }}" class="form-label">
                             <i class="fas fa-lock"></i> Contraseña
                         </label>
-                        <div class="input-group">
+                        <div class="input-group {% if form.password.errors %}has-error{% endif %}">
                             <span class="input-group-text">
                                 <i class="fas fa-lock"></i>
                             </span>
                             <input type="password" 
                                    name="{{ form.password.name }}" 
                                    id="{{ form.password.id_for_label }}"
-                                   class="form-input"
+                                   class="form-input {% if form.password.errors %}is-invalid{% endif %}"
                                    placeholder="Tu contraseña"
                                    required>
-                            <button type="button" class="toggle-password" data-target="{{ form.password.id_for_label }}">
-                                <i class="fas fa-eye"></i>
+                            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('{{ form.password.id_for_label }}')">
+                                <i class="fas fa-eye" id="toggle-icon-{{ form.password.id_for_label }}"></i>
                             </button>
                         </div>
                         {% if form.password.errors %}
                             <div class="form-error">
+                                <i class="fas fa-exclamation-circle"></i>
                                 {{ form.password.errors.0 }}
                             </div>
                         {% endif %}
@@ -134,52 +156,126 @@ document.addEventListener('DOMContentLoaded', function() {
     // Crear partículas animadas
     function createParticles() {
         const particles = document.querySelector('.particles');
-        const particleCount = 15;
-        
-        for (let i = 0; i < particleCount; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 20 + 's';
-            particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
-            particles.appendChild(particle);
+        if (particles) {
+            const particleCount = 15;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                particles.appendChild(particle);
+            }
         }
     }
     
     createParticles();
 
-    // Toggle password visibility
-    const toggleButtons = document.querySelectorAll('.toggle-password');
-    toggleButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const targetId = this.getAttribute('data-target');
-            const passwordInput = document.getElementById(targetId);
-            const icon = this.querySelector('i');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        });
-    });
-
-    // Form submission with loading state
+    // Form submission with loading state and validation
     const loginForm = document.querySelector('.login-form');
     const loginButton = document.querySelector('.btn-login');
     
-    loginForm.addEventListener('submit', function() {
-        loginButton.classList.add('loading');
-        loginButton.disabled = true;
+    if (loginForm && loginButton) {
+        loginForm.addEventListener('submit', function(e) {
+            // Limpiar errores previos
+            document.querySelectorAll('.form-error').forEach(error => {
+                error.style.display = 'none';
+            });
+            document.querySelectorAll('.input-group').forEach(group => {
+                group.classList.remove('has-error');
+            });
+            document.querySelectorAll('.form-input').forEach(input => {
+                input.classList.remove('is-invalid');
+            });
+
+            // Validación básica del lado del cliente
+            const username = document.getElementById('{{ form.username.id_for_label }}').value.trim();
+            const password = document.getElementById('{{ form.password.id_for_label }}').value;
+            let hasErrors = false;
+
+            if (!username) {
+                showFieldError('{{ form.username.id_for_label }}', 'El nombre de usuario es requerido');
+                hasErrors = true;
+            }
+
+            if (!password) {
+                showFieldError('{{ form.password.id_for_label }}', 'La contraseña es requerida');
+                hasErrors = true;
+            }
+
+            if (hasErrors) {
+                e.preventDefault();
+                return false;
+            }
+
+            // Mostrar estado de carga
+            loginButton.classList.add('loading');
+            loginButton.disabled = true;
+            loginButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Iniciando sesión...';
+        });
+    }
+
+    // Función para mostrar errores de campo
+    function showFieldError(fieldId, message) {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            const inputGroup = field.closest('.input-group');
+            const formGroup = field.closest('.form-group');
+            
+            if (inputGroup) inputGroup.classList.add('has-error');
+            field.classList.add('is-invalid');
+            
+            // Crear o mostrar mensaje de error
+            let errorDiv = formGroup.querySelector('.form-error');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.className = 'form-error';
+                formGroup.appendChild(errorDiv);
+            }
+            
+            errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + message;
+            errorDiv.style.display = 'block';
+        }
+    }
+
+    // Limpiar errores cuando el usuario empiece a escribir
+    document.querySelectorAll('.form-input').forEach(input => {
+        input.addEventListener('input', function() {
+            const inputGroup = this.closest('.input-group');
+            const formGroup = this.closest('.form-group');
+            const errorDiv = formGroup.querySelector('.form-error');
+            
+            if (inputGroup) inputGroup.classList.remove('has-error');
+            this.classList.remove('is-invalid');
+            
+            if (errorDiv) {
+                errorDiv.style.display = 'none';
+            }
+        });
     });
 
     // Prevenir scroll
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
 });
+
+// Función global para toggle de contraseña
+function togglePasswordVisibility(fieldId) {
+    const passwordInput = document.getElementById(fieldId);
+    const icon = document.getElementById('toggle-icon-' + fieldId);
+    
+    if (passwordInput && icon) {
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+}
 </script>
 {% endblock %}

@@ -527,7 +527,7 @@
         <!-- Módulos Section -->
         <div class="nav-section">
             <div class="nav-section-title">Módulos Ganaderos</div>
-            {% if user.perfilusuario and user.perfilusuario.rol == 'admin_aves' or user.perfilusuario and user.perfilusuario.rol == 'superusuario' %}
+            {% if user.perfilusuario and user.perfilusuario.rol == 'admin_aves' or user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'solo_vista' %}
             <div class="nav-item">
                 <a href="{% url 'aves:dashboard' %}" class="nav-link">
                     <i class="fas fa-dove"></i>

@@ -9,9 +9,11 @@
 {% endblock %}
 
 {% block page_actions %}
+    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'veterinario' %}
     <a href="{% url 'aves:plan_vacunacion_create' %}" class="btn btn-primary">
         <i class="fas fa-plus me-2"></i>Nuevo Plan
     </a>
+    {% endif %}
 {% endblock %}
 
 {% block content %}

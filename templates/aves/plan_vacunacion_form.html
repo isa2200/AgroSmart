@@ -7,7 +7,9 @@
 
 {% block breadcrumb_items %}
     <li class="breadcrumb-item"><a href="{% url 'aves:plan_vacunacion_list' %}">Vacunación</a></li>
+    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'veterinario' %}
     <li class="breadcrumb-item active">Nuevo Plan</li>
+    {% endif %}
 {% endblock %}
 
 {% block page_actions %}
@@ -21,7 +23,9 @@
     <div class="col-md-8">
         <div class="card">
             <div class="card-header">
+                {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'veterinario' %}
                 <h5 class="mb-0"><i class="fas fa-syringe me-2"></i>Crear Plan de Vacunación</h5>
+                {% endif %}
             </div>
             <div class="card-body">
                 <form method="post">

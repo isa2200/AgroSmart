@@ -10,9 +10,11 @@
 {% endblock %}
 
 {% block page_actions %}
+    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
     <a href="{% url 'aves:lote_create' %}" class="btn btn-primary">
         <i class="fas fa-plus me-2"></i>Nuevo Lote
     </a>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -124,19 +126,21 @@
                                                    class="btn btn-outline-primary" title="Ver detalles">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                {% if perms.aves.change_loteaves %}
-                                                    <a href="{% url 'aves:lote_edit' lote.pk %}" 
-                                                       class="btn btn-outline-warning" title="Editar">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                {% endif %}
-                                                {% if perms.aves.delete_loteaves %}
-                                                    <button type="button" 
-                                                            class="btn btn-outline-danger" 
-                                                            title="Eliminar"
-                                                            onclick="confirmarEliminacion('{{ lote.pk }}', '{{ lote.codigo }}')">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
+                                                {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
+                                                    {% if perms.aves.change_loteaves %}
+                                                        <a href="{% url 'aves:lote_edit' lote.pk %}" 
+                                                        class="btn btn-outline-warning" title="Editar">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                    {% endif %}
+                                                    {% if perms.aves.delete_loteaves %}
+                                                        <button type="button" 
+                                                                class="btn btn-outline-danger" 
+                                                                title="Eliminar"
+                                                                onclick="confirmarEliminacion('{{ lote.pk }}', '{{ lote.codigo }}')">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    {% endif %}
                                                 {% endif %}
                                             </div>
                                         </td>
@@ -179,9 +183,11 @@
                         <i class="fas fa-layer-group fa-3x text-muted mb-3"></i>
                         <h5 class="text-muted">No hay lotes registrados</h5>
                         <p class="text-muted">Comienza creando tu primer lote de aves.</p>
+                        {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
                         <a href="{% url 'aves:lote_create' %}" class="btn btn-primary">
                             <i class="fas fa-plus me-2"></i>Crear Primer Lote
                         </a>
+                        {% endif %}
                     </div>
                 {% endif %}
             </div>

@@ -408,8 +408,6 @@ def bitacora_list(request):
 
 
 @login_required
-@acceso_modulo_aves_required
-@puede_editar_required
 def lote_create(request):
     """Crear nuevo lote de aves."""
     if request.method == 'POST':
@@ -441,8 +439,6 @@ def lote_create(request):
     return render(request, 'aves/lote_form.html', {'form': form})
 
 @login_required
-@acceso_modulo_aves_required
-@puede_editar_required
 def lote_edit(request, pk):
     """Editar lote de aves con justificación obligatoria."""
     lote = get_object_or_404(LoteAves, pk=pk)
@@ -496,8 +492,6 @@ def lote_edit(request, pk):
     return render(request, 'aves/lote_edit.html', context)
 
 @login_required
-@acceso_modulo_aves_required
-@puede_eliminar_required
 @require_http_methods(["POST"])
 def lote_delete(request, pk):
     """Eliminar lote y sus bitácoras asociadas con justificación obligatoria."""
@@ -545,7 +539,7 @@ def lote_delete(request, pk):
     return redirect('aves:lote_list')
 
 @login_required
-@acceso_modulo_aves_required
+@role_required(['superusuario', 'admin_aves', 'solo_vista'])
 def lote_list(request):
     """Lista de lotes de aves."""
     lotes = LoteAves.objects.filter(is_active=True).order_by('-fecha_llegada')
@@ -583,7 +577,7 @@ def lote_list(request):
 
 
 @login_required
-@acceso_modulo_aves_required
+@role_required(['superusuario', 'admin_aves', 'solo_vista'])
 def lote_detail(request, pk):
     """Detalle de un lote."""
     lote = get_object_or_404(LoteAves, pk=pk)
