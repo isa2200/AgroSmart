@@ -505,7 +505,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     {% endif %}
                                 </div>
                                 
-                                <div class="form-group-enhanced">
+                                <div class="form-group-enhanced precio-group">
                                     <label>💰 Precio por Docena</label>
                                     {{ form.precio_por_docena }}
                                     {% if form.precio_por_docena.errors %}
@@ -646,6 +646,31 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // Función para mostrar/ocultar campos de precio según el tipo de movimiento
+    function togglePrecioFields() {
+        const tipoMovimiento = document.getElementById('id_tipo_movimiento');
+        const precioGroups = document.querySelectorAll('.precio-group');
+        
+        if (tipoMovimiento && tipoMovimiento.value === 'autoconsumo') {
+            // Ocultar campos de precio para autoconsumo
+            precioGroups.forEach(function(group) {
+                group.style.display = 'none';
+                const precioInput = group.querySelector('input[name$="-precio_por_docena"]');
+                if (precioInput) {
+                    precioInput.value = '0'; // Establecer precio en 0 para autoconsumo
+                }
+            });
+        } else {
+            // Mostrar campos de precio para venta
+            precioGroups.forEach(function(group) {
+                group.style.display = 'block';
+            });
+        }
+        
+        // Recalcular totales después del cambio
+        calcularTotales();
+    }
+    
     // Función para calcular totales generales
     function calcularTotales() {
         let totalHuevos = 0;
@@ -718,6 +743,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Configurar eventos para el nuevo detalle
             configurarEventosDetalle(newDetalle);
+            
+            // Aplicar lógica de precio según tipo de movimiento
+            togglePrecioFields();
         }
     }
     
@@ -798,8 +826,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Configurar eventos iniciales
     const tipoMovimientoSelect = document.getElementById('id_tipo_movimiento');
     if (tipoMovimientoSelect) {
-        tipoMovimientoSelect.addEventListener('change', toggleInfoTransporte);
+        tipoMovimientoSelect.addEventListener('change', function() {
+            toggleInfoTransporte();
+            togglePrecioFields();
+        });
         toggleInfoTransporte(); // Ejecutar al cargar
+        togglePrecioFields(); // Ejecutar al cargar
     }
     
     // Configurar eventos para detalles existentes

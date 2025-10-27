@@ -27,7 +27,7 @@ class Command(BaseCommand):
         self.stdout.write("\n=== PRUEBA DE GENERACION DE TOKEN ===")
         factory = RequestFactory()
         
-        test_hosts = ['localhost:8000', '127.0.0.1:8000', '172.30.0.58:8000']
+        test_hosts = ['localhost:8000', '127.0.0.1:8000', '10.2.66.58:8000']
         
         for host in test_hosts:
             try:
@@ -59,7 +59,7 @@ class Command(BaseCommand):
         
         self.stdout.write("\n=== INSTRUCCIONES DE PRUEBA ===")
         self.stdout.write("1. Reinicia Docker: docker-compose restart")
-        self.stdout.write("2. Accede a http://172.30.0.58:8000 desde otro dispositivo")
+        self.stdout.write("2. Accede a http://10.2.66.58:8000 desde otro dispositivo")
         self.stdout.write("3. Abre las herramientas de desarrollador (F12)")
         self.stdout.write("4. Ve a la pestaña 'Network' o 'Red'")
         self.stdout.write("5. Intenta hacer login y captura el error exacto")

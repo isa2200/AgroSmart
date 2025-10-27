@@ -30,6 +30,7 @@ class LoteAves(BaseModel):
         ('bovans_white', 'Bovans White'),
         ('dekalb_brown', 'Dekalb Brown'),
         ('dekalb_white', 'Dekalb White'),
+        ('babcock_brown', 'Babcock Brown'),
         ('otra', 'Otra'),
     ]
     
@@ -288,8 +289,6 @@ class MovimientoHuevos(BaseModel):
     TIPOS_MOVIMIENTO = [
         ('venta', 'Venta'),
         ('autoconsumo', 'Autoconsumo'),
-        ('baja', 'Baja'),
-        ('devolucion', 'Devolución'),
     ]
     
     CATEGORIAS_HUEVO = [

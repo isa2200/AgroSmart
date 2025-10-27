@@ -20,7 +20,7 @@ class Command(BaseCommand):
         test_hosts = [
             'localhost',
             '127.0.0.1', 
-            '172.30.0.58',
+            '10.2.66.58',
             '172.18.0.3'
         ]
         
