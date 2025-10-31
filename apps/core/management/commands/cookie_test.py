@@ -19,7 +19,7 @@ class Command(BaseCommand):
         
         # Simular requests desde diferentes hosts
         factory = RequestFactory()
-        hosts = ['localhost:8000', '127.0.0.1:8000', '10.2.66.58:8000']
+        hosts = ['localhost:8000', '127.0.0.1:8000', '10.2.66.1:8000']
         
         print("\n=== SIMULACIÓN DE REQUESTS ===")
         for host in hosts:
@@ -33,8 +33,8 @@ class Command(BaseCommand):
         print("\n=== RECOMENDACIONES ===")
         print("1. Reinicia Docker: docker-compose restart")
         print("2. Accede primero a http://localhost:8000 y verifica que funcione")
-        print("3. Luego accede a http://10.2.66.58:8000")
+        print("3. Luego accede a http://10.2.66.1:8000")
         print("4. Si persiste el error, verifica las cookies en DevTools:")
         print("   - F12 > Application > Cookies")
         print("   - Busca 'csrftoken' y verifica su dominio")
-        print("5. Intenta limpiar cookies del navegador para 10.2.66.58")
+        print("5. Intenta limpiar cookies del navegador para 10.2.66.1")

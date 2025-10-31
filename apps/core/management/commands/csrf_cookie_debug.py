@@ -31,7 +31,7 @@ class Command(BaseCommand):
         test_hosts = [
             ('localhost:8000', 'http://localhost:8000'),
             ('127.0.0.1:8000', 'http://127.0.0.1:8000'),
-            ('10.2.66.58:8000', 'http://10.2.66.58:8000'),
+            ('10.2.66.1:8000', 'http://10.2.66.1:8000'),
         ]
         
         for host, origin in test_hosts:
@@ -64,8 +64,8 @@ class Command(BaseCommand):
         if settings.CSRF_COOKIE_DOMAIN:
             self.stdout.write(f"⚠️  CSRF_COOKIE_DOMAIN está configurado: {settings.CSRF_COOKIE_DOMAIN}")
         
-        # Verificar si 10.2.66.58:8000 está en trusted origins
-        target_origin = 'http://10.2.66.58:8000'
+        # Verificar si 10.2.66.1:8000 está en trusted origins
+        target_origin = 'http://10.2.66.1:8000'
         if target_origin not in settings.CSRF_TRUSTED_ORIGINS:
             self.stdout.write(f"❌ {target_origin} NO está en CSRF_TRUSTED_ORIGINS")
         else:
@@ -74,12 +74,12 @@ class Command(BaseCommand):
         self.stdout.write("\n=== SOLUCIÓN RECOMENDADA ===")
         self.stdout.write("1. Asegúrate de que CSRF_COOKIE_SAMESITE='Lax' (no 'Strict')")
         self.stdout.write("2. Verifica que CSRF_COOKIE_SECURE=False para HTTP")
-        self.stdout.write("3. Confirma que http://10.2.66.58:8000 está en CSRF_TRUSTED_ORIGINS")
+        self.stdout.write("3. Confirma que http://10.2.66.1:8000 está en CSRF_TRUSTED_ORIGINS")
         self.stdout.write("4. Reinicia Docker después de cambios: docker-compose restart")
         self.stdout.write("5. Limpia cookies del navegador antes de probar")
         
         self.stdout.write("\n=== COMANDO DE PRUEBA ===")
-        self.stdout.write("Desde otro dispositivo, abre http://10.2.66.58:8000 y:")
+        self.stdout.write("Desde otro dispositivo, abre http://10.2.66.1:8000 y:")
         self.stdout.write("1. Abre DevTools (F12)")
         self.stdout.write("2. Ve a Application > Cookies")
         self.stdout.write("3. Verifica si existe la cookie 'csrftoken'")

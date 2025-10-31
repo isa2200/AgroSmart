@@ -20,7 +20,7 @@ else:
 
 # Si no hay hosts específicos, agregar los básicos
 if not ALLOWED_HOSTS or ALLOWED_HOSTS == [""]:
-    ALLOWED_HOSTS = ["localhost", "127.0.0.1", "10.2.66.58", "172.18.0.3"]
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1", "10.2.66.1", "172.18.0.3"]
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 if not DEBUG and (
@@ -103,7 +103,7 @@ else:
     CSRF_TRUSTED_ORIGINS = [
         "http://localhost:8000",
         "http://127.0.0.1:8000",
-        "http://10.2.66.58:8000"
+        "http://10.2.66.1:8000"
     ]
 
 # Configuración de cookies CSRF
@@ -142,8 +142,8 @@ for ip in local_ips:
             CSRF_TRUSTED_ORIGINS.append(origin)
 
 # Garantizar que la IP LAN fija esté incluida (refuerzo explícito)
-if "http://10.2.66.58:8000" not in CSRF_TRUSTED_ORIGINS:
-    CSRF_TRUSTED_ORIGINS.append("http://10.2.66.58:8000")
+if "http://10.2.66.1:8000" not in CSRF_TRUSTED_ORIGINS:
+    CSRF_TRUSTED_ORIGINS.append("http://10.2.66.1:8000")
 
 
 
@@ -161,7 +161,7 @@ if DEBUG:
             MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
         
         # IPs internas para debug toolbar
-        INTERNAL_IPS = ['127.0.0.1', '172.18.0.1', '10.2.66.58'] + local_ips
+        INTERNAL_IPS = ['127.0.0.1', '172.18.0.1', '10.2.66.1'] + local_ips
     except ImportError:
         pass
 
