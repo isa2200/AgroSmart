@@ -558,10 +558,9 @@
             {% endif %}
             {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' %}
             <div class="nav-item">
-                <a href="#" class="nav-link" style="opacity: 0.6;">
+                <a href="{% url 'porcinos:dashboard' %}" class="nav-link">
                     <i class="fas fa-piggy-bank"></i>
                     <span>Módulo Porcino</span>
-                    <span class="badge bg-secondary">Próximamente</span>
                 </a>
             </div>
             {% endif %}
@@ -767,6 +766,13 @@
                         <div>
                             <h6 class="mb-0">Módulo Avícola</h6>
                             <small>Gestionar aves y producción</small>
+                        </div>
+                    </a>
+                    <a href="{% url 'porcinos:dashboard' %}" class="quick-action">
+                        <i class="fas fa-piggy-bank"></i>
+                        <div>
+                            <h6 class="mb-0">Módulo Porcinos</h6>
+                            <small>Gestionar porcinos</small>
                         </div>
                     </a>
                     

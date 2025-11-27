@@ -34,11 +34,11 @@
             </div>
             <div class="col-md-3">
                 <label class="form-label">Fecha Desde</label>
-                <input type="date" name="fecha_desde" class="form-control" value="{{ request.GET.fecha_desde }}">
+                <input type="date" name="fecha_desde" class="form-control" value="{{ filtros.fecha_desde }}">
             </div>
             <div class="col-md-3">
                 <label class="form-label">Fecha Hasta</label>
-                <input type="date" name="fecha_hasta" class="form-control" value="{{ request.GET.fecha_hasta }}">
+                <input type="date" name="fecha_hasta" class="form-control" value="{{ filtros.fecha_hasta }}">
             </div>
             <div class="col-md-3">
                 <label class="form-label">&nbsp;</label>
@@ -122,10 +122,10 @@
                     <ul class="pagination justify-content-center">
                         {% if page_obj.has_previous %}
                             <li class="page-item">
-                                <a class="page-link" href="?page=1{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}{% if request.GET.fecha_desde %}&fecha_desde={{ request.GET.fecha_desde }}{% endif %}{% if request.GET.fecha_hasta %}&fecha_hasta={{ request.GET.fecha_hasta }}{% endif %}">Primera</a>
+                                <a class="page-link" href="?page=1{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}">Primera</a>
                             </li>
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}{% if request.GET.fecha_desde %}&fecha_desde={{ request.GET.fecha_desde }}{% endif %}{% if request.GET.fecha_hasta %}&fecha_hasta={{ request.GET.fecha_hasta }}{% endif %}">Anterior</a>
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}">Anterior</a>
                             </li>
                         {% endif %}
                         
@@ -135,10 +135,10 @@
                         
                         {% if page_obj.has_next %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}{% if request.GET.fecha_desde %}&fecha_desde={{ request.GET.fecha_desde }}{% endif %}{% if request.GET.fecha_hasta %}&fecha_hasta={{ request.GET.fecha_hasta }}{% endif %}">Siguiente</a>
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}">Siguiente</a>
                             </li>
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}{% if request.GET.fecha_desde %}&fecha_desde={{ request.GET.fecha_desde }}{% endif %}{% if request.GET.fecha_hasta %}&fecha_hasta={{ request.GET.fecha_hasta }}{% endif %}">Última</a>
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}">Última</a>
                             </li>
                         {% endif %}
                     </ul>

@@ -735,9 +735,9 @@
 <script>
 $(document).ready(function() {
     // Datos para gráficos desde el contexto
-    const evolucionProduccion = {{ evolucion_produccion_json|safe }};
-    const evolucionMortalidad = {{ evolucion_mortalidad_json|safe }};
-    
+    const evolucionProduccion = JSON.parse('{{ evolucion_produccion_json|default:"[]"|escapejs }}');
+    const evolucionMortalidad = JSON.parse('{{ evolucion_mortalidad_json|default:"[]"|escapejs }}');
+
     // Gráfico de Evolución de Producción
     const ctxProduccion = document.getElementById('produccionChart').getContext('2d');
     new Chart(ctxProduccion, {
@@ -860,7 +860,7 @@ $(document).ready(function() {
         {% for alerta in alertas_criticas %}
         setTimeout(function() {
             new Notification("AgroSmart - Alerta Avícola", {
-                body: "{{ alerta.mensaje }}",
+                body: "{{ alerta.mensaje|escapejs}}",
                 icon: "{% static 'img/logo-ico.ico' %}",
                 tag: "alerta-{{ forloop.counter }}"
             });

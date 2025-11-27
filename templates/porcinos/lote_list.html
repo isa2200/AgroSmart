@@ -1,0 +1,86 @@
+{% extends 'aves/base.html' %}
+
+{% block title %}Lotes Porcinos{% endblock %}
+{% block page_title %}Lotes Porcinos{% endblock %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard:principal' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'porcinos:dashboard' %}">Porcinos</a></li>
+        <li class="breadcrumb-item active">Lotes</li>
+    </ol>
+    </nav>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <form class="d-flex" method="get">
+                <input type="text" name="corral" class="form-control me-2" placeholder="Corral" value="{{ filtros.corral }}">
+                <select name="estado" class="form-select me-2">
+                    <option value="">Todos</option>
+                    <option value="activo" {% if filtros.estado == 'activo' %}selected{% endif %}>Activo</option>
+                    <option value="engorde" {% if filtros.estado == 'engorde' %}selected{% endif %}>Engorde</option>
+                    <option value="vendido" {% if filtros.estado == 'vendido' %}selected{% endif %}>Vendido</option>
+                    <option value="cerrado" {% if filtros.estado == 'cerrado' %}selected{% endif %}>Cerrado</option>
+                </select>
+                <button class="btn btn-primary" type="submit">Filtrar</button>
+            </form>
+            {% if user.is_superuser %}
+            <a href="{% url 'porcinos:lote_create' %}" class="btn btn-success">
+                <i class="fas fa-plus me-2"></i>Nuevo Lote
+            </a>
+            {% endif %}
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Corral</th>
+                        <th>Cerdos</th>
+                        <th>Estado</th>
+                        <th>Fecha llegada</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lote in lotes %}
+                    <tr>
+                        <td>{{ lote.codigo }}</td>
+                        <td>{{ lote.corral }}</td>
+                        <td>{{ lote.numero_cerdos_actual }}</td>
+                        <td>{{ lote.estado }}</td>
+                        <td>{{ lote.fecha_llegada }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">No hay lotes</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if lotes.has_other_pages %}
+        <nav>
+            <ul class="pagination">
+                {% if lotes.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ lotes.previous_page_number }}{% if filtros.corral %}&corral={{ filtros.corral }}{% endif %}{% if filtros.estado %}&estado={{ filtros.estado }}{% endif %}">Anterior</a>
+                </li>
+                {% endif %}
+                <li class="page-item disabled"><span class="page-link">Página {{ lotes.number }} de {{ lotes.paginator.num_pages }}</span></li>
+                {% if lotes.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ lotes.next_page_number }}{% if filtros.corral %}&corral={{ filtros.corral }}{% endif %}{% if filtros.estado %}&estado={{ filtros.estado }}{% endif %}">Siguiente</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+ </div>
+{% endblock %}

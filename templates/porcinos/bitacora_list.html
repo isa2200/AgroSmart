@@ -1,0 +1,96 @@
+{% extends 'aves/base.html' %}
+
+{% block title %}Bitácora Porcinos{% endblock %}
+{% block page_title %}Bitácora Porcinos{% endblock %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard:principal' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'porcinos:dashboard' %}">Porcinos</a></li>
+        <li class="breadcrumb-item active">Bitácora</li>
+    </ol>
+    </nav>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <form class="row g-2" method="get">
+                <div class="col-auto">
+                    <select name="lote" class="form-select">
+                        <option value="">Todos los lotes</option>
+                        {% for l in lotes %}
+                        <option value="{{ l.id }}" {% if filtros.lote == l.id|stringformat:'s' %}selected{% endif %}>{{ l.codigo }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <input type="date" name="fecha_desde" class="form-control" value="{{ filtros.fecha_desde }}">
+                </div>
+                <div class="col-auto">
+                    <input type="date" name="fecha_hasta" class="form-control" value="{{ filtros.fecha_hasta }}">
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary" type="submit">Filtrar</button>
+                </div>
+            </form>
+            {% if user.is_superuser %}
+            <a href="{% url 'porcinos:bitacora_create' %}" class="btn btn-success">
+                <i class="fas fa-plus me-2"></i>Nueva Bitácora
+            </a>
+            {% endif %}
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Lote</th>
+                        <th>Peso promedio</th>
+                        <th>Consumo alimento (kg)</th>
+                        <th>Enfermos</th>
+                        <th>Mortalidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in bitacoras %}
+                    <tr>
+                        <td>{{ b.fecha }}</td>
+                        <td>{{ b.lote.codigo }}</td>
+                        <td>{{ b.peso_promedio }}</td>
+                        <td>{{ b.consumo_alimento_kg }}</td>
+                        <td>{{ b.animales_enfermos }}</td>
+                        <td>{{ b.mortalidad }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">No hay registros</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if bitacoras.has_other_pages %}
+        <nav>
+            <ul class="pagination">
+                {% if bitacoras.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ bitacoras.previous_page_number }}{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}">Anterior</a>
+                </li>
+                {% endif %}
+                <li class="page-item disabled"><span class="page-link">Página {{ bitacoras.number }} de {{ bitacoras.paginator.num_pages }}</span></li>
+                {% if bitacoras.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ bitacoras.next_page_number }}{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}">Siguiente</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+ </div>
+{% endblock %}

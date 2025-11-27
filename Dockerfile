@@ -1,5 +1,5 @@
 # Imagen base
-FROM python:3.11-slim
+FROM python:3.13.3-slim
 
 # Evita archivos pyc y asegura logs en stdout/stderr
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -22,6 +22,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copiar el código del proyecto
 COPY . .
+
+# Crear directorio de logs esperado por configuración de producción
+RUN mkdir -p /app/logs
 
 # Copiar entrypoint
 COPY scripts/entrypoint.sh /app/scripts/entrypoint.sh

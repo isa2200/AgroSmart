@@ -20,6 +20,9 @@ def role_required(allowed_roles):
                 messages.warning(request, 'Debe iniciar sesión para acceder a esta página.')
                 return redirect('usuarios:login')
             
+            if getattr(request.user, 'is_superuser', False):
+                return view_func(request, *args, **kwargs)
+
             try:
                 perfil = request.user.perfilusuario
                 if perfil.rol not in allowed_roles:

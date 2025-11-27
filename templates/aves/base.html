@@ -15,8 +15,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js UMD build -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
     
     {% block extra_css %}{% endblock %}
     
@@ -167,6 +167,15 @@
                         <a class="nav-link" href="{% url 'dashboard:principal' %}">
                             <i class="fas fa-home me-2"></i>Volver al Dashboard
                         </a>
+                        <a class="nav-link" href="{% url 'porcinos:dashboard' %}">
+                            <i class="fas fa-piggy-bank me-2"></i>Porcinos
+                        </a>
+                        <a class="nav-link" href="{% url 'porcinos:lote_list' %}">
+                            <i class="fas fa-layer-group me-2"></i>Lotes Porcinos
+                        </a>
+                        <a class="nav-link" href="{% url 'porcinos:bitacora_list' %}">
+                            <i class="fas fa-clipboard-list me-2"></i>Bitácora Porcinos
+                        </a>
                     </nav>
                     <!-- Información del usuario -->
                     {% if user.is_authenticated %}
@@ -236,8 +245,6 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'reportes/js/messages.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>
