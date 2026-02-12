@@ -1,0 +1,453 @@
+{% extends 'aves/base.html' %}
+{% load static %}
+
+{% block title %}Inventario Permanente de Aves{% endblock %}
+{% block page_title %}Inventario Permanente de Aves{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Print Styles */
+    @media print {
+        @page { 
+            size: legal landscape; 
+            margin: 5mm; 
+        }
+        body * { 
+            visibility: hidden; 
+        }
+        .print-layout, .print-layout * { 
+            visibility: visible; 
+        }
+        .print-layout { 
+            position: absolute; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            display: block !important;
+            background-color: white;
+            padding: 10px;
+        }
+        
+        .no-print, .sidebar, .navbar, .card-footer, .btn, form, .card-header, .page-header, .breadcrumb, .modal { 
+            display: none !important; 
+        }
+        .main-content { 
+            margin: 0 !important; 
+            padding: 0 !important; 
+            background-color: white !important; 
+        }
+        
+        /* Table Styles for Print */
+        table { 
+            width: 100% !important; 
+            border-collapse: collapse !important; 
+            font-size: 10px !important; 
+            font-family: Arial, sans-serif !important;
+        }
+        th, td { 
+            border: 1px solid black !important; 
+            padding: 2px !important; 
+            color: black !important; 
+            vertical-align: middle !important; 
+        }
+        th { 
+            background-color: white !important; 
+            font-weight: bold !important; 
+            text-align: center !important;
+        }
+        .text-center { text-align: center !important; }
+        .text-start { text-align: left !important; }
+        .fw-bold { font-weight: bold !important; }
+    }
+    .print-layout { display: none; }
+
+    /* Table Compactness & Styles */
+    .table-sm th, .table-sm td {
+        padding: 0.25rem 0.25rem;
+        font-size: 0.85rem;
+    }
+
+    /* New Design: Clean White Table with Green Header */
+    .table-custom {
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        border-collapse: separate; 
+        border-spacing: 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .table-custom thead {
+        background-color: #2E7D32; /* Forest Green */
+        color: white;
+    }
+    
+    .table-custom thead th {
+        background-color: #2E7D32 !important;
+        color: white !important;
+        border: 1px solid rgba(255,255,255,0.1);
+        vertical-align: middle;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        padding: 10px 8px;
+    }
+
+    .table-custom tbody tr {
+        background-color: white !important;
+        color: #444 !important;
+        transition: all 0.2s;
+    }
+    
+    .table-custom tbody tr:hover {
+        background-color: #f1f8e9 !important; /* Very light green hover */
+    }
+    
+    .table-custom tbody td {
+        border: 1px solid #e9ecef;
+        padding: 8px;
+        vertical-align: middle;
+    }
+
+    /* Editable cells indication */
+    td[contenteditable="true"]:hover {
+        background-color: #e8f5e9 !important;
+        cursor: text;
+        outline: 1px dashed #2e7d32;
+    }
+    td[contenteditable="true"]:focus {
+        background-color: white !important;
+        color: #000 !important;
+        outline: 2px solid #2e7d32;
+        box-shadow: 0 0 5px rgba(46, 125, 50, 0.3);
+        z-index: 5;
+        position: relative;
+    }
+    
+    .total-cell {
+        font-weight: bold;
+        color: #2E7D32 !important;
+        background-color: #f9fbe7 !important; /* Lime-ish light bg */
+    }
+</style>
+{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active">Inventario Permanente</li>
+{% endblock %}
+
+{% block content %}
+<div class="unified-dashboard-card mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h5 class="mb-0 text-white"><i class="fas fa-clipboard-list me-2"></i>Registro Inventario Permanente de Aves</h5>
+            <small class="text-white-50">Control de existencias y novedades diarias - <span class="text-white"><i class="fas fa-edit me-1"></i>Haga clic en las celdas para editar</span></small>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-light" onclick="window.print()">
+                <i class="fas fa-print me-2"></i>Imprimir
+            </button>
+            <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#registroModal">
+                <i class="fas fa-plus me-2"></i>Nuevo Registro
+            </button>
+        </div>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="table table-custom table-sm text-center mb-0">
+            <thead>
+                <tr>
+                    <th rowspan="2" class="align-middle">Fecha</th>
+                    <th rowspan="2" class="align-middle" style="min-width: 150px;">Detalle</th>
+                    <th colspan="5">Existencias / Etapas</th>
+                    <th colspan="6">Movimientos</th>
+                    <th rowspan="2" class="align-middle">Total</th>
+                </tr>
+                <tr>
+                    <!-- Existencias -->
+                    <th>Ini</th>
+                    <th>Poll</th>
+                    <th>Post</th>
+                    <th>Eng</th>
+                    <th>Rep</th>
+                    
+                    <!-- Movimientos -->
+                    <th>Com</th>
+                    <th>Nac</th>
+                    <th>Ven</th>
+                    <th>Mor</th>
+                    <th>Auto</th>
+                    <th>Desc</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros %}
+                <tr data-id="{{ registro.id }}">
+                    <td class="fw-bold text-nowrap">{{ registro.fecha|date:"d/m/Y" }}</td>
+                    <td contenteditable="true" onblur="updateRegistro(this, 'detalle')" class="text-start text-truncate" style="max-width: 200px;">{{ registro.detalle }}</td>
+                    
+                    <!-- Existencias -->
+                    <td contenteditable="true" onblur="updateRegistro(this, 'aves_inicio')">{{ registro.aves_inicio }}</td>
+                    <td contenteditable="true" onblur="updateRegistro(this, 'pollitas_levante')">{{ registro.pollitas_levante }}</td>
+                    <td contenteditable="true" onblur="updateRegistro(this, 'aves_postura')">{{ registro.aves_postura }}</td>
+                    <td contenteditable="true" onblur="updateRegistro(this, 'aves_engorde')">{{ registro.aves_engorde }}</td>
+                    <td contenteditable="true" onblur="updateRegistro(this, 'reproductores')">{{ registro.reproductores }}</td>
+                    
+                    <!-- Movimientos -->
+                    <td contenteditable="true" onblur="updateRegistro(this, 'compras')">{{ registro.compras }}</td>
+                    <td contenteditable="true" onblur="updateRegistro(this, 'nacimientos')">{{ registro.nacimientos }}</td>
+                    <td contenteditable="true" onblur="updateRegistro(this, 'ventas')">{{ registro.ventas }}</td>
+                    <td contenteditable="true" onblur="updateRegistro(this, 'mortalidad')">{{ registro.mortalidad }}</td>
+                    <td contenteditable="true" onblur="updateRegistro(this, 'autoconsumo')">{{ registro.autoconsumo }}</td>
+                    <td contenteditable="true" onblur="updateRegistro(this, 'descartes')">{{ registro.descartes }}</td>
+                    
+                    <td class="total-cell">{{ registro.total }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="14" class="text-center py-5">
+                        <i class="fas fa-clipboard-list fa-3x text-muted mb-3 d-block"></i>
+                        <span class="text-muted">No hay registros disponibles</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Print Layout -->
+<div class="print-layout">
+    <table class="table table-bordered mb-0" style="width: 100%; margin-bottom: 0 !important; border: 2px solid black;">
+        <tbody>
+            <tr>
+                <td style="width: 60%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height:20mm; width:auto; object-fit:contain;">
+                        <div class="fw-bold" style="font-size: 14px; line-height: 1.2;">
+                            Centro de los Recursos Naturales Renovables La Salada<br>
+                            Regional Antioquia
+                        </div>
+                    </div>
+                </td>
+                <td style="width: 40%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="fw-bold">Código del documento: <span class="fw-normal">-</span></div>
+                    <div class="mt-1 fw-bold">Versión: <span class="fw-normal">01</span></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-center" style="text-align: center !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="fw-bold">Unidad productiva de avicultura</div>
+                    <div class="h5 mb-0 fw-bold">INVENTARIO PERMANENTE DE AVES</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-bordered mt-0" style="width: 100%; border: 2px solid black; border-top: none; margin-top: -2px !important; font-size: 9px !important;">
+        <thead>
+            <tr style="background-color: white;">
+                <th rowspan="2" class="align-middle text-center">FECHA</th>
+                <th rowspan="2" class="align-middle text-center" style="width: 15%;">DETALLE</th>
+                <th colspan="5" class="text-center">EXISTENCIAS / ETAPAS</th>
+                <th colspan="6" class="text-center">MOVIMIENTOS</th>
+                <th rowspan="2" class="align-middle text-center">TOTAL</th>
+            </tr>
+            <tr style="background-color: white;">
+                <th class="text-center">INI</th>
+                <th class="text-center">POLL</th>
+                <th class="text-center">POST</th>
+                <th class="text-center">ENG</th>
+                <th class="text-center">REP</th>
+                <th class="text-center">COM</th>
+                <th class="text-center">NAC</th>
+                <th class="text-center">VEN</th>
+                <th class="text-center">MOR</th>
+                <th class="text-center">AUTO</th>
+                <th class="text-center">DESC</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registro in registros %}
+            <tr>
+                <td class="text-center">{{ registro.fecha|date:"d/m/Y" }}</td>
+                <td class="text-start">{{ registro.detalle }}</td>
+                <td class="text-center">{{ registro.aves_inicio }}</td>
+                <td class="text-center">{{ registro.pollitas_levante }}</td>
+                <td class="text-center">{{ registro.aves_postura }}</td>
+                <td class="text-center">{{ registro.aves_engorde }}</td>
+                <td class="text-center">{{ registro.reproductores }}</td>
+                <td class="text-center">{{ registro.compras }}</td>
+                <td class="text-center">{{ registro.nacimientos }}</td>
+                <td class="text-center">{{ registro.ventas }}</td>
+                <td class="text-center">{{ registro.mortalidad }}</td>
+                <td class="text-center">{{ registro.autoconsumo }}</td>
+                <td class="text-center">{{ registro.descartes }}</td>
+                <td class="text-center fw-bold">{{ registro.total }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <table class="table table-bordered mt-0" style="width: 100%; border: 2px solid black; border-top: none; margin-top: -2px !important;">
+        <tbody>
+            <tr style="height: 60px;">
+                <td style="width: 50%; vertical-align: bottom !important; padding: 5px;">
+                    <div style="font-size: 10px; font-weight: bold; margin-bottom: 30px;">Responsable de Inventario:</div>
+                    <div style="border-bottom: 1px solid #ccc; width: 90%; margin: 0 auto;"></div>
+                </td>
+                <td style="width: 50%; vertical-align: bottom !important; padding: 5px;">
+                    <div style="font-size: 10px; font-weight: bold; margin-bottom: 30px;">Visto Bueno Instructor:</div>
+                    <div style="border-bottom: 1px solid #ccc; width: 90%; margin: 0 auto;"></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Registro -->
+<div class="modal fade" id="registroModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Nuevo Registro de Inventario</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha</label>
+                            <input type="date" name="fecha" class="form-control" required value="{% now 'Y-m-d' %}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Detalle</label>
+                            <input type="text" name="detalle" class="form-control" placeholder="Descripción del registro">
+                        </div>
+                        
+                        <div class="col-12 mt-4">
+                            <h6 class="border-bottom pb-2 text-success">Existencias / Etapas</h6>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label small">Inicio</label>
+                            <input type="number" name="aves_inicio" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label small">Pollitas</label>
+                            <input type="number" name="pollitas_levante" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label small">Postura</label>
+                            <input type="number" name="aves_postura" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Engorde</label>
+                            <input type="number" name="aves_engorde" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Reproductores</label>
+                            <input type="number" name="reproductores" class="form-control" value="0" min="0">
+                        </div>
+                        
+                        <div class="col-12 mt-4">
+                            <h6 class="border-bottom pb-2 text-success">Movimientos</h6>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label small">Compras</label>
+                            <input type="number" name="compras" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label small">Nacimientos</label>
+                            <input type="number" name="nacimientos" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label small">Ventas</label>
+                            <input type="number" name="ventas" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label small">Mortalidad</label>
+                            <input type="number" name="mortalidad" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label small">Autoconsumo</label>
+                            <input type="number" name="autoconsumo" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label small">Descartes</label>
+                            <input type="number" name="descartes" class="form-control" value="0" min="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Guardar Registro</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function updateRegistro(element, field) {
+        const row = element.closest('tr');
+        const id = row.dataset.id;
+        // Clean value (remove extra spaces, newlines)
+        let value = element.innerText.trim();
+        
+        // Handle empty numeric fields as 0
+        if (value === '' && field !== 'detalle') {
+            value = '0';
+            element.innerText = '0';
+        }
+
+        fetch('{% url "aves:inventario_permanente" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({
+                id: id,
+                field: field,
+                value: value
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Visual feedback
+                element.style.backgroundColor = 'rgba(212, 237, 218, 0.5)'; // Greenish
+                setTimeout(() => {
+                    element.style.backgroundColor = '';
+                }, 500);
+                
+                // Update total if provided
+                if (data.new_total !== undefined) {
+                    const totalCell = row.querySelector('.total-cell');
+                    if (totalCell) {
+                        totalCell.innerText = data.new_total;
+                        // Flash total cell too
+                        totalCell.style.backgroundColor = 'rgba(212, 237, 218, 0.5)';
+                        setTimeout(() => {
+                            totalCell.style.backgroundColor = ''; // Return to default CSS
+                        }, 500);
+                    }
+                }
+            } else {
+                alert('Error al actualizar: ' + data.message);
+                element.style.backgroundColor = 'rgba(248, 215, 218, 0.8)'; // Reddish
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error de conexión');
+            element.style.backgroundColor = 'rgba(248, 215, 218, 0.8)';
+        });
+    }
+</script>
+{% endblock %}

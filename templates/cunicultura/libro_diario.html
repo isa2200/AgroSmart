@@ -1,0 +1,533 @@
+{% extends 'cunicultura/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    {{ block.super }}
+<style>
+    /* Excel-like Styles - Compact Mode */
+    :root {
+        --excel-header-bg: #107c41; /* Excel Green */
+        --excel-header-text: #ffffff;
+        --excel-border: #d4d4d4;
+        --excel-row-hover: #e1e1e1;
+        --excel-input-bg: #fff;
+        --excel-input-focus: #e3f2fd;
+    }
+
+    .excel-container {
+        background: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        overflow: hidden;
+        margin-bottom: 2rem;
+        border: 1px solid var(--excel-border);
+    }
+
+    .excel-table {
+        margin-bottom: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 0.75rem; /* Compact font */
+        border-collapse: collapse;
+        width: 100%;
+        table-layout: auto;
+    }
+
+    .excel-table th {
+        background-color: var(--excel-header-bg) !important;
+        color: var(--excel-header-text) !important;
+        font-weight: 600;
+        border: 1px solid rgba(255,255,255,0.3);
+        padding: 4px 2px; /* Compact padding */
+        vertical-align: middle;
+        white-space: nowrap; /* Keep headers single line if possible, or allow wrap for narrow ones */
+        text-align: center;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        font-size: 0.7rem;
+    }
+
+    /* Subheaders slightly darker/lighter */
+    .excel-table thead tr:nth-child(2) th {
+        background-color: #185a2d !important; /* Darker green for subheaders */
+        font-size: 0.65rem;
+        white-space: normal; /* Allow wrapping for subheaders */
+        line-height: 1.1;
+    }
+
+    .excel-table td {
+        border: 1px solid var(--excel-border);
+        padding: 0; /* Minimal padding for inputs */
+        vertical-align: middle;
+        background-color: white;
+        color: #333;
+        height: 24px; /* Fixed height for consistency */
+    }
+
+    .excel-table tbody tr:hover td {
+        background-color: var(--excel-row-hover);
+    }
+
+    /* Input styling to look like Excel cells */
+    .excel-table .form-control {
+        border: none;
+        border-radius: 0;
+        padding: 2px 4px;
+        font-size: 0.75rem;
+        background-color: transparent;
+        box-shadow: none;
+        width: 100%;
+        height: 100%;
+        min-width: 40px; /* Minimal width */
+        text-align: center;
+    }
+
+    .excel-table .form-control:focus {
+        background-color: var(--excel-input-focus);
+        outline: 2px solid #107c41;
+        outline-offset: -2px;
+        color: black;
+    }
+
+    /* Specific column widths - Optimized for screen fit */
+    .col-fecha { min-width: 85px; width: 85px; }
+    .col-jaula { min-width: 45px; width: 45px; }
+    .col-num { min-width: 40px; width: 40px; text-align: center; }
+    .col-text { min-width: 100px; width: 120px; }
+    
+    /* Input Row Styling */
+    .input-row td {
+        background-color: #fff9c4 !important; /* Light yellow for input row */
+        border-bottom: 2px solid #107c41;
+    }
+    
+    .input-row .form-control {
+        font-weight: 600;
+        color: #000;
+    }
+
+    /* Action Button */
+    .btn-save-row {
+        background: #107c41;
+        color: white;
+        border: none;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        transition: all 0.2s;
+        border-radius: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .btn-save-row:hover {
+        background: #0b572e;
+        color: white;
+    }
+
+    /* Container adjustments */
+    .main-content {
+        padding: 0.5rem !important; /* Minimal padding */
+        max-width: 100vw;
+        overflow-x: hidden;
+    }
+    
+    .table-wrapper {
+        overflow-x: auto;
+        max-height: 85vh;
+        position: relative;
+        /* Custom scrollbar for better look */
+        scrollbar-width: thin;
+        scrollbar-color: #107c41 #f1f1f1;
+    }
+
+    .table-wrapper::-webkit-scrollbar {
+        height: 8px;
+        width: 8px;
+    }
+    
+    .table-wrapper::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    
+    .table-wrapper::-webkit-scrollbar-thumb {
+        background: #107c41;
+        border-radius: 4px;
+    }
+
+    /* Remove standard dashboard card styles for this view to maximize space */
+    .unified-dashboard-card {
+        background: transparent;
+        backdrop-filter: none;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
+
+    /* Print Styles */
+    .print-layout { display: none; }
+
+    @media print {
+        @page { size: landscape; margin: 5mm; }
+        
+        body { 
+            background: white; 
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact;
+        }
+
+        /* Hide UI elements */
+        .sidebar, .mobile-toggle, .btn, .input-row, .d-flex.justify-content-between, header, footer, .no-print {
+            display: none !important;
+        }
+
+        /* Reset Container Styles */
+        .main-content, .dashboard-container, .container-fluid {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            max-width: none !important;
+            overflow: visible !important;
+        }
+
+        .excel-container {
+            border: none !important;
+            box-shadow: none !important;
+            margin: 0 !important;
+            overflow: visible !important;
+            display: block !important;
+        }
+
+        .table-wrapper {
+            max-height: none !important;
+            overflow: visible !important;
+        }
+
+        /* Print Header & Footer Display */
+        .print-layout {
+            display: block !important;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        /* Table Print Styling */
+        .excel-table {
+            border: 2px solid black !important;
+            font-size: 7pt !important; /* Smaller font for print to fit content */
+            width: 100% !important;
+            table-layout: auto !important;
+        }
+
+        .excel-table th {
+            background-color: #f0f0f0 !important; /* Light gray for print */
+            color: black !important;
+            border: 1px solid black !important;
+            font-weight: bold;
+        }
+
+        .excel-table td {
+            border: 1px solid black !important;
+            color: black !important;
+            height: auto !important;
+            padding: 2px !important;
+        }
+        
+        /* Ensure table fits */
+        .excel-table th, .excel-table td {
+            white-space: normal !important; /* Allow wrapping */
+        }
+
+        /* Hide specific elements if needed */
+        .btn-save-row { display: none !important; }
+        
+        /* Adjust specific columns for print */
+        .col-fecha { width: 60px !important; min-width: 0 !important; }
+        .col-jaula { width: 30px !important; min-width: 0 !important; }
+        
+        /* Hide scrollbars */
+        ::-webkit-scrollbar { display: none; }
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+<!-- Print Header -->
+<div class="print-layout">
+    <table class="table table-bordered mb-0" style="width: 100%; margin-bottom: 0 !important; border: 2px solid black;">
+        <tbody>
+            <tr>
+                <td style="width: 60%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height:20mm; width:auto; object-fit:contain;">
+                        <div class="fw-bold" style="font-size: 14px; line-height: 1.2; color: black;">
+                            Centro de los Recursos Naturales Renovables La Salada<br>
+                            Regional Antioquia
+                        </div>
+                    </div>
+                </td>
+                <td style="width: 40%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="fw-bold" style="color: black;">Código del documento: <span class="fw-normal">-</span></div>
+                    <div class="mt-1 fw-bold" style="color: black;">Versión: <span class="fw-normal">01</span></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-center" style="text-align: center !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="fw-bold" style="color: black;">Unidad productiva de Cunicultura</div>
+                    <div class="h5 mb-0 fw-bold" style="color: black;">LIBRO DIARIO DE CONEJOS</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3 no-print">
+    <div>
+        <h2 class="text-white mb-0" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">
+            <i class="fas fa-book me-2"></i>Libro Diario
+        </h2>
+        <p class="text-white-50 mb-0 small">Vista tipo hoja de cálculo - Ingrese los datos en la primera fila amarilla</p>
+    </div>
+    <div>
+        <button onclick="window.print()" class="btn btn-outline-light btn-sm me-2">
+            <i class="fas fa-print me-1"></i> Imprimir
+        </button>
+        <a href="{% url 'cunicultura:dashboard' %}" class="btn btn-outline-light btn-sm">
+            <i class="fas fa-arrow-left me-1"></i> Volver
+        </a>
+    </div>
+</div>
+
+<div class="excel-container">
+    <form method="post" id="libroDiarioForm">
+        {% csrf_token %}
+        <div class="table-wrapper">
+            <table class="excel-table">
+                <thead>
+                    <tr>
+                        <th rowspan="2" class="align-middle" style="min-width: 50px;">Acción</th>
+                        <th rowspan="2" class="align-middle col-fecha">Fecha</th>
+                        
+                        <!-- Partos -->
+                        <th colspan="3" style="background-color: #2e7d32 !important;">Partos</th>
+                        
+                        <!-- Palpación -->
+                        <th colspan="2" style="background-color: #1565c0 !important;">Palpación</th>
+                        
+                        <!-- Montas -->
+                        <th colspan="2" style="background-color: #f57f17 !important;">Montas</th>
+                        
+                        <!-- Muertes -->
+                        <th colspan="4" style="background-color: #c62828 !important;">Muertes</th>
+                        
+                        <!-- Ventas -->
+                        <th colspan="3" style="background-color: #00838f !important;">Ventas</th>
+                        
+                        <!-- Manejo Gazapera -->
+                        <th colspan="2" style="background-color: #455a64 !important;">Manejo Gazapera</th>
+                        
+                        <!-- Destetes -->
+                        <th colspan="4" style="background-color: #2e7d32 !important;">Destetes</th>
+                        
+                        <!-- Alimentación -->
+                        <th colspan="3" style="background-color: #6d4c41 !important;">Alimentación (Kg/$$)</th>
+                        
+                        <th rowspan="2" class="align-middle col-text">Tratamientos</th>
+                        <th rowspan="2" class="align-middle col-text">Observaciones</th>
+                    </tr>
+                    <tr>
+                        <!-- Partos Subheaders -->
+                        <th class="col-jaula">Jaula</th>
+                        <th class="col-num">Vivos</th>
+                        <th class="col-num">Muertos</th>
+                        
+                        <!-- Palpación Subheaders -->
+                        <th class="col-jaula">Jaula</th>
+                        <th class="col-text">Estado</th>
+                        
+                        <!-- Montas Subheaders -->
+                        <th class="col-jaula">Jaula</th>
+                        <th class="col-jaula">Macho</th>
+                        
+                        <!-- Muertes Subheaders -->
+                        <th class="col-jaula">Jaula</th>
+                        <th class="col-num">Gazapos</th>
+                        <th class="col-num">L/C</th>
+                        <th class="col-num">Reprod.</th>
+                        
+                        <!-- Ventas Subheaders -->
+                        <th class="col-jaula">Jaula</th>
+                        <th class="col-num">L/C</th>
+                        <th class="col-num">Pie Cría</th>
+                        
+                        <!-- Manejo Gazapera Subheaders -->
+                        <th class="col-jaula">Poner</th>
+                        <th class="col-jaula">Quitar</th>
+                        
+                        <!-- Destetes Subheaders -->
+                        <th class="col-jaula">Jaula</th>
+                        <th class="col-num">Hembra</th>
+                        <th class="col-num">Macho</th>
+                        <th class="col-num">Peso</th>
+                        
+                        <!-- Alimentación Subheaders -->
+                        <th class="col-num">L/C</th>
+                        <th class="col-num">Reprod.</th>
+                        <th class="col-num">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Input Row (Always First) -->
+                    <tr class="input-row">
+                        <td class="text-center">
+                            <button type="submit" class="btn-save-row" title="Guardar Registro">
+                                <i class="fas fa-save"></i>
+                            </button>
+                        </td>
+                        <td>{{ form.fecha }}</td>
+                        
+                        <!-- Partos -->
+                        <td>{{ form.parto_jaula }}</td>
+                        <td>{{ form.parto_vivos }}</td>
+                        <td>{{ form.parto_muertos }}</td>
+                        
+                        <!-- Palpación -->
+                        <td>{{ form.palpacion_jaula }}</td>
+                        <td>{{ form.palpacion_estado }}</td>
+                        
+                        <!-- Montas -->
+                        <td>{{ form.monta_jaula }}</td>
+                        <td>{{ form.monta_macho }}</td>
+                        
+                        <!-- Muertes -->
+                        <td>{{ form.muerte_jaula }}</td>
+                        <td>{{ form.muerte_gazapos }}</td>
+                        <td>{{ form.muerte_levante_ceba }}</td>
+                        <td>{{ form.muerte_reproductores }}</td>
+                        
+                        <!-- Ventas -->
+                        <td>{{ form.venta_jaula }}</td>
+                        <td>{{ form.venta_levante_ceba }}</td>
+                        <td>{{ form.venta_pie_cria }}</td>
+                        
+                        <!-- Manejo Gazapera -->
+                        <td>{{ form.gazapera_poner_jaula }}</td>
+                        <td>{{ form.gazapera_quitar_jaula }}</td>
+                        
+                        <!-- Destetes -->
+                        <td>{{ form.destete_jaula }}</td>
+                        <td>{{ form.destete_cantidad_hembras }}</td>
+                        <td>{{ form.destete_cantidad_machos }}</td>
+                        <td>{{ form.destete_peso_total }}</td>
+                        
+                        <!-- Alimentación -->
+                        <td>{{ form.alimentacion_levante_ceba }}</td>
+                        <td>{{ form.alimentacion_reproduccion }}</td>
+                        <td>{{ form.alimentacion_total }}</td>
+                        
+                        <td>{{ form.tratamientos }}</td>
+                        <td>{{ form.observaciones }}</td>
+                    </tr>
+
+                    <!-- Data Rows -->
+                    {% for registro in registros %}
+                    <tr>
+                        <td class="text-center text-muted small">{{ forloop.counter }}</td>
+                        <td class="text-center">{{ registro.fecha|date:"d/m/Y" }}</td>
+                        
+                        <!-- Partos -->
+                        <td class="text-center">{{ registro.parto_jaula|default:"-" }}</td>
+                        <td class="text-center">{{ registro.parto_vivos|default:"0" }}</td>
+                        <td class="text-center">{{ registro.parto_muertos|default:"0" }}</td>
+                        
+                        <!-- Palpación -->
+                        <td class="text-center">{{ registro.palpacion_jaula|default:"-" }}</td>
+                        <td class="text-center">{{ registro.palpacion_estado|default:"-" }}</td>
+                        
+                        <!-- Montas -->
+                        <td class="text-center">{{ registro.monta_jaula|default:"-" }}</td>
+                        <td class="text-center">{{ registro.monta_macho|default:"-" }}</td>
+                        
+                        <!-- Muertes -->
+                        <td class="text-center">{{ registro.muerte_jaula|default:"-" }}</td>
+                        <td class="text-center">{{ registro.muerte_gazapos|default:"0" }}</td>
+                        <td class="text-center">{{ registro.muerte_levante_ceba|default:"0" }}</td>
+                        <td class="text-center">{{ registro.muerte_reproductores|default:"0" }}</td>
+                        
+                        <!-- Ventas -->
+                        <td class="text-center">{{ registro.venta_jaula|default:"-" }}</td>
+                        <td class="text-center">{{ registro.venta_levante_ceba|default:"0" }}</td>
+                        <td class="text-center">{{ registro.venta_pie_cria|default:"0" }}</td>
+                        
+                        <!-- Manejo Gazapera -->
+                        <td class="text-center">{{ registro.gazapera_poner_jaula|default:"-" }}</td>
+                        <td class="text-center">{{ registro.gazapera_quitar_jaula|default:"-" }}</td>
+                        
+                        <!-- Destetes -->
+                        <td class="text-center">{{ registro.destete_jaula|default:"-" }}</td>
+                        <td class="text-center">{{ registro.destete_cantidad_hembras|default:"0" }}</td>
+                        <td class="text-center">{{ registro.destete_cantidad_machos|default:"0" }}</td>
+                        <td class="text-center">{{ registro.destete_peso_total|default:"0" }}</td>
+                        
+                        <!-- Alimentación -->
+                        <td class="text-center">{{ registro.alimentacion_levante_ceba|default:"-" }}</td>
+                        <td class="text-center">{{ registro.alimentacion_reproduccion|default:"-" }}</td>
+                        <td class="text-center">{{ registro.alimentacion_total|default:"-" }}</td>
+                        
+                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ registro.tratamientos }}">{{ registro.tratamientos|default:"-" }}</td>
+                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ registro.observaciones }}">{{ registro.observaciones|default:"-" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="30" class="text-center py-4 text-muted">
+                            <i class="fas fa-info-circle me-2"></i> No hay registros. Utilice la primera fila para agregar datos.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>
+
+<!-- Print Footer -->
+<div class="print-layout mt-4">
+    <table class="table table-bordered" style="width: 100%; border: 2px solid black;">
+        <tbody>
+            <tr>
+                <td style="height: 80px; vertical-align: bottom;">
+                    <div class="fw-bold small">Realizado por:</div>
+                </td>
+                <td style="height: 80px; vertical-align: bottom;">
+                    <div class="fw-bold small">Documento revisado por:</div>
+                </td>
+                <td style="height: 80px; vertical-align: bottom;">
+                    <div class="fw-bold small">Aprobado por:</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // Simple script to handle 'Enter' key in inputs to move to next input or submit
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('libroDiarioForm');
+        const inputs = form.querySelectorAll('input, select, textarea');
+        
+        inputs.forEach((input, index) => {
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    } else {
+                        // If it's the last input, submit? Or maybe just focus the button
+                        form.querySelector('.btn-save-row').focus();
+                    }
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
