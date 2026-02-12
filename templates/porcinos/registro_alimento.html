@@ -1,0 +1,501 @@
+{% extends 'porcinos/base.html' %}
+{% load static %}
+
+{% block title %}Registro Gasto de Alimento{% endblock %}
+{% block page_title %}Registro Gasto de Alimento{% endblock %}
+
+
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard:principal' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'porcinos:dashboard' %}">Porcinos</a></li>
+        <li class="breadcrumb-item active">Registro Gasto de Alimento</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+        <div>
+            <h4 class="mb-1 fw-bold text-dark">Registro Gasto de Alimento</h4>
+            <div class="text-muted small">
+                <i class="fas fa-file-alt me-1"></i>Doc: {{ codigo_documento|default:"-" }} | 
+                <i class="fas fa-code-branch me-1"></i>Ver: {{ version }}
+            </div>
+        </div>
+        <div class="d-flex gap-2">
+            <a class="btn btn-outline-primary" href="{% url 'porcinos:reportes' %}">
+                <i class="fas fa-chart-bar me-2"></i>Reportes
+            </a>
+            <button class="btn btn-outline-secondary" onclick="window.print()">
+                <i class="fas fa-print me-2"></i>Imprimir
+            </button>
+        </div>
+    </div>
+
+    <!-- Historial de Registros -->
+    <div class="card no-print mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="mb-0"><i class="fas fa-archive me-2"></i>Historial de Registros</h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4">Mes</th><th>Día</th>
+                            <th>Lactancia E</th><th>Gestación E</th>
+                            <th>Preinicio E</th><th>Inicio E</th>
+                            <th>Levante E</th><th>Ceba E</th>
+                            <th class="text-end pe-4">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rows"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario de Nuevo Registro -->
+    <div class="card no-print">
+        <div class="card-header">
+            <h6 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Nuevo Registro de Gasto</h6>
+        </div>
+        <div class="card-body p-4">
+            <form method="post" id="alimentoForm">
+                {% csrf_token %}
+                <input type="hidden" name="registro_json" id="registro_json">
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-2">
+                        <label class="form-label small fw-bold text-muted">Mes</label>
+                        <input type="number" min="1" max="12" class="form-control ip-mes" placeholder="MM">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label small fw-bold text-muted">Día</label>
+                        <input type="number" min="1" max="31" class="form-control ip-dia" placeholder="DD">
+                    </div>
+                    <div class="col-md-8 d-flex align-items-end">
+                        <div class="alert alert-info py-2 mb-0 small w-100">
+                            <i class="fas fa-info-circle me-2"></i>E = Entrada (kg), S1 = Saldo (kg), S2 = Salida (kg)
+                        </div>
+                    </div>
+                </div>
+
+                <h6 class="text-primary border-bottom pb-2 mb-3"><i class="fas fa-balance-scale me-2"></i>Valores del día</h6>
+                
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle text-center table-sm">
+                        <thead class="bg-light text-muted small">
+                            <tr>
+                                <th style="width: 15%">Etapa</th>
+                                <th style="width: 25%">Lote</th>
+                                <th style="width: 20%">Entrada (kg)</th>
+                                <th style="width: 20%">Saldo (kg)</th>
+                                <th style="width: 20%">Salida (kg)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Lactancia -->
+                            <tr>
+                                <td class="fw-bold text-start ps-3">Lactancia</td>
+                                <td><input type="text" class="form-control form-control-sm ip-lac-lote text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-lac-e text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-lac-s1 text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-lac-s2 text-center"></td>
+                            </tr>
+                            <!-- Gestación -->
+                            <tr>
+                                <td class="fw-bold text-start ps-3">Gestación</td>
+                                <td><input type="text" class="form-control form-control-sm ip-ges-lote text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ges-e text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ges-s1 text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ges-s2 text-center"></td>
+                            </tr>
+                            <!-- Preinicio -->
+                            <tr>
+                                <td class="fw-bold text-start ps-3">Preinicio</td>
+                                <td><input type="text" class="form-control form-control-sm ip-pre-lote text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-pre-e text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-pre-s1 text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-pre-s2 text-center"></td>
+                            </tr>
+                            <!-- Inicio -->
+                            <tr>
+                                <td class="fw-bold text-start ps-3">Inicio</td>
+                                <td><input type="text" class="form-control form-control-sm ip-ini-lote text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ini-e text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ini-s1 text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ini-s2 text-center"></td>
+                            </tr>
+                            <!-- Levante -->
+                            <tr>
+                                <td class="fw-bold text-start ps-3">Levante</td>
+                                <td><input type="text" class="form-control form-control-sm ip-lev-lote text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-lev-e text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-lev-s1 text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-lev-s2 text-center"></td>
+                            </tr>
+                            <!-- Ceba -->
+                            <tr>
+                                <td class="fw-bold text-start ps-3">Ceba</td>
+                                <td><input type="text" class="form-control form-control-sm ip-ceb-lote text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ceb-e text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ceb-s1 text-center"></td>
+                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ceb-s2 text-center"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary px-5 shadow-sm">
+                        <i class="fas fa-save me-2"></i>Guardar Registro
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    </div>
+
+<div id="printLayout" class="print-layout">
+    <table class="table table-bordered mb-0" style="width: 100%; margin-bottom: 0 !important;">
+        <tbody>
+            <tr>
+                <td style="width: 60%; text-align: left !important; vertical-align: middle !important; padding: 5px !important;">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height:12mm; width:auto; object-fit:contain;">
+                        <div class="fw-bold" style="font-size: 12px; line-height: 1.2;">{{ centro|default:"Centro de los Recursos Naturales Renovables La Salada" }}</div>
+                    </div>
+                </td>
+                <td style="width: 40%; text-align: left !important; vertical-align: middle !important; padding: 5px !important;">
+                    <div class="fw-bold" style="font-size: 10px;">Código del documento: <span class="fw-normal">{{ codigo_documento|default:"" }}</span></div>
+                    <div class="mt-1 fw-bold" style="font-size: 10px;">Versión <span class="fw-normal">{{ version }}</span></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-center" style="text-align: center !important; vertical-align: middle !important; padding: 5px !important;">
+                    <div class="fw-bold" style="font-size: 10px;">{{ unidad_productiva }}</div>
+                    <div class="h6 mb-0 fw-bold" style="font-size: 12px;">REGISTRO GASTO DE ALIMENTO</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <table class="table table-bordered table-sm align-middle" style="table-layout:fixed;width:100%;font-size:11px; margin-top: -2px !important;">
+            <colgroup>
+                <col style="width:4%">
+                <col style="width:4%"><col style="width:4%"><col style="width:4%"><col style="width:4%">  {# Lactancia #}
+                <col style="width:4%"><col style="width:4%"><col style="width:4%"><col style="width:4%">  {# Gestación #}
+                <col style="width:4%"><col style="width:4%"><col style="width:4%"><col style="width:4%">  {# Preinicio #}
+                <col style="width:4%"><col style="width:4%"><col style="width:4%"><col style="width:4%">  {# Inicio #}
+                <col style="width:4%"><col style="width:4%"><col style="width:4%"><col style="width:4%">  {# Levante #}
+                <col style="width:4%"><col style="width:4%"><col style="width:4%"><col style="width:4%">  {# Ceba #}
+            </colgroup>
+            <thead class="table-light">
+                <tr>
+                    <th rowspan="2">Día</th>
+                    <th colspan="4">Lactancia</th>
+                    <th colspan="4">Gestación</th>
+                    <th colspan="4">Preinicio</th>
+                    <th colspan="4">Inicio</th>
+                    <th colspan="4">Levante</th>
+                    <th colspan="4">Ceba</th>
+                </tr>
+                <tr>
+                    <th>Lote</th><th>E</th><th>S</th><th>S</th>
+                    <th>Lote</th><th>E</th><th>S</th><th>S</th>
+                    <th>Lote</th><th>E</th><th>S</th><th>S</th>
+                    <th>Lote</th><th>E</th><th>S</th><th>S</th>
+                    <th>Lote</th><th>E</th><th>S</th><th>S</th>
+                    <th>Lote</th><th>E</th><th>S</th><th>S</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="pv-dia"></span></td>
+                    <td><span class="pv-lac-lote"></span></td>
+                    <td><span class="pv-lac-e"></span></td>
+                    <td><span class="pv-lac-s1"></span></td>
+                    <td><span class="pv-lac-s2"></span></td>
+                    <td><span class="pv-ges-lote"></span></td>
+                    <td><span class="pv-ges-e"></span></td>
+                    <td><span class="pv-ges-s1"></span></td>
+                    <td><span class="pv-ges-s2"></span></td>
+                    <td><span class="pv-pre-lote"></span></td>
+                    <td><span class="pv-pre-e"></span></td>
+                    <td><span class="pv-pre-s1"></span></td>
+                    <td><span class="pv-pre-s2"></span></td>
+                    <td><span class="pv-ini-lote"></span></td>
+                    <td><span class="pv-ini-e"></span></td>
+                    <td><span class="pv-ini-s1"></span></td>
+                    <td><span class="pv-ini-s2"></span></td>
+                    <td><span class="pv-lev-lote"></span></td>
+                    <td><span class="pv-lev-e"></span></td>
+                    <td><span class="pv-lev-s1"></span></td>
+                    <td><span class="pv-lev-s2"></span></td>
+                    <td><span class="pv-ceb-lote"></span></td>
+                    <td><span class="pv-ceb-e"></span></td>
+                    <td><span class="pv-ceb-s1"></span></td>
+                    <td><span class="pv-ceb-s2"></span></td>
+                </tr>
+                {% for i in rango_print|slice:":10" %}
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                    <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                    <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                    <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                    <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                    <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="mt-1 mb-2" style="font-size:10px; font-weight:bold;">E: ENTRADA &nbsp;&nbsp; S: SALDO &nbsp;&nbsp; S: SALIDA</div>
+
+        <table class="table table-bordered table-sm align-middle" style="table-layout:fixed;width:100%;font-size:10px; margin-top: -2px !important;">
+            <colgroup>
+                <col style="width:33%">
+                <col style="width:34%">
+                <col style="width:33%">
+            </colgroup>
+            <tbody>
+                <tr style="height: 40px;">
+                    <td style="vertical-align: top !important; padding: 5px !important;">
+                        <div style="font-size: 10px; font-weight: bold;">Realizado por:</div>
+                    </td>
+                    <td style="vertical-align: top !important; padding: 5px !important;">
+                        <div style="font-size: 10px; font-weight: bold;">Revisado por:</div>
+                    </td>
+                    <td style="vertical-align: top !important; padding: 5px !important;">
+                        <div style="font-size: 10px; font-weight: bold;">Aprobado por:</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    
+</div>
+
+<!-- Logout Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title fw-bold text-secondary" id="logoutModalLabel">Cerrar Sesión</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <div class="mb-3 text-warning">
+            <i class="fas fa-exclamation-circle fa-3x"></i>
+        </div>
+        <h5 class="mb-3 fw-bold">¿Estás seguro?</h5>
+        <p class="text-muted mb-0">Deseas cerrar tu sesión actual.</p>
+      </div>
+      <div class="modal-footer border-top-0 justify-content-center pb-4">
+        <button type="button" class="btn btn-light px-4 border" data-bs-dismiss="modal">Cancelar</button>
+        <a href="{% url 'usuarios:logout' %}" class="btn btn-danger px-4 ms-2">Sí, Cerrar Sesión</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos Modernos - Unificados */
+    .card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    
+    .card-header {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        padding: 20px 25px;
+        border: none;
+    }
+
+    .card-header h6 {
+        color: white !important;
+    }
+    
+    .card-header i {
+        color: white !important;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        padding: 0.6rem 1rem;
+    }
+
+    .form-control:focus {
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+        border-color: #0d6efd;
+    }
+
+    /* Tabla de entrada */
+    .table-sm td, .table-sm th {
+        padding: 0.25rem;
+    }
+    
+    .table input.form-control-sm {
+        border: none;
+        background: transparent;
+        padding: 0;
+        height: auto;
+        font-size: 0.9rem;
+    }
+    
+    .table input.form-control-sm:focus {
+        background: white;
+        box-shadow: none;
+        outline: 2px solid #86b7fe;
+    }
+
+    .btn-primary {
+        border-radius: 10px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+    }
+    
+    .animate-fade-in {
+        animation: fadeInUp 0.5s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media print {
+        @page { size: A4 landscape; margin: 5mm; }
+        .no-print, .sidebar, .breadcrumb, .navbar { display: none !important; }
+        .print-layout { display:block !important; position: static; width: 100%; }
+        html, body { height:auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        
+        .print-layout table { 
+            font-size: 8px !important; 
+            border-collapse: collapse !important;
+            border: 2px solid black !important;
+        }
+        
+        .print-layout table th, .print-layout table td {
+            border: 1px solid black !important;
+            padding: 2px !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+        }
+        
+        .print-layout .table-light th {
+            background-color: #f0f0f0 !important;
+            color: black !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        /* Ajustes específicos para firmas */
+        .print-layout td[style*="text-align: left"] {
+            text-align: left !important;
+        }
+        .print-layout td[style*="vertical-align: top"] {
+            vertical-align: top !important;
+        }
+    }
+    .print-layout { display:none; }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const form = document.getElementById('alimentoForm');
+  const out = document.getElementById('registro_json');
+  const borrador = JSON.parse('{{ borrador_json|default:"{}"|escapejs }}');
+  const registros = JSON.parse('{{ registros_json|default:"[]"|escapejs }}');
+  function set(cls,val){const el=document.querySelector(cls); if(el) el.value=val||''}
+  function get(cls){const el=document.querySelector(cls); return el?el.value:''}
+  function setText(cls,val){const el=document.querySelector(cls); if(el) el.textContent=(val||'').toString()}
+  if (borrador && typeof borrador==='object'){
+    set('.ip-mes', borrador.mes); set('.ip-dia', borrador.dia);
+    set('.ip-lac-lote', borrador.lac_lote); set('.ip-lac-e', borrador.lac_e); set('.ip-lac-s1', borrador.lac_s1); set('.ip-lac-s2', borrador.lac_s2);
+    set('.ip-ges-lote', borrador.ges_lote); set('.ip-ges-e', borrador.ges_e); set('.ip-ges-s1', borrador.ges_s1); set('.ip-ges-s2', borrador.ges_s2);
+    set('.ip-pre-lote', borrador.pre_lote); set('.ip-pre-e', borrador.pre_e); set('.ip-pre-s1', borrador.pre_s1); set('.ip-pre-s2', borrador.pre_s2);
+    set('.ip-ini-lote', borrador.ini_lote); set('.ip-ini-e', borrador.ini_e); set('.ip-ini-s1', borrador.ini_s1); set('.ip-ini-s2', borrador.ini_s2);
+    set('.ip-lev-lote', borrador.lev_lote); set('.ip-lev-e', borrador.lev_e); set('.ip-lev-s1', borrador.lev_s1); set('.ip-lev-s2', borrador.lev_s2);
+    set('.ip-ceb-lote', borrador.ceb_lote); set('.ip-ceb-e', borrador.ceb_e); set('.ip-ceb-s1', borrador.ceb_s1); set('.ip-ceb-s2', borrador.ceb_s2);
+  }
+  function sync(){
+    setText('.pv-dia', get('.ip-dia'));
+    setText('.pv-lac-lote', get('.ip-lac-lote')); setText('.pv-lac-e', get('.ip-lac-e')); setText('.pv-lac-s1', get('.ip-lac-s1')); setText('.pv-lac-s2', get('.ip-lac-s2'));
+    setText('.pv-ges-lote', get('.ip-ges-lote')); setText('.pv-ges-e', get('.ip-ges-e')); setText('.pv-ges-s1', get('.ip-ges-s1')); setText('.pv-ges-s2', get('.ip-ges-s2'));
+    setText('.pv-pre-lote', get('.ip-pre-lote')); setText('.pv-pre-e', get('.ip-pre-e')); setText('.pv-pre-s1', get('.ip-pre-s1')); setText('.pv-pre-s2', get('.ip-pre-s2'));
+    setText('.pv-ini-lote', get('.ip-ini-lote')); setText('.pv-ini-e', get('.ip-ini-e')); setText('.pv-ini-s1', get('.ip-ini-s1')); setText('.pv-ini-s2', get('.ip-ini-s2'));
+    setText('.pv-lev-lote', get('.ip-lev-lote')); setText('.pv-lev-e', get('.ip-lev-e')); setText('.pv-lev-s1', get('.ip-lev-s1')); setText('.pv-lev-s2', get('.ip-lev-s2'));
+    setText('.pv-ceb-lote', get('.ip-ceb-lote')); setText('.pv-ceb-e', get('.ip-ceb-e')); setText('.pv-ceb-s1', get('.ip-ceb-s1')); setText('.pv-ceb-s2', get('.ip-ceb-s2'));
+  }
+  function buildJSON(){
+    const obj={ mes:get('.ip-mes'), dia:get('.ip-dia'),
+      lac_lote:get('.ip-lac-lote'), lac_e:get('.ip-lac-e'), lac_s1:get('.ip-lac-s1'), lac_s2:get('.ip-lac-s2'),
+      ges_lote:get('.ip-ges-lote'), ges_e:get('.ip-ges-e'), ges_s1:get('.ip-ges-s1'), ges_s2:get('.ip-ges-s2'),
+      pre_lote:get('.ip-pre-lote'), pre_e:get('.ip-pre-e'), pre_s1:get('.ip-pre-s1'), pre_s2:get('.ip-pre-s2'),
+      ini_lote:get('.ip-ini-lote'), ini_e:get('.ip-ini-e'), ini_s1:get('.ip-ini-s1'), ini_s2:get('.ip-ini-s2'),
+      lev_lote:get('.ip-lev-lote'), lev_e:get('.ip-lev-e'), lev_s1:get('.ip-lev-s1'), lev_s2:get('.ip-lev-s2'),
+      ceb_lote:get('.ip-ceb-lote'), ceb_e:get('.ip-ceb-e'), ceb_s1:get('.ip-ceb-s1'), ceb_s2:get('.ip-ceb-s2') };
+    out.value = JSON.stringify(obj);
+  }
+  document.querySelectorAll('input').forEach(el=>el.addEventListener('input', sync));
+  window.addEventListener('beforeprint', function(){ sync(); });
+  form.addEventListener('submit', function(){ sync(); buildJSON(); });
+  const params=new URLSearchParams(window.location.search);
+  if(params.get('autoprint')==='1'){ sync(); setTimeout(()=>window.print(),200); }
+
+  const tbody = document.getElementById('rows');
+  if (tbody) {
+    tbody.innerHTML = '';
+    if (Array.isArray(registros) && registros.length > 0) {
+      registros.forEach((r, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="ps-4 fw-bold text-primary">${r.mes||''}</td>
+          <td>${r.dia||''}</td>
+          <td>${r.lac_e||''}</td>
+          <td>${r.ges_e||''}</td>
+          <td>${r.pre_e||''}</td>
+          <td>${r.ini_e||''}</td>
+          <td>${r.lev_e||''}</td>
+          <td>${r.ceb_e||''}</td>
+          <td class="text-end pe-4">
+            <a class="btn btn-action btn-outline-primary" href="{% url 'porcinos:registro_alimento' %}?load_index=${idx}" title="Ver">
+                <i class="fas fa-eye"></i>
+            </a>
+            <a class="btn btn-action btn-outline-secondary" href="{% url 'porcinos:registro_alimento' %}?load_index=${idx}&autoprint=1" title="Imprimir">
+                <i class="fas fa-print"></i>
+            </a>
+          </td>`;
+        tbody.appendChild(tr);
+      });
+    } else {
+      const tr=document.createElement('tr'); tr.innerHTML='<td colspan="9" class="text-muted">Sin registros</td>'; tbody.appendChild(tr);
+    }
+  }
+});
+</script>
+{% endblock %}

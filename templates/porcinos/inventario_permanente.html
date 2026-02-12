@@ -1,0 +1,548 @@
+{% extends 'porcinos/base.html' %}
+{% load static %}
+
+{% block title %}Inventario Permanente de Cerdos{% endblock %}
+{% block page_title %}Inventario Permanente de Cerdos{% endblock %}
+{% block page_header %}{% endblock %}
+
+
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard:principal' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'porcinos:dashboard' %}">Porcinos</a></li>
+        <li class="breadcrumb-item active">Inventario Permanente</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+        <div>
+            <h4 class="mb-1 fw-bold text-dark">Inventario Permanente</h4>
+            <div class="text-muted small">
+                <i class="fas fa-file-alt me-1"></i>Doc: {{ codigo_documento|default:"-" }} | 
+                <i class="fas fa-code-branch me-1"></i>Ver: {{ version }}
+            </div>
+        </div>
+        <div class="d-flex gap-2">
+            <a class="btn btn-outline-primary" href="{% url 'porcinos:reportes' %}">
+                <i class="fas fa-chart-bar me-2"></i>Reportes
+            </a>
+            <button class="btn btn-outline-secondary" onclick="window.print()">
+                <i class="fas fa-print me-2"></i>Imprimir
+            </button>
+        </div>
+    </div>
+
+    <!-- Tabla de Registros Guardados -->
+    <div class="card no-print">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="mb-0"><i class="fas fa-archive me-2"></i>Inventarios Guardados</h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4">Fecha</th>
+                            <th>Detalle</th>
+                            <th>Total</th>
+                            <th class="text-end pe-4">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invRows">
+                        <tr class="text-muted"><td colspan="4" class="text-center py-4">Sin registros</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario de Nuevo Registro -->
+    <div class="card no-print">
+        <div class="card-header">
+            <h6 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Nuevo Registro de Inventario</h6>
+        </div>
+        <div class="card-body p-4">
+            <form method="post" id="inventarioForm" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="inventario_json" id="inventario_json">
+                <input type="hidden" class="ip-sig-realizado-b64">
+                <input type="hidden" class="ip-sig-revisado-b64">
+                <input type="hidden" class="ip-sig-aprobado-b64">
+                
+                <div class="row g-3">
+                    <!-- Form fields structure preserved but wrapped nicely -->
+                    <div class="col-md-2"><label class="form-label small fw-bold text-muted">Año</label><input type="number" min="2000" class="form-control ip-ano"></div>
+                    <div class="col-md-2"><label class="form-label small fw-bold text-muted">Mes</label><input type="number" min="1" max="12" class="form-control ip-mes"></div>
+                    <div class="col-md-2"><label class="form-label small fw-bold text-muted">Día</label><input type="number" min="1" max="31" class="form-control ip-dia"></div>
+                    <div class="col-md-6"><label class="form-label small fw-bold text-muted">Detalle clasificación</label><input type="text" class="form-control ip-detalle"></div>
+
+                    <!-- Divider -->
+                    <div class="col-12"><hr class="my-2 opacity-10"></div>
+                    
+                    <!-- Group 1 -->
+                    <div class="col-md-3"><label class="form-label small text-muted">Madre No.</label><input type="text" class="form-control ip-madre"></div>
+                    <div class="col-md-3"><label class="form-label small text-muted">Lechones vivos</label><input type="number" min="0" class="form-control ip-sum ip-lech-vivos"></div>
+                    <div class="col-md-3"><label class="form-label small text-muted">Lechones muertos</label><input type="number" min="0" class="form-control ip-sum ip-lech-muertos"></div>
+                    <div class="col-md-3"><label class="form-label small text-muted">Compras</label><input type="number" min="0" class="form-control ip-sum ip-compras"></div>
+
+                    <!-- Group 2 -->
+                    <div class="col-md-3"><label class="form-label small text-muted">Ventas</label><input type="number" min="0" class="form-control ip-sum ip-ventas"></div>
+                    <div class="col-md-3"><label class="form-label small text-muted">Muertes</label><input type="number" min="0" class="form-control ip-sum ip-muertes"></div>
+                    <div class="col-md-3"><label class="form-label small text-muted">Preiniciador</label><input type="number" min="0" class="form-control ip-sum ip-preiniciador"></div>
+                    <div class="col-md-3"><label class="form-label small text-muted">Levante y Ceba</label><input type="number" min="0" class="form-control ip-sum ip-lev-ceba"></div>
+
+                    <!-- Group 3 -->
+                    <div class="col-md-3"><label class="form-label small text-muted">Reproductores</label><input type="number" min="0" class="form-control ip-sum ip-reproductores"></div>
+                    <div class="col-md-3"><label class="form-label small text-muted">Hembras de reemplazo</label><input type="number" min="0" class="form-control ip-sum ip-hem-reemplazo"></div>
+                    <div class="col-md-3"><label class="form-label small text-muted">Hembras en gestación</label><input type="number" min="0" class="form-control ip-sum ip-hem-gestacion"></div>
+                    <div class="col-md-3"><label class="form-label small text-muted">Destetes</label><input type="number" min="0" class="form-control ip-sum ip-destetes"></div>
+
+                    <!-- Group 4 -->
+                    <div class="col-md-3"><label class="form-label small text-muted">Hembras lactando</label><input type="number" min="0" class="form-control ip-sum ip-hem-lactando"></div>
+                    <div class="col-md-3"><label class="form-label small text-muted">Lechones lactando</label><input type="number" min="0" class="form-control ip-sum ip-lech-lactando"></div>
+                    <div class="col-md-3"><label class="form-label small text-muted">Descartes</label><input type="number" min="0" class="form-control ip-sum ip-descartes"></div>
+                    <div class="col-md-3">
+                        <label class="form-label small fw-bold text-primary">Total</label>
+                        <input type="number" min="0" class="form-control ip-total bg-light fw-bold text-primary" readonly>
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-4">
+                    <div class="col-12"><h6 class="text-primary border-bottom pb-2">Firmas Responsables</h6></div>
+                    <div class="col-md-4">
+                        <label class="form-label small">Realizado por</label>
+                        <input type="text" class="form-control ip-sig-realizado-nombre" placeholder="Nombre y cargo">
+                        <input type="file" accept="image/*" class="form-control mt-2 ip-sig-realizado text-muted small">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small">Documento revisado por</label>
+                        <input type="text" class="form-control ip-sig-revisado-nombre" placeholder="Nombre y cargo">
+                        <input type="file" accept="image/*" class="form-control mt-2 ip-sig-revisado text-muted small">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small">Aprobado por</label>
+                        <input type="text" class="form-control ip-sig-aprobado-nombre" placeholder="Nombre y cargo">
+                        <input type="file" accept="image/*" class="form-control mt-2 ip-sig-aprobado text-muted small">
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary px-5 shadow-sm">
+                        <i class="fas fa-save me-2"></i>Guardar Inventario
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+        
+    <div id="printLayout" class="print-layout" style="display:none;">
+    <table class="table table-bordered mb-0" style="width: 100%; margin-bottom: 0 !important;">
+        <tbody>
+            <tr>
+                <td style="width: 60%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height:20mm; width:auto; object-fit:contain;">
+                        <div class="fw-bold" style="font-size: 14px; line-height: 1.2;">{{ centro|default:"Centro de los Recursos Naturales Renovables La Salada" }}</div>
+                    </div>
+                </td>
+                <td style="width: 40%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="fw-bold">Código del documento: <span class="fw-normal">{{ codigo_documento|default:"" }}</span></div>
+                    <div class="mt-1 fw-bold">Versión <span class="fw-normal">{{ version }}</span></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-center" style="text-align: center !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="fw-bold">{{ unidad_productiva }}</div>
+                    <div class="h5 mb-0 fw-bold">INVENTARIO PERMANENTE DE CERDOS</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <table class="table table-bordered table-sm align-middle" style="table-layout:fixed;width:100%;font-size:10px; margin-top: -2px !important;">
+                    <colgroup>
+                        <col style="width:3%">
+                        <col style="width:3%">
+                        <col style="width:3%">
+                        <col style="width:10%">
+                        <col style="width:5%">
+                        <col style="width:4.6%">
+                        <col style="width:4.6%">
+                        <col style="width:4.6%">
+                        <col style="width:4.6%">
+                        <col style="width:4.6%">
+                        <col style="width:4.6%">
+                        <col style="width:4.6%">
+                        <col style="width:4.6%">
+                        <col style="width:4.6%">
+                        <col style="width:4.6%">
+                        <col style="width:4.6%">
+                        <col style="width:4.6%">
+                        <col style="width:5%">
+                        <col style="width:5%">
+                        <col style="width:5%">
+                    </colgroup>
+                    <thead class="table-light">
+                        <tr class="text-center">
+                            <th colspan="3">FECHA</th>
+                            <th colspan="2">DESCRIPCIÓN</th>
+                            <th colspan="2">LECHONES (PARTO)</th>
+                            <th colspan="3">MOVIMIENTOS</th>
+                            <th colspan="9">DISTRIBUCIÓN / INVENTARIO</th>
+                            <th rowspan="2">TOTAL</th>
+                        </tr>
+                        <tr>
+                            <th>Año</th>
+                            <th>Mes</th>
+                            <th>Día</th>
+                            <th>Detalle</th>
+                            <th>Madre</th>
+                            <th>Vivos</th>
+                            <th>Muertos</th>
+                            <th>Comp.</th>
+                            <th>Ventas</th>
+                            <th>Muertes</th>
+                            <th>Preini.</th>
+                            <th>L/Ceba</th>
+                            <th>Repro.</th>
+                            <th>Reempl.</th>
+                            <th>Gest.</th>
+                            <th>Dest.</th>
+                            <th>H.Lact</th>
+                            <th>Lechones Lactando</th>
+                            <th>Descartes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="pv-ano"></span></td>
+                            <td><span class="pv-mes"></span></td>
+                            <td><span class="pv-dia"></span></td>
+                            <td><span class="pv-detalle"></span></td>
+                            <td><span class="pv-madre"></span></td>
+                            <td><span class="pv-lech-vivos"></span></td>
+                            <td><span class="pv-lech-muertos"></span></td>
+                            <td><span class="pv-compras"></span></td>
+                            <td><span class="pv-ventas"></span></td>
+                            <td><span class="pv-muertes"></span></td>
+                            <td><span class="pv-preiniciador"></span></td>
+                            <td><span class="pv-lev-ceba"></span></td>
+                            <td><span class="pv-reproductores"></span></td>
+                            <td><span class="pv-hem-reemplazo"></span></td>
+                            <td><span class="pv-hem-gestacion"></span></td>
+                            <td><span class="pv-destetes"></span></td>
+                            <td><span class="pv-hem-lactando"></span></td>
+                            <td><span class="pv-lech-lactando"></span></td>
+                            <td><span class="pv-descartes"></span></td>
+                            <td><span class="pv-total"></span></td>
+                        </tr>
+                        {% for i in rango_print|slice:":15" %}
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <table class="table table-bordered table-sm align-middle" style="table-layout:fixed;width:100%;font-size:10px; margin-top: -2px !important;">
+                    <colgroup>
+                        <col style="width:33%">
+                        <col style="width:34%">
+                        <col style="width:33%">
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div>Realizado por:</div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <img class="signature-img pv-sig-realizado" alt="Firma realizado">
+                                    <span class="pv-sig-realizado-nombre"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div>Documento revisado por:</div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <img class="signature-img pv-sig-revisado" alt="Firma revisado">
+                                    <span class="pv-sig-revisado-nombre"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div>Aprobado por:</div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <img class="signature-img pv-sig-aprobado" alt="Firma aprobado">
+                                    <span class="pv-sig-aprobado-nombre"></span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+        </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos Modernos - Unificados */
+    .card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .card-header {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        padding: 20px 25px;
+        border: none;
+    }
+
+    .card-header h5, .card-header h6 {
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .table-hover tbody tr:hover {
+        background-color: rgba(52, 152, 219, 0.05);
+        transform: scale(1.001);
+        transition: all 0.2s ease;
+    }
+    
+    .btn-action {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 0 2px;
+        transition: all 0.2s;
+    }
+
+    .btn-action:hover {
+        transform: translateY(-2px);
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .animate-fade-in {
+        animation: fadeInUp 0.5s ease-out;
+    }
+
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 0.85rem;
+    }
+
+    /* Maintain print styles */
+    @media print {
+        @page { size: A4 landscape; margin: 8mm; }
+        .no-print { display: none !important; }
+        .print-layout { display:block !important; position: static; width: 100%; }
+        html, body { height:auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .print-layout table { 
+            font-size:9px !important; 
+            border-collapse: collapse !important;
+            border: 2px solid black !important;
+        }
+        .print-layout table th, .print-layout table td {
+            border: 2px solid black !important;
+            padding: 3px !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+        }
+        .print-layout .table-responsive {
+            overflow: visible !important;
+            display: block !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+        }
+        .print-layout .table-light th {
+            background-color: #f0f0f0 !important;
+            color: black !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    }
+    .print-layout { display:none; }
+    .signature-img{ max-height:40px; width:auto; border:1px solid #ccc; }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('inventarioForm');
+  const out = document.getElementById('inventario_json');
+
+  function recalcTotal() {
+    let sum = 0;
+    document.querySelectorAll('.ip-sum').forEach(inp => { sum += parseInt(inp.value || '0', 10); });
+    document.querySelector('.ip-total').value = sum;
+  }
+
+  function buildJSON() {
+    function get(cls) { return document.querySelector(cls).value.trim(); }
+    const obj = {
+      ano: get('.ip-ano'), mes: get('.ip-mes'), dia: get('.ip-dia'),
+      detalle: get('.ip-detalle'), madre: get('.ip-madre'),
+      lechones_vivos: get('.ip-lech-vivos'), lechones_muertos: get('.ip-lech-muertos'),
+      compras: get('.ip-compras'), ventas: get('.ip-ventas'), muertes: get('.ip-muertes'),
+      preiniciador: get('.ip-preiniciador'), levante_ceba: get('.ip-lev-ceba'),
+      reproductores: get('.ip-reproductores'), hembras_reemplazo: get('.ip-hem-reemplazo'),
+      hembras_gestacion: get('.ip-hem-gestacion'), destetes: get('.ip-destetes'),
+      hembras_lactando: get('.ip-hem-lactando'), lechones_lactando: get('.ip-lech-lactando'),
+      descartes: get('.ip-descartes'), total: get('.ip-total'),
+      sig_realizado_b64: get('.ip-sig-realizado-b64'), sig_revisado_b64: get('.ip-sig-revisado-b64'), sig_aprobado_b64: get('.ip-sig-aprobado-b64'),
+      sig_realizado_nombre: get('.ip-sig-realizado-nombre'), sig_revisado_nombre: get('.ip-sig-revisado-nombre'), sig_aprobado_nombre: get('.ip-sig-aprobado-nombre')
+    };
+    out.value = JSON.stringify(obj);
+  }
+
+  const borrador = JSON.parse('{{ borrador_json|default:"{}"|escapejs }}');
+  if (borrador && typeof borrador === 'object' && !Array.isArray(borrador)) {
+    function set(cls, val) { const el = document.querySelector(cls); if (el) el.value = val || ''; }
+    set('.ip-ano', borrador.ano);
+    set('.ip-mes', borrador.mes);
+    set('.ip-dia', borrador.dia);
+    set('.ip-detalle', borrador.detalle);
+    set('.ip-madre', borrador.madre);
+    set('.ip-lech-vivos', borrador.lechones_vivos);
+    set('.ip-lech-muertos', borrador.lechones_muertos);
+    set('.ip-compras', borrador.compras);
+    set('.ip-ventas', borrador.ventas);
+    set('.ip-muertes', borrador.muertes);
+    set('.ip-preiniciador', borrador.preiniciador);
+    set('.ip-lev-ceba', borrador.levante_ceba);
+    set('.ip-reproductores', borrador.reproductores);
+    set('.ip-hem-reemplazo', borrador.hembras_reemplazo);
+    set('.ip-hem-gestacion', borrador.hembras_gestacion);
+    set('.ip-destetes', borrador.destetes);
+    set('.ip-hem-lactando', borrador.hembras_lactando);
+    set('.ip-lech-lactando', borrador.lechones_lactando);
+    set('.ip-descartes', borrador.descartes);
+    set('.ip-total', borrador.total);
+    set('.ip-sig-realizado-nombre', borrador.sig_realizado_nombre);
+    set('.ip-sig-revisado-nombre', borrador.sig_revisado_nombre);
+    set('.ip-sig-aprobado-nombre', borrador.sig_aprobado_nombre);
+    set('.ip-sig-realizado-b64', borrador.sig_realizado_b64);
+    set('.ip-sig-revisado-b64', borrador.sig_revisado_b64);
+    set('.ip-sig-aprobado-b64', borrador.sig_aprobado_b64);
+  }
+
+  document.querySelectorAll('.ip-sum').forEach(el => el.addEventListener('input', recalcTotal));
+  recalcTotal();
+  function toBase64(file, cb){ const r=new FileReader(); r.onload=()=>cb(r.result); r.readAsDataURL(file); }
+  function bindSig(inpCls, hiddenCls){
+    const el=document.querySelector(inpCls);
+    const hid=document.querySelector(hiddenCls);
+    if(el && hid){
+      el.addEventListener('change', function(){ const f=el.files && el.files[0]; if(f){ toBase64(f, (b64)=>{ hid.value=b64; syncPrint(); }); } });
+    }
+  }
+  bindSig('.ip-sig-realizado', '.ip-sig-realizado-b64');
+  bindSig('.ip-sig-revisado', '.ip-sig-revisado-b64');
+  bindSig('.ip-sig-aprobado', '.ip-sig-aprobado-b64');
+  function syncPrint() {
+    function setText(cls, val) { const el = document.querySelector(cls); if (el) el.textContent = (val || '').toString(); }
+    function get(cls) { const el = document.querySelector(cls); return el ? el.value : ''; }
+    setText('.pv-ano', get('.ip-ano'));
+    setText('.pv-mes', get('.ip-mes'));
+    setText('.pv-dia', get('.ip-dia'));
+    setText('.pv-detalle', get('.ip-detalle'));
+    setText('.pv-madre', get('.ip-madre'));
+    setText('.pv-lech-vivos', get('.ip-lech-vivos'));
+    setText('.pv-lech-muertos', get('.ip-lech-muertos'));
+    setText('.pv-compras', get('.ip-compras'));
+    setText('.pv-ventas', get('.ip-ventas'));
+    setText('.pv-muertes', get('.ip-muertes'));
+    setText('.pv-preiniciador', get('.ip-preiniciador'));
+    setText('.pv-lev-ceba', get('.ip-lev-ceba'));
+    setText('.pv-reproductores', get('.ip-reproductores'));
+    setText('.pv-hem-reemplazo', get('.ip-hem-reemplazo'));
+    setText('.pv-hem-gestacion', get('.ip-hem-gestacion'));
+    setText('.pv-destetes', get('.ip-destetes'));
+    setText('.pv-hem-lactando', get('.ip-hem-lactando'));
+    setText('.pv-lech-lactando', get('.ip-lech-lactando'));
+    setText('.pv-descartes', get('.ip-descartes'));
+    setText('.pv-total', get('.ip-total'));
+    const s1 = document.querySelector('.pv-sig-realizado'); if (s1) s1.src = get('.ip-sig-realizado-b64') || '';
+    const s2 = document.querySelector('.pv-sig-revisado'); if (s2) s2.src = get('.ip-sig-revisado-b64') || '';
+    const s3 = document.querySelector('.pv-sig-aprobado'); if (s3) s3.src = get('.ip-sig-aprobado-b64') || '';
+    setText('.pv-sig-realizado-nombre', get('.ip-sig-realizado-nombre'));
+    setText('.pv-sig-revisado-nombre', get('.ip-sig-revisado-nombre'));
+    setText('.pv-sig-aprobado-nombre', get('.ip-sig-aprobado-nombre'));
+  }
+  document.querySelectorAll('input').forEach(el => el.addEventListener('input', syncPrint));
+  window.addEventListener('beforeprint', function() { recalcTotal(); syncPrint(); });
+  form.addEventListener('submit', function() { recalcTotal(); syncPrint(); buildJSON(); });
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('autoprint') === '1') {
+    recalcTotal();
+    syncPrint();
+    setTimeout(() => window.print(), 200);
+  }
+  const invData = JSON.parse('{{ inventarios_json|default:"[]"|escapejs }}');
+  const invBody = document.getElementById('invRows');
+  if (Array.isArray(invData) && invBody) {
+    if (invData.length > 0) {
+      invBody.innerHTML = '';
+      invData.forEach((it, idx) => {
+        const f = `${it.ano || ''}-${String(it.mes||'').padStart(2,'0')}-${String(it.dia||'').padStart(2,'0')}`;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="ps-4 fw-bold text-primary">${f}</td>
+          <td>${(it.detalle||'')}</td>
+          <td><span class="badge bg-success bg-opacity-10 text-success status-badge">${(it.total||'')}</span></td>
+          <td class="text-end pe-4">
+            <a class="btn btn-action btn-outline-primary" href="{% url 'porcinos:inventario_permanente' %}?load_index=${idx}" title="Ver">
+                <i class="fas fa-eye"></i>
+            </a>
+            <a class="btn btn-action btn-outline-secondary" href="{% url 'porcinos:inventario_permanente' %}?load_index=${idx}&autoprint=1" title="Imprimir">
+                <i class="fas fa-print"></i>
+            </a>
+          </td>`;
+        invBody.appendChild(tr);
+      });
+    }
+  }
+});
+</script>
+{% endblock %}
