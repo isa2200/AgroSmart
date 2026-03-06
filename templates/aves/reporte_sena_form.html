@@ -3,19 +3,16 @@
 
 {% block title %}Reporte SENA - AgroSmart{% endblock %}
 
-{% block page_title %}Generar Reporte SENA{% endblock %}
+{% block page_title %}{% endblock %}
 
-{% block breadcrumb_items %}
-    <li class="breadcrumb-item"><a href="{% url 'aves:reportes_dashboard' %}">Reportes</a></li>
-    <li class="breadcrumb-item active">Reporte SENA</li>
-{% endblock %}
+{% block breadcrumb_items %}{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">
+        <div class="unified-dashboard-card">
+            <div class="card-header bg-transparent border-bottom border-light">
+                <h5 class="mb-0 text-white">
                     <i class="fas fa-file-excel me-2"></i>
                     Registro Mensual de Postura - Formato SENA
                 </h5>
@@ -27,11 +24,11 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="lote_id" class="form-label">Lote *</label>
-                                <select name="lote_id" id="lote_id" class="form-control" required>
-                                    <option value="">Seleccione un lote</option>
+                                <label for="lote_id" class="form-label text-white">Lote *</label>
+                                <select name="lote_id" id="lote_id" class="form-select form-control-glass text-white" required>
+                                    <option value="" class="text-dark">Seleccione un lote</option>
                                     {% for lote in lotes %}
-                                        <option value="{{ lote.id }}">
+                                        <option value="{{ lote.id }}" class="text-dark">
                                             {{ lote.codigo }} - {{ lote.galpon }}
                                         </option>
                                     {% endfor %}
@@ -41,10 +38,10 @@
                         
                         <div class="col-md-3">
                             <div class="mb-3">
-                                <label for="mes" class="form-label">Mes *</label>
-                                <select name="mes" id="mes" class="form-control" required>
+                                <label for="mes" class="form-label text-white">Mes *</label>
+                                <select name="mes" id="mes" class="form-select form-control-glass text-white" required>
                                     {% for valor, nombre in meses %}
-                                        <option value="{{ valor }}" {% if valor == mes_actual %}selected{% endif %}>
+                                        <option value="{{ valor }}" {% if valor == mes_actual %}selected{% endif %} class="text-dark">
                                             {{ nombre }}
                                         </option>
                                     {% endfor %}
@@ -54,10 +51,10 @@
                         
                         <div class="col-md-3">
                             <div class="mb-3">
-                                <label for="año" class="form-label">Año *</label>
-                                <select name="año" id="año" class="form-control" required>
+                                <label for="año" class="form-label text-white">Año *</label>
+                                <select name="año" id="año" class="form-select form-control-glass text-white" required>
                                     {% for año in años %}
-                                        <option value="{{ año }}" {% if año == año_actual %}selected{% endif %}>
+                                        <option value="{{ año }}" {% if año == año_actual %}selected{% endif %} class="text-dark">
                                             {{ año }}
                                         </option>
                                     {% endfor %}
@@ -69,22 +66,22 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="nombre_granja" class="form-label">Nombre de la Granja</label>
+                                <label for="nombre_granja" class="form-label text-white">Nombre de la Granja</label>
                                 <input type="text" name="nombre_granja" id="nombre_granja" 
-                                        class="form-control" value="Granja Avícola La Salada">
+                                        class="form-control form-control-glass text-white" value="Granja Avícola La Salada">
                             </div>
                         </div>
                         
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="registro_ica" class="form-label">Registro ICA</label>
+                                <label for="registro_ica" class="form-label text-white">Registro ICA</label>
                                 <input type="text" name="registro_ica" id="registro_ica" 
-                                        class="form-control" value="051290274">
+                                        class="form-control form-control-glass text-white" value="051290274">
                             </div>
                         </div>
                     </div>
                     
-                    <div class="alert alert-info">
+                    <div class="alert alert-info-glass text-white">
                         <i class="fas fa-info-circle me-2"></i>
                         <strong>Información:</strong> Este reporte generará un archivo en formato SENA 
                         (Excel) para el registro mensual de postura. Incluye producción diaria, consumo de alimento, 
@@ -95,21 +92,22 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="mb-3">
-                                <label for="formato" class="form-label">Formato de salida</label>
-                                <select name="formato" id="formato" class="form-select">
-                                    <option value="excel" selected>Excel (.xlsx)</option>
+                                <label for="formato" class="form-label text-white">Formato de salida</label>
+                                <select name="formato" id="formato" class="form-select form-control-glass text-white">
+                                    <option value="excel" selected class="text-dark">Excel (.xlsx)</option>
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="d-flex justify-content-between">
-                        <a href="{% url 'aves:reportes_dashboard' %}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left me-2"></i>Volver
-                        </a>
-                        <button type="submit" class="btn btn-success">
-                            <i class="fas fa-download me-2"></i>Generar Reporte
-                        </button>
+                        <div class="col-md-8 d-flex align-items-end">
+                            <div class="mb-3 w-100 text-end">
+                                <a href="{% url 'aves:reportes_dashboard' %}" class="btn btn-light-custom me-2">
+                                    <i class="fas fa-arrow-left me-2"></i>Volver
+                                </a>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-download me-2"></i>Generar Reporte
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

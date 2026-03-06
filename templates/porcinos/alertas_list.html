@@ -4,7 +4,171 @@
 {% block title %}Centro de Alertas - Porcinos{% endblock %}
 
 {% block extra_css %}
+<!-- We can keep the link if needed, but the inline styles are crucial for the glassmorphism -->
 <link rel="stylesheet" href="{% static 'aves/css/alertas.css' %}">
+<style>
+    /* Estilos unificados Glassmorphism - COPIED FROM AVES */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    /* Glass Stat Cards */
+    .glass-stat-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        padding: 1.5rem;
+        color: white;
+        height: 100%;
+        transition: transform 0.2s;
+    }
+    
+    .glass-stat-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    .glass-stat-card.danger { border-left: 4px solid #dc3545; }
+    .glass-stat-card.warning { border-left: 4px solid #ffc107; }
+    .glass-stat-card.info { border-left: 4px solid #0dcaf0; }
+
+    /* Form Styles in Glass */
+    .form-label {
+        color: rgba(255,255,255,0.9);
+        font-weight: 500;
+    }
+
+    .form-select, .form-control {
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+    }
+
+    .form-select:focus, .form-control:focus {
+        background: rgba(255,255,255,0.2);
+        border-color: rgba(255,255,255,0.5);
+        color: white;
+        box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.1);
+    }
+    
+    .form-select option {
+        background: #2e7d32;
+        color: white;
+    }
+
+    /* Table Styles */
+    .table-custom {
+        margin-bottom: 0;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        color: white;
+    }
+    
+    .table-custom thead th {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        color: white !important;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+        vertical-align: middle;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 15px;
+        letter-spacing: 0.5px;
+    }
+
+    .table-custom tbody tr {
+        background-color: transparent !important;
+        transition: all 0.2s;
+    }
+    
+    .table-custom tbody tr:hover {
+        background-color: rgba(255,255,255,0.1) !important;
+    }
+    
+    .table-custom td {
+        padding: 15px;
+        vertical-align: middle;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.9);
+    }
+
+    /* Badges */
+    .badge {
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+
+    /* Pagination */
+    .pagination .page-link {
+        background: rgba(255,255,255,0.1);
+        border-color: rgba(255,255,255,0.2);
+        color: white;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background: rgba(255,255,255,0.3);
+        border-color: rgba(255,255,255,0.4);
+    }
+    
+    .pagination .page-item.disabled .page-link {
+        background: rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.5);
+    }
+
+    /* Checkbox */
+    .form-check-input {
+        background-color: rgba(255,255,255,0.1);
+        border-color: rgba(255,255,255,0.3);
+    }
+    .form-check-input:checked {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+    
+    /* Buttons */
+    .btn-light-custom {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.5);
+        color: #2e7d32;
+        font-weight: 600;
+    }
+    .btn-light-custom:hover {
+        background: #fff;
+        color: #1b5e20;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -14,55 +178,53 @@
     <!-- Header con Estadísticas -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2><i class="fas fa-exclamation-triangle text-warning me-2"></i>Centro de Alertas Porcinos</h2>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-outline-primary" id="btnRefresh">
-                        <i class="fas fa-sync-alt me-1"></i>Actualizar
-                    </button>
-                    <button type="button" class="btn btn-outline-success" id="btnMarkAllRead">
-                        <i class="fas fa-check-double me-1"></i>Marcar Todo Leído
-                    </button>
+            <div class="unified-dashboard-card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="section-title" style="font-size: 2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+                        <i class="fas fa-exclamation-triangle text-warning me-2"></i>Centro de Alertas
+                    </h2>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-glass-green fw-bold" id="btnRefresh">
+                            <i class="fas fa-sync-alt me-1"></i>Actualizar
+                        </button>
+                        <button type="button" class="btn btn-sm btn-glass-green fw-bold" id="btnMarkAllRead">
+                            <i class="fas fa-check-double me-1"></i>Marcar Todo Leído
+                        </button>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- Estadísticas de Alertas -->
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card bg-danger text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
+                
+                <!-- Estadísticas de Alertas -->
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="glass-stat-card danger">
+                            <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h4 class="mb-0">{{ stats.criticas }}</h4>
-                                    <p class="mb-0">Críticas</p>
+                                    <h3 class="mb-0 fw-bold">{{ stats.criticas }}</h3>
+                                    <p class="mb-0 opacity-75">Críticas</p>
                                 </div>
-                                <i class="fas fa-exclamation-circle fa-2x"></i>
+                                <i class="fas fa-exclamation-circle fa-2x text-danger opacity-75"></i>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card bg-warning text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
+                    <div class="col-md-4">
+                        <div class="glass-stat-card warning">
+                            <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h4 class="mb-0">{{ stats.altas }}</h4>
-                                    <p class="mb-0">Normales</p>
+                                    <h3 class="mb-0 fw-bold">{{ stats.altas }}</h3>
+                                    <p class="mb-0 opacity-75">Normales</p>
                                 </div>
-                                <i class="fas fa-exclamation-triangle fa-2x"></i>
+                                <i class="fas fa-exclamation-triangle fa-2x text-warning opacity-75"></i>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card bg-info text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
+                    <div class="col-md-4">
+                        <div class="glass-stat-card info">
+                            <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h4 class="mb-0">{{ stats.total_no_leidas }}</h4>
-                                    <p class="mb-0">No Leídas</p>
+                                    <h3 class="mb-0 fw-bold">{{ stats.total_no_leidas }}</h3>
+                                    <p class="mb-0 opacity-75">No Leídas</p>
                                 </div>
-                                <i class="fas fa-info-circle fa-2x"></i>
+                                <i class="fas fa-info-circle fa-2x text-info opacity-75"></i>
                             </div>
                         </div>
                     </div>
@@ -72,12 +234,15 @@
     </div>
     
     <!-- Filtros -->
-    <div class="row mb-3">
+    <div class="row mb-4">
         <div class="col-12">
-            <div class="card">
+            <div class="unified-dashboard-card">
+                <div class="card-header">
+                    <h5 class="section-title"><i class="fas fa-filter me-2"></i>Filtros</h5>
+                </div>
                 <div class="card-body">
                     <form method="get" id="filtrosForm">
-                        <div class="row">
+                        <div class="row g-3">
                             <div class="col-md-3">
                                 <label class="form-label">Nivel</label>
                                 <select name="nivel" class="form-select">
@@ -123,10 +288,10 @@
                         </div>
                         <div class="row mt-3">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-sm btn-glass-green fw-bold">
                                     <i class="fas fa-filter me-1"></i>Filtrar
                                 </button>
-                                <a href="{% url 'porcinos:alertas_list' %}" class="btn btn-outline-secondary ms-2">
+                                <a href="{% url 'porcinos:alertas_list' %}" class="btn btn-sm btn-glass-green fw-bold ms-2">
                                     <i class="fas fa-times me-1"></i>Limpiar
                                 </a>
                             </div>
@@ -140,11 +305,11 @@
     <!-- Lista de Alertas -->
     <div class="row">
         <div class="col-12">
-            <div class="card">
-                <div class="card-body">
+            <div class="unified-dashboard-card">
+                <div class="card-body p-0">
                     {% if alertas %}
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-custom table-hover">
                                 <thead>
                                     <tr>
                                         <th width="5%">
@@ -161,10 +326,7 @@
                                 </thead>
                                 <tbody>
                                     {% for alerta in alertas %}
-                                        <tr class="alerta-row {% if not alerta.leida %}table-warning{% endif %}" 
-                                            data-id="{{ alerta.id }}" 
-                                            data-mensaje="{{ alerta.mensaje }}"
-                                            data-titulo="{{ alerta.titulo }}">
+                                        <tr class="alerta-row {% if not alerta.leida %}alerta-unread{% endif %}" data-id="{{ alerta.id }}">
                                             <td>
                                                 <input type="checkbox" class="form-check-input alerta-checkbox" value="{{ alerta.id }}">
                                             </td>
@@ -174,7 +336,7 @@
                                                         <i class="fas fa-exclamation-circle me-1"></i>Crítica
                                                     </span>
                                                 {% else %}
-                                                    <span class="badge bg-warning">
+                                                    <span class="badge bg-warning text-dark">
                                                         <i class="fas fa-exclamation-triangle me-1"></i>Normal
                                                     </span>
                                                 {% endif %}
@@ -184,17 +346,16 @@
                                             </td>
                                             <td>
                                                 <strong>{{ alerta.titulo }}</strong>
-                                                <br><small class="text-muted">{{ alerta.mensaje|truncatechars:50 }}</small>
-                                                <span class="d-none full-message">{{ alerta.mensaje }}</span>
+                                                <br><small class="opacity-75">{{ alerta.mensaje|truncatechars:50 }}</small>
                                             </td>
                                             <td>
                                                 {% if alerta.lote %}
                                                     <strong>{{ alerta.lote.codigo }}</strong>
-                                                    <br><small class="text-muted">{{ alerta.lote.corral }}</small>
+                                                    <br><small class="opacity-75">{{ alerta.lote.corral }}</small>
                                                 {% elif alerta.corral_nombre %}
-                                                    <span class="text-muted">{{ alerta.corral_nombre }}</span>
+                                                    <span class="opacity-75">{{ alerta.corral_nombre }}</span>
                                                 {% else %}
-                                                    <span class="text-muted">General</span>
+                                                    <span class="opacity-75">General</span>
                                                 {% endif %}
                                             </td>
                                             <td>
@@ -206,19 +367,19 @@
                                                 {% if alerta.leida %}
                                                     <span class="badge bg-primary">Leída</span>
                                                 {% else %}
-                                                    <span class="badge bg-warning">Nueva</span>
+                                                    <span class="badge bg-warning text-dark">Nueva</span>
                                                 {% endif %}
                                             </td>
                                             <td>
                                                 <div class="btn-group btn-group-sm">
-                                                    <button type="button" class="btn btn-outline-primary btn-sm" 
-                                                            onclick="verDetalle(this)" title="Ver detalle">
+                                                    <button type="button" class="btn btn-light-custom btn-sm" 
+                                                            onclick="verDetalle('{{ alerta.id }}')" title="Ver detalle">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
                                                     {% if not alerta.leida %}
                                                         <button type="button" class="btn btn-outline-info btn-sm" 
-                                                                onclick="marcarLeida(this)" title="Marcar como leída">
-                                                            <i class="fas fa-eye-slash"></i>
+                                                                onclick="marcarLeida('{{ alerta.id }}')" title="Marcar como leída">
+                                                            <i class="fas fa-check"></i>
                                                         </button>
                                                     {% endif %}
                                                 </div>
@@ -231,46 +392,40 @@
                         
                         <!-- Paginación -->
                         {% if is_paginated %}
-                            <nav aria-label="Paginación de alertas">
-                                <ul class="pagination justify-content-center">
-                                    {% if page_obj.has_previous %}
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page=1{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Primera</a>
+                            <div class="p-3 border-top border-secondary">
+                                <nav aria-label="Paginación de alertas">
+                                    <ul class="pagination justify-content-center mb-0">
+                                        {% if page_obj.has_previous %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page=1{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Primera</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Anterior</a>
+                                            </li>
+                                        {% endif %}
+                                        
+                                        <li class="page-item active">
+                                            <span class="page-link">{{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
                                         </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Anterior</a>
-                                        </li>
-                                    {% endif %}
-                                    
-                                    <li class="page-item active">
-                                        <span class="page-link">{{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
-                                    </li>
-                                    
-                                    {% if page_obj.has_next %}
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Siguiente</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Última</a>
-                                        </li>
-                                    {% endif %}
-                                </ul>
-                            </nav>
+                                        
+                                        {% if page_obj.has_next %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Siguiente</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Última</a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            </div>
                         {% endif %}
                         
-                        <!-- Acciones en Lote -->
-                        <div class="mt-3">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-outline-primary" id="btnMarcarLeidas" disabled>
-                                    <i class="fas fa-eye me-1"></i>Marcar como Leídas
-                                </button>
-                            </div>
-                        </div>
                     {% else %}
                         <div class="text-center py-5">
-                            <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
-                            <h5 class="text-muted">No hay alertas</h5>
-                            <p class="text-muted">No se encontraron alertas con los filtros aplicados.</p>
+                            <i class="fas fa-bell-slash fa-3x text-white-50 mb-3"></i>
+                            <h5 class="text-white-50">No hay alertas</h5>
+                            <p class="text-white-50">No se encontraron alertas con los filtros aplicados.</p>
                         </div>
                     {% endif %}
                 </div>
@@ -279,18 +434,18 @@
     </div>
 </div>
 
-<!-- Modal de Detalle -->
+<!-- Modal de Detalle (Simpler version for now, logic handled by JS) -->
 <div class="modal fade" id="modalDetalleAlerta" tabindex="-1">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Detalle de Alerta</h5>
+        <div class="modal-content" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title fw-bold text-success">Detalle de Alerta</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" id="modalDetalleContent">
                 <!-- Contenido cargado dinámicamente -->
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer border-top-0">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
@@ -304,7 +459,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const btnMarkAllRead = document.getElementById('btnMarkAllRead');
     const btnRefresh = document.getElementById('btnRefresh');
-    const btnMarcarLeidas = document.getElementById('btnMarcarLeidas');
     const selectAll = document.getElementById('selectAll');
     const checkboxes = document.querySelectorAll('.alerta-checkbox');
 
@@ -329,23 +483,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (selectAll) {
         selectAll.addEventListener('change', function() {
             checkboxes.forEach(cb => cb.checked = this.checked);
-            updateButtonsState();
         });
     }
 
-    checkboxes.forEach(cb => {
-        cb.addEventListener('change', updateButtonsState);
-    });
-
-    function updateButtonsState() {
-        const checkedCount = document.querySelectorAll('.alerta-checkbox:checked').length;
-        if (btnMarcarLeidas) btnMarcarLeidas.disabled = checkedCount === 0;
-    }
-
-    // Acciones masivas
-    if (btnMarcarLeidas) {
-        btnMarcarLeidas.addEventListener('click', function() {
-            ejecutarAccionMasiva('leida');
+    if (btnRefresh) {
+        btnRefresh.addEventListener('click', function() {
+            window.location.reload();
         });
     }
 
@@ -368,86 +511,53 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (data.success) {
                         location.reload();
                     } else {
-                        alert('Error: ' + data.error);
+                        alert('Error al marcar alertas: ' + (data.error || 'Error desconocido'));
                     }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error de conexión');
                 });
             }
         });
     }
 
-    if (btnRefresh) {
-        btnRefresh.addEventListener('click', function() {
-            location.reload();
-        });
-    }
-
-    function ejecutarAccionMasiva(accion) {
-        const ids = Array.from(document.querySelectorAll('.alerta-checkbox:checked')).map(cb => cb.value);
-        if (ids.length === 0) return;
-
-        fetch('{% url "porcinos:marcar_alertas_masivo" %}', {
+    // Funciones globales para los botones de la tabla
+    window.marcarLeida = function(id) {
+        fetch(`{% url "porcinos:marcar_alerta_leida" 0 %}`.replace('0', id), {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 'X-CSRFToken': csrftoken
-            },
-            body: JSON.stringify({
-                accion: accion,
-                alertas_ids: ids
-            })
+            }
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 location.reload();
-            } else {
-                alert('Error: ' + data.error);
             }
         });
-    }
+    };
+    
+    // Simulación de Ver Detalle (podría mejorarse con AJAX si es necesario)
+    window.verDetalle = function(id) {
+        const row = document.querySelector(`tr[data-id="${id}"]`);
+        if(row) {
+            const titulo = row.querySelector('strong').textContent;
+            // Intentar obtener mensaje completo si existe, sino el truncado
+            const mensajeFull = row.querySelector('.full-message') ? row.querySelector('.full-message').textContent : row.querySelector('small').textContent;
+            
+            const content = `
+                <div class="p-3">
+                    <h5 class="mb-3">${titulo}</h5>
+                    <p>${mensajeFull}</p>
+                    <hr>
+                    <p class="text-muted mb-0">ID Alerta: ${id}</p>
+                </div>
+            `;
+            document.getElementById('modalDetalleContent').innerHTML = content;
+            new bootstrap.Modal(document.getElementById('modalDetalleAlerta')).show();
+        }
+    };
 });
-
-// Funciones globales para botones individuales
-function marcarLeida(btn) {
-    const row = btn.closest('tr');
-    const id = row.getAttribute('data-id');
-    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    fetch(`{% url "porcinos:alertas_list" %}${id}/leida/`, {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': csrftoken
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        }
-    });
-}
-
-function verDetalle(btn) {
-    const row = btn.closest('tr');
-    if (!row) return;
-    
-    const titulo = row.getAttribute('data-titulo') || row.querySelector('td:nth-child(4) strong').textContent;
-    const fullMessageEl = row.querySelector('.full-message');
-    const mensaje = fullMessageEl ? fullMessageEl.textContent : (row.getAttribute('data-mensaje') || row.querySelector('td:nth-child(4) small').textContent);
-    
-    const modalContent = document.getElementById('modalDetalleContent');
-    modalContent.innerHTML = `
-        <h4>${titulo}</h4>
-        <div class="alert alert-light border">
-            <p class="mb-0" style="white-space: pre-wrap;">${mensaje}</p>
-        </div>
-        <hr>
-        <p class="text-muted small">
-            <strong>ID Alerta:</strong> ${row.getAttribute('data-id')}<br>
-            <strong>Estado:</strong> ${row.classList.contains('table-warning') ? 'Nueva / No leída' : 'Leída'}
-        </p>
-    `;
-    const modal = new bootstrap.Modal(document.getElementById('modalDetalleAlerta'));
-    modal.show();
-}
 </script>
 {% endblock %}

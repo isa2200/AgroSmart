@@ -1,13 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'dashboard/base_dashboard.html' %}
 {% load static %}
 
-{% block title %}Dashboard - AgroSmart{% endblock %}
-
-{% block extra_css %}
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+{% block dashboard_extra_css %}
 <style>
     :root {
-        --sidebar-width: 280px;
         --primary-color: #2c3e50;
         --secondary-color: #34495e;
         --accent-color: #3498db;
@@ -17,788 +13,328 @@
         --info-color: #17a2b8;
         --light-bg: #f8f9fa;
         --border-color: #dee2e6;
+        --shadow: 0 2px 20px rgba(0,0,0,0.08);
+        --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
     }
 
-    body {
-        background-color: var(--light-bg);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
+    /* Override base dashboard container for transparency */
     .dashboard-container {
-        display: flex;
-        min-height: 100vh;
-        padding-top: 0;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        border: none !important;
+        box-shadow: none !important;
     }
 
-    /* Sidebar Styles */
-    .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        width: var(--sidebar-width);
-        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-        color: white;
-        z-index: 1000;
-        transition: all 0.3s ease;
-        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-
-    /* Ocultar scrollbar pero mantener funcionalidad */
-    .sidebar::-webkit-scrollbar {
-        width: 0px;
-        background: transparent;
-    }
-
-    .sidebar::-webkit-scrollbar-thumb {
-        background: transparent;
-    }
-
-    /* Para Firefox */
-    .sidebar {
-        scrollbar-width: none;
-    }
-
-    .sidebar-header {
-        padding: 2rem 1.5rem;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-        text-align: center;
-    }
-
-    .sidebar-header h3 {
-        margin: 0;
-        font-weight: 600;
-        font-size: 1.5rem;
-    }
-
-    .sidebar-header p {
-        margin: 0.5rem 0 0 0;
-        opacity: 0.8;
-        font-size: 0.9rem;
-    }
-
-    .sidebar-nav {
-        padding: 1rem 0 2rem 0;
-        height: calc(100vh - 120px);
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-
-    .sidebar-nav::-webkit-scrollbar {
-        width: 0px;
-        background: transparent;
-    }
-
-    .nav-section {
-        margin-bottom: 2rem;
-    }
-
-    .nav-section-title {
-        padding: 0 1.5rem 0.5rem 1.5rem;
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        opacity: 0.6;
-        font-weight: 600;
-    }
-
-    .nav-item {
-        margin: 0.2rem 1rem;
-    }
-
-    .nav-link {
-        display: flex;
-        align-items: center;
-        padding: 0.8rem 1rem;
-        color: rgba(255,255,255,0.8);
-        text-decoration: none;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-        position: relative;
-    }
-
-    .nav-link:hover {
-        background-color: rgba(255,255,255,0.1);
-        color: white;
-        transform: translateX(5px);
-    }
-
-    .nav-link.active {
-        background-color: var(--accent-color);
-        color: white;
-        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
-    }
-
-    .nav-link i {
-        width: 20px;
-        margin-right: 1rem;
-        font-size: 1.1rem;
-    }
-
-    .nav-link .badge {
-        margin-left: auto;
-        background-color: var(--danger-color);
-        font-size: 0.7rem;
-    }
-
-    /* Main Content */
-    .main-content {
-        margin-left: var(--sidebar-width);
-        min-height: 100vh;
-        padding: 2rem;
-        transition: all 0.3s ease;
-    }
-
-    .dashboard-header {
-        background: white;
+    /* Green Glassmorphism Style */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
         border-radius: 15px;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
-        border: 1px solid var(--border-color);
-    }
-
-    .welcome-section {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .welcome-text h1 {
-        margin: 0;
-        color: var(--primary-color);
-        font-weight: 700;
-        font-size: 2rem;
-    }
-
-    .welcome-text p {
-        margin: 0.5rem 0 0 0;
-        color: #6c757d;
-        font-size: 1.1rem;
-    }
-
-    .user-info {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        background: rgb(116, 116, 116);
-        padding: 1rem 1.5rem;
-        border-radius: 12px;
-        color: black;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    .user-avatar {
-        width: 40px;              /* tamaño fijo del cuadro */
-        height: 40px;
-        border-radius: 50%;
-        overflow: hidden;         /* recorta contenido sobrante */
-        background: #e9ecef;      /* fondo neutro si no hay foto */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        font-size: 0.95rem;       /* tamaño para inicial */
-        color: #6b7280;
-        flex-shrink: 0;           /* evita que se estire por flex */
-    }
-    .user-avatar img {
-        width: 100%;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        border: 1px solid rgba(255,255,255,0.2);
         height: 100%;
-        object-fit: cover;        /* recorte elegante en el círculo */
-        display: block;
-        border-radius: 50%;
-    }
-    .user-avatar {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        background: rgb(255, 255, 255);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
         color: white;
-        font-size: 1.1rem;
-        font-weight: bold;
-        border: 2px solid rgba(255, 255, 255, 0.3);
     }
-
-    .user-info h6 {
-        color: white !important;
-        margin: 0;
-        font-weight: 600;
-    }
-
-    .user-info small {
-        color: rgba(255, 255, 255, 0.8) !important;
-        font-size: 0.85rem;
-    }
-
-    /* Metrics Cards */
-    .metrics-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .metric-card {
-        background: white;
-        border-radius: 15px;
-        padding: 2rem;
-        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
-        border: 1px solid var(--border-color);
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .metric-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: var(--accent-color);
-    }
-
-    .metric-card.success::before { background: var(--success-color); }
-    .metric-card.warning::before { background: var(--warning-color); }
-    .metric-card.danger::before { background: var(--danger-color); }
-    .metric-card.info::before { background: var(--info-color); }
-
-    .metric-card:hover {
+    
+    .unified-dashboard-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        background: rgba(0, 175, 0, 0.35);
     }
 
-    .metric-header {
-        display: flex;
-        justify-content: between;
-        align-items: flex-start;
-        margin-bottom: 1rem;
-    }
-
-    .metric-icon {
-        width: 60px;
-        height: 60px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        color: white;
-        background: var(--accent-color);
-    }
-
-    .metric-icon.success { background: var(--success-color); }
-    .metric-icon.warning { background: var(--warning-color); }
-    .metric-icon.danger { background: var(--danger-color); }
-    .metric-icon.info { background: var(--info-color); }
-
+    /* Metrics Styling */
     .metric-value {
         font-size: 2.5rem;
         font-weight: 700;
-        color: var(--primary-color);
+        color: white;
         margin: 0;
+        line-height: 1.2;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .metric-label {
-        color: #6c757d;
-        font-size: 1rem;
-        margin: 0.5rem 0 0 0;
-    }
-
-    .metric-change {
+        color: rgba(255, 255, 255, 0.9);
         font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
         margin-top: 0.5rem;
     }
 
-    .metric-change.positive { color: var(--success-color); }
-    .metric-change.negative { color: var(--danger-color); }
-
-    /* Content Grid */
-    .content-grid {
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 2rem;
-        margin-bottom: 2rem;
-    }
-
-    .content-card {
-        background: white;
-        border-radius: 15px;
-        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
-        border: 1px solid var(--border-color);
-        overflow: hidden;
-    }
-
-    .content-card-header {
-        padding: 1.5rem 2rem;
-        border-bottom: 1px solid var(--border-color);
-        background: #f8f9fa;
-    }
-
-    .content-card-header h5 {
-        margin: 0;
-        color: var(--primary-color);
-        font-weight: 600;
+    .metric-subtext {
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        color: rgba(255, 255, 255, 0.8);
     }
 
-    .content-card-body {
-        padding: 2rem;
-    }
-
-    /* Alerts */
-    .alert-item {
-        padding: 1rem;
-        margin-bottom: 1rem;
-        border-radius: 10px;
-        border-left: 4px solid var(--danger-color);
-        background: #fff5f5;
-        transition: all 0.3s ease;
-    }
-
-    .alert-item:hover {
-        transform: translateX(5px);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    .alert-item:last-child {
-        margin-bottom: 0;
-    }
-
-    .alert-header {
-        display: flex;
-        justify-content: between;
-        align-items: center;
-        margin-bottom: 0.5rem;
-    }
-
-    .alert-title {
-        font-weight: 600;
-        color: var(--primary-color);
-        margin: 0;
-    }
-
-    .alert-time {
-        font-size: 0.8rem;
-        color: #6c757d;
-    }
-
-    .alert-description {
-        color: #6c757d;
-        margin: 0;
-        font-size: 0.9rem;
-    }
-
-    /* Quick Actions */
-    .quick-actions {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-
-    .quick-action {
-        display: flex;
-        align-items: center;
-        padding: 1rem;
-        border-radius: 10px;
-        text-decoration: none;
-        color: var(--primary-color);
-        background: #f8f9fa;
-        border: 1px solid var(--border-color);
-        transition: all 0.3s ease;
-    }
-
-    .quick-action:hover {
-        background: var(--accent-color);
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
-    }
-
-    .quick-action i {
-        width: 40px;
-        height: 40px;
-        border-radius: 8px;
+    /* Icon Boxes */
+    .icon-box {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-right: 1rem;
-        background: var(--accent-color);
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        background: rgba(255, 255, 255, 0.2);
         color: white;
-        font-size: 1.1rem;
+        backdrop-filter: blur(5px);
     }
 
-    .quick-action:hover i {
-        background: white;
-        color: var(--accent-color);
-    }
-
-    /* Responsive Design */
-    @media (max-width: 1200px) {
-        .content-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .sidebar {
-            transform: translateX(-100%);
-        }
-        
-        .sidebar.active {
-            transform: translateX(0);
-        }
-        
-        .main-content {
-            margin-left: 0;
-            padding: 1rem;
-        }
-        
-        .metrics-grid {
-            grid-template-columns: 1fr;
-        }
-        
-        .welcome-section {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-    }
-
-    /* Mobile Menu Toggle */
-    .mobile-toggle {
-        display: none;
-        position: fixed;
-        top: 1rem;
-        left: 1rem;
-        z-index: 1001;
-        background: var(--primary-color);
+    /* Welcome Header */
+    .welcome-card {
+        /* background removed to inherit from unified-dashboard-card */
         color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 0.5rem;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .welcome-card h1 {
+        color: white;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    /* Quick Actions */
+    .quick-action-btn {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        color: white;
+        text-decoration: none;
+        transition: all 0.2s;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
+    }
+
+    .quick-action-btn:hover {
+        background: rgba(46, 125, 50, 0.9);
+        color: white;
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: translateY(-2px);
+    }
+
+    .quick-action-btn i {
         font-size: 1.2rem;
-        cursor: pointer;
+        margin-right: 1rem;
+        width: 24px;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.9);
+    }
+    
+    /* Layout Container */
+    .dashboard-container-custom {
+        max-width: 1400px;
+        margin: 0 auto;
     }
 
-    @media (max-width: 768px) {
-        .mobile-toggle {
-            display: block;
-        }
-    }
+    /* Text Colors overrides for specific elements if needed */
+    .text-success { color: #a5d6a7 !important; } /* Lighter green for dark bg */
+    .text-primary { color: #90caf9 !important; } /* Lighter blue for dark bg */
+    .text-warning { color: #ffe082 !important; } /* Lighter orange for dark bg */
+    .text-info { color: #80deea !important; } /* Lighter cyan for dark bg */
+    
+    .text-dark { color: white !important; }
 </style>
 {% endblock %}
 
-{% block content %}
-<!-- Mobile Menu Toggle -->
-<button class="mobile-toggle" onclick="toggleSidebar()">
-    <i class="fas fa-bars"></i>
-</button>
-
-<!-- Sidebar -->
-<div class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-        <h3><i class="fas fa-seedling"></i> AgroSmart</h3>
-        <p>Sistema de Gestión Agrícola</p>
-    </div>
-    
-    <nav class="sidebar-nav">
-        <!-- Dashboard Section -->
-        <div class="nav-section">
-            <div class="nav-section-title">Dashboard</div>
-            <div class="nav-item">
-                <a href="{% url 'dashboard:principal' %}" class="nav-link active">
-                    <i class="fas fa-home"></i>
-                    <span>Inicio</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Módulos Section -->
-        <div class="nav-section">
-            <div class="nav-section-title">Módulos Ganaderos</div>
-            {% if user.perfilusuario and user.perfilusuario.rol == 'admin_aves' or user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'solo_vista' %}
-            <div class="nav-item">
-                <a href="{% url 'aves:dashboard' %}" class="nav-link">
-                    <i class="fas fa-dove"></i>
-                    <span>Módulo Avícola</span>
-                    {% if total_aves %}
-                        <span class="badge">{{ total_aves }}</span>
-                    {% endif %}
-                </a>
-            </div>
-            {% endif %}
-            {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' %}
-            <div class="nav-item">
-                <a href="#" class="nav-link" style="opacity: 0.6;">
-                    <i class="fas fa-cow"></i>
-                    <span>Módulo Bovino</span>
-                    <span class="badge bg-secondary">Próximamente</span>
-                </a>
-            </div>
-            {% endif %}
-            {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' %}
-            <div class="nav-item">
-                <a href="#" class="nav-link" style="opacity: 0.6;">
-                    <i class="fas fa-horse-head"></i>
-                    <span>Módulo Equino</span>
-                    <span class="badge bg-secondary">Próximamente</span>
-                </a>
-            </div>
-            {% endif %}
-            {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' %}
-            <div class="nav-item">
-                <a href="{% url 'porcinos:dashboard' %}" class="nav-link">
-                    <i class="fas fa-piggy-bank"></i>
-                    <span>Módulo Porcino</span>
-                </a>
-            </div>
-            {% endif %}
-            {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' %}
-            <div class="nav-item">
-                <a href="#" class="nav-link" style="opacity: 0.6;">
-                    <i class="fas fa-paw"></i>
-                    <span>Módulo Ovino</span>
-                    <span class="badge bg-secondary">Próximamente</span>
-                </a>
-            </div>
-            {% endif %}
-            {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' %}
-            <div class="nav-item">
-                <a href="#" class="nav-link" style="opacity: 0.6;">
-                    <i class="fas fa-mountain"></i>
-                    <span>Módulo Caprino</span>
-                    <span class="badge bg-secondary">Próximamente</span>
-                </a>
-            </div>
-            {% endif %}
-            {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' %}
-            <div class="nav-item">
-                <a href="#" class="nav-link" style="opacity: 0.6;">
-                    <i class="fas fa-carrot"></i>
-                    <span>Módulo Cunícola</span>
-                    <span class="badge bg-secondary">Próximamente</span>
-                </a>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- Gestión Section -->
-        {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' %}
-        <div class="nav-section">
-            <div class="nav-section-title">Gestión</div>
-            <div class="nav-item">
-                <a href="{% url 'usuarios:lista' %}" class="nav-link">
-                    <i class="fas fa-users"></i>
-                    <span>Usuarios</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="{% url 'reportes:lista_reportes' %}" class="nav-link">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Reportes</span>
-                </a>
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Usuario Section -->
-        <div class="nav-section">
-            <div class="nav-section-title">Usuario</div>
-            <div class="nav-item">
-                <a href="{% url 'usuarios:perfil' %}" class="nav-link">
-                    <i class="fas fa-user"></i>
-                    <span>Mi Perfil</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="{% url 'usuarios:logout' %}" class="nav-link">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Cerrar Sesión</span>
-                </a>
-            </div>
-        </div>
-    </nav>
-</div>
-
-<!-- Main Content -->
-<div class="main-content">
-    <!-- Dashboard Header -->
-    <div class="dashboard-header">
-        <div class="welcome-section">
-            <div class="welcome-text">
-                <h1>¡Bienvenido de vuelta!</h1>
-                <p>Aquí tienes un resumen de tu sistema AgroSmart</p>
-            </div>
-            <div class="user-info">
-                <!-- Bloque del usuario en el header/topbar -->
-                <div class="user-avatar" aria-label="Avatar de usuario">
-                    {% if user.perfilusuario and user.perfilusuario.foto %}
-                        <img src="{{ user.perfilusuario.foto.url }}" alt="Avatar de usuario">
-                    {% else %}
-                        {% if user.first_name %}
-                            {{ user.first_name|slice:":1"|upper }}
-                        {% else %}
-                            {{ user.username|slice:":1"|upper }}
-                        {% endif %}
-                    {% endif %}
+{% block dashboard_content %}
+<div class="dashboard-container-custom container-fluid">
+    <!-- Welcome Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="unified-dashboard-card welcome-card p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="h2 mb-1">Bienvenido a AgroSmart</h1>
+                        <p class="mb-0 opacity-75">Panel de Control Principal</p>
+                    </div>
+                    <div class="bg-white text-success rounded-circle p-3 shadow-sm">
+                        <i class="fas fa-user fa-lg"></i>
+                    </div>
                 </div>
-                <h6 class="mb-0">
-                    {% if user.get_full_name %}
-                        {{ user.get_full_name }}
-                    {% else %}
-                        {{ user.username }}
-                    {% endif %}
-                </h6>
-                <small class="text-muted">{{ user.perfilusuario.get_rol_display|default:"Usuario" }}</small>
             </div>
         </div>
     </div>
 
     <!-- Metrics Grid -->
-    <div class="metrics-grid">
-        <div class="metric-card">
-            <div class="metric-header">
-                <div class="metric-icon">
-                    <i class="fas fa-seedling"></i>
+    <div class="row g-4 mb-4">
+        {% for unidad in unidades %}
+        <div class="col-md-6 col-lg-3">
+            <div class="unified-dashboard-card position-relative overflow-hidden">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="icon-box bg-white text-{{ unidad.color }} shadow-sm">
+                        <i class="{{ unidad.icon }}"></i>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-link text-white opacity-75" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url unidad.url %}"><i class="fas fa-external-link-alt me-2"></i>Ir al Módulo</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="openUserModal('{{ unidad.id }}', '{{ unidad.nombre }}')"><i class="fas fa-users-cog me-2"></i>Administrar Personal</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h4 class="fw-bold mb-1">{{ unidad.nombre }}</h4>
+                
+                <div class="mt-3 pt-3 border-top border-light border-opacity-25">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="rounded-circle bg-white bg-opacity-25 p-1 me-2 d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">
+                            <i class="fas fa-user-tie text-white small"></i>
+                        </div>
+                        <div class="text-truncate">
+                            <small class="d-block text-white-50" style="font-size: 0.7rem;">ENCARGADO</small>
+                            <span class="fw-bold text-white small">
+                                {% if unidad.encargado %}
+                                    {{ unidad.encargado.get_full_name|default:unidad.encargado.username }}
+                                {% else %}
+                                    <span class="text-white-50 fst-italic">Sin asignar</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-white bg-opacity-25 p-1 me-2 d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">
+                                <i class="fas fa-user-graduate text-white small"></i>
+                            </div>
+                            <div>
+                                <small class="d-block text-white-50" style="font-size: 0.7rem;">PRACTICANTES</small>
+                                <span class="fw-bold text-white small">{{ unidad.num_practicantes }} activos</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-sm btn-light rounded-circle shadow-sm" 
+                                onclick="openUserModal('{{ unidad.id }}', '{{ unidad.nombre }}')"
+                                title="Agregar Personal">
+                            <i class="fas fa-plus text-{{ unidad.color }}"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
-            <h2 class="metric-value">7</h2>
-            <p class="metric-label">Módulos Disponibles</p>
-            <p class="metric-change positive">
-                <i class="fas fa-arrow-up"></i> 1 activo
-            </p>
         </div>
-
-        <div class="metric-card success">
-            <div class="metric-header">
-                <div class="metric-icon success">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-            </div>
-            <h2 class="metric-value">{{ total_aves|default:0 }}</h2>
-            <p class="metric-label">Total de Animales</p>
-            <p class="metric-change positive">
-                <i class="fas fa-arrow-up"></i> Módulo Avícola
-            </p>
-        </div>
-
-        <div class="metric-card warning">
-            <div class="metric-header">
-                <div class="metric-icon warning">
-                    <i class="fas fa-bell"></i>
-                </div>
-            </div>
-            <h2 class="metric-value">{{ alertas.count|default:0 }}</h2>
-            <p class="metric-label">Alertas del Sistema</p>
-            <p class="metric-change">
-                <i class="fas fa-info-circle"></i> Todas las áreas
-            </p>
-        </div>
-
-        <div class="metric-card info">
-            <div class="metric-header">
-                <div class="metric-icon info">
-                    <i class="fas fa-users"></i>
-                </div>
-            </div>
-            <h2 class="metric-value">1</h2>
-            <p class="metric-label">Usuarios Activos</p>
-            <p class="metric-change positive">
-                <i class="fas fa-check"></i> Sistema operativo
-            </p>
-        </div>
+        {% endfor %}
     </div>
 
-    <!-- Content Grid -->
-    <div class="content-grid">
+    <div class="row g-4">
         <!-- Alertas Recientes -->
-        <div class="content-card">
-            <div class="content-card-header">
-                <h5>
-                    <i class="fas fa-bell"></i>
-                    Alertas Recientes
-                </h5>
-            </div>
-            <div class="content-card-body">
+        <div class="col-12">
+            <div class="unified-dashboard-card h-100">
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-light">
+                    <h5 class="mb-0 fw-bold text-white"><i class="fas fa-bell me-2 text-warning"></i>Alertas Recientes</h5>
+                    <button class="btn btn-sm btn-outline-light rounded-pill">Ver historial</button>
+                </div>
+                
                 {% if alertas %}
-                    {% for alerta in alertas %}
-                    <div class="alert-item">
-                        <div class="alert-header">
-                            <h6 class="alert-title">{{ alerta.titulo|default:"Alerta del Sistema" }}</h6>
-                            <span class="alert-time">{{ alerta.created_at|date:"d/m H:i" }}</span>
+                    <div class="d-flex flex-column gap-3">
+                        {% for alerta in alertas %}
+                        <div class="d-flex align-items-start p-3 rounded" style="background: rgba(255,255,255,0.1);">
+                            <i class="fas fa-exclamation-circle text-warning mt-1 me-3"></i>
+                            <div>
+                                <h6 class="mb-1 fw-bold text-white">{{ alerta.titulo }}</h6>
+                                <p class="mb-0 text-white-50 small">{{ alerta.descripcion }}</p>
+                                <small class="text-white-50">{{ alerta.created_at|timesince }}</small>
+                            </div>
                         </div>
-                        <p class="alert-description">{{ alerta.descripcion|default:"Descripción no disponible" }}</p>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 {% else %}
-                    <div class="text-center py-4">
-                        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
-                        <h6>¡Todo en orden!</h6>
-                        <p class="text-muted">No hay alertas pendientes en este momento</p>
+                    <div class="text-center py-5">
+                        <div class="mb-3 text-success">
+                            <i class="fas fa-check-circle fa-4x"></i>
+                        </div>
+                        <h4 class="fw-bold text-white">¡Todo en orden!</h4>
+                        <p class="text-white-50">No hay alertas pendientes en este momento</p>
                     </div>
                 {% endif %}
             </div>
         </div>
+    </div>
+</div>
 
-        <!-- Acciones Rápidas -->
-        <div class="content-card">
-            <div class="content-card-header">
-                <h5>
-                    <i class="fas fa-bolt"></i>
-                    Acciones Rápidas
-                </h5>
+<!-- User Management Modal -->
+<div class="modal fade" id="userManagementModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" id="modalUnitTitle">Gestión de Personal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="content-card-body">
-                <div class="quick-actions">
-                    <a href="{% url 'aves:dashboard' %}" class="quick-action">
-                        <i class="fas fa-dove"></i>
-                        <div>
-                            <h6 class="mb-0">Módulo Avícola</h6>
-                            <small>Gestionar aves y producción</small>
+            <div class="modal-body">
+                <input type="hidden" id="currentUnitId">
+                
+                <!-- Main View -->
+                <div id="usersListSection">
+                    <h6 class="text-muted text-uppercase small fw-bold mb-3">Encargado de Unidad</h6>
+                    <div id="encargadoContainer" class="mb-4">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="text-muted text-uppercase small fw-bold mb-0">Practicantes</h6>
+                        <button class="btn btn-sm btn-outline-primary rounded-pill" onclick="showAddUserForm('practicante')">
+                            <i class="fas fa-plus me-1"></i> Agregar Practicante
+                        </button>
+                    </div>
+                    <div id="practicantesContainer" class="list-group list-group-flush mb-3">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Add User Form (Hidden) -->
+                <div id="addUserFormSection" style="display: none;">
+                    <div class="d-flex align-items-center mb-4">
+                        <button class="btn btn-link p-0 me-3 text-dark" onclick="hideAddUserForm()">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <h5 class="mb-0 fw-bold" id="formTitle">Agregar Usuario</h5>
+                    </div>
+
+                    <form id="newUserForm">
+                        <input type="hidden" id="userType">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="firstName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Apellido</label>
+                                <input type="text" class="form-control" id="lastName" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Correo Electrónico</label>
+                                <input type="email" class="form-control" id="email">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Usuario</label>
+                                <input type="text" class="form-control" id="username" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Contraseña</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="password" required>
+                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </a>
-                    <a href="{% url 'porcinos:dashboard' %}" class="quick-action">
-                        <i class="fas fa-piggy-bank"></i>
-                        <div>
-                            <h6 class="mb-0">Módulo Porcinos</h6>
-                            <small>Gestionar porcinos</small>
+                        <div class="mt-4 text-end">
+                            <button type="button" class="btn btn-light me-2" onclick="hideAddUserForm()">Cancelar</button>
+                            <button type="submit" class="btn btn-primary px-4">Guardar Usuario</button>
                         </div>
-                    </a>
-                    
-                    <a href="{% url 'reportes:lista_reportes' %}" class="quick-action">
-                        <i class="fas fa-chart-bar"></i>
-                        <div>
-                            <h6 class="mb-0">Generar Reporte</h6>
-                            <small>Crear reportes personalizados</small>
-                        </div>
-                    </a>
-                    
-                    <a href="{% url 'usuarios:lista' %}" class="quick-action">
-                        <i class="fas fa-users"></i>
-                        <div>
-                            <h6 class="mb-0">Gestionar Usuarios</h6>
-                            <small>Administrar permisos y roles</small>
-                        </div>
-                    </a>
-                    
-                    <a href="{% url 'usuarios:perfil' %}" class="quick-action">
-                        <i class="fas fa-user-cog"></i>
-                        <div>
-                            <h6 class="mb-0">Configuración</h6>
-                            <small>Ajustar preferencias</small>
-                        </div>
-                    </a>
+                    </form>
                 </div>
             </div>
         </div>
@@ -806,44 +342,144 @@
 </div>
 {% endblock %}
 
-{% block extra_js %}
+{% block dashboard_extra_js %}
 <script>
-function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.classList.toggle('active');
-}
-
-// Auto-close sidebar on mobile when clicking outside
-document.addEventListener('click', function(event) {
-    const sidebar = document.getElementById('sidebar');
-    const toggle = document.querySelector('.mobile-toggle');
+    const userModal = new bootstrap.Modal(document.getElementById('userManagementModal'));
     
-    if (window.innerWidth <= 768) {
-        if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
-            sidebar.classList.remove('active');
+    function openUserModal(unitId, unitName) {
+        document.getElementById('currentUnitId').value = unitId;
+        document.getElementById('modalUnitTitle').textContent = 'Gestión - ' + unitName;
+        hideAddUserForm();
+        loadUnitUsers(unitId);
+        userModal.show();
+    }
+
+    function loadUnitUsers(unitId) {
+        fetch(`{% url 'dashboard:api_usuarios_unidad' %}?unidad=${unitId}`)
+            .then(response => response.json())
+            .then(data => {
+                renderUsers(data);
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function renderUsers(data) {
+        const encargadoContainer = document.getElementById('encargadoContainer');
+        const practicantesContainer = document.getElementById('practicantesContainer');
+        
+        // Render Encargado
+        if (data.encargados && data.encargados.length > 0) {
+            const enc = data.encargados[0];
+            encargadoContainer.innerHTML = `
+                <div class="card border shadow-sm">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-3 me-3">
+                                <i class="fas fa-user-tie fa-lg"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1 fw-bold">${enc.nombre}</h6>
+                                <p class="mb-0 text-muted small">${enc.username} | ${enc.email}</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="showAddUserForm('encargado')">
+                            <i class="fas fa-pencil-alt"></i> Cambiar
+                        </button>
+                    </div>
+                </div>
+            `;
+        } else {
+            encargadoContainer.innerHTML = `
+                <div class="alert alert-light border border-dashed text-center py-4 mb-0">
+                    <p class="text-muted mb-3">No hay encargado asignado</p>
+                    <button class="btn btn-sm btn-primary" onclick="showAddUserForm('encargado')">
+                        <i class="fas fa-plus me-1"></i> Asignar Encargado
+                    </button>
+                </div>
+            `;
+        }
+
+        // Render Practicantes
+        if (data.practicantes && data.practicantes.length > 0) {
+            practicantesContainer.innerHTML = data.practicantes.map(p => `
+                <div class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-bottom">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-success bg-opacity-10 text-success rounded-circle p-2 me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold">${p.nombre}</h6>
+                            <p class="mb-0 text-muted small">${p.username}</p>
+                        </div>
+                    </div>
+                    <span class="badge bg-light text-dark border">Activo</span>
+                </div>
+            `).join('');
+        } else {
+            practicantesContainer.innerHTML = `
+                <div class="text-center py-3 text-muted">
+                    <small>No hay practicantes registrados</small>
+                </div>
+            `;
         }
     }
-});
 
-// Smooth animations on load
-document.addEventListener('DOMContentLoaded', function() {
-    const cards = document.querySelectorAll('.metric-card, .content-card');
-    cards.forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
+    function showAddUserForm(type) {
+        document.getElementById('usersListSection').style.display = 'none';
+        document.getElementById('addUserFormSection').style.display = 'block';
+        document.getElementById('userType').value = type;
+        document.getElementById('formTitle').textContent = type === 'encargado' ? 'Asignar Nuevo Encargado' : 'Registrar Nuevo Practicante';
+        document.getElementById('newUserForm').reset();
+    }
+
+    function hideAddUserForm() {
+        document.getElementById('addUserFormSection').style.display = 'none';
+        document.getElementById('usersListSection').style.display = 'block';
+    }
+
+    function togglePassword() {
+        const input = document.getElementById('password');
+        input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    document.getElementById('newUserForm').addEventListener('submit', function(e) {
+        e.preventDefault();
         
-        setTimeout(() => {
-            card.style.transition = 'all 0.6s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, index * 100);
-    });
-});
+        const unitId = document.getElementById('currentUnitId').value;
+        
+        const data = {
+            unidad: unitId,
+            tipo: document.getElementById('userType').value,
+            first_name: document.getElementById('firstName').value,
+            last_name: document.getElementById('lastName').value,
+            email: document.getElementById('email').value,
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value
+        };
 
-// Auto-refresh data every 5 minutes
-setInterval(function() {
-    // Aquí puedes agregar lógica para actualizar datos específicos
-    console.log('Actualizando datos del dashboard...');
-}, 300000);
+        fetch('{% url "dashboard:api_agregar_usuario" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert('Error: ' + data.error);
+            } else {
+                hideAddUserForm();
+                loadUnitUsers(unitId);
+                // Optional: Reload page to update cards count
+                // location.reload(); 
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ocurrió un error al guardar el usuario');
+        });
+    });
 </script>
 {% endblock %}

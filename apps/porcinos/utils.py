@@ -33,8 +33,6 @@ def generar_alertas_porcinos(bitacora_instance=None):
                         corral_nombre=lote.corral,
                         leida=False
                     )
-                    # No agregamos a alertas_generadas porque create no retorna (obj, created)
-                    # Pero podemos hacerlo si es necesario
                 except Exception:
                     pass
 
@@ -64,14 +62,14 @@ def generar_alertas_porcinos(bitacora_instance=None):
         # Esto requeriría buscar el registro anterior, lo cual es más costoso.
         # Por simplicidad, alertamos si el peso es 0 (error de registro o problema)
         if bitacora_instance.peso_promedio == 0 and lote.numero_cerdos_actual > 0:
-             exists = AlertaPorcinos.objects.filter(
+            exists = AlertaPorcinos.objects.filter(
                 tipo_alerta='peso_bajo',
                 lote=lote,
                 fecha_generacion__date=bitacora_instance.fecha
             ).exists()
             
-             if not exists:
-                 try:
+            if not exists:
+                try:
                     AlertaPorcinos.objects.create(
                         tipo_alerta='peso_bajo',
                         lote=lote,
@@ -81,7 +79,7 @@ def generar_alertas_porcinos(bitacora_instance=None):
                         corral_nombre=lote.corral,
                         leida=False
                     )
-                 except Exception:
+                except Exception:
                     pass
 
     return alertas_generadas

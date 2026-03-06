@@ -11,6 +11,9 @@ app_name = 'aves'
 urlpatterns = [
     # Dashboard
     path('', views.dashboard_aves, name='dashboard'),
+    path('tarea/crear/', views.crear_tarea, name='crear_tarea'),
+    path('tarea/completar/<int:tarea_id>/', views.completar_tarea, name='completar_tarea'),
+    path('tarea/eliminar/<int:tarea_id>/', views.eliminar_tarea, name='eliminar_tarea'),
     
     # Bitácora diaria
     path('bitacora/', views.bitacora_list, name='bitacora_list'),
@@ -24,6 +27,9 @@ urlpatterns = [
     path('lotes/<int:pk>/', views.lote_detail, name='lote_detail'),
     path('lotes/<int:pk>/editar/', views.lote_edit, name='lote_edit'),
     path('lotes/<int:pk>/eliminar/', views.lote_delete, name='lote_delete'),
+    
+    # Inventario permanente de aves
+    path('inventario-permanente/', views.inventario_permanente, name='inventario_permanente'),
     
     # Inventario de huevos
     path('inventario-huevos/', views.inventario_huevos, name='inventario_huevos'),

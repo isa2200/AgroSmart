@@ -1,548 +1,695 @@
 {% extends 'porcinos/base.html' %}
 {% load static %}
 
-{% block title %}Inventario Permanente de Cerdos{% endblock %}
-{% block page_title %}Inventario Permanente de Cerdos{% endblock %}
+{% block title %}Inventario Permanente - AgroSmart{% endblock %}
+
+{% block breadcrumb %}{% endblock %}
 {% block page_header %}{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Estilos unificados Glassmorphism */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
+    .unified-dashboard-card .card-body {
+        padding: 0;
+    }
 
-{% block breadcrumb %}
-<nav aria-label="breadcrumb" class="mb-3">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'dashboard:principal' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'porcinos:dashboard' %}">Porcinos</a></li>
-        <li class="breadcrumb-item active">Inventario Permanente</li>
-    </ol>
-</nav>
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    .glass-wrap {
+        width: 100%;
+        max-width: 98%;
+        margin: 0 auto;
+    }
+
+    /* Table Styles within Glass Card */
+    .table-custom {
+        margin-bottom: 0;
+        width: 100%;
+        border-collapse: separate; 
+        border-spacing: 0;
+    }
+    
+    .table-custom thead th {
+        background-color: #2E7D32 !important;
+        color: white !important;
+        border: 1px solid rgba(255,255,255,0.1);
+        vertical-align: middle;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem; /* Smaller font for many columns */
+        padding: 8px 4px;
+        letter-spacing: 0.5px;
+    }
+
+    .table-custom tbody tr {
+        background-color: white !important;
+        color: #444 !important;
+        transition: all 0.2s;
+    }
+    
+    .table-custom tbody tr:hover {
+        background-color: #f1f8e9 !important;
+    }
+    
+    .table-custom tbody td {
+        border: 1px solid #e9ecef;
+        padding: 8px 4px;
+        vertical-align: middle;
+        font-size: 0.85rem;
+    }
+
+    /* Editable cells indication */
+    td[contenteditable="true"]:hover {
+        background-color: #e8f5e9 !important;
+        cursor: text;
+        outline: 1px dashed #2e7d32;
+    }
+    td[contenteditable="true"]:focus {
+        background-color: white !important;
+        color: #000 !important;
+        outline: 2px solid #2e7d32;
+        box-shadow: 0 0 5px rgba(46, 125, 50, 0.3);
+        z-index: 5;
+        position: relative;
+    }
+    
+    .total-cell {
+        font-weight: bold;
+        color: #2E7D32 !important;
+        background-color: #f9fbe7 !important;
+    }
+
+    /* Botones */
+    .btn-light-custom {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.5);
+        color: #2e7d32;
+        font-weight: 600;
+    }
+    .btn-light-custom:hover {
+        background: #fff;
+        color: #1b5e20;
+    }
+
+    /* Modal Glassmorphism Styles */
+    .modal-content-glass {
+        background: rgba(20, 50, 20, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        border-radius: 15px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    }
+    
+    .modal-content-glass .modal-header {
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 15px 15px 0 0;
+        padding: 1.5rem 2rem;
+    }
+    
+    .modal-content-glass .modal-footer {
+        border-top: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 0 0 15px 15px;
+        padding: 1rem 2rem;
+    }
+
+    .modal-content-glass .modal-body {
+        padding: 2rem;
+    }
+
+    .modal-content-glass .form-control {
+        background: rgba(255,255,255,0.85);
+        border: 1px solid rgba(255,255,255,0.25);
+        color: #1b1b1b;
+    }
+    
+    .modal-content-glass .form-control:focus {
+        background: white;
+        border-color: rgba(52, 199, 89, 0.9);
+        box-shadow: 0 0 0 0.2rem rgba(52, 199, 89, 0.25);
+    }
+    
+    .modal-content-glass .form-label {
+        color: #fff;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+    
+    .modal-section-title {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        color: #fff;
+        font-weight: 600;
+        margin-bottom: 12px;
+        border-left: 4px solid #34c759;
+        padding-left: 8px;
+        font-size: 1rem;
+    }
+
+    /* Print Styles */
+    @media print {
+        @page { size: legal landscape; margin: 5mm; }
+        body * { visibility: hidden; }
+        .print-layout, .print-layout * { visibility: visible; }
+        .print-layout { position: absolute; left: 0; top: 0; width: 100%; display: block !important; background-color: white; padding: 10px; }
+        .no-print, .sidebar, .navbar, .card-footer, .btn, form, .card-header, .page-header, .breadcrumb, .modal, .glass-wrap h2 { display: none !important; }
+        .main-content { margin: 0 !important; padding: 0 !important; background-color: white !important; }
+        table { width: 100% !important; border-collapse: collapse !important; font-size: 9px !important; font-family: Arial, sans-serif !important; }
+        th, td { border: 1px solid black !important; padding: 2px !important; color: black !important; vertical-align: middle !important; }
+        th { background-color: white !important; font-weight: bold !important; text-align: center !important; }
+        .text-center { text-align: center !important; }
+        .text-start { text-align: left !important; }
+        .fw-bold { font-weight: bold !important; }
+    }
+    .print-layout { display: none; }
+</style>
+{% endblock %}
+
+{% block breadcrumb_items %}
+<!-- Breadcrumb hidden by block override above -->
 {% endblock %}
 
 {% block content %}
-<div class="animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-4 no-print">
-        <div>
-            <h4 class="mb-1 fw-bold text-dark">Inventario Permanente</h4>
-            <div class="text-muted small">
-                <i class="fas fa-file-alt me-1"></i>Doc: {{ codigo_documento|default:"-" }} | 
-                <i class="fas fa-code-branch me-1"></i>Ver: {{ version }}
+<div class="glass-wrap">
+    <h2 class="text-center text-white mb-4 fw-bold" style="font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Inventario Permanente Porcinos</h2>
+    
+    <div class="unified-dashboard-card">
+        <div class="card-header">
+            <h5 class="section-title">
+                <i class="fas fa-clipboard-list"></i>
+                Registro de Inventario
+            </h5>
+            <div class="d-flex gap-2">
+                <form class="d-flex gap-2 align-items-center me-2" method="get">
+                    <input type="date" name="fecha_inicio" class="form-control form-control-sm" value="{{ fecha_inicio|default:'' }}" placeholder="Desde">
+                    <span class="text-white">-</span>
+                    <input type="date" name="fecha_fin" class="form-control form-control-sm" value="{{ fecha_fin|default:'' }}" placeholder="Hasta">
+                    <button type="submit" class="btn btn-sm btn-glass-green">
+                        <i class="fas fa-filter"></i>
+                    </button>
+                    {% if fecha_inicio or fecha_fin %}
+                        <a href="{% url 'porcinos:inventario_permanente' %}" class="btn btn-sm btn-glass-green" title="Limpiar Filtros">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    {% endif %}
+                </form>
+
+                <button type="button" class="btn btn-glass-green fw-bold" onclick="window.print()">
+                    <i class="fas fa-print me-2"></i>Imprimir
+                </button>
+                <button type="button" class="btn btn-glass-green fw-bold" data-bs-toggle="modal" data-bs-target="#registroModal">
+                    <i class="fas fa-plus me-2"></i>Nuevo Registro
+                </button>
             </div>
         </div>
-        <div class="d-flex gap-2">
-            <a class="btn btn-outline-primary" href="{% url 'porcinos:reportes' %}">
-                <i class="fas fa-chart-bar me-2"></i>Reportes
-            </a>
-            <button class="btn btn-outline-secondary" onclick="window.print()">
-                <i class="fas fa-print me-2"></i>Imprimir
-            </button>
-        </div>
-    </div>
-
-    <!-- Tabla de Registros Guardados -->
-    <div class="card no-print">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h6 class="mb-0"><i class="fas fa-archive me-2"></i>Inventarios Guardados</h6>
-        </div>
+        
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
+                <table class="table table-custom table-sm text-center mb-0">
+                    <thead>
                         <tr>
-                            <th class="ps-4">Fecha</th>
-                            <th>Detalle</th>
-                            <th>Total</th>
-                            <th class="text-end pe-4">Acciones</th>
+                            <th rowspan="2" class="align-middle">Fecha</th>
+                            <th rowspan="2" class="align-middle" style="min-width: 120px;">Detalle</th>
+                            <th colspan="9">Población / Etapas</th>
+                            <th colspan="7">Movimientos / Producción</th>
+                            <th rowspan="2" class="align-middle">Total</th>
+                            <th rowspan="2" class="align-middle">Firma</th>
+                            <th rowspan="2" class="align-middle">Acciones</th>
+                        </tr>
+                        <tr>
+                            <!-- Población -->
+                            <th title="Madre">Madre</th>
+                            <th title="Reproductores">Repro</th>
+                            <th title="Hembras Reemplazo">H.Reem</th>
+                            <th title="Hembras Gestación">H.Gest</th>
+                            <th title="Hembras Lactando">H.Lact</th>
+                            <th title="Lechones Lactando">L.Lact</th>
+                            <th title="Preiniciador">Preini</th>
+                            <th title="Levante/Ceba">Lev/Ceb</th>
+                            <th title="Descartes">Desc</th>
+                            
+                            <!-- Movimientos -->
+                            <th title="Lechones Vivos">L.Viv</th>
+                            <th title="Lechones Muertos">L.Mue</th>
+                            <th title="Destetes">Dest</th>
+                            <th title="Compras">Comp</th>
+                            <th title="Ventas">Vent</th>
+                            <th title="Salidas">Sal</th>
+                            <th title="Muertes">Mue</th>
                         </tr>
                     </thead>
-                    <tbody id="invRows">
-                        <tr class="text-muted"><td colspan="4" class="text-center py-4">Sin registros</td></tr>
+                    <tbody>
+                        {% for registro in registros %}
+                        <tr data-id="{{ registro.id }}">
+                            <td class="fw-bold text-nowrap">{{ registro.fecha|date:"d/m/Y" }}</td>
+                            <td contenteditable="true" onblur="updateRegistro(this, 'detalle')" class="text-start text-truncate" style="max-width: 150px;">{{ registro.detalle }}</td>
+                            
+                            <!-- Población -->
+                            <td contenteditable="true" onblur="updateRegistro(this, 'madre')">{{ registro.madre }}</td>
+                            <td contenteditable="true" onblur="updateRegistro(this, 'reproductores')">{{ registro.reproductores }}</td>
+                            <td contenteditable="true" onblur="updateRegistro(this, 'hembras_reemplazo')">{{ registro.hembras_reemplazo }}</td>
+                            <td contenteditable="true" onblur="updateRegistro(this, 'hembras_gestacion')">{{ registro.hembras_gestacion }}</td>
+                            <td contenteditable="true" onblur="updateRegistro(this, 'hembras_lactando')">{{ registro.hembras_lactando }}</td>
+                            <td contenteditable="true" onblur="updateRegistro(this, 'lechones_lactando')">{{ registro.lechones_lactando }}</td>
+                            <td contenteditable="true" onblur="updateRegistro(this, 'preiniciador')">{{ registro.preiniciador }}</td>
+                            <td contenteditable="true" onblur="updateRegistro(this, 'levante_ceba')">{{ registro.levante_ceba }}</td>
+                            <td contenteditable="true" onblur="updateRegistro(this, 'descartes')">{{ registro.descartes }}</td>
+                            
+                            <!-- Movimientos -->
+                            <td contenteditable="true" onblur="updateRegistro(this, 'lechones_vivos')">{{ registro.lechones_vivos }}</td>
+                            <td contenteditable="true" onblur="updateRegistro(this, 'lechones_muertos')">{{ registro.lechones_muertos }}</td>
+                            <td contenteditable="true" onblur="updateRegistro(this, 'destetes')">{{ registro.destetes }}</td>
+                            <td contenteditable="true" onblur="updateRegistro(this, 'compras')">{{ registro.compras }}</td>
+                            <td contenteditable="true" onblur="updateRegistro(this, 'ventas')">{{ registro.ventas }}</td>
+                            <td contenteditable="true" onblur="updateRegistro(this, 'salidas')">{{ registro.salidas }}</td>
+                            <td contenteditable="true" onblur="updateRegistro(this, 'muertes')">{{ registro.muertes }}</td>
+                            
+                            <td class="total-cell">{{ registro.total }}</td>
+                            <td>
+                                <div class="d-flex justify-content-center align-items-center signature-container" data-id="{{ registro.id }}">
+                                    {% if registro.firma_realizado %}
+                                        <a href="{{ registro.firma_realizado.url }}" target="_blank" title="Ver firma completa">
+                                            <img src="{{ registro.firma_realizado.url }}" alt="Firma" class="img-thumbnail" style="height: 30px; width: auto; max-width: 80px; padding: 2px;">
+                                        </a>
+                                    {% else %}
+                                        <span class="text-muted small"><i class="fas fa-signature"></i></span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-center align-items-center gap-2">
+                                    <label class="btn btn-sm btn-outline-secondary p-1 border-0" style="line-height: 1; cursor: pointer;" title="{% if registro.firma_realizado %}Cambiar{% else %}Subir{% endif %} Firma">
+                                        <i class="fas fa-upload small"></i>
+                                        <input type="file" class="d-none" onchange="uploadFirma(this, '{{ registro.id }}')" accept="image/*">
+                                    </label>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary p-1 border-0" onclick="imprimirIndividual('{{ registro.id }}', '{% if registro.firma_realizado %}{{ registro.firma_realizado.url }}{% endif %}')" title="Imprimir registro">
+                                        <i class="fas fa-print small"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="22" class="text-center py-5">
+                                <i class="fas fa-clipboard-list fa-3x text-muted mb-3 d-block"></i>
+                                <span class="text-muted">No hay registros disponibles</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Formulario de Nuevo Registro -->
-    <div class="card no-print">
-        <div class="card-header">
-            <h6 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Nuevo Registro de Inventario</h6>
-        </div>
-        <div class="card-body p-4">
-            <form method="post" id="inventarioForm" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="hidden" name="inventario_json" id="inventario_json">
-                <input type="hidden" class="ip-sig-realizado-b64">
-                <input type="hidden" class="ip-sig-revisado-b64">
-                <input type="hidden" class="ip-sig-aprobado-b64">
-                
-                <div class="row g-3">
-                    <!-- Form fields structure preserved but wrapped nicely -->
-                    <div class="col-md-2"><label class="form-label small fw-bold text-muted">Año</label><input type="number" min="2000" class="form-control ip-ano"></div>
-                    <div class="col-md-2"><label class="form-label small fw-bold text-muted">Mes</label><input type="number" min="1" max="12" class="form-control ip-mes"></div>
-                    <div class="col-md-2"><label class="form-label small fw-bold text-muted">Día</label><input type="number" min="1" max="31" class="form-control ip-dia"></div>
-                    <div class="col-md-6"><label class="form-label small fw-bold text-muted">Detalle clasificación</label><input type="text" class="form-control ip-detalle"></div>
-
-                    <!-- Divider -->
-                    <div class="col-12"><hr class="my-2 opacity-10"></div>
-                    
-                    <!-- Group 1 -->
-                    <div class="col-md-3"><label class="form-label small text-muted">Madre No.</label><input type="text" class="form-control ip-madre"></div>
-                    <div class="col-md-3"><label class="form-label small text-muted">Lechones vivos</label><input type="number" min="0" class="form-control ip-sum ip-lech-vivos"></div>
-                    <div class="col-md-3"><label class="form-label small text-muted">Lechones muertos</label><input type="number" min="0" class="form-control ip-sum ip-lech-muertos"></div>
-                    <div class="col-md-3"><label class="form-label small text-muted">Compras</label><input type="number" min="0" class="form-control ip-sum ip-compras"></div>
-
-                    <!-- Group 2 -->
-                    <div class="col-md-3"><label class="form-label small text-muted">Ventas</label><input type="number" min="0" class="form-control ip-sum ip-ventas"></div>
-                    <div class="col-md-3"><label class="form-label small text-muted">Muertes</label><input type="number" min="0" class="form-control ip-sum ip-muertes"></div>
-                    <div class="col-md-3"><label class="form-label small text-muted">Preiniciador</label><input type="number" min="0" class="form-control ip-sum ip-preiniciador"></div>
-                    <div class="col-md-3"><label class="form-label small text-muted">Levante y Ceba</label><input type="number" min="0" class="form-control ip-sum ip-lev-ceba"></div>
-
-                    <!-- Group 3 -->
-                    <div class="col-md-3"><label class="form-label small text-muted">Reproductores</label><input type="number" min="0" class="form-control ip-sum ip-reproductores"></div>
-                    <div class="col-md-3"><label class="form-label small text-muted">Hembras de reemplazo</label><input type="number" min="0" class="form-control ip-sum ip-hem-reemplazo"></div>
-                    <div class="col-md-3"><label class="form-label small text-muted">Hembras en gestación</label><input type="number" min="0" class="form-control ip-sum ip-hem-gestacion"></div>
-                    <div class="col-md-3"><label class="form-label small text-muted">Destetes</label><input type="number" min="0" class="form-control ip-sum ip-destetes"></div>
-
-                    <!-- Group 4 -->
-                    <div class="col-md-3"><label class="form-label small text-muted">Hembras lactando</label><input type="number" min="0" class="form-control ip-sum ip-hem-lactando"></div>
-                    <div class="col-md-3"><label class="form-label small text-muted">Lechones lactando</label><input type="number" min="0" class="form-control ip-sum ip-lech-lactando"></div>
-                    <div class="col-md-3"><label class="form-label small text-muted">Descartes</label><input type="number" min="0" class="form-control ip-sum ip-descartes"></div>
-                    <div class="col-md-3">
-                        <label class="form-label small fw-bold text-primary">Total</label>
-                        <input type="number" min="0" class="form-control ip-total bg-light fw-bold text-primary" readonly>
-                    </div>
-                </div>
-
-                <div class="row g-3 mt-4">
-                    <div class="col-12"><h6 class="text-primary border-bottom pb-2">Firmas Responsables</h6></div>
-                    <div class="col-md-4">
-                        <label class="form-label small">Realizado por</label>
-                        <input type="text" class="form-control ip-sig-realizado-nombre" placeholder="Nombre y cargo">
-                        <input type="file" accept="image/*" class="form-control mt-2 ip-sig-realizado text-muted small">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label small">Documento revisado por</label>
-                        <input type="text" class="form-control ip-sig-revisado-nombre" placeholder="Nombre y cargo">
-                        <input type="file" accept="image/*" class="form-control mt-2 ip-sig-revisado text-muted small">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label small">Aprobado por</label>
-                        <input type="text" class="form-control ip-sig-aprobado-nombre" placeholder="Nombre y cargo">
-                        <input type="file" accept="image/*" class="form-control mt-2 ip-sig-aprobado text-muted small">
-                    </div>
-                </div>
-
-                <div class="mt-4 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary px-5 shadow-sm">
-                        <i class="fas fa-save me-2"></i>Guardar Inventario
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-        
-    <div id="printLayout" class="print-layout" style="display:none;">
-    <table class="table table-bordered mb-0" style="width: 100%; margin-bottom: 0 !important;">
+<!-- Print Layout -->
+<div class="print-layout">
+    <table class="table table-bordered mb-0" style="width: 100%; margin-bottom: 0 !important; border: 2px solid black;">
         <tbody>
             <tr>
                 <td style="width: 60%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
                     <div class="d-flex align-items-center gap-3">
                         <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height:20mm; width:auto; object-fit:contain;">
-                        <div class="fw-bold" style="font-size: 14px; line-height: 1.2;">{{ centro|default:"Centro de los Recursos Naturales Renovables La Salada" }}</div>
+                        <div class="fw-bold" style="font-size: 14px; line-height: 1.2;">
+                            Centro de los Recursos Naturales Renovables La Salada<br>
+                            Regional Antioquia
+                        </div>
                     </div>
                 </td>
                 <td style="width: 40%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
-                    <div class="fw-bold">Código del documento: <span class="fw-normal">{{ codigo_documento|default:"" }}</span></div>
-                    <div class="mt-1 fw-bold">Versión <span class="fw-normal">{{ version }}</span></div>
+                    <div class="fw-bold">Código del documento: <span class="fw-normal">-</span></div>
+                    <div class="mt-1 fw-bold">Versión: <span class="fw-normal">01</span></div>
                 </td>
             </tr>
             <tr>
                 <td colspan="2" class="text-center" style="text-align: center !important; vertical-align: middle !important; padding: 10px !important;">
-                    <div class="fw-bold">{{ unidad_productiva }}</div>
-                    <div class="h5 mb-0 fw-bold">INVENTARIO PERMANENTE DE CERDOS</div>
+                    <div class="fw-bold">Unidad productiva de porcinos</div>
+                    <div class="h5 mb-0 fw-bold">INVENTARIO PERMANENTE DE PORCINOS</div>
                 </td>
             </tr>
         </tbody>
     </table>
+
+    <table class="table table-bordered mt-0" style="width: 100%; border: 2px solid black; border-top: none; margin-top: -2px !important; font-size: 8px !important;">
+        <thead>
+            <tr style="background-color: white;">
+                <th rowspan="2" class="align-middle text-center">FECHA</th>
+                <th rowspan="2" class="align-middle text-center" style="width: 15%;">DETALLE</th>
+                <th colspan="9" class="text-center">POBLACIÓN / ETAPAS</th>
+                <th colspan="7" class="text-center">MOVIMIENTOS / PRODUCCIÓN</th>
+                <th rowspan="2" class="align-middle text-center">TOTAL</th>
+                <th rowspan="2" class="align-middle text-center">FIRMA</th>
+            </tr>
+            <tr style="background-color: white;">
+                <th class="text-center">MADRE</th>
+                <th class="text-center">REPRO</th>
+                <th class="text-center">H.REEM</th>
+                <th class="text-center">H.GEST</th>
+                <th class="text-center">H.LACT</th>
+                <th class="text-center">L.LACT</th>
+                <th class="text-center">PREINI</th>
+                <th class="text-center">LEV/CEB</th>
+                <th class="text-center">DESC</th>
+                
+                <th class="text-center">L.VIV</th>
+                <th class="text-center">L.MUE</th>
+                <th class="text-center">DEST</th>
+                <th class="text-center">COMP</th>
+                <th class="text-center">VENT</th>
+                <th class="text-center">SAL</th>
+                <th class="text-center">MUE</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registro in registros %}
+            <tr data-id="{{ registro.id }}">
+                <td class="text-center">{{ registro.fecha|date:"d/m/Y" }}</td>
+                <td class="text-start">{{ registro.detalle }}</td>
+                
+                <td class="text-center">{{ registro.madre }}</td>
+                <td class="text-center">{{ registro.reproductores }}</td>
+                <td class="text-center">{{ registro.hembras_reemplazo }}</td>
+                <td class="text-center">{{ registro.hembras_gestacion }}</td>
+                <td class="text-center">{{ registro.hembras_lactando }}</td>
+                <td class="text-center">{{ registro.lechones_lactando }}</td>
+                <td class="text-center">{{ registro.preiniciador }}</td>
+                <td class="text-center">{{ registro.levante_ceba }}</td>
+                <td class="text-center">{{ registro.descartes }}</td>
+                
+                <td class="text-center">{{ registro.lechones_vivos }}</td>
+                <td class="text-center">{{ registro.lechones_muertos }}</td>
+                <td class="text-center">{{ registro.destetes }}</td>
+                <td class="text-center">{{ registro.compras }}</td>
+                <td class="text-center">{{ registro.ventas }}</td>
+                <td class="text-center">{{ registro.salidas }}</td>
+                <td class="text-center">{{ registro.muertes }}</td>
+                
+                <td class="text-center fw-bold">{{ registro.total }}</td>
+                <td class="text-center" id="print-signature-{{ registro.id }}">
+                    {% if registro.firma_realizado %}
+                        <img src="{{ registro.firma_realizado.url }}" alt="Firma" style="max-height: 30px; max-width: 80px;">
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     
-    <table class="table table-bordered table-sm align-middle" style="table-layout:fixed;width:100%;font-size:10px; margin-top: -2px !important;">
-                    <colgroup>
-                        <col style="width:3%">
-                        <col style="width:3%">
-                        <col style="width:3%">
-                        <col style="width:10%">
-                        <col style="width:5%">
-                        <col style="width:4.6%">
-                        <col style="width:4.6%">
-                        <col style="width:4.6%">
-                        <col style="width:4.6%">
-                        <col style="width:4.6%">
-                        <col style="width:4.6%">
-                        <col style="width:4.6%">
-                        <col style="width:4.6%">
-                        <col style="width:4.6%">
-                        <col style="width:4.6%">
-                        <col style="width:4.6%">
-                        <col style="width:4.6%">
-                        <col style="width:5%">
-                        <col style="width:5%">
-                        <col style="width:5%">
-                    </colgroup>
-                    <thead class="table-light">
-                        <tr class="text-center">
-                            <th colspan="3">FECHA</th>
-                            <th colspan="2">DESCRIPCIÓN</th>
-                            <th colspan="2">LECHONES (PARTO)</th>
-                            <th colspan="3">MOVIMIENTOS</th>
-                            <th colspan="9">DISTRIBUCIÓN / INVENTARIO</th>
-                            <th rowspan="2">TOTAL</th>
-                        </tr>
-                        <tr>
-                            <th>Año</th>
-                            <th>Mes</th>
-                            <th>Día</th>
-                            <th>Detalle</th>
-                            <th>Madre</th>
-                            <th>Vivos</th>
-                            <th>Muertos</th>
-                            <th>Comp.</th>
-                            <th>Ventas</th>
-                            <th>Muertes</th>
-                            <th>Preini.</th>
-                            <th>L/Ceba</th>
-                            <th>Repro.</th>
-                            <th>Reempl.</th>
-                            <th>Gest.</th>
-                            <th>Dest.</th>
-                            <th>H.Lact</th>
-                            <th>Lechones Lactando</th>
-                            <th>Descartes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="pv-ano"></span></td>
-                            <td><span class="pv-mes"></span></td>
-                            <td><span class="pv-dia"></span></td>
-                            <td><span class="pv-detalle"></span></td>
-                            <td><span class="pv-madre"></span></td>
-                            <td><span class="pv-lech-vivos"></span></td>
-                            <td><span class="pv-lech-muertos"></span></td>
-                            <td><span class="pv-compras"></span></td>
-                            <td><span class="pv-ventas"></span></td>
-                            <td><span class="pv-muertes"></span></td>
-                            <td><span class="pv-preiniciador"></span></td>
-                            <td><span class="pv-lev-ceba"></span></td>
-                            <td><span class="pv-reproductores"></span></td>
-                            <td><span class="pv-hem-reemplazo"></span></td>
-                            <td><span class="pv-hem-gestacion"></span></td>
-                            <td><span class="pv-destetes"></span></td>
-                            <td><span class="pv-hem-lactando"></span></td>
-                            <td><span class="pv-lech-lactando"></span></td>
-                            <td><span class="pv-descartes"></span></td>
-                            <td><span class="pv-total"></span></td>
-                        </tr>
-                        {% for i in rango_print|slice:":15" %}
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <table class="table table-bordered table-sm align-middle" style="table-layout:fixed;width:100%;font-size:10px; margin-top: -2px !important;">
-                    <colgroup>
-                        <col style="width:33%">
-                        <col style="width:34%">
-                        <col style="width:33%">
-                    </colgroup>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div>Realizado por:</div>
-                                <div class="d-flex align-items-center gap-2">
-                                    <img class="signature-img pv-sig-realizado" alt="Firma realizado">
-                                    <span class="pv-sig-realizado-nombre"></span>
-                                </div>
-                            </td>
-                            <td>
-                                <div>Documento revisado por:</div>
-                                <div class="d-flex align-items-center gap-2">
-                                    <img class="signature-img pv-sig-revisado" alt="Firma revisado">
-                                    <span class="pv-sig-revisado-nombre"></span>
-                                </div>
-                            </td>
-                            <td>
-                                <div>Aprobado por:</div>
-                                <div class="d-flex align-items-center gap-2">
-                                    <img class="signature-img pv-sig-aprobado" alt="Firma aprobado">
-                                    <span class="pv-sig-aprobado-nombre"></span>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-        </div>
+    <!-- Firma Footer para impresión individual -->
+    <div id="print-footer-signature" class="mt-4 d-none">
+        <!-- Will be populated by JS -->
+    </div>
 </div>
-{% endblock %}
 
-{% block extra_css %}
-<style>
-    /* Estilos Modernos - Unificados */
-    .card {
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        margin-bottom: 2rem;
-    }
-    
-    .card-header {
-        background: linear-gradient(135deg, #3498db, #2980b9);
-        color: white;
-        padding: 20px 25px;
-        border: none;
-    }
+<!-- Modal Registro -->
+<div class="modal fade" id="registroModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-content-glass">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">
+                    <i class="fas fa-edit me-2"></i>Nuevo Registro de Inventario
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha</label>
+                            <input type="date" name="fecha" class="form-control" required value="{% now 'Y-m-d' %}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Detalle</label>
+                            <input type="text" name="detalle" class="form-control" placeholder="Descripción del registro">
+                        </div>
+                        
+                        <div class="col-md-12">
+                            <label class="form-label">Firma del Realizado</label>
+                            <input type="file" name="firma_realizado" class="form-control" accept="image/*">
+                        </div>
 
-    .card-header h5, .card-header h6 {
-        font-weight: 600;
-        margin: 0;
-    }
-    
-    .table-hover tbody tr:hover {
-        background-color: rgba(52, 152, 219, 0.05);
-        transform: scale(1.001);
-        transition: all 0.2s ease;
-    }
-    
-    .btn-action {
-        width: 32px;
-        height: 32px;
-        padding: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        margin: 0 2px;
-        transition: all 0.2s;
-    }
+                        <div class="col-12 mt-4">
+                            <h6 class="modal-section-title">
+                                <i class="fas fa-cubes me-2"></i>Población y Etapas
+                            </h6>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Madre</label>
+                            <input type="number" name="madre" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Reproductores</label>
+                            <input type="number" name="reproductores" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Hembras Reemplazo</label>
+                            <input type="number" name="hembras_reemplazo" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Hembras Gestación</label>
+                            <input type="number" name="hembras_gestacion" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Hembras Lactando</label>
+                            <input type="number" name="hembras_lactando" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Lechones Lactando</label>
+                            <input type="number" name="lechones_lactando" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Preiniciador</label>
+                            <input type="number" name="preiniciador" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Levante/Ceba</label>
+                            <input type="number" name="levante_ceba" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Descartes</label>
+                            <input type="number" name="descartes" class="form-control" value="0" min="0">
+                        </div>
+                        
+                        <div class="col-12 mt-4">
+                            <h6 class="modal-section-title">
+                                <i class="fas fa-exchange-alt me-2"></i>Movimientos y Producción
+                            </h6>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Lechones Vivos</label>
+                            <input type="number" name="lechones_vivos" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Lechones Muertos</label>
+                            <input type="number" name="lechones_muertos" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Destetes</label>
+                            <input type="number" name="destetes" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Compras</label>
+                            <input type="number" name="compras" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Ventas</label>
+                            <input type="number" name="ventas" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Salidas</label>
+                            <input type="number" name="salidas" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small">Muertes</label>
+                            <input type="number" name="muertes" class="form-control" value="0" min="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-custom" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success" style="background-color: #2e7d32; border-color: #2e7d32;">
+                        <i class="fas fa-save me-2"></i>Guardar Registro
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-    .btn-action:hover {
-        transform: translateY(-2px);
-    }
-    
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .animate-fade-in {
-        animation: fadeInUp 0.5s ease-out;
-    }
-
-    .status-badge {
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-weight: 500;
-        font-size: 0.85rem;
-    }
-
-    /* Maintain print styles */
-    @media print {
-        @page { size: A4 landscape; margin: 8mm; }
-        .no-print { display: none !important; }
-        .print-layout { display:block !important; position: static; width: 100%; }
-        html, body { height:auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        .print-layout table { 
-            font-size:9px !important; 
-            border-collapse: collapse !important;
-            border: 2px solid black !important;
-        }
-        .print-layout table th, .print-layout table td {
-            border: 2px solid black !important;
-            padding: 3px !important;
-            text-align: center !important;
-            vertical-align: middle !important;
-        }
-        .print-layout .table-responsive {
-            overflow: visible !important;
-            display: block !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            border: none !important;
-        }
-        .print-layout .table-light th {
-            background-color: #f0f0f0 !important;
-            color: black !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-    }
-    .print-layout { display:none; }
-    .signature-img{ max-height:40px; width:auto; border:1px solid #ccc; }
-</style>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const form = document.getElementById('inventarioForm');
-  const out = document.getElementById('inventario_json');
+    {% if print_mode %}
+        window.onload = function() {
+            window.print();
+        }
+    {% endif %}
 
-  function recalcTotal() {
-    let sum = 0;
-    document.querySelectorAll('.ip-sum').forEach(inp => { sum += parseInt(inp.value || '0', 10); });
-    document.querySelector('.ip-total').value = sum;
-  }
+    function imprimirIndividual(id, firmaUrl) {
+        // 1. Hide all rows in print table except the one with data-id=id
+        const rows = document.querySelectorAll('.print-layout tbody tr');
+        rows.forEach(row => {
+            // Only affect rows that are data rows (have data-id)
+            if (row.dataset.id) {
+                if (row.dataset.id === id) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
 
-  function buildJSON() {
-    function get(cls) { return document.querySelector(cls).value.trim(); }
-    const obj = {
-      ano: get('.ip-ano'), mes: get('.ip-mes'), dia: get('.ip-dia'),
-      detalle: get('.ip-detalle'), madre: get('.ip-madre'),
-      lechones_vivos: get('.ip-lech-vivos'), lechones_muertos: get('.ip-lech-muertos'),
-      compras: get('.ip-compras'), ventas: get('.ip-ventas'), muertes: get('.ip-muertes'),
-      preiniciador: get('.ip-preiniciador'), levante_ceba: get('.ip-lev-ceba'),
-      reproductores: get('.ip-reproductores'), hembras_reemplazo: get('.ip-hem-reemplazo'),
-      hembras_gestacion: get('.ip-hem-gestacion'), destetes: get('.ip-destetes'),
-      hembras_lactando: get('.ip-hem-lactando'), lechones_lactando: get('.ip-lech-lactando'),
-      descartes: get('.ip-descartes'), total: get('.ip-total'),
-      sig_realizado_b64: get('.ip-sig-realizado-b64'), sig_revisado_b64: get('.ip-sig-revisado-b64'), sig_aprobado_b64: get('.ip-sig-aprobado-b64'),
-      sig_realizado_nombre: get('.ip-sig-realizado-nombre'), sig_revisado_nombre: get('.ip-sig-revisado-nombre'), sig_aprobado_nombre: get('.ip-sig-aprobado-nombre')
-    };
-    out.value = JSON.stringify(obj);
-  }
+        // 3. Print
+        window.print();
 
-  const borrador = JSON.parse('{{ borrador_json|default:"{}"|escapejs }}');
-  if (borrador && typeof borrador === 'object' && !Array.isArray(borrador)) {
-    function set(cls, val) { const el = document.querySelector(cls); if (el) el.value = val || ''; }
-    set('.ip-ano', borrador.ano);
-    set('.ip-mes', borrador.mes);
-    set('.ip-dia', borrador.dia);
-    set('.ip-detalle', borrador.detalle);
-    set('.ip-madre', borrador.madre);
-    set('.ip-lech-vivos', borrador.lechones_vivos);
-    set('.ip-lech-muertos', borrador.lechones_muertos);
-    set('.ip-compras', borrador.compras);
-    set('.ip-ventas', borrador.ventas);
-    set('.ip-muertes', borrador.muertes);
-    set('.ip-preiniciador', borrador.preiniciador);
-    set('.ip-lev-ceba', borrador.levante_ceba);
-    set('.ip-reproductores', borrador.reproductores);
-    set('.ip-hem-reemplazo', borrador.hembras_reemplazo);
-    set('.ip-hem-gestacion', borrador.hembras_gestacion);
-    set('.ip-destetes', borrador.destetes);
-    set('.ip-hem-lactando', borrador.hembras_lactando);
-    set('.ip-lech-lactando', borrador.lechones_lactando);
-    set('.ip-descartes', borrador.descartes);
-    set('.ip-total', borrador.total);
-    set('.ip-sig-realizado-nombre', borrador.sig_realizado_nombre);
-    set('.ip-sig-revisado-nombre', borrador.sig_revisado_nombre);
-    set('.ip-sig-aprobado-nombre', borrador.sig_aprobado_nombre);
-    set('.ip-sig-realizado-b64', borrador.sig_realizado_b64);
-    set('.ip-sig-revisado-b64', borrador.sig_revisado_b64);
-    set('.ip-sig-aprobado-b64', borrador.sig_aprobado_b64);
-  }
-
-  document.querySelectorAll('.ip-sum').forEach(el => el.addEventListener('input', recalcTotal));
-  recalcTotal();
-  function toBase64(file, cb){ const r=new FileReader(); r.onload=()=>cb(r.result); r.readAsDataURL(file); }
-  function bindSig(inpCls, hiddenCls){
-    const el=document.querySelector(inpCls);
-    const hid=document.querySelector(hiddenCls);
-    if(el && hid){
-      el.addEventListener('change', function(){ const f=el.files && el.files[0]; if(f){ toBase64(f, (b64)=>{ hid.value=b64; syncPrint(); }); } });
+        // 4. Restore rows after print
+        setTimeout(() => {
+            rows.forEach(row => {
+                row.style.display = '';
+            });
+        }, 1000);
     }
-  }
-  bindSig('.ip-sig-realizado', '.ip-sig-realizado-b64');
-  bindSig('.ip-sig-revisado', '.ip-sig-revisado-b64');
-  bindSig('.ip-sig-aprobado', '.ip-sig-aprobado-b64');
-  function syncPrint() {
-    function setText(cls, val) { const el = document.querySelector(cls); if (el) el.textContent = (val || '').toString(); }
-    function get(cls) { const el = document.querySelector(cls); return el ? el.value : ''; }
-    setText('.pv-ano', get('.ip-ano'));
-    setText('.pv-mes', get('.ip-mes'));
-    setText('.pv-dia', get('.ip-dia'));
-    setText('.pv-detalle', get('.ip-detalle'));
-    setText('.pv-madre', get('.ip-madre'));
-    setText('.pv-lech-vivos', get('.ip-lech-vivos'));
-    setText('.pv-lech-muertos', get('.ip-lech-muertos'));
-    setText('.pv-compras', get('.ip-compras'));
-    setText('.pv-ventas', get('.ip-ventas'));
-    setText('.pv-muertes', get('.ip-muertes'));
-    setText('.pv-preiniciador', get('.ip-preiniciador'));
-    setText('.pv-lev-ceba', get('.ip-lev-ceba'));
-    setText('.pv-reproductores', get('.ip-reproductores'));
-    setText('.pv-hem-reemplazo', get('.ip-hem-reemplazo'));
-    setText('.pv-hem-gestacion', get('.ip-hem-gestacion'));
-    setText('.pv-destetes', get('.ip-destetes'));
-    setText('.pv-hem-lactando', get('.ip-hem-lactando'));
-    setText('.pv-lech-lactando', get('.ip-lech-lactando'));
-    setText('.pv-descartes', get('.ip-descartes'));
-    setText('.pv-total', get('.ip-total'));
-    const s1 = document.querySelector('.pv-sig-realizado'); if (s1) s1.src = get('.ip-sig-realizado-b64') || '';
-    const s2 = document.querySelector('.pv-sig-revisado'); if (s2) s2.src = get('.ip-sig-revisado-b64') || '';
-    const s3 = document.querySelector('.pv-sig-aprobado'); if (s3) s3.src = get('.ip-sig-aprobado-b64') || '';
-    setText('.pv-sig-realizado-nombre', get('.ip-sig-realizado-nombre'));
-    setText('.pv-sig-revisado-nombre', get('.ip-sig-revisado-nombre'));
-    setText('.pv-sig-aprobado-nombre', get('.ip-sig-aprobado-nombre'));
-  }
-  document.querySelectorAll('input').forEach(el => el.addEventListener('input', syncPrint));
-  window.addEventListener('beforeprint', function() { recalcTotal(); syncPrint(); });
-  form.addEventListener('submit', function() { recalcTotal(); syncPrint(); buildJSON(); });
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('autoprint') === '1') {
-    recalcTotal();
-    syncPrint();
-    setTimeout(() => window.print(), 200);
-  }
-  const invData = JSON.parse('{{ inventarios_json|default:"[]"|escapejs }}');
-  const invBody = document.getElementById('invRows');
-  if (Array.isArray(invData) && invBody) {
-    if (invData.length > 0) {
-      invBody.innerHTML = '';
-      invData.forEach((it, idx) => {
-        const f = `${it.ano || ''}-${String(it.mes||'').padStart(2,'0')}-${String(it.dia||'').padStart(2,'0')}`;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="ps-4 fw-bold text-primary">${f}</td>
-          <td>${(it.detalle||'')}</td>
-          <td><span class="badge bg-success bg-opacity-10 text-success status-badge">${(it.total||'')}</span></td>
-          <td class="text-end pe-4">
-            <a class="btn btn-action btn-outline-primary" href="{% url 'porcinos:inventario_permanente' %}?load_index=${idx}" title="Ver">
-                <i class="fas fa-eye"></i>
-            </a>
-            <a class="btn btn-action btn-outline-secondary" href="{% url 'porcinos:inventario_permanente' %}?load_index=${idx}&autoprint=1" title="Imprimir">
-                <i class="fas fa-print"></i>
-            </a>
-          </td>`;
-        invBody.appendChild(tr);
-      });
+
+    function uploadFirma(input, id) {
+        if (input.files && input.files[0]) {
+            const formData = new FormData();
+            formData.append('id', id);
+            formData.append('firma_realizado', input.files[0]);
+
+            const row = input.closest('tr');
+            const container = row.querySelector('.signature-container');
+
+            if (!container) return;
+            
+            const originalContent = container.innerHTML;
+            container.innerHTML = '<div class="spinner-border spinner-border-sm text-success" role="status"></div>';
+
+            fetch('{% url "porcinos:inventario_permanente" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Update image in the main table
+                    container.innerHTML = `
+                        <a href="${data.url}" target="_blank" title="Ver firma completa">
+                            <img src="${data.url}" alt="Firma" class="img-thumbnail" style="height: 30px; width: auto; max-width: 80px; padding: 2px;">
+                        </a>
+                    `;
+                    
+                    // Update the print layout signature too
+                    const printSig = document.getElementById('print-signature-' + id);
+                    if(printSig) {
+                        printSig.innerHTML = `<img src="${data.url}" alt="Firma" style="max-height: 30px; max-width: 80px;">`;
+                    }
+                    
+                } else {
+                    alert('Error: ' + data.message);
+                    container.innerHTML = originalContent;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al subir la firma');
+                container.innerHTML = originalContent;
+            });
+        }
     }
-  }
-});
+
+    function updateRegistro(element, field) {
+        const row = element.closest('tr');
+        const id = row.dataset.id;
+        // Clean value (remove extra spaces, newlines)
+        let value = element.innerText.trim();
+        
+        // Handle empty numeric fields as 0
+        if (value === '' && field !== 'detalle') {
+            value = '0';
+            element.innerText = '0';
+        }
+
+        fetch('{% url "porcinos:inventario_permanente" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({
+                id: id,
+                field: field,
+                value: value
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Visual feedback
+                element.style.backgroundColor = 'rgba(212, 237, 218, 0.5)'; // Greenish
+                setTimeout(() => {
+                    element.style.backgroundColor = '';
+                }, 500);
+                
+                // Update total if provided
+                if (data.new_total !== undefined) {
+                    const totalCell = row.querySelector('.total-cell');
+                    if (totalCell) {
+                        totalCell.innerText = data.new_total;
+                        // Flash total cell too
+                        totalCell.style.backgroundColor = 'rgba(212, 237, 218, 0.5)';
+                        setTimeout(() => {
+                            totalCell.style.backgroundColor = ''; // Return to default CSS
+                        }, 500);
+                    }
+                }
+            } else {
+                alert('Error al actualizar: ' + data.message);
+                element.style.backgroundColor = 'rgba(248, 215, 218, 0.8)'; // Reddish
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error de conexión');
+            element.style.backgroundColor = 'rgba(248, 215, 218, 0.8)';
+        });
+    }
 </script>
 {% endblock %}

@@ -9,6 +9,9 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.dev')
 sys.path.append(os.getcwd())
 django.setup()
 
+from django.conf import settings
+settings.ALLOWED_HOSTS += ['testserver']
+
 from django.contrib.auth.models import User
 
 def test_login():

@@ -3,450 +3,681 @@
 
 {% block title %}Plan Sanitario Cerda Gestante{% endblock %}
 {% block page_title %}Plan Sanitario Cerda Gestante{% endblock %}
+{% block page_header %}{% endblock %}
 
+{% block extra_css %}
+{{ block.super }}
+<style>
+    /* Estilos copiados de Bitácora para consistencia */
+    .glass-wrap {
+        width: 100%;
+        max-width: 95%;
+        margin: 0 auto;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+    @media (min-width: 1600px){
+        .glass-wrap{ max-width: 95%; }
+    }
 
+    /* Modal Glassmorphism Styles */
+    .modal-content-glass {
+        background: rgba(20, 50, 20, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        border-radius: 15px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    }
+    
+    .modal-content-glass .modal-header {
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 15px 15px 0 0;
+        padding: 1.5rem 2rem;
+    }
+    
+    .modal-content-glass .modal-footer {
+        border-top: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 0 0 15px 15px;
+        padding: 1rem 2rem;
+    }
 
-{% block breadcrumb %}
-<nav aria-label="breadcrumb" class="mb-3">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'dashboard:principal' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'porcinos:dashboard' %}">Porcinos</a></li>
-        <li class="breadcrumb-item active">Plan Sanitario Cerda Gestante</li>
-    </ol>
-</nav>
+    .modal-content-glass .modal-body {
+        padding: 2rem;
+    }
+
+    .modal-content-glass .form-control, 
+    .modal-content-glass .form-select {
+        background: rgba(255,255,255,0.85);
+        border: 1px solid rgba(255,255,255,0.25);
+        color: #1b1b1b;
+    }
+    
+    .modal-content-glass .form-control:focus,
+    .modal-content-glass .form-select:focus {
+        background: white;
+        border-color: rgba(52, 199, 89, 0.9);
+        box-shadow: 0 0 0 0.2rem rgba(52, 199, 89, 0.25);
+    }
+    
+    .modal-content-glass .form-label {
+        color: #fff;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Table Styles within Glass Card */
+    /* Using .table-modern from base.html instead of local .table-custom */
+    .table-modern thead th {
+        border-top: none;
+        border-bottom: none !important; 
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+    
+    .table-modern tbody tr:hover {
+        transform: scale(1.005);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        z-index: 10;
+        position: relative;
+    }
+
+    /* Print Styles */
+    @media print {
+        @page { size: legal landscape; margin: 5mm; }
+        body * { visibility: hidden; }
+        .print-layout, .print-layout * { visibility: visible; }
+        .print-layout { position: absolute; left: 0; top: 0; width: 100%; display: block !important; background-color: white; padding: 10px; }
+        .no-print, .sidebar, .navbar, .card-footer, .btn, form, .card-header, .page-header, .breadcrumb, .modal, .glass-wrap h2, .unified-dashboard-card { display: none !important; }
+        .main-content { margin: 0 !important; padding: 0 !important; background-color: white !important; }
+        table { width: 100% !important; border-collapse: collapse !important; font-size: 10px !important; font-family: Arial, sans-serif !important; }
+        th, td { border: 1px solid black !important; padding: 2px !important; color: black !important; vertical-align: middle !important; }
+        th { background-color: white !important; font-weight: bold !important; text-align: center !important; }
+        .text-center { text-align: center !important; }
+        .text-start { text-align: left !important; }
+        .fw-bold { font-weight: bold !important; }
+        
+        /* Signature Styles for Print */
+        .signature-section { margin-top: 50px; page-break-inside: avoid; }
+        .signature-box { border-top: 1px solid black; padding-top: 5px; margin-top: 40px; }
+    }
+    .print-layout { display: none; }
+    
+    .signature-img {
+        max-height: 40px;
+        max-width: 100px;
+        display: block;
+    }
+</style>
 {% endblock %}
 
+
+{% block breadcrumb %}{% endblock %}
+
 {% block content %}
-<div class="animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+<div class="glass-wrap animate-fade-in">
+    <!-- Header Actions (Bitácora Style) -->
+    <div class="d-flex justify-content-center align-items-center mb-4 no-print px-3">
         <div>
-            <h4 class="mb-1 fw-bold text-dark">Plan Sanitario Cerda Gestante</h4>
-            <div class="text-muted small">
-                <i class="fas fa-file-alt me-1"></i>Doc: {{ codigo_documento|default:"-" }} | 
-                <i class="fas fa-code-branch me-1"></i>Ver: {{ version }}
-            </div>
-        </div>
-        <div class="d-flex gap-2">
-            <button class="btn btn-outline-secondary" onclick="window.print()">
-                <i class="fas fa-print me-2"></i>Imprimir
-            </button>
+            <h2 class="text-white fw-bold mb-0 text-center" style="font-size: 2.2rem; text-shadow: 0 4px 8px rgba(0,0,0,0.3);">
+                <i class="fas fa-notes-medical me-2"></i>Plan Sanitario Cerda Gestante
+            </h2>
         </div>
     </div>
 
-    <!-- Planes Guardados -->
-    <div class="card no-print">
+    <!-- Planes Guardados List (Glassmorphism) -->
+    <div class="unified-dashboard-card no-print">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h6 class="mb-0"><i class="fas fa-archive me-2"></i>Planes Guardados</h6>
+            <h5 class="section-title mb-0 text-white fw-bold">
+                <i class="fas fa-list me-2"></i>Registros de Plan Sanitario
+            </h5>
+            <!-- Optional Filters matching Bitácora look -->
+            <div class="d-flex gap-2 align-items-center">
+                <div class="input-group input-group-sm" style="width: 250px;">
+                    <span class="input-group-text bg-white border-0 text-success"><i class="fas fa-search"></i></span>
+                    <input type="text" class="form-control border-0" placeholder="Buscar por ID..." id="searchInput">
+                </div>
+                <button class="btn btn-sm btn-glass-green fw-bold" onclick="printAllPlans()">
+                    <i class="fas fa-print me-2"></i>Imprimir
+                </button>
+                <button type="button" class="btn btn-sm btn-glass-green fw-bold" onclick="newPlan()">
+                    <i class="fas fa-plus me-2"></i>Nuevo Plan
+                </button>
+            </div>
         </div>
         <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
+            <div class="table-responsive" style="border-radius: 0 0 15px 15px; overflow: hidden;">
+                <table class="table table-modern align-middle mb-0">
+                    <thead>
                         <tr>
                             <th class="ps-4">Identificación</th>
                             <th>Fecha de inseminación</th>
+                            <th>Observaciones</th>
                             <th class="text-end pe-4">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="rows">
-                        <tr class="text-muted"><td colspan="3" class="text-center py-4">Cargando...</td></tr>
+                        <tr><td colspan="4" class="text-center py-5 text-muted fw-bold">Cargando registros...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- Formulario Nuevo Plan -->
-    <div class="card no-print">
-        <div class="card-header">
-            <h6 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Nuevo Plan Sanitario</h6>
-        </div>
-        <div class="card-body p-4">
-            <form method="post" id="planForm" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="hidden" name="plan_json" id="plan_json">
-                <input type="hidden" class="ip-sig-realizado-b64">
-                <input type="hidden" class="ip-sig-revisado-b64">
-                <input type="hidden" class="ip-sig-aprobado-b64">
-                
-                <div class="row g-3">
-                    <div class="col-md-3"><label class="form-label small fw-bold text-muted">Identificación</label><input type="text" class="form-control ip-identificacion"></div>
-                    <div class="col-md-3"><label class="form-label small fw-bold text-muted">Fecha de inseminación</label><input type="date" class="form-control ip-fecha-ins"></div>
-                    <div class="col-md-3"><label class="form-label small text-muted">E. coli</label><input type="text" class="form-control ip-ecoli" placeholder="fecha/nota"></div>
-                    <div class="col-md-3"><label class="form-label small text-muted">Micoplasma + Circoflex</label><input type="text" class="form-control ip-micro" placeholder="fecha/nota"></div>
-                    
-                    <div class="col-md-3"><label class="form-label small text-muted">Vermífugo</label><input type="text" class="form-control ip-vermi" placeholder="fecha/nota"></div>
-                    <div class="col-md-3"><label class="form-label small text-muted">Parvo-Lepto</label><input type="text" class="form-control ip-parvo" placeholder="fecha/nota"></div>
-                    <div class="col-md-6"><label class="form-label small text-muted">Observaciones</label><input type="text" class="form-control ip-obs"></div>
+    <!-- Modal Nuevo Plan (Form moved here) -->
+    <div class="modal fade" id="planModal" tabindex="-1" aria-labelledby="planModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content modal-content-glass">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-white" id="planModalLabel">
+                        <i class="fas fa-plus-circle me-2"></i>Nuevo Plan Sanitario
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <div class="modal-body">
+                    <form method="post" id="planForm" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="plan_json" id="plan_json">
+                        <input type="hidden" class="ip-sig-realizado-b64">
+                        <input type="hidden" class="ip-sig-revisado-b64">
+                        <input type="hidden" class="ip-sig-aprobado-b64">
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-white">Identificación *</label>
+                                <input type="text" class="form-control form-control-glass ip-identificacion" required placeholder="ID de la cerda">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-white">Fecha de inseminación *</label>
+                                <input type="date" class="form-control form-control-glass ip-fecha-ins" required>
+                            </div>
 
-                <div class="row g-3 mt-4">
-                    <div class="col-12"><h6 class="text-primary border-bottom pb-2">Firmas Responsables</h6></div>
-                    <div class="col-md-4">
-                        <label class="form-label small">Realizado por</label>
-                        <input type="text" class="form-control ip-sig-realizado-nombre" placeholder="Nombre y cargo">
-                        <input type="file" accept="image/*" class="form-control mt-2 ip-sig-realizado text-muted small">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label small">Documento revisado por</label>
-                        <input type="text" class="form-control ip-sig-revisado-nombre" placeholder="Nombre y cargo">
-                        <input type="file" accept="image/*" class="form-control mt-2 ip-sig-revisado text-muted small">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label small">Aprobado por</label>
-                        <input type="text" class="form-control ip-sig-aprobado-nombre" placeholder="Nombre y cargo">
-                        <input type="file" accept="image/*" class="form-control mt-2 ip-sig-aprobado text-muted small">
-                    </div>
-                </div>
+                            <div class="col-12"><hr class="my-2 border-light"></div>
 
-                <div class="mt-4 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary px-5 shadow-sm">
-                        <i class="fas fa-save me-2"></i>Guardar
-                    </button>
+                            <!-- Tratamientos -->
+                            <div class="col-md-6">
+                                <label class="form-label text-white">E. coli</label>
+                                <input type="text" class="form-control form-control-glass ip-ecoli" placeholder="fecha/nota">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-white">Micoplasma + Circoflex</label>
+                                <input type="text" class="form-control form-control-glass ip-micro" placeholder="fecha/nota">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-white">Vermífugo</label>
+                                <input type="text" class="form-control form-control-glass ip-vermi" placeholder="fecha/nota">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-white">Parvo-Lepto</label>
+                                <input type="text" class="form-control form-control-glass ip-parvo" placeholder="fecha/nota">
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label text-white">Observaciones</label>
+                                <textarea class="form-control form-control-glass ip-obs" rows="2" placeholder="Observaciones generales"></textarea>
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <h6 class="fw-bold mb-3 text-white">Firmas Responsables</h6>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label class="form-label small text-white">Realizado por</label>
+                                <input type="text" class="form-control form-control-glass ip-sig-realizado-nombre" placeholder="Nombre y cargo">
+                                <input type="file" accept="image/*" class="form-control form-control-glass mt-2 ip-sig-realizado small">
+                                <img class="img-fluid mt-2 rounded modal-sig-preview pv-sig-realizado-preview" style="max-height: 50px; display: none;">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small text-white">Documento revisado por</label>
+                                <input type="text" class="form-control form-control-glass ip-sig-revisado-nombre" placeholder="Nombre y cargo">
+                                <input type="file" accept="image/*" class="form-control form-control-glass mt-2 ip-sig-revisado small">
+                                <img class="img-fluid mt-2 rounded modal-sig-preview pv-sig-revisado-preview" style="max-height: 50px; display: none;">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small text-white">Aprobado por</label>
+                                <input type="text" class="form-control form-control-glass ip-sig-aprobado-nombre" placeholder="Nombre y cargo">
+                                <input type="file" accept="image/*" class="form-control form-control-glass mt-2 ip-sig-aprobado small">
+                                <img class="img-fluid mt-2 rounded modal-sig-preview pv-sig-aprobado-preview" style="max-height: 50px; display: none;">
+                            </div>
+                        </div>
+
+                        <div class="mt-4 d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-glass-green fw-bold" onclick="printCurrentForm()">
+                                <i class="fas fa-print me-2"></i>Imprimir
+                            </button>
+                            <button type="submit" class="btn btn-glass-green px-5">
+                                <i class="fas fa-save me-2"></i>Guardar
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 
+    <!-- Print Layout (SENA Compliant) -->
     <div id="printLayout" class="print-layout">
-        <table class="table table-bordered mb-0" style="width: 100%; margin-bottom: 0 !important;">
+        <!-- Header -->
+        <table class="table table-bordered mb-0" style="width: 100%; border: 1px solid black;">
             <tbody>
-                <tr>
-                    <td style="width: 60%; text-align: left !important; vertical-align: middle !important; padding: 5px !important;">
-                        <div class="d-flex align-items-center gap-3">
-                            <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height:12mm; width:auto; object-fit:contain;">
-                            <div class="fw-bold" style="font-size: 12px; line-height: 1.2;">{{ centro|default:"Centro de los Recursos Naturales Renovables La Salada" }}</div>
-                        </div>
+                <tr style="height: 60px;">
+                    <td style="width: 20%; text-align: center; vertical-align: middle; border: 1px solid black;">
+                        <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height: 50px;">
                     </td>
-                    <td style="width: 40%; text-align: left !important; vertical-align: middle !important; padding: 5px !important;">
-                        <div class="fw-bold" style="font-size: 10px;">Código del documento: <span class="fw-normal">{{ codigo_documento|default:"" }}</span></div>
-                        <div class="mt-1 fw-bold" style="font-size: 10px;">Versión <span class="fw-normal">{{ version }}</span></div>
+                    <td style="width: 60%; text-align: center; vertical-align: middle; border: 1px solid black;">
+                        <div style="font-weight: bold; font-size: 14px;">Manual Calidad</div>
+                    </td>
+                    <td style="width: 20%; text-align: center; vertical-align: middle; border: 1px solid black;">
+                        <div style="font-size: 10px;">Código del<br>Documento</div>
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="2" class="text-center" style="text-align: center !important; vertical-align: middle !important; padding: 5px !important;">
-                        <div class="fw-bold" style="font-size: 10px;">{{ unidad_productiva }}</div>
-                        <div class="h6 mb-0 fw-bold" style="font-size: 12px;">PLAN SANITARIO CERDA GESTANTE</div>
+                <tr style="height: 30px;">
+                    <td style="text-align: center; vertical-align: middle; border: 1px solid black; font-weight: bold; font-size: 12px;">
+                        Centro de los Recursos Naturales Renovables La Salada
+                    </td>
+                    <td style="text-align: center; vertical-align: middle; border: 1px solid black;">
+                        <div style="font-size: 12px;">Unidad Productiva Porcícola</div>
+                    </td>
+                    <td style="text-align: center; vertical-align: middle; border: 1px solid black;">
+                        <div style="font-size: 12px;">Versión 1</div>
+                    </td>
+                </tr>
+                <tr style="height: 40px;">
+                    <td colspan="3" style="text-align: center; vertical-align: middle; border: 1px solid black;">
+                        <div style="font-weight: bold; font-size: 14px;">PLAN SANITARIO CERDA GESTANTE</div>
                     </td>
                 </tr>
             </tbody>
         </table>
-        
-        <table class="table table-bordered table-sm align-middle" style="table-layout:fixed;width:100%;font-size:11px; margin-top: -2px !important;">
-            <colgroup>
-                <col style="width:12%">
-                <col style="width:12%">
-                <col style="width:12%">
-                <col style="width:15%">
-                <col style="width:12%">
-                <col style="width:12%">
-                <col style="width:25%">
-            </colgroup>
-            <thead class="table-light">
+
+        <!-- Main Data Table -->
+        <table class="table table-bordered" style="width: 100%; border: 1px solid black; margin-top: -1px;">
+            <thead>
                 <tr>
-                    <th>IDENTIFICACIÓN</th>
-                    <th>FECHA DE INSEMINACIÓN</th>
-                    <th>E. COLI</th>
-                    <th>MICOPLASMA + CIRCOFLEX</th>
-                    <th>VERMÍFUGO</th>
-                    <th>PARVO-LEPTO</th>
-                    <th>OBSERVACIONES</th>
+                    <th style="width: 15%; border: 1px solid black; text-align: center; font-weight: bold;">IDENTIFICACIÓN</th>
+                    <th style="width: 15%; border: 1px solid black; text-align: center; font-weight: bold;">FECHA DE<br>INSEMINACIÓN</th>
+                    <th style="width: 10%; border: 1px solid black; text-align: center; font-weight: bold;">E. COLI</th>
+                    <th style="width: 15%; border: 1px solid black; text-align: center; font-weight: bold;">MICOPLASMA + CIRCOFLEX</th>
+                    <th style="width: 15%; border: 1px solid black; text-align: center; font-weight: bold;">VERMÍFUGO</th>
+                    <th style="width: 15%; border: 1px solid black; text-align: center; font-weight: bold;">PARVO-LEPTO</th>
+                    <th style="width: 15%; border: 1px solid black; text-align: center; font-weight: bold;">OBSERVACIONES</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td style="height: 20px;"><span class="pv-identificacion"></span></td>
-                    <td><span class="pv-fecha-ins"></span></td>
-                    <td><span class="pv-ecoli"></span></td>
-                    <td><span class="pv-micro"></span></td>
-                    <td><span class="pv-vermi"></span></td>
-                    <td><span class="pv-parvo"></span></td>
-                    <td><span class="pv-obs"></span></td>
-                </tr>
-                {% for i in rango_print|slice:":15" %}
-                <tr>
-                    <td style="height: 20px;">&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                {% endfor %}
+            <tbody id="printTableBody">
+                <!-- Rows will be populated by JS -->
             </tbody>
         </table>
-        
-        <table class="table table-bordered table-sm align-middle" style="table-layout:fixed;width:100%;font-size:10px; margin-top: -2px !important;">
-            <colgroup>
-                <col style="width:33%">
-                <col style="width:34%">
-                <col style="width:33%">
-            </colgroup>
-            <tbody>
-                <tr style="height: 40px;">
-                    <td style="vertical-align: top !important; padding: 5px !important;">
-                        <div style="font-size: 10px; font-weight: bold;">Realizado por:</div>
-                        <div class="d-flex align-items-center gap-2 mt-1">
-                             <img class="signature-img pv-sig-realizado" alt="">
-                             <span class="pv-sig-realizado-nombre"></span>
-                        </div>
-                    </td>
-                    <td style="vertical-align: top !important; padding: 5px !important;">
-                        <div style="font-size: 10px; font-weight: bold;">Documento revisado por:</div>
-                        <div class="d-flex align-items-center gap-2 mt-1">
-                             <img class="signature-img pv-sig-revisado" alt="">
-                             <span class="pv-sig-revisado-nombre"></span>
-                        </div>
-                    </td>
-                    <td style="vertical-align: top !important; padding: 5px !important;">
-                        <div style="font-size: 10px; font-weight: bold;">Aprobado por:</div>
-                        <div class="d-flex align-items-center gap-2 mt-1">
-                             <img class="signature-img pv-sig-aprobado" alt="">
-                             <span class="pv-sig-aprobado-nombre"></span>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
+
+        <!-- Signatures -->
+        <table class="table table-bordered" style="width: 100%; border: 1px solid black; margin-top: -1px;">
+            <tr>
+                <td style="width: 33%; border: 1px solid black; vertical-align: top; height: 60px; padding: 5px;">
+                    <div style="font-size: 10px;">
+                        <b>Realizado por:</b> <span class="pv-sig-realizado-nombre"></span>
+                    </div>
+                    <div class="d-flex justify-content-center mt-1">
+                        <img class="signature-img pv-sig-realizado" alt="" style="max-height: 40px; display: block;">
+                    </div>
+                </td>
+                <td style="width: 33%; border: 1px solid black; vertical-align: top; height: 60px; padding: 5px;">
+                    <div style="font-size: 10px;">
+                        <b>Documento revisado por:</b> <span class="pv-sig-revisado-nombre"></span>
+                    </div>
+                    <div class="d-flex justify-content-center mt-1">
+                        <img class="signature-img pv-sig-revisado" alt="" style="max-height: 40px; display: block;">
+                    </div>
+                </td>
+                <td style="width: 34%; border: 1px solid black; vertical-align: top; height: 60px; padding: 5px;">
+                    <div style="font-size: 10px;">
+                        <b>Aprobado por:</b> <span class="pv-sig-aprobado-nombre"></span>
+                    </div>
+                    <div class="d-flex justify-content-center mt-1">
+                        <img class="signature-img pv-sig-aprobado" alt="" style="max-height: 40px; display: block;">
+                    </div>
+                </td>
+            </tr>
         </table>
     </div>
 </div>
-<!-- Logout Modal -->
-<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow">
-      <div class="modal-header border-bottom-0">
-        <h5 class="modal-title fw-bold text-secondary" id="logoutModalLabel">Cerrar Sesión</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body text-center py-4">
-        <div class="mb-3 text-warning">
-            <i class="fas fa-exclamation-circle fa-3x"></i>
-        </div>
-        <h5 class="mb-3 fw-bold">¿Estás seguro?</h5>
-        <p class="text-muted mb-0">Deseas cerrar tu sesión actual.</p>
-      </div>
-      <div class="modal-footer border-top-0 justify-content-center pb-4">
-        <button type="button" class="btn btn-light px-4 border" data-bs-dismiss="modal">Cancelar</button>
-        <a href="{% url 'usuarios:logout' %}" class="btn btn-danger px-4 ms-2">Sí, Cerrar Sesión</a>
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
-
-{% block extra_css %}
-<style>
-    /* Estilos Modernos - Unificados */
-    .card {
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        margin-bottom: 2rem;
-    }
-    
-    .card-header {
-        background: linear-gradient(135deg, #3498db, #2980b9);
-        color: white;
-        padding: 20px 25px;
-        border: none;
-    }
-
-    .card-header h5, .card-header h6 {
-        font-weight: 600;
-        margin: 0;
-    }
-    
-    .table-hover tbody tr:hover {
-        background-color: rgba(52, 152, 219, 0.05);
-        transform: scale(1.001);
-        transition: all 0.2s ease;
-    }
-    
-    .btn-action {
-        width: 32px;
-        height: 32px;
-        padding: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        margin: 0 2px;
-        transition: all 0.2s;
-    }
-
-    .btn-action:hover {
-        transform: translateY(-2px);
-    }
-    
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .animate-fade-in {
-        animation: fadeInUp 0.5s ease-out;
-    }
-
-    .status-badge {
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-weight: 500;
-        font-size: 0.85rem;
-    }
-
-    /* Hide print layout on screen */
-    .print-layout { display: none !important; }
-
-    /* Maintain print styles */
-    @media print {
-        @page { size: A4 landscape; margin: 5mm; }
-        .no-print, .sidebar, .breadcrumb, .navbar { display: none !important; }
-        
-        .print-layout { display:block !important; position: static; width: 100%; }
-        html, body { height: auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        
-        .print-layout table { 
-            font-size: 8px !important; 
-            border-collapse: collapse !important;
-            border: 2px solid black !important;
-        }
-        
-        .print-layout table th, .print-layout table td {
-            border: 1px solid black !important;
-            padding: 2px !important;
-            text-align: center !important;
-            vertical-align: middle !important;
-        }
-        
-        /* Outer border thicker */
-        .print-layout > table {
-             border: 2px solid black !important;
-        }
-        
-        .print-layout .table-light th {
-            background-color: #f0f0f0 !important;
-            color: black !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-
-        .print-layout td[style*="text-align: left"] {
-            text-align: left !important;
-        }
-        .print-layout td[style*="vertical-align: top"] {
-            vertical-align: top !important;
-        }
-        
-        .print-layout .table-responsive {
-            overflow: visible !important;
-            display: block !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            border: none !important;
-        }
-    }
-    .signature-img{ max-height:40px; width:auto; border:1px solid #ccc; }
-</style>
 {% endblock %}
 
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const form = document.getElementById('planForm');
-  const out = document.getElementById('plan_json');
-  const borrador = JSON.parse('{{ borrador_json|default:"{}"|escapejs }}');
-  const planes = JSON.parse('{{ planes_json|default:"[]"|escapejs }}');
-  function set(cls, val){const el=document.querySelector(cls); if(el) el.value=val||''}
-  function get(cls){const el=document.querySelector(cls); return el?el.value:''}
-  function setText(cls,val){const el=document.querySelector(cls); if(el) el.textContent=(val||'').toString()}
-  if (borrador && typeof borrador==='object'){
-    set('.ip-identificacion', borrador.identificacion);
-    set('.ip-fecha-ins', borrador.fecha_inseminacion);
-    set('.ip-ecoli', borrador.e_coli);
-    set('.ip-micro', borrador.micoplasma_circoflex);
-    set('.ip-vermi', borrador.vermifugo);
-    set('.ip-parvo', borrador.parvo_lepto);
-    set('.ip-obs', borrador.observaciones);
-    set('.ip-sig-realizado-nombre', borrador.sig_realizado_nombre);
-    set('.ip-sig-revisado-nombre', borrador.sig_revisado_nombre);
-    set('.ip-sig-aprobado-nombre', borrador.sig_aprobado_nombre);
-    set('.ip-sig-realizado-b64', borrador.sig_realizado_b64);
-    set('.ip-sig-revisado-b64', borrador.sig_revisado_b64);
-    set('.ip-sig-aprobado-b64', borrador.sig_aprobado_b64);
-  }
-  function sync(){
-    setText('.pv-identificacion', get('.ip-identificacion'));
-    setText('.pv-fecha-ins', get('.ip-fecha-ins'));
-    setText('.pv-ecoli', get('.ip-ecoli'));
-    setText('.pv-micro', get('.ip-micro'));
-    setText('.pv-vermi', get('.ip-vermi'));
-    setText('.pv-parvo', get('.ip-parvo'));
-    setText('.pv-obs', get('.ip-obs'));
-    const s1=document.querySelector('.pv-sig-realizado'); if(s1) s1.src=get('.ip-sig-realizado-b64')||'';
-    const s2=document.querySelector('.pv-sig-revisado'); if(s2) s2.src=get('.ip-sig-revisado-b64')||'';
-    const s3=document.querySelector('.pv-sig-aprobado'); if(s3) s3.src=get('.ip-sig-aprobado-b64')||'';
-    setText('.pv-sig-realizado-nombre', get('.ip-sig-realizado-nombre'));
-    setText('.pv-sig-revisado-nombre', get('.ip-sig-revisado-nombre'));
-    setText('.pv-sig-aprobado-nombre', get('.ip-sig-aprobado-nombre'));
-  }
-  function buildJSON(){
-    const obj={
-      identificacion:get('.ip-identificacion'),
-      fecha_inseminacion:get('.ip-fecha-ins'),
-      e_coli:get('.ip-ecoli'),
-      micoplasma_circoflex:get('.ip-micro'),
-      vermifugo:get('.ip-vermi'),
-      parvo_lepto:get('.ip-parvo'),
-      observaciones:get('.ip-obs'),
-      sig_realizado_b64:get('.ip-sig-realizado-b64'),
-      sig_revisado_b64:get('.ip-sig-revisado-b64'),
-      sig_aprobado_b64:get('.ip-sig-aprobado-b64'),
-      sig_realizado_nombre:get('.ip-sig-realizado-nombre'),
-      sig_revisado_nombre:get('.ip-sig-revisado-nombre'),
-      sig_aprobado_nombre:get('.ip-sig-aprobado-nombre')
+    // Load from localStorage or initialize empty
+    let plans = [];
+    const stored = localStorage.getItem('porcinos_plan_sanitario');
+    if (stored) {
+        try {
+            plans = JSON.parse(stored);
+        } catch(e) {
+            console.error("Error parsing stored plans", e);
+        }
+    }
+
+    const tbody = document.getElementById('rows');
+    const planForm = document.getElementById('planForm');
+    
+    renderTable();
+
+    // File Inputs to Base64
+    ['realizado', 'revisado', 'aprobado'].forEach(type => {
+        const fileInput = document.querySelector(`.ip-sig-${type}`);
+        if(fileInput){
+            fileInput.addEventListener('change', function(e){
+                const file = e.target.files[0];
+                if(file){
+                    const reader = new FileReader();
+                    reader.onload = function(evt){
+                        const b64 = evt.target.result;
+                        document.querySelector(`.ip-sig-${type}-b64`).value = b64;
+                        // Update preview immediately
+                        const imgPreview = document.querySelector(`.pv-sig-${type}`);
+                        if(imgPreview) imgPreview.src = b64;
+                        
+                        // Update modal preview
+                        const modalPreview = document.querySelector(`.pv-sig-${type}-preview`);
+                        if(modalPreview) {
+                            modalPreview.src = b64;
+                            modalPreview.style.display = 'block';
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    });
+
+    // Auto sync inputs to print layout
+    const inputs = document.querySelectorAll('#planForm input, #planForm textarea');
+    inputs.forEach(input => {
+        input.addEventListener('input', sync);
+    });
+
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    if(searchInput){
+        searchInput.addEventListener('keyup', function(e) {
+            const term = e.target.value.toLowerCase();
+            const rows = tbody.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                if(row.innerText.toLowerCase().includes(term)){
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('rows');
+        tbody.innerHTML = '';
+        
+        if (plans.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center py-5 text-muted fw-bold">No hay registros guardados</td></tr>';
+            return;
+        }
+
+        plans.forEach((plan, i) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="ps-4 fw-bold">${plan.identificacion || '-'}</td>
+                <td>${plan.fecha_ins || '-'}</td>
+                <td>${plan.obs ? (plan.obs.substring(0,30) + '...') : '-'}</td>
+                <td class="text-end pe-4">
+                    <div class="d-flex justify-content-end gap-2">
+                        <button class="btn btn-sm btn-glass-green" onclick="printPlan(${i})" title="Imprimir Documento">
+                            <i class="fas fa-print"></i>
+                        </button>
+                        <button class="btn btn-sm btn-glass-green" onclick="loadPlan(${i})" title="Ver/Editar">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-glass-danger" onclick="deletePlan(${i})" title="Eliminar">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // Helper to safely set value
+    const safeSet = (sel, val) => {
+        const el = document.querySelector(sel);
+        if(el) el.value = val || '';
     };
-    out.value = JSON.stringify(obj);
-  }
-  document.querySelectorAll('input').forEach(el=>el.addEventListener('input', sync));
-  function toBase64(file, cb){ const r=new FileReader(); r.onload=()=>cb(r.result); r.readAsDataURL(file); }
-  function bindSig(inpCls, hiddenCls){ const el=document.querySelector(inpCls); const hid=document.querySelector(hiddenCls); if(el&&hid){ el.addEventListener('change', function(){ const f=el.files&&el.files[0]; if(f){ toBase64(f, (b64)=>{ hid.value=b64; sync(); }); } }); } }
-  bindSig('.ip-sig-realizado', '.ip-sig-realizado-b64');
-  bindSig('.ip-sig-revisado', '.ip-sig-revisado-b64');
-  bindSig('.ip-sig-aprobado', '.ip-sig-aprobado-b64');
-  window.addEventListener('beforeprint', function(){ sync(); });
-  form.addEventListener('submit', function(){ sync(); buildJSON(); });
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('autoprint')==='1'){ sync(); setTimeout(()=>window.print(),200); }
-  const tbody = document.getElementById('rows');
-  tbody.innerHTML = '';
-  if (Array.isArray(planes) && planes.length>0){
-    planes.forEach((p,idx)=>{
-      const tr=document.createElement('tr');
-      const f=(p.fecha_inseminacion||'');
-      tr.innerHTML = `
-        <td class="ps-4 fw-bold text-primary">${p.identificacion||''}</td>
-        <td>${f}</td>
-        <td class="text-end pe-4">
-          <a class="btn btn-action btn-outline-primary" href="{% url 'porcinos:plan_gestante' %}?load_index=${idx}" title="Ver">
-              <i class="fas fa-eye"></i>
-          </a>
-          <a class="btn btn-action btn-outline-secondary" href="{% url 'porcinos:plan_gestante' %}?load_index=${idx}&autoprint=1" title="Imprimir">
-              <i class="fas fa-print"></i>
-          </a>
-        </td>`;
-      tbody.appendChild(tr);
-    })
-  } else {
-    const tr=document.createElement('tr'); tr.innerHTML='<td colspan="3" class="text-muted">Sin registros</td>'; tbody.appendChild(tr);
-  }
+
+    function fillForm(p) {
+        safeSet('.ip-identificacion', p.identificacion);
+        safeSet('.ip-fecha-ins', p.fecha_ins);
+        safeSet('.ip-ecoli', p.ecoli);
+        safeSet('.ip-micro', p.micro);
+        safeSet('.ip-vermi', p.vermi);
+        safeSet('.ip-parvo', p.parvo);
+        safeSet('.ip-obs', p.obs);
+        safeSet('.ip-sig-realizado-nombre', p.sig_realizado_nombre);
+        safeSet('.ip-sig-revisado-nombre', p.sig_revisado_nombre);
+        safeSet('.ip-sig-aprobado-nombre', p.sig_aprobado_nombre);
+        safeSet('.ip-sig-realizado-b64', p.sig_realizado_b64);
+        safeSet('.ip-sig-revisado-b64', p.sig_revisado_b64);
+        safeSet('.ip-sig-aprobado-b64', p.sig_aprobado_b64);
+        
+        sync();
+    }
+
+    window.renderPrintTable = function(data) {
+        const tbody = document.getElementById('printTableBody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        
+        // Render data rows
+        data.forEach(p => {
+            const tr = document.createElement('tr');
+            tr.style.height = '25px';
+            tr.innerHTML = `
+                <td style="border: 1px solid black; text-align: center;">${p.identificacion || ''}</td>
+                <td style="border: 1px solid black; text-align: center;">${p.fecha_ins || ''}</td>
+                <td style="border: 1px solid black; text-align: center;">${p.ecoli || ''}</td>
+                <td style="border: 1px solid black; text-align: center;">${p.micro || ''}</td>
+                <td style="border: 1px solid black; text-align: center;">${p.vermi || ''}</td>
+                <td style="border: 1px solid black; text-align: center;">${p.parvo || ''}</td>
+                <td style="border: 1px solid black; text-align: center;">${p.obs || ''}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // Add filler rows to reach minimum 15 rows
+        const minRows = 15;
+        const remaining = minRows - data.length;
+        if (remaining > 0) {
+            for(let i=0; i<remaining; i++) {
+                const tr = document.createElement('tr');
+                tr.style.height = '25px';
+                tr.innerHTML = `
+                    <td style="border: 1px solid black;">&nbsp;</td>
+                    <td style="border: 1px solid black;">&nbsp;</td>
+                    <td style="border: 1px solid black;">&nbsp;</td>
+                    <td style="border: 1px solid black;">&nbsp;</td>
+                    <td style="border: 1px solid black;">&nbsp;</td>
+                    <td style="border: 1px solid black;">&nbsp;</td>
+                    <td style="border: 1px solid black;">&nbsp;</td>
+                `;
+                tbody.appendChild(tr);
+            }
+        }
+    };
+
+    window.printPlan = function(index) {
+        const p = plans[index];
+        if(!p) return;
+        renderPrintTable([p]); // Print only this plan
+        fillForm(p); // Populate signatures
+        setTimeout(() => {
+            window.print();
+        }, 500);
+    };
+
+    window.printAllPlans = function() {
+        renderPrintTable(plans); // Print all plans
+        // Clear signatures for global print
+        document.querySelectorAll('.pv-sig-realizado-nombre').forEach(e => e.innerText = '');
+        document.querySelectorAll('.pv-sig-revisado-nombre').forEach(e => e.innerText = '');
+        document.querySelectorAll('.pv-sig-aprobado-nombre').forEach(e => e.innerText = '');
+        document.querySelectorAll('.signature-img').forEach(e => e.src = '');
+        
+        setTimeout(() => {
+            window.print();
+        }, 500);
+    };
+
+    // Helper to open modal safely
+    function openModal() {
+        const modalEl = document.getElementById('planModal');
+        if (modalEl) {
+            const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+            modal.show();
+        }
+    }
+
+    window.newPlan = function() {
+        planForm.reset();
+        document.querySelectorAll('input[type="hidden"][class^="ip-sig-"]').forEach(i => i.value = '');
+        // Clear preview images
+        document.querySelectorAll('.signature-img').forEach(img => img.src = '');
+        document.querySelectorAll('.modal-sig-preview').forEach(img => { img.src = ''; img.style.display = 'none'; });
+        sync();
+        openModal();
+    };
+
+    window.loadPlan = function(idx) {
+        const p = plans[idx];
+        if(!p) return;
+        fillForm(p);
+        openModal();
+    };
+    
+    window.deletePlan = function(idx) {
+        if(confirm('¿Está seguro de eliminar este plan?')) {
+            plans.splice(idx, 1);
+            localStorage.setItem('porcinos_plan_sanitario', JSON.stringify(plans));
+            renderTable();
+        }
+    };
+
+    planForm.onsubmit = function(e) {
+        e.preventDefault();
+        
+        const getVal = (sel) => {
+            const el = document.querySelector(sel);
+            return el ? el.value : '';
+        };
+
+        const newPlan = {
+            identificacion: getVal('.ip-identificacion'),
+            fecha_ins: getVal('.ip-fecha-ins'),
+            ecoli: getVal('.ip-ecoli'),
+            micro: getVal('.ip-micro'),
+            vermi: getVal('.ip-vermi'),
+            parvo: getVal('.ip-parvo'),
+            obs: getVal('.ip-obs'),
+            sig_realizado_nombre: getVal('.ip-sig-realizado-nombre'),
+            sig_revisado_nombre: getVal('.ip-sig-revisado-nombre'),
+            sig_aprobado_nombre: getVal('.ip-sig-aprobado-nombre'),
+            sig_realizado_b64: getVal('.ip-sig-realizado-b64'),
+            sig_revisado_b64: getVal('.ip-sig-revisado-b64'),
+            sig_aprobado_b64: getVal('.ip-sig-aprobado-b64')
+        };
+
+        // Check if updating existing by ID and Date
+        const existingIdx = plans.findIndex(p => p.identificacion === newPlan.identificacion && p.fecha_ins === newPlan.fecha_ins);
+        if (existingIdx >= 0) {
+            if(confirm('Ya existe un plan para esta identificación y fecha. ¿Desea actualizarlo?')) {
+                plans[existingIdx] = newPlan;
+            } else {
+                return; // Cancel save
+            }
+        } else {
+            plans.push(newPlan);
+        }
+
+        localStorage.setItem('porcinos_plan_sanitario', JSON.stringify(plans));
+        renderTable();
+        alert('Plan guardado correctamente');
+        planForm.reset();
+        // Clear hidden b64 inputs
+        document.querySelectorAll('input[type="hidden"][class^="ip-sig-"]').forEach(i => i.value = '');
+        sync(); // Clear print view
+    };
+
+    window.printCurrentForm = function() {
+        const getVal = (sel) => {
+            const el = document.querySelector(sel);
+            return el ? el.value : '';
+        };
+
+        const currentPlan = {
+            identificacion: getVal('.ip-identificacion'),
+            fecha_ins: getVal('.ip-fecha-ins'),
+            ecoli: getVal('.ip-ecoli'),
+            micro: getVal('.ip-micro'),
+            vermi: getVal('.ip-vermi'),
+            parvo: getVal('.ip-parvo'),
+            obs: getVal('.ip-obs')
+        };
+
+        renderPrintTable([currentPlan]);
+        // Signatures are handled by sync() which runs on input change
+        setTimeout(() => {
+            window.print();
+        }, 500);
+    };
+
+    function sync(){
+        const getVal = (sel) => {
+            const el = document.querySelector(sel);
+            return el ? el.value : '';
+        };
+        
+        const setText = (sel, val) => {
+            const el = document.querySelector(sel);
+            if (el) el.innerText = val || '';
+        };
+
+        // Table fields are now handled by renderPrintTable() on demand
+        
+        const updateImg = (imgSel, inputSel) => {
+            const img = document.querySelector(imgSel);
+            const val = getVal(inputSel);
+            if(img) img.src = val || '';
+        };
+
+        updateImg('.pv-sig-realizado', '.ip-sig-realizado-b64');
+        updateImg('.pv-sig-revisado', '.ip-sig-revisado-b64');
+        updateImg('.pv-sig-aprobado', '.ip-sig-aprobado-b64');
+        
+        // Update modal previews
+        const updatePreview = (previewSel, inputSel) => {
+            const img = document.querySelector(previewSel);
+            const val = getVal(inputSel);
+            if(img) {
+                img.src = val || '';
+                img.style.display = val ? 'block' : 'none';
+            }
+        };
+        updatePreview('.pv-sig-realizado-preview', '.ip-sig-realizado-b64');
+        updatePreview('.pv-sig-revisado-preview', '.ip-sig-revisado-b64');
+        updatePreview('.pv-sig-aprobado-preview', '.ip-sig-aprobado-b64');
+        
+        setText('.pv-sig-realizado-nombre', getVal('.ip-sig-realizado-nombre'));
+        setText('.pv-sig-revisado-nombre', getVal('.ip-sig-revisado-nombre'));
+        setText('.pv-sig-aprobado-nombre', getVal('.ip-sig-aprobado-nombre'));
+    }
 });
 </script>
 {% endblock %}

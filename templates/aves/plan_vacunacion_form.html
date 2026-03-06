@@ -3,126 +3,230 @@
 
 {% block title %}Nuevo Plan de Vacunación - AgroSmart{% endblock %}
 
-{% block page_title %}Nuevo Plan de Vacunación{% endblock %}
+{% block breadcrumb %}{% endblock %}
 
-{% block breadcrumb_items %}
-    <li class="breadcrumb-item"><a href="{% url 'aves:plan_vacunacion_list' %}">Vacunación</a></li>
-    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'veterinario' %}
-    <li class="breadcrumb-item active">Nuevo Plan</li>
-    {% endif %}
-{% endblock %}
+{% block page_header %}{% endblock %}
 
-{% block page_actions %}
-    <a href="{% url 'aves:plan_vacunacion_list' %}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left me-2"></i>Volver
-    </a>
+{% block extra_css %}
+{{ block.super }}
+<style>
+    /* Estilos copiados de dashboard-section para consistencia */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden; /* Importante para el header */
+        padding: 0; /* Reset padding para que el header ocupe todo el ancho */
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1); /* Fondo oscuro para el header */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 2rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    /* Envoltura para ampliar el ancho útil del contenedor */
+    .glass-wrap{
+        width: 100%;
+        max-width: 95%; /* Ampliado para layout de 2 columnas */
+        margin: 0 auto;
+    }
+    @media (min-width: 1600px){
+        .glass-wrap{ max-width: 95%; }
+    }
+
+    .unified-dashboard-card .form-label{
+        color: #fff;
+    }
+    .unified-dashboard-card .form-text{
+        color: rgba(255,255,255,0.8);
+    }
+    .unified-dashboard-card .table thead th {
+        background-color: #2e7d32 !important;
+        color: white !important;
+        border: none;
+    }
+    .unified-dashboard-card .form-control{
+        background: rgba(255,255,255,0.85);
+        border: 1px solid rgba(255,255,255,0.25);
+        color: #1b1b1b;
+    }
+    .unified-dashboard-card .form-control:focus{
+        border-color: rgba(52, 199, 89, 0.9);
+        box-shadow: 0 0 0 0.2rem rgba(52, 199, 89, 0.25);
+    }
+    .unified-dashboard-card .is-invalid{
+        border-color: rgba(220,53,69,0.9);
+        box-shadow: 0 0 0 0.2rem rgba(220,53,69,0.15);
+    }
+    .unified-dashboard-card hr{
+        border-color: rgba(255,255,255,0.2);
+    }
+    .form-section-title{
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        color: #fff;
+        font-weight: 600;
+        margin-bottom: 12px;
+        border-left: 4px solid #34c759;
+        padding-left: 8px;
+    }
+    .alert-info-glass {
+        background: rgba(13, 202, 240, 0.15);
+        border: 1px solid rgba(13, 202, 240, 0.3);
+        color: white;
+        border-radius: 10px;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'veterinario' %}
-                <h5 class="mb-0"><i class="fas fa-syringe me-2"></i>Crear Plan de Vacunación</h5>
-                {% endif %}
-            </div>
-            <div class="card-body">
-                <form method="post">
-                    {% csrf_token %}
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="{{ form.lote.id_for_label }}" class="form-label">Lote *</label>
-                                {{ form.lote|add_class:"form-select" }}
-                                {% if form.lote.errors %}
-                                    <div class="text-danger small">{{ form.lote.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="{{ form.tipo_vacuna.id_for_label }}" class="form-label">Tipo de Vacuna *</label>
-                                {{ form.tipo_vacuna|add_class:"form-select" }}
-                                {% if form.tipo_vacuna.errors %}
-                                    <div class="text-danger small">{{ form.tipo_vacuna.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="{{ form.fecha_programada.id_for_label }}" class="form-label">Fecha Programada *</label>
-                                {{ form.fecha_programada|add_class:"form-control" }}
-                                {% if form.fecha_programada.errors %}
-                                    <div class="text-danger small">{{ form.fecha_programada.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="dosis_por_ave" class="form-label">Dosis por Ave (ml)</label>
-                                <input type="text" id="dosis_por_ave" class="form-control" readonly placeholder="Seleccione una vacuna">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Información adicional de la vacuna -->
-                    <div id="info_vacuna" class="alert alert-info" style="display: none;">
-                        <h6><i class="fas fa-info-circle me-2"></i>Información de la Vacuna</h6>
-                        <div class="row">
+<div class="glass-wrap">
+    <div class="row justify-content-center">
+        <div class="col-12 col-xl-10">
+            <div class="unified-dashboard-card">
+                <div class="card-header">
+                    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'veterinario' %}
+                    <h5 class="section-title">
+                        <i class="fas fa-syringe"></i>
+                        Crear Plan de Vacunación
+                    </h5>
+                    {% endif %}
+                    <a href="{% url 'aves:plan_vacunacion_list' %}" class="btn btn-sm btn-light-custom">
+                        <i class="fas fa-arrow-left me-2"></i>Volver
+                    </a>
+                </div>
+                
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- Información General -->
+                        <h6 class="form-section-title">
+                            <i class="fas fa-info-circle"></i> Información General
+                        </h6>
+                        <div class="row mb-4">
                             <div class="col-md-6">
-                                <small><strong>Laboratorio:</strong> <span id="laboratorio_vacuna">-</span></small><br>
-                                <small><strong>Vía de aplicación:</strong> <span id="via_aplicacion">-</span></small>
+                                <div class="mb-3">
+                                    <label for="{{ form.lote.id_for_label }}" class="form-label">Lote *</label>
+                                    {{ form.lote|add_class:"form-select" }}
+                                    {% if form.lote.errors %}
+                                        <div class="text-danger small">{{ form.lote.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <small><strong>Previene:</strong> <span id="enfermedad_previene">-</span></small><br>
-                                <small><strong>Intervalo entre dosis:</strong> <span id="intervalo_dias">-</span> días</small>
+                                <div class="mb-3">
+                                    <label for="{{ form.tipo_vacuna.id_for_label }}" class="form-label">Tipo de Vacuna *</label>
+                                    {{ form.tipo_vacuna|add_class:"form-select" }}
+                                    {% if form.tipo_vacuna.errors %}
+                                        <div class="text-danger small">{{ form.tipo_vacuna.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="{{ form.lote_vacuna.id_for_label }}" class="form-label">Lote de Vacuna</label>
-                                {{ form.lote_vacuna|add_class:"form-control" }}
-                                {% if form.lote_vacuna.errors %}
-                                    <div class="text-danger small">{{ form.lote_vacuna.errors.0 }}</div>
-                                {% endif %}
+                        
+                        <!-- Detalles de Programación -->
+                        <h6 class="form-section-title">
+                            <i class="fas fa-calendar-alt"></i> Detalles de Programación
+                        </h6>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.fecha_programada.id_for_label }}" class="form-label">Fecha Programada *</label>
+                                    {{ form.fecha_programada|add_class:"form-control" }}
+                                    {% if form.fecha_programada.errors %}
+                                        <div class="text-danger small">{{ form.fecha_programada.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="dosis_por_ave" class="form-label">Dosis por Ave (ml)</label>
+                                    <input type="text" id="dosis_por_ave" class="form-control" readonly placeholder="Seleccione una vacuna">
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="{{ form.numero_aves_vacunadas.id_for_label }}" class="form-label">Número de Aves a Vacunar</label>
-                                {{ form.numero_aves_vacunadas|add_class:"form-control" }}
-                                {% if form.numero_aves_vacunadas.errors %}
-                                    <div class="text-danger small">{{ form.numero_aves_vacunadas.errors.0 }}</div>
-                                {% endif %}
+                        
+                        <!-- Información adicional de la vacuna -->
+                        <div id="info_vacuna" class="alert alert-info-glass p-3 mb-4" style="display: none;">
+                            <h6 class="text-white"><i class="fas fa-info-circle me-2"></i>Información de la Vacuna</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <small class="text-white"><strong>Laboratorio:</strong> <span id="laboratorio_vacuna">-</span></small><br>
+                                    <small class="text-white"><strong>Vía de aplicación:</strong> <span id="via_aplicacion">-</span></small>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="text-white"><strong>Previene:</strong> <span id="enfermedad_previene">-</span></small><br>
+                                    <small class="text-white"><strong>Intervalo entre dosis:</strong> <span id="intervalo_dias">-</span> días</small>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
-                        {{ form.observaciones|add_class:"form-control" }}
-                        {% if form.observaciones.errors %}
-                            <div class="text-danger small">{{ form.observaciones.errors.0 }}</div>
-                        {% endif %}
-                    </div>
-                    
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a href="{% url 'aves:plan_vacunacion_list' %}" class="btn btn-secondary me-md-2">
-                            <i class="fas fa-times me-2"></i>Cancelar
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-2"></i>Guardar Plan
-                        </button>
-                    </div>
-                </form>
+                        
+                        <!-- Detalles de Aplicación -->
+                        <h6 class="form-section-title">
+                            <i class="fas fa-check-circle"></i> Detalles de Aplicación
+                        </h6>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.lote_vacuna.id_for_label }}" class="form-label">Lote de Vacuna</label>
+                                    {{ form.lote_vacuna|add_class:"form-control" }}
+                                    {% if form.lote_vacuna.errors %}
+                                        <div class="text-danger small">{{ form.lote_vacuna.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.numero_aves_vacunadas.id_for_label }}" class="form-label">Número de Aves a Vacunar</label>
+                                    {{ form.numero_aves_vacunadas|add_class:"form-control" }}
+                                    {% if form.numero_aves_vacunadas.errors %}
+                                        <div class="text-danger small">{{ form.numero_aves_vacunadas.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
+                            {{ form.observaciones|add_class:"form-control" }}
+                            {% if form.observaciones.errors %}
+                                <div class="text-danger small">{{ form.observaciones.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'aves:plan_vacunacion_list' %}" class="btn btn-light-custom me-md-2">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-2"></i>Guardar Plan
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -139,8 +243,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const enfermedadPrevieneSpan = document.getElementById('enfermedad_previene');
     const intervaloDiasSpan = document.getElementById('intervalo_dias');
     
-    tipoVacunaSelect.addEventListener('change', function() {
-        const vacunaId = this.value;
+    // Función para actualizar la información
+    function updateVacunaInfo() {
+        const vacunaId = tipoVacunaSelect.value;
         
         if (vacunaId && vacunasData[vacunaId]) {
             const vacuna = vacunasData[vacunaId];
@@ -162,7 +267,15 @@ document.addEventListener('DOMContentLoaded', function() {
             dosisInput.placeholder = 'Seleccione una vacuna';
             infoVacuna.style.display = 'none';
         }
-    });
+    }
+
+    // Event listener para cambio
+    tipoVacunaSelect.addEventListener('change', updateVacunaInfo);
+    
+    // Verificar estado inicial (por si hay error de validación y se recarga la página)
+    if (tipoVacunaSelect.value) {
+        updateVacunaInfo();
+    }
 });
 </script>
 {% endblock %}

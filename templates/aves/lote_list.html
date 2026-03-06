@@ -3,163 +3,339 @@
 
 {% block title %}Lotes de Aves - AgroSmart{% endblock %}
 
-{% block page_title %}Gestión de Lotes{% endblock %}
+{% block page_title %}{% endblock %}
+{% block breadcrumb_items %}{% endblock %}
+{% block page_actions %}{% endblock %}
 
-{% block breadcrumb_items %}
-    <li class="breadcrumb-item active">Lotes</li>
-{% endblock %}
+{% block extra_css %}
+<style>
+    /* Estilos unificados Glassmorphism */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-{% block page_actions %}
-    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
-    <a href="{% url 'aves:lote_create' %}" class="btn btn-primary">
-        <i class="fas fa-plus me-2"></i>Nuevo Lote
-    </a>
-    {% endif %}
+    .unified-dashboard-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    /* Form Styles in Glass */
+    .form-label {
+        color: rgba(255,255,255,0.9);
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control, .form-select {
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        backdrop-filter: blur(5px);
+    }
+
+    .form-control:focus, .form-select:focus {
+        background: rgba(255,255,255,0.2);
+        border-color: rgba(255,255,255,0.5);
+        color: white;
+        box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.1);
+    }
+
+    .form-control::placeholder {
+        color: rgba(255,255,255,0.5);
+    }
+
+    option {
+        background: #2e7d32;
+        color: white;
+    }
+
+    /* Table Styles */
+    .table-custom {
+        width: 100%;
+        margin-bottom: 0;
+        color: white;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .table-custom thead th {
+        background-color: rgba(0,0,0,0.2);
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 1rem;
+        border-bottom: 2px solid rgba(255,255,255,0.1);
+    }
+
+    .table-custom tbody tr {
+        background: rgba(255,255,255,0.05);
+        transition: all 0.2s;
+    }
+
+    .table-custom tbody tr:hover {
+        background: rgba(255,255,255,0.15);
+    }
+
+    .table-custom td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        color: rgba(255,255,255,0.9);
+    }
+
+    .table-custom td strong {
+        color: white;
+        font-weight: 600;
+    }
+
+    /* Pagination */
+    .pagination {
+        margin-bottom: 0;
+    }
+
+    .pagination .page-link {
+        background: rgba(255,255,255,0.1);
+        border-color: rgba(255,255,255,0.2);
+        color: white;
+    }
+
+    .pagination .page-item.active .page-link {
+        background: #2e7d32;
+        border-color: #2e7d32;
+        color: white;
+    }
+
+    .pagination .page-link:hover {
+        background: rgba(255,255,255,0.2);
+        color: white;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        background: rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.5);
+    }
+
+    /* Buttons */
+    .btn-light-custom {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.5);
+        color: #2e7d32;
+        font-weight: 600;
+    }
+    .btn-light-custom:hover {
+        background: #fff;
+        color: #1b5e20;
+    }
+
+    .btn-outline-light-custom {
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.5);
+        color: white;
+    }
+    .btn-outline-light-custom:hover {
+        background: rgba(255,255,255,0.2);
+        color: white;
+    }
+
+    /* Badges */
+    .badge {
+        font-weight: 500;
+        padding: 0.5em 0.8em;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <!-- Filtros -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <form method="get" class="row g-3">
-                    <div class="col-md-3">
-                        <label class="form-label">Estado</label>
-                        <select name="estado" class="form-control">
-                            <option value="">Todos los estados</option>
-                            {% for value, label in estados %}
-                                <option value="{{ value }}" {% if filtros.estado == value %}selected{% endif %}>
-                                    {{ label }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Galpón</label>
-                        <input type="text" name="galpon" class="form-control" 
-                               value="{{ filtros.galpon|default:'' }}" placeholder="Buscar por galpón">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Línea Genética</label>
-                        <select name="linea_genetica" class="form-control">
-                            <option value="">Todas las líneas</option>
-                            {% for value, label in lineas_geneticas %}
-                                <option value="{{ value }}" {% if filtros.linea_genetica == value %}selected{% endif %}>
-                                    {{ label }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-md-3 d-flex align-items-end">
-                        <button type="submit" class="btn btn-outline-primary me-2">
-                            <i class="fas fa-search"></i> Filtrar
-                        </button>
-                        <a href="{% url 'aves:lote_list' %}" class="btn btn-outline-secondary">
-                            <i class="fas fa-times"></i> Limpiar
-                        </a>
-                    </div>
-                </form>
-            </div>
+<div class="container-fluid">
+    <!-- Header Personalizado -->
+    <div class="text-center mb-4">
+        <h2 class="text-white fw-bold" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5); font-size: 2.5rem;">
+            Gestión de Lotes
+        </h2>
+    </div>
+
+    <!-- Filtros -->
+    <div class="unified-dashboard-card">
+        <div class="card-header">
+            <h5 class="section-title">
+                <i class="fas fa-search"></i>
+                Búsqueda de Galpones
+            </h5>
         </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Estado</label>
+                    <select name="estado" class="form-select">
+                        <option value="">Todos los estados</option>
+                        {% for value, label in estados %}
+                            <option value="{{ value }}" {% if filtros.estado == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Búsqueda de Galpón</label>
+                    <input type="text" name="galpon" class="form-control" 
+                           value="{{ filtros.galpon|default:'' }}" placeholder="Buscar por galpón">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Línea Genética</label>
+                    <select name="linea_genetica" class="form-select">
+                        <option value="">Todas las líneas</option>
+                        {% for value, label in lineas_geneticas %}
+                            <option value="{{ value }}" {% if filtros.linea_genetica == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-light-custom me-2 w-100">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                    <a href="{% url 'aves:lote_list' %}" class="btn btn-outline-light-custom w-100">
+                        <i class="fas fa-times"></i> Limpiar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
 
-        <!-- Lista de lotes -->
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="fas fa-layer-group me-2"></i>
-                    Lotes de Aves ({{ lotes.paginator.count }} total)
-                </h5>
-            </div>
-            <div class="card-body">
-                {% if lotes %}
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover">
-                            <thead class="table-dark">
+    <!-- Lista de Lotes -->
+    <div class="unified-dashboard-card">
+        <div class="card-header">
+            <h5 class="section-title">
+                <i class="fas fa-layer-group"></i>
+                Lotes Registrados ({{ lotes.paginator.count }})
+            </h5>
+            {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
+            <a href="{% url 'aves:lote_create' %}" class="btn btn-light-custom btn-sm">
+                <i class="fas fa-plus me-2"></i>Nuevo Lote
+            </a>
+            {% endif %}
+        </div>
+        <div class="card-body p-0">
+            {% if lotes %}
+                <div class="table-responsive">
+                    <table class="table table-custom mb-0">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Galpón</th>
+                                <th>Línea Genética</th>
+                                <th>Estado</th>
+                                <th>Aves Actuales</th>
+                                <th>Fecha Llegada</th>
+                                <th>Edad (días)</th>
+                                <th>Mortalidad %</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for lote in lotes %}
                                 <tr>
-                                    <th>Código</th>
-                                    <th>Galpón</th>
-                                    <th>Línea Genética</th>
-                                    <th>Estado</th>
-                                    <th>Aves Actuales</th>
-                                    <th>Fecha Llegada</th>
-                                    <th>Edad (días)</th>
-                                    <th>Mortalidad %</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for lote in lotes %}
-                                    <tr>
-                                        <td>
-                                            <strong>{{ lote.codigo }}</strong>
-                                        </td>
-                                        <td>{{ lote.galpon }}</td>
-                                        <td>{{ lote.get_linea_genetica_display }}</td>
-                                        <td>
-                                            {% if lote.estado == 'levante' %}
-                                                <span class="badge bg-info">{{ lote.get_estado_display }}</span>
-                                            {% elif lote.estado == 'postura' %}
-                                                <span class="badge bg-success">{{ lote.get_estado_display }}</span>
-                                            {% else %}
-                                                <span class="badge bg-secondary">{{ lote.get_estado_display }}</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            <strong>{{ lote.numero_aves_actual|floatformat:0 }}</strong>
-                                            <small class="text-muted">(inicial: {{ lote.numero_aves_inicial }})</small>
-                                        </td>
-                                        <td>{{ lote.fecha_llegada|date:"d/m/Y" }}</td>
-                                        <td>{{ lote.edad_dias }}</td>
-                                        <td>
-                                            {% if lote.porcentaje_mortalidad > 5 %}
-                                                <span class="text-danger fw-bold">{{ lote.porcentaje_mortalidad }}%</span>
-                                            {% elif lote.porcentaje_mortalidad > 2 %}
-                                                <span class="text-warning fw-bold">{{ lote.porcentaje_mortalidad }}%</span>
-                                            {% else %}
-                                                <span class="text-success">{{ lote.porcentaje_mortalidad }}%</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            <div class="btn-group btn-group-sm">
-                                                <a href="{% url 'aves:lote_detail' lote.pk %}" 
-                                                   class="btn btn-outline-primary" title="Ver detalles">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
-                                                    {% if perms.aves.change_loteaves %}
-                                                        <a href="{% url 'aves:lote_edit' lote.pk %}" 
-                                                        class="btn btn-outline-warning" title="Editar">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a>
-                                                    {% endif %}
-                                                    {% if perms.aves.delete_loteaves %}
-                                                        <button type="button" 
-                                                                class="btn btn-outline-danger" 
-                                                                title="Eliminar"
-                                                                onclick="confirmarEliminacion('{{ lote.pk }}', '{{ lote.codigo }}')">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    {% endif %}
+                                    <td>
+                                        <strong>{{ lote.codigo }}</strong>
+                                    </td>
+                                    <td>{{ lote.galpon }}</td>
+                                    <td>{{ lote.get_linea_genetica_display }}</td>
+                                    <td>
+                                        {% if lote.estado == 'levante' %}
+                                            <span class="badge bg-info bg-opacity-75">{{ lote.get_estado_display }}</span>
+                                        {% elif lote.estado == 'postura' %}
+                                            <span class="badge bg-success bg-opacity-75">{{ lote.get_estado_display }}</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary bg-opacity-75">{{ lote.get_estado_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <strong>{{ lote.numero_aves_actual|floatformat:0 }}</strong>
+                                        <small class="d-block text-white-50" style="font-size: 0.75rem;">(inicial: {{ lote.numero_aves_inicial }})</small>
+                                    </td>
+                                    <td>{{ lote.fecha_llegada|date:"d/m/Y" }}</td>
+                                    <td>{{ lote.edad_dias }}</td>
+                                    <td>
+                                        {% if lote.porcentaje_mortalidad > 5 %}
+                                            <span class="text-danger fw-bold bg-white px-2 py-1 rounded">{{ lote.porcentaje_mortalidad }}%</span>
+                                        {% elif lote.porcentaje_mortalidad > 2 %}
+                                            <span class="text-warning fw-bold bg-dark px-2 py-1 rounded">{{ lote.porcentaje_mortalidad }}%</span>
+                                        {% else %}
+                                            <span class="text-success fw-bold bg-white px-2 py-1 rounded">{{ lote.porcentaje_mortalidad }}%</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'aves:lote_detail' lote.pk %}" 
+                                               class="btn btn-light-custom" title="Ver detalles">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
+                                                {% if perms.aves.change_loteaves %}
+                                                    <a href="{% url 'aves:lote_edit' lote.pk %}" 
+                                                    class="btn btn-outline-light-custom" title="Editar">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                 {% endif %}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                                                {% if perms.aves.delete_loteaves %}
+                                                    <button type="button" 
+                                                            class="btn btn-danger bg-opacity-75 border-0" 
+                                                            title="Eliminar"
+                                                            onclick="confirmarEliminacion('{{ lote.pk }}', '{{ lote.codigo }}')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
-                    <!-- Paginación -->
-                    {% if lotes.has_other_pages %}
+                <!-- Paginación Glass -->
+                {% if lotes.has_other_pages %}
+                    <div class="d-flex justify-content-center py-4">
                         <nav aria-label="Paginación de lotes">
-                            <ul class="pagination justify-content-center">
+                            <ul class="pagination">
                                 {% if lotes.has_previous %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?page=1{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.galpon %}&galpon={{ request.GET.galpon }}{% endif %}{% if request.GET.linea_genetica %}&linea_genetica={{ request.GET.linea_genetica }}{% endif %}">Primera</a>
+                                        <a class="page-link" href="?page=1{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.galpon %}&galpon={{ request.GET.galpon }}{% endif %}{% if request.GET.linea_genetica %}&linea_genetica={{ request.GET.linea_genetica }}{% endif %}">
+                                            <i class="fas fa-angle-double-left"></i>
+                                        </a>
                                     </li>
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ lotes.previous_page_number }}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.galpon %}&galpon={{ request.GET.galpon }}{% endif %}{% if request.GET.linea_genetica %}&linea_genetica={{ request.GET.linea_genetica }}{% endif %}">Anterior</a>
+                                        <a class="page-link" href="?page={{ lotes.previous_page_number }}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.galpon %}&galpon={{ request.GET.galpon }}{% endif %}{% if request.GET.linea_genetica %}&linea_genetica={{ request.GET.linea_genetica }}{% endif %}">
+                                            <i class="fas fa-angle-left"></i>
+                                        </a>
                                     </li>
                                 {% endif %}
 
@@ -169,28 +345,32 @@
 
                                 {% if lotes.has_next %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ lotes.next_page_number }}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.galpon %}&galpon={{ request.GET.galpon }}{% endif %}{% if request.GET.linea_genetica %}&linea_genetica={{ request.GET.linea_genetica }}{% endif %}">Siguiente</a>
+                                        <a class="page-link" href="?page={{ lotes.next_page_number }}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.galpon %}&galpon={{ request.GET.galpon }}{% endif %}{% if request.GET.linea_genetica %}&linea_genetica={{ request.GET.linea_genetica }}{% endif %}">
+                                            <i class="fas fa-angle-right"></i>
+                                        </a>
                                     </li>
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ lotes.paginator.num_pages }}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.galpon %}&galpon={{ request.GET.galpon }}{% endif %}{% if request.GET.linea_genetica %}&linea_genetica={{ request.GET.linea_genetica }}{% endif %}">Última</a>
+                                        <a class="page-link" href="?page={{ lotes.paginator.num_pages }}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.galpon %}&galpon={{ request.GET.galpon }}{% endif %}{% if request.GET.linea_genetica %}&linea_genetica={{ request.GET.linea_genetica }}{% endif %}">
+                                            <i class="fas fa-angle-double-right"></i>
+                                        </a>
                                     </li>
                                 {% endif %}
                             </ul>
                         </nav>
-                    {% endif %}
-                {% else %}
-                    <div class="text-center py-5">
-                        <i class="fas fa-layer-group fa-3x text-muted mb-3"></i>
-                        <h5 class="text-muted">No hay lotes registrados</h5>
-                        <p class="text-muted">Comienza creando tu primer lote de aves.</p>
-                        {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
-                        <a href="{% url 'aves:lote_create' %}" class="btn btn-primary">
-                            <i class="fas fa-plus me-2"></i>Crear Primer Lote
-                        </a>
-                        {% endif %}
                     </div>
                 {% endif %}
-            </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-layer-group fa-3x text-white-50 mb-3"></i>
+                    <h5 class="text-white">No hay lotes registrados</h5>
+                    <p class="text-white-50">Comienza creando tu primer lote de aves.</p>
+                    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
+                    <a href="{% url 'aves:lote_create' %}" class="btn btn-light-custom mt-3">
+                        <i class="fas fa-plus me-2"></i>Crear Primer Lote
+                    </a>
+                    {% endif %}
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -198,8 +378,8 @@
 <!-- Modal de confirmación para eliminar -->
 <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
+        <div class="modal-content glass-modal-content" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);">
+            <div class="modal-header bg-danger text-white border-0">
                 <h5 class="modal-title" id="modalEliminarLabel">
                     <i class="fas fa-exclamation-triangle me-2"></i>Confirmar Eliminación
                 </h5>
@@ -207,7 +387,7 @@
             </div>
             <form id="formEliminar" method="post">
                 {% csrf_token %}
-                <div class="modal-body">
+                <div class="modal-body text-dark">
                     <p>¿Está seguro de que desea eliminar el lote <strong id="codigoLote"></strong>?</p>
                     <div class="alert alert-warning">
                         <i class="fas fa-info-circle me-2"></i>
@@ -216,14 +396,15 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label for="justificacionEliminacion" class="form-label">Justificación de la eliminación *</label>
+                        <label for="justificacionEliminacion" class="form-label text-dark">Justificación de la eliminación *</label>
                         <textarea name="justificacion" id="justificacionEliminacion" 
-                                  class="form-control" rows="3" required
+                                  class="form-control text-dark border-secondary" rows="3" required
+                                  style="background: white;"
                                   placeholder="Explique el motivo de la eliminación del lote..."></textarea>
                         <div class="form-text">Mínimo 10 caracteres</div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer border-top-0">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-danger">
                         <i class="fas fa-trash me-2"></i>Eliminar Lote

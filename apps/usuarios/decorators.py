@@ -26,11 +26,11 @@ def role_required(allowed_roles):
             try:
                 perfil = request.user.perfilusuario
                 if perfil.rol not in allowed_roles:
-                    messages.warning(request, f'No tiene permisos para realizar esta acción. Roles permitidos: {", ".join(allowed_roles)}')
-                    return redirect('aves:dashboard')  # Redirigir al dashboard de aves
+                    messages.warning(request, f'No tiene permisos para realizar esta acción.')
+                    return redirect('dashboard:principal')  # Redirigir al dashboard principal
             except Exception as e:
                 messages.error(request, f'Error al verificar permisos: Perfil de usuario no configurado correctamente.')
-                return redirect('aves:dashboard')
+                return redirect('dashboard:principal')
             
             return view_func(request, *args, **kwargs)
         return _wrapped_view

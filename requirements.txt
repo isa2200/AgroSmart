@@ -11,6 +11,7 @@ django-widget-tweaks>=1.4.12
 reportlab>=4.0.0
 openpyxl>=3.1.0
 Pillow>=10.0.0
+qrcode[pil]>=8.2
 
 # Base de datos
 psycopg2-binary>=2.9.0  # Para PostgreSQL

@@ -8,9 +8,44 @@
 <link rel="stylesheet" href="{% static 'dashboard/css/login.css' %}">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 <style>
-body {
-  overflow: hidden !important;
-  height: 100vh !important;
+/* Estilos inline para el video en el card */
+.character-section {
+    position: relative;
+    overflow: hidden;
+}
+
+#card-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+/* Forzar la eliminación de cualquier pseudo-elemento que pueda estar cargando una imagen */
+.character-section::before,
+.character-section::after {
+    content: none !important;
+    display: none !important;
+    background: none !important;
+    background-image: none !important;
+}
+
+/* Estilos para el logo posicionado absolutamente */
+.form-section {
+    position: relative;
+}
+
+.logo-container-absolute {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.login-header {
+    margin-top: 20px; /* Ajustar margen superior si es necesario */
 }
 </style>
 {% endblock %}
@@ -19,24 +54,32 @@ body {
 <div class="login-container">
     <div class="login-wrapper">
         <div class="login-card">
-            <!-- Sección izquierda - Imagen de caricatura -->
+            <!-- Sección izquierda - Video de caricatura -->
             <div class="character-section">
-                <div class="character-decoration"></div>
-                <div class="character-decoration"></div>
-                <div class="character-decoration"></div>
+                <!-- Video dentro del card -->
+                <video autoplay muted loop playsinline id="card-video">
+                    <source src="{% static 'videos/Video_loguin.mp4' %}" type="video/mp4">
+                    Tu navegador no soporta video HTML5.
+                </video>
+
+
             </div>
 
             <!-- Sección derecha - Formulario -->
             <div class="form-section">
+                <!-- Logo SENA posicionado absolutamente -->
+                <div class="logo-container-absolute">
+                    <img src="{% static 'img/logo-ico.ico' %}" alt="AgroSmart Logo" class="sena-logo">
+                </div>
+
                 <div class="login-header">
-                    <div class="logo-container">
-                        <img src="{% static 'img/logo-ico.ico' %}" alt="AgroSmart Logo" class="sena-logo">
-                    </div>
+                    <!-- Título AgroSmart subido -->
                     <h1 class="login-title">
                         <i class="fas fa-seedling"></i>
                         AgroSmart
                     </h1>
-                    <p class="login-subtitle">Sistema de gestion de unidades productivas</p>
+                    <!-- Subtítulo actualizado -->
+                    <p class="login-subtitle">Centro de Recursos Naturales Renovables La Salada</p>
                 </div>
 
                 <!-- Mensajes de error y éxito -->

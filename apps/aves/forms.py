@@ -16,14 +16,17 @@ class BitacoraDiariaForm(forms.ModelForm):
         model = BitacoraDiaria
         fields = [
             'lote', 'fecha', 'semana_vida', 
-            'recoleccion_1', 'recoleccion_2', 'recoleccion_3', 'huevos_rotos',
-            'produccion_aaa', 'produccion_aa', 'produccion_a', 'produccion_b', 'produccion_c', 
-            'mortalidad', 'causa_mortalidad', 'consumo_concentrado', 'observaciones'
+            'recoleccion_1', 'recoleccion_2', 'recoleccion_3', 'huevos_rotos', 'imagen_huevos_rotos',
+        'produccion_aaa', 'produccion_aa', 'produccion_a', 'produccion_b', 'produccion_c', 
+        'produccion_jumbo', 'huevos_sucios', 'huevos_farfara', 'descarte',
+        'mortalidad', 'causa_mortalidad', 'consumo_concentrado', 'observaciones',
+            'firma_responsable'
         ]
         widgets = {
             'fecha': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'lote': forms.Select(attrs={'class': 'form-control'}),
             'semana_vida': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'}),
+            'firma_responsable': forms.FileInput(attrs={'class': 'form-control'}),
             
             # Recolecciones
             'recoleccion_1': forms.NumberInput(attrs={
@@ -46,15 +49,20 @@ class BitacoraDiariaForm(forms.ModelForm):
                 'min': '0',
                 'placeholder': '0'
             }),
+            'imagen_huevos_rotos': forms.FileInput(attrs={'class': 'form-control'}),
             
             # Clasificación de huevos
-            'produccion_aaa': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
-            'produccion_aa': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
-            'produccion_a': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
-            'produccion_b': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
-            'produccion_c': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
-            
-            'mortalidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+        'produccion_aaa': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
+        'produccion_aa': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
+        'produccion_a': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
+        'produccion_b': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
+        'produccion_c': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
+        'produccion_jumbo': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
+        'huevos_sucios': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
+        'huevos_farfara': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
+        'descarte': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0'}),
+        
+        'mortalidad': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
             'causa_mortalidad': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: Enfermedad, Accidente, etc.'}),
             'consumo_concentrado': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0'}),
             'observaciones': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
@@ -79,7 +87,8 @@ class BitacoraDiariaForm(forms.ModelForm):
         for field_name in ['recoleccion_1', 'recoleccion_2', 'recoleccion_3']:
             self.fields[field_name].widget.attrs['data-recoleccion'] = 'true'
         
-        for field_name in ['produccion_aaa', 'produccion_aa', 'produccion_a', 'produccion_b', 'produccion_c']:
+        for field_name in ['produccion_aaa', 'produccion_aa', 'produccion_a', 'produccion_b', 'produccion_c', 
+                       'produccion_jumbo', 'huevos_sucios', 'huevos_farfara', 'descarte']:
             self.fields[field_name].widget.attrs['data-clasificacion'] = 'true'
     
     def clean(self):
@@ -111,12 +120,16 @@ class BitacoraDiariaForm(forms.ModelForm):
         # Calcular totales
         total_recolectado = recoleccion_1 + recoleccion_2 + recoleccion_3
         total_clasificado = (
-            cleaned_data.get('produccion_aaa', 0) +
-            cleaned_data.get('produccion_aa', 0) +
-            cleaned_data.get('produccion_a', 0) +
-            cleaned_data.get('produccion_b', 0) +
-            cleaned_data.get('produccion_c', 0)
-        )
+        cleaned_data.get('produccion_aaa', 0) +
+        cleaned_data.get('produccion_aa', 0) +
+        cleaned_data.get('produccion_a', 0) +
+        cleaned_data.get('produccion_b', 0) +
+        cleaned_data.get('produccion_c', 0) +
+        cleaned_data.get('produccion_jumbo', 0) +
+        cleaned_data.get('huevos_sucios', 0) +
+        cleaned_data.get('huevos_farfara', 0) +
+        cleaned_data.get('descarte', 0)
+    )
         
         # Validar que el total clasificado no exceda el total recolectado
         if total_clasificado > total_recolectado:
@@ -130,6 +143,13 @@ class BitacoraDiariaForm(forms.ModelForm):
             raise ValidationError(
                 f"Los huevos rotos ({huevos_rotos}) no pueden ser más que el total recolectado ({total_recolectado})."
             )
+            
+        # Validar imagen de huevos rotos
+        imagen_huevos_rotos = cleaned_data.get('imagen_huevos_rotos')
+        if huevos_rotos > 0 and not imagen_huevos_rotos:
+            # Si es edición y ya tiene imagen, se permite continuar sin subir nueva imagen
+            if not (self.instance.pk and self.instance.imagen_huevos_rotos):
+                self.add_error('imagen_huevos_rotos', "Debe subir una imagen de evidencia cuando hay huevos rotos.")
         
         return cleaned_data
 
@@ -471,7 +491,7 @@ class BitacoraDiariaEditForm(forms.ModelForm):
         model = BitacoraDiaria
         fields = [
             'lote', 'fecha', 'semana_vida',
-            'recoleccion_1', 'recoleccion_2', 'recoleccion_3', 'huevos_rotos',
+            'recoleccion_1', 'recoleccion_2', 'recoleccion_3', 'huevos_rotos', 'imagen_huevos_rotos',
             'produccion_aaa', 'produccion_aa', 'produccion_a', 'produccion_b', 'produccion_c',
             'mortalidad', 'causa_mortalidad', 'consumo_concentrado', 'observaciones'
         ]
@@ -497,6 +517,7 @@ class BitacoraDiariaEditForm(forms.ModelForm):
                 'data-recoleccion': 'true'
             }),
             'huevos_rotos': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'imagen_huevos_rotos': forms.FileInput(attrs={'class': 'form-control'}),
             
             # Clasificación
             'produccion_aaa': forms.NumberInput(attrs={'class': 'form-control clasificacion-input', 'min': '0', 'data-clasificacion': 'true'}),
@@ -559,6 +580,13 @@ class BitacoraDiariaEditForm(forms.ModelForm):
             raise ValidationError(
                 f"Los huevos rotos ({huevos_rotos}) no pueden ser más que el total recolectado ({total_recolectado})."
             )
+            
+        # Validar imagen de huevos rotos
+        imagen_huevos_rotos = cleaned_data.get('imagen_huevos_rotos')
+        if huevos_rotos > 0 and not imagen_huevos_rotos:
+            # Si es edición y ya tiene imagen, se permite continuar sin subir nueva imagen
+            if not (self.instance.pk and self.instance.imagen_huevos_rotos):
+                self.add_error('imagen_huevos_rotos', "Debe subir una imagen de evidencia cuando hay huevos rotos.")
         
         return cleaned_data
 
@@ -576,3 +604,19 @@ class JustificacionForm(forms.Form):
         max_length=500,
         help_text='Máximo 500 caracteres'
     )
+
+
+class TareaForm(forms.ModelForm):
+    """Formulario para la gestión de tareas."""
+    
+    class Meta:
+        model = Tarea
+        fields = ['titulo', 'descripcion', 'prioridad', 'fecha_limite', 'responsable']
+        widgets = {
+            'titulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Título de la tarea'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Descripción detallada'}),
+            'prioridad': forms.Select(attrs={'class': 'form-select'}),
+            'fecha_limite': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+            'responsable': forms.Select(attrs={'class': 'form-select'}),
+        }
+

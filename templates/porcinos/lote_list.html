@@ -1,86 +1,451 @@
-{% extends 'aves/base.html' %}
+{% extends 'porcinos/base.html' %}
+{% load widget_tweaks %}
 
-{% block title %}Lotes Porcinos{% endblock %}
-{% block page_title %}Lotes Porcinos{% endblock %}
+{% block title %}Lotes Porcinos - AgroSmart{% endblock %}
 
-{% block breadcrumb %}
-<nav aria-label="breadcrumb" class="mb-3">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'dashboard:principal' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'porcinos:dashboard' %}">Porcinos</a></li>
-        <li class="breadcrumb-item active">Lotes</li>
-    </ol>
-    </nav>
+{% block page_title %}{% endblock %}
+{% block breadcrumb %}{% endblock %}
+{% block page_actions %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos unificados Glassmorphism - Copiados de Aves */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    /* Form Styles in Glass */
+    .form-label {
+        color: rgba(255,255,255,0.9);
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control, .form-select {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: #333;
+        backdrop-filter: blur(5px);
+    }
+
+    .form-control:focus, .form-select:focus {
+        background: #ffffff;
+        border-color: rgba(255,255,255,0.5);
+        color: #000;
+        box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+    }
+
+    .form-control::placeholder {
+        color: #6c757d;
+    }
+
+    option {
+        background: white;
+        color: #333;
+    }
+
+    /* Table Styles */
+    .table-custom {
+        width: 100%;
+        margin-bottom: 0;
+        color: black;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .table-custom thead th {
+        background-color: rgba(0,0,0,0.2);
+        color: white;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 1rem;
+        border-bottom: 2px solid rgba(255,255,255,0.1);
+    }
+
+    .table-custom tbody tr {
+        background: rgba(255,255,255,0.9);
+        transition: all 0.2s;
+    }
+
+    .table-custom tbody tr:hover {
+        background: rgba(255,255,255,1);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .table-custom td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        color: #000000 !important; /* Negro puro */
+    }
+
+    .table-custom td strong {
+        color: #000000 !important;
+        font-weight: 700;
+    }
+    
+    .table-custom .text-muted {
+        color: #6c757d !important; /* Gris oscuro para texto secundario */
+    }
+
+    /* Pagination */
+    .pagination {
+        margin-bottom: 0;
+    }
+
+    .pagination .page-link {
+        background: rgba(255,255,255,0.1);
+        border-color: rgba(255,255,255,0.2);
+        color: white;
+    }
+
+    .pagination .page-item.active .page-link {
+        background: #2e7d32;
+        border-color: #2e7d32;
+        color: white;
+    }
+
+    .pagination .page-link:hover {
+        background: rgba(255,255,255,0.2);
+        color: white;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        background: rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.5);
+    }
+
+    /* Buttons */
+    .btn-light-custom {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.5);
+        color: #1b5e20;
+        font-weight: 600;
+    }
+    .btn-light-custom:hover {
+        background: #fff;
+        color: #000;
+    }
+
+    .btn-outline-action {
+        background: transparent;
+        border: 1px solid #2e7d32;
+        color: #2e7d32;
+    }
+    .btn-outline-action:hover {
+        background: #2e7d32;
+        color: white;
+    }
+
+    /* Badges */
+    .badge-status {
+        font-weight: 600;
+        padding: 0.5em 1em;
+        border-radius: 50rem;
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
+        border: 1px solid transparent;
+        text-transform: uppercase;
+    }
+    
+    .bg-activo {
+        background-color: rgba(46, 125, 50, 0.1) !important;
+        color: #2e7d32 !important;
+        border-color: rgba(46, 125, 50, 0.2);
+    }
+    
+    .bg-engorde {
+        background-color: rgba(255, 143, 0, 0.1) !important;
+        color: #ef6c00 !important;
+        border-color: rgba(255, 143, 0, 0.2);
+    }
+    
+    .bg-vendido {
+        background-color: rgba(21, 101, 192, 0.1) !important;
+        color: #1565c0 !important;
+        border-color: rgba(21, 101, 192, 0.2);
+    }
+    
+    .bg-cerrado {
+        background-color: rgba(97, 97, 97, 0.1) !important;
+        color: #616161 !important;
+        border-color: rgba(97, 97, 97, 0.2);
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="card">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <form class="d-flex" method="get">
-                <input type="text" name="corral" class="form-control me-2" placeholder="Corral" value="{{ filtros.corral }}">
-                <select name="estado" class="form-select me-2">
-                    <option value="">Todos</option>
-                    <option value="activo" {% if filtros.estado == 'activo' %}selected{% endif %}>Activo</option>
-                    <option value="engorde" {% if filtros.estado == 'engorde' %}selected{% endif %}>Engorde</option>
-                    <option value="vendido" {% if filtros.estado == 'vendido' %}selected{% endif %}>Vendido</option>
-                    <option value="cerrado" {% if filtros.estado == 'cerrado' %}selected{% endif %}>Cerrado</option>
-                </select>
-                <button class="btn btn-primary" type="submit">Filtrar</button>
+<div class="container-fluid">
+    <!-- Header Personalizado -->
+    <div class="text-center mb-4">
+        <h2 class="text-white fw-bold" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5); font-size: 2.5rem;">
+            Gestión de Lotes Porcinos
+        </h2>
+    </div>
+
+    <!-- Filtros -->
+    <div class="unified-dashboard-card">
+        <div class="card-header">
+            <h5 class="section-title">
+                <i class="fas fa-search"></i>
+                Búsqueda y Filtros
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label">Buscar por Corral</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0 text-dark" style="border-color: rgba(255,255,255,0.2);">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" name="corral" class="form-control border-start-0 ps-0" placeholder="Ej: Corral 1" value="{{ filtros.corral }}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Estado</label>
+                    <select name="estado" class="form-select">
+                        <option value="">Todos los estados</option>
+                        <option value="activo" {% if filtros.estado == 'activo' %}selected{% endif %}>Activo</option>
+                        <option value="engorde" {% if filtros.estado == 'engorde' %}selected{% endif %}>Engorde</option>
+                        <option value="vendido" {% if filtros.estado == 'vendido' %}selected{% endif %}>Vendido</option>
+                        <option value="cerrado" {% if filtros.estado == 'cerrado' %}selected{% endif %}>Cerrado</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-light-custom w-100" type="submit">
+                        <i class="fas fa-search me-2"></i>Buscar
+                    </button>
+                </div>
+                <div class="col-md-2">
+                     <a href="{% url 'porcinos:lote_list' %}" class="btn btn-outline-light-custom w-100">
+                        <i class="fas fa-times me-2"></i>Limpiar
+                    </a>
+                </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Lista de Lotes -->
+    <div class="unified-dashboard-card">
+        <div class="card-header">
+            <h5 class="section-title">
+                <i class="fas fa-layer-group"></i>
+                Lotes Registrados ({{ lotes.paginator.count|default:lotes|length }})
+            </h5>
             {% if user.is_superuser %}
-            <a href="{% url 'porcinos:lote_create' %}" class="btn btn-success">
+            <a href="{% url 'porcinos:lote_create' %}" class="btn btn-sm btn-glass-green fw-bold">
                 <i class="fas fa-plus me-2"></i>Nuevo Lote
             </a>
             {% endif %}
         </div>
+        <div class="card-body p-0">
+            {% if lotes %}
+                <div class="table-responsive">
+                    <table class="table table-custom mb-0">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Corral</th>
+                                <th>Cerdos Actuales</th>
+                                <th>Estado</th>
+                                <th>Fecha Llegada</th>
+                                <th>Edad (días)</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for lote in lotes %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ lote.codigo }}</strong>
+                                    </td>
+                                    <td>{{ lote.corral }}</td>
+                                    <td>
+                                        <strong>{{ lote.numero_cerdos_actual }}</strong>
+                                        <small class="d-block text-muted" style="font-size: 0.75rem;">(inicial: {{ lote.numero_cerdos_inicial }})</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-status bg-{{ lote.estado }}">
+                                            {{ lote.get_estado_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ lote.fecha_llegada|date:"d/m/Y" }}</td>
+                                    <td>{{ lote.edad_dias }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'porcinos:lote_detail' lote.pk %}" class="btn btn-outline-action" title="Ver detalles">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            {% if user.is_superuser or user.perfilusuario.rol == 'admin_aves' %}
+                                                <a href="{% url 'porcinos:lote_edit' lote.pk %}" class="btn btn-outline-action" title="Editar">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <button type="button" 
+                                                        class="btn btn-danger bg-opacity-75 border-0" 
+                                                        title="Eliminar"
+                                                        onclick="confirmarEliminacion('{{ lote.pk }}', '{{ lote.codigo }}')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Código</th>
-                        <th>Corral</th>
-                        <th>Cerdos</th>
-                        <th>Estado</th>
-                        <th>Fecha llegada</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for lote in lotes %}
-                    <tr>
-                        <td>{{ lote.codigo }}</td>
-                        <td>{{ lote.corral }}</td>
-                        <td>{{ lote.numero_cerdos_actual }}</td>
-                        <td>{{ lote.estado }}</td>
-                        <td>{{ lote.fecha_llegada }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" class="text-center text-muted">No hay lotes</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                {% if lotes.has_other_pages %}
+                    <div class="d-flex justify-content-center py-4">
+                        <nav aria-label="Paginación de lotes">
+                            <ul class="pagination">
+                                {% if lotes.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1{% if filtros.corral %}&corral={{ filtros.corral }}{% endif %}{% if filtros.estado %}&estado={{ filtros.estado }}{% endif %}">
+                                            <i class="fas fa-angle-double-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ lotes.previous_page_number }}{% if filtros.corral %}&corral={{ filtros.corral }}{% endif %}{% if filtros.estado %}&estado={{ filtros.estado }}{% endif %}">
+                                            <i class="fas fa-angle-left"></i>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ lotes.number }} de {{ lotes.paginator.num_pages }}</span>
+                                </li>
+                                {% if lotes.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ lotes.next_page_number }}{% if filtros.corral %}&corral={{ filtros.corral }}{% endif %}{% if filtros.estado %}&estado={{ filtros.estado }}{% endif %}">
+                                            <i class="fas fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ lotes.paginator.num_pages }}{% if filtros.corral %}&corral={{ filtros.corral }}{% endif %}{% if filtros.estado %}&estado={{ filtros.estado }}{% endif %}">
+                                            <i class="fas fa-angle-double-right"></i>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-piggy-bank fa-3x text-white-50 mb-3"></i>
+                    <h5 class="text-white">No hay lotes registrados</h5>
+                    <p class="text-white-50">Comienza creando tu primer lote de porcinos.</p>
+                    {% if user.is_superuser %}
+                    <a href="{% url 'porcinos:lote_create' %}" class="btn btn-light-custom mt-3">
+                        <i class="fas fa-plus me-2"></i>Crear Primer Lote
+                    </a>
+                    {% endif %}
+                </div>
+            {% endif %}
         </div>
-
-        {% if lotes.has_other_pages %}
-        <nav>
-            <ul class="pagination">
-                {% if lotes.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ lotes.previous_page_number }}{% if filtros.corral %}&corral={{ filtros.corral }}{% endif %}{% if filtros.estado %}&estado={{ filtros.estado }}{% endif %}">Anterior</a>
-                </li>
-                {% endif %}
-                <li class="page-item disabled"><span class="page-link">Página {{ lotes.number }} de {{ lotes.paginator.num_pages }}</span></li>
-                {% if lotes.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ lotes.next_page_number }}{% if filtros.corral %}&corral={{ filtros.corral }}{% endif %}{% if filtros.estado %}&estado={{ filtros.estado }}{% endif %}">Siguiente</a>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
-        {% endif %}
     </div>
- </div>
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content glass-modal-content" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);">
+            <div class="modal-header bg-danger text-white border-0">
+                <h5 class="modal-title" id="modalEliminarLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Confirmar Eliminación
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formEliminar" method="post">
+                {% csrf_token %}
+                <div class="modal-body text-dark">
+                    <p>¿Está seguro de que desea eliminar el lote <strong id="codigoLote"></strong>?</p>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Importante:</strong> Esta acción desactivará el lote pero no lo eliminará físicamente. 
+                        Los registros históricos se mantendrán para auditoría.
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="justificacionEliminacion" class="form-label text-dark">Justificación de la eliminación *</label>
+                        <textarea name="justificacion" id="justificacionEliminacion" 
+                                  class="form-control text-dark border-secondary" rows="3" required
+                                  style="background: white;"
+                                  placeholder="Explique el motivo de la eliminación del lote..."></textarea>
+                        <div class="form-text">Mínimo 10 caracteres</div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>Eliminar Lote
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function confirmarEliminacion(loteId, codigoLote) {
+    document.getElementById('codigoLote').textContent = codigoLote;
+    // Usar la URL correcta generada por Django
+    document.getElementById('formEliminar').action = "{% url 'porcinos:lote_delete' 999 %}".replace('999', loteId);
+    document.getElementById('justificacionEliminacion').value = '';
+    
+    const modal = new bootstrap.Modal(document.getElementById('modalEliminar'));
+    modal.show();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Validación del formulario de eliminación
+    const formEliminar = document.getElementById('formEliminar');
+    if (formEliminar) {
+        formEliminar.addEventListener('submit', function(e) {
+            const justificacion = document.getElementById('justificacionEliminacion').value.trim();
+            
+            if (justificacion.length < 10) {
+                e.preventDefault();
+                alert('La justificación debe tener al menos 10 caracteres.');
+                return false;
+            }
+        });
+    }
+});
+</script>
 {% endblock %}

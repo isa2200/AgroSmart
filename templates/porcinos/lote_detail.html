@@ -1,0 +1,274 @@
+{% extends 'porcinos/base.html' %}
+{% load static %}
+
+{% block title %}Detalle de Lote {{ lote.codigo }} - AgroSmart{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos unificados Glassmorphism */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 2rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.5rem;
+    }
+
+    /* Detail Card Styles */
+    .detail-label {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.25rem;
+    }
+
+    .detail-value {
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+    }
+    
+    .btn-action {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        transition: all 0.2s;
+        border: none;
+        margin: 0 0.15rem;
+        font-size: 0.8rem;
+    }
+    
+    .btn-view { background: rgba(13, 202, 240, 0.2); color: #0dcaf0; }
+    .btn-view:hover { background: rgba(13, 202, 240, 0.4); transform: scale(1.1); }
+    
+    .btn-back {
+        background: rgba(255,255,255,0.1);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .btn-back:hover {
+        background: rgba(255,255,255,0.2);
+        color: white;
+    }
+    
+    /* Table Styles */
+    .table-custom {
+        width: 100%;
+        margin-bottom: 0;
+        color: black;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .table-custom thead th {
+        background-color: rgba(0,0,0,0.2);
+        color: white;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 1rem;
+        border-bottom: 2px solid rgba(255,255,255,0.1);
+    }
+
+    .table-custom tbody tr {
+        background: rgba(255,255,255,0.9);
+        transition: all 0.2s;
+    }
+
+    .table-custom tbody tr:hover {
+        background: rgba(255,255,255,1);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .table-custom td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        color: #000000 !important;
+    }
+    
+    .table-custom .text-muted {
+        color: #6c757d !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-9">
+            <!-- Header with Back Button -->
+            <div class="d-flex align-items-center mb-4">
+                <a href="{% url 'porcinos:lote_list' %}" class="btn btn-sm btn-glass-green fw-bold me-3">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </a>
+                <h2 class="text-white mb-0" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Detalle de Lote</h2>
+            </div>
+
+            <div class="unified-dashboard-card">
+                <div class="card-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-layer-group"></i> {{ lote.codigo }}
+                        <span class="badge bg-light text-dark ms-2 fs-6">{{ lote.get_estado_display }}</span>
+                    </h3>
+                    <div class="d-flex">
+                        <a href="{% url 'porcinos:lote_edit' lote.pk %}" class="btn btn-warning btn-sm me-2">
+                            <i class="fas fa-edit me-1"></i> Editar
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="detail-label">Corral</div>
+                            <div class="detail-value">{{ lote.corral|default:"-" }}</div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="detail-label">Fecha Inicio</div>
+                            <div class="detail-value">{{ lote.fecha_inicio|date:"d/m/Y" }}</div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="detail-label">Cerdos Iniciales</div>
+                            <div class="detail-value">{{ lote.numero_cerdos_inicial }}</div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="detail-label">Cerdos Actuales</div>
+                            <div class="detail-value">{{ lote.numero_cerdos_actual }}</div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="detail-label">Raza Predominante</div>
+                            <div class="detail-value">{{ lote.raza|default:"-" }}</div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="detail-label">Peso Promedio Actual</div>
+                            <div class="detail-value">{{ lote.peso_promedio_actual|default:"0" }} kg</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <!-- Animales del Lote -->
+                <div class="col-md-6">
+                    <div class="unified-dashboard-card">
+                        <div class="card-header">
+                            <h4 class="mb-0 fs-5"><i class="fas fa-piggy-bank me-2"></i>Animales Asignados ({{ total_animales }})</h4>
+                        </div>
+                        <div class="card-body p-0">
+                            {% if animales %}
+                            <div class="table-responsive">
+                                <table class="table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Sexo</th>
+                                            <th>Etapa</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for animal in animales %}
+                                        <tr>
+                                            <td><strong>{{ animal.codigo }}</strong></td>
+                                            <td>{{ animal.get_sexo_display }}</td>
+                                            <td>{{ animal.get_etapa_display }}</td>
+                                            <td>
+                                                <a href="{% url 'porcinos:animal_detail' animal.pk %}" class="btn-action btn-view" title="Ver Detalle">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <div class="p-4 text-center text-white-50">
+                                No hay animales asignados individualmente a este lote.
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bitácoras Recientes -->
+                <div class="col-md-6">
+                    <div class="unified-dashboard-card">
+                        <div class="card-header">
+                            <h4 class="mb-0 fs-5"><i class="fas fa-clipboard-list me-2"></i>Bitácoras Recientes</h4>
+                        </div>
+                        <div class="card-body p-0">
+                            {% if bitacoras %}
+                            <div class="table-responsive">
+                                <table class="table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Consumo</th>
+                                            <th>Mortalidad</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for bitacora in bitacoras %}
+                                        <tr>
+                                            <td><strong>{{ bitacora.fecha|date:"d/m/Y" }}</strong></td>
+                                            <td>{{ bitacora.consumo_alimento_kg }} kg</td>
+                                            <td>{{ bitacora.mortalidad }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <div class="p-4 text-center text-white-50">
+                                No hay registros de bitácora recientes.
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

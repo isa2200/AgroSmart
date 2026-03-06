@@ -12,20 +12,72 @@ from django.utils import timezone
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ValidationError
+from django.core.serializers.json import DjangoJSONEncoder
 from datetime import timedelta
 import json
 import traceback
 
 from apps.usuarios.decorators import role_required, acceso_modulo_aves_required, puede_editar_required, puede_eliminar_required, veterinario_required
-from .models import *
+from .models import (
+    LoteAves,
+    BitacoraDiaria,
+    TipoConcentrado,
+    ControlConcentrado,
+    TipoVacuna,
+    PlanVacunacion,
+    MovimientoHuevos,
+    DetalleMovimientoHuevos,
+    InventarioHuevos,
+    InventarioAves,
+    Tarea,
+)
 from .forms import *
 from .utils import generar_alertas, actualizar_inventario_huevos, exportar_reporte_excel
+
+
+@login_required
+def crear_tarea(request):
+    if request.method == 'POST':
+        form = TareaForm(request.POST)
+        if form.is_valid():
+            tarea = form.save(commit=False)
+            # Asignar responsable si no se seleccionó (opcional, por defecto el usuario actual)
+            if not tarea.responsable:
+                tarea.responsable = request.user
+            tarea.save()
+            messages.success(request, 'Tarea creada exitosamente.')
+            return redirect('aves:dashboard')
+        else:
+            messages.error(request, 'Error al crear la tarea. Verifique los datos.')
+    return redirect('aves:dashboard')
+
+
+@login_required
+def completar_tarea(request, tarea_id):
+    tarea = get_object_or_404(Tarea, id=tarea_id)
+    tarea.estado = 'completada'
+    tarea.save()
+    messages.success(request, 'Tarea marcada como completada.')
+    return redirect('aves:dashboard')
+
+
+@login_required
+@acceso_modulo_aves_required
+def eliminar_tarea(request, tarea_id):
+    tarea = get_object_or_404(Tarea, id=tarea_id)
+    tarea.delete()
+    messages.success(request, 'Tarea eliminada exitosamente.')
+    return redirect('aves:dashboard')
 
 
 @login_required
 @acceso_modulo_aves_required
 def dashboard_aves(request):
     """Dashboard principal del módulo avícola mejorado."""
+    # Si es veterinario, redirigir directamente al plan de vacunación
+    if request.user.perfilusuario.rol == 'veterinario':
+        return redirect('aves:plan_vacunacion_list')
+        
     from django.db.models import F
     
     hoy = timezone.now().date()
@@ -148,8 +200,8 @@ def dashboard_aves(request):
         )['total'] or 0
         evolucion_produccion.append({
             'fecha': fecha.strftime('%d/%m'),
-            'produccion': prod_dia,
-            'porcentaje': (prod_dia / aves_ponedoras * 100) if aves_ponedoras > 0 else 0
+            'produccion': float(prod_dia),
+            'porcentaje': float((prod_dia / aves_ponedoras * 100) if aves_ponedoras > 0 else 0)
         })
     
     # Evolución mortalidad últimos 30 días
@@ -161,7 +213,7 @@ def dashboard_aves(request):
         ).aggregate(total=Sum('mortalidad'))['total'] or 0
         evolucion_mortalidad.append({
             'fecha': fecha.strftime('%d/%m'),
-            'mortalidad': mort_dia
+            'mortalidad': float(mort_dia)
         })
     
     # COMPARACIÓN ENTRE GALPONES - CAMBIADO A MENSUAL
@@ -178,17 +230,53 @@ def dashboard_aves(request):
             total=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + 
                      F('produccion_b') + F('produccion_c'))
         )['total'] or 0
+
+        # Producción HOY
+        prod_hoy_galpon = BitacoraDiaria.objects.filter(
+            lote__in=lotes_galpon, fecha=hoy
+        ).aggregate(
+            total=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + 
+                     F('produccion_b') + F('produccion_c'))
+        )['total'] or 0
+
+        # Producción 7 días
+        prod_7d_galpon = BitacoraDiaria.objects.filter(
+            lote__in=lotes_galpon, fecha__gte=hace_7_dias, fecha__lte=hoy
+        ).aggregate(
+            total=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + 
+                     F('produccion_b') + F('produccion_c'))
+        )['total'] or 0
+
+        # Consumo HOY
+        consumo_hoy_galpon = BitacoraDiaria.objects.filter(
+            lote__in=lotes_galpon, fecha=hoy
+        ).aggregate(total=Sum('consumo_concentrado'))['total'] or 0
+
+        # Consumo 7 días
+        consumo_7d_galpon = BitacoraDiaria.objects.filter(
+            lote__in=lotes_galpon, fecha__gte=hace_7_dias, fecha__lte=hoy
+        ).aggregate(total=Sum('consumo_concentrado'))['total'] or 0
         
         # Mortalidad del galpón (últimos 30 días)
         mort_galpon = BitacoraDiaria.objects.filter(
             lote__in=lotes_galpon, fecha__gte=hace_30_dias, fecha__lte=hoy
+        ).aggregate(total=Sum('mortalidad'))['total'] or 0
+
+        # Mortalidad HOY
+        mort_hoy_galpon = BitacoraDiaria.objects.filter(
+            lote__in=lotes_galpon, fecha=hoy
         ).aggregate(total=Sum('mortalidad'))['total'] or 0
         
         comparacion_galpones.append({
             'galpon': galpon,
             'aves': aves_galpon,
             'produccion_30d': prod_galpon,
+            'produccion_hoy': prod_hoy_galpon,
+            'produccion_7d': prod_7d_galpon,
+            'consumo_hoy': consumo_hoy_galpon,
+            'consumo_7d': consumo_7d_galpon,
             'mortalidad_30d': mort_galpon,
+            'mortalidad_hoy': mort_hoy_galpon,
             'porcentaje_postura': (prod_galpon / (aves_galpon * 30) * 100) if aves_galpon > 0 else 0,
             'porcentaje_mortalidad': (mort_galpon / aves_galpon * 100) if aves_galpon > 0 else 0
         })
@@ -261,7 +349,13 @@ def dashboard_aves(request):
     # Ordenar por porcentaje de postura
     top_lotes.sort(key=lambda x: x['porcentaje_postura'], reverse=True)
     
+    # Tareas
+    tareas = Tarea.objects.filter(estado__in=['pendiente', 'en_proceso']).order_by('fecha_limite')
+    tarea_form = TareaForm()
+    
     context = {
+        'tareas': tareas,
+        'tarea_form': tarea_form,
         # Estadísticas generales
         'total_lotes': total_lotes,
         'total_aves': total_aves,
@@ -311,12 +405,60 @@ def dashboard_aves(request):
         'lotes_disponibles': lotes_query.values('id', 'codigo'),
         'galpon_filtro': galpon_filtro,
         'lote_filtro': lote_filtro,
-        
-        # JSON para gráficos
-        'evolucion_produccion_json': json.dumps(evolucion_produccion),
-        'evolucion_mortalidad_json': json.dumps(evolucion_mortalidad),
-        'comparacion_galpones_json': json.dumps(comparacion_galpones),
     }
+        
+    # JSON para gráficos y modales
+    lotes_data_full = []
+    for lote in lotes_query:
+        # Data Hoy
+        bitacora_hoy = BitacoraDiaria.objects.filter(lote=lote, fecha=hoy).first()
+        prod_hoy = 0
+        consumo_hoy = 0
+        
+        if bitacora_hoy:
+            prod_hoy = (bitacora_hoy.produccion_aaa or 0) + (bitacora_hoy.produccion_aa or 0) + \
+                       (bitacora_hoy.produccion_a or 0) + (bitacora_hoy.produccion_b or 0) + \
+                       (bitacora_hoy.produccion_c or 0)
+            consumo_hoy = bitacora_hoy.consumo_concentrado or 0
+            
+        # Data 30d
+        prod_30d = BitacoraDiaria.objects.filter(
+            lote=lote, fecha__gte=hace_30_dias, fecha__lte=hoy
+        ).aggregate(
+            total=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + 
+                     F('produccion_b') + F('produccion_c'))
+        )['total'] or 0
+
+        # Data 7d
+        prod_7d = BitacoraDiaria.objects.filter(
+            lote=lote, fecha__gte=hace_7_dias, fecha__lte=hoy
+        ).aggregate(
+            total=Sum(F('produccion_aaa') + F('produccion_aa') + F('produccion_a') + 
+                     F('produccion_b') + F('produccion_c'))
+        )['total'] or 0
+        
+        lotes_data_full.append({
+            'id': lote.id,
+            'codigo': lote.codigo,
+            'galpon': lote.galpon,
+            'numero_aves_actual': lote.numero_aves_actual,
+            'produccion_hoy': float(prod_hoy),
+            'produccion_7d': float(prod_7d),
+            'produccion_30d': float(prod_30d),
+            'consumo_hoy': float(consumo_hoy),
+        })
+
+    context.update({
+        'evolucion_produccion_json': json.dumps(evolucion_produccion, cls=DjangoJSONEncoder),
+        'evolucion_mortalidad_json': json.dumps(evolucion_mortalidad, cls=DjangoJSONEncoder),
+        'comparacion_galpones_json': json.dumps(comparacion_galpones, cls=DjangoJSONEncoder),
+        'lotes_data_json': json.dumps(lotes_data_full, cls=DjangoJSONEncoder),
+    })
+
+    # Tareas
+    tareas = Tarea.objects.exclude(estado='completada').order_by('-prioridad', 'fecha_limite')
+    context['tareas'] = tareas
+    context['tarea_form'] = TareaForm()
     
     return render(request, 'aves/dashboard.html', context)
 
@@ -327,7 +469,7 @@ def dashboard_aves(request):
 def bitacora_diaria_create(request):
     """Crear nueva bitácora diaria."""
     if request.method == 'POST':
-        form = BitacoraDiariaForm(request.POST)
+        form = BitacoraDiariaForm(request.POST, request.FILES)
         if form.is_valid():
             try:
                 bitacora = form.save(commit=False)
@@ -435,8 +577,12 @@ def lote_create(request):
                     messages.error(request, f'• {error}')
     else:
         form = LoteAvesForm()
-    
-    return render(request, 'aves/lote_form.html', {'form': form})
+    lotes_recientes = LoteAves.objects.order_by('-fecha_llegada', '-id')[:10]
+    context = {
+        'form': form,
+        'lotes_recientes': lotes_recientes,
+    }
+    return render(request, 'aves/lote_form.html', context)
 
 @login_required
 def lote_edit(request, pk):
@@ -683,6 +829,141 @@ def inventario_huevos(request):
 
 
 @login_required
+@acceso_modulo_aves_required
+def inventario_permanente(request):
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        # Handle file upload (Signature)
+        if request.FILES.get('firma_responsable'):
+            try:
+                registro_id = request.POST.get('id')
+                firma = request.FILES.get('firma_responsable')
+                
+                if registro_id:
+                    registro = InventarioAves.objects.get(id=registro_id)
+                    registro.firma_responsable = firma
+                    registro.save()
+                    return JsonResponse({'status': 'success', 'url': registro.firma_responsable.url})
+                return JsonResponse({'status': 'error', 'message': 'ID no proporcionado'}, status=400)
+            except Exception as e:
+                return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
+        # Handle JSON data (Inline text edit)
+        try:
+            data = json.loads(request.body)
+            registro_id = data.get('id')
+            campo = data.get('field')
+            valor = data.get('value')
+
+            if registro_id:
+                registro = InventarioAves.objects.get(id=registro_id)
+
+                campos_numericos = [
+                    'aves_inicio',
+                    'pollitas_levante',
+                    'aves_postura',
+                    'aves_engorde',
+                    'reproductores',
+                    'compras',
+                    'nacimientos',
+                    'ventas',
+                    'mortalidad',
+                    'autoconsumo',
+                    'descartes',
+                ]
+
+                if campo in campos_numericos:
+                    setattr(registro, campo, int(valor) if valor else 0)
+                elif campo == 'detalle':
+                    registro.detalle = valor
+
+                registro.save()
+
+                return JsonResponse({'status': 'success', 'new_total': registro.total})
+
+            return JsonResponse({'status': 'error', 'message': 'Registro no encontrado'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
+    if request.method == 'POST':
+        fecha = request.POST.get('fecha') or timezone.now().date()
+        detalle = request.POST.get('detalle', '')
+
+        campos_numericos = [
+            'aves_inicio',
+            'pollitas_levante',
+            'aves_postura',
+            'aves_engorde',
+            'reproductores',
+            'compras',
+            'nacimientos',
+            'ventas',
+            'mortalidad',
+            'autoconsumo',
+            'descartes',
+        ]
+
+        valores = {}
+        for campo in campos_numericos:
+            try:
+                valores[campo] = int(request.POST.get(campo, 0) or 0)
+            except ValueError:
+                valores[campo] = 0
+
+        firma_responsable = request.FILES.get('firma_responsable')
+
+        InventarioAves.objects.create(
+            fecha=fecha,
+            detalle=detalle,
+            firma_responsable=firma_responsable,
+            **valores,
+        )
+
+        messages.success(request, 'Registro de inventario permanente creado correctamente.')
+        return redirect('aves:inventario_permanente')
+
+    # Filtrado
+    fecha_inicio = request.GET.get('fecha_inicio')
+    fecha_fin = request.GET.get('fecha_fin')
+    registro_id = request.GET.get('id')
+    print_mode = request.GET.get('print_mode') == 'true'
+
+    registros = InventarioAves.objects.all()
+
+    if registro_id:
+        registros = registros.filter(id=registro_id)
+    else:
+        if fecha_inicio:
+            registros = registros.filter(fecha__gte=fecha_inicio)
+        if fecha_fin:
+            registros = registros.filter(fecha__lte=fecha_fin)
+    
+    registros = registros.order_by('-fecha', '-id')
+
+    # Determinar firma para impresión
+    firma_responsable_url = None
+    if registros.exists():
+        # Si se filtra por ID, usar esa firma
+        if registro_id:
+            first_record = registros.first()
+            if first_record and first_record.firma_responsable:
+                firma_responsable_url = first_record.firma_responsable.url
+        # Si se filtra por fecha y hay registros, usar la firma del más reciente (o único)
+        elif fecha_inicio or fecha_fin:
+            first_record = registros.first()
+            if first_record and first_record.firma_responsable:
+                firma_responsable_url = first_record.firma_responsable.url
+
+    context = {
+        'registros': registros,
+        'print_mode': print_mode,
+        'fecha_inicio': fecha_inicio,
+        'fecha_fin': fecha_fin,
+        'firma_responsable_url': firma_responsable_url,
+    }
+    return render(request, 'aves/inventario_permanente.html', context)
+
+
+@login_required
 @role_required(['superusuario', 'admin_aves'])
 def movimiento_huevos_create(request):
     """Crear movimiento de huevos con múltiples detalles."""
@@ -810,7 +1091,18 @@ def movimiento_huevos_create(request):
         else:
             messages.error(request, 'Por favor corrija los errores indicados en el formulario.')
     else:
-        form = MovimientoHuevosForm()
+        # Calcular el próximo número de comprobante
+        try:
+            ultimo_movimiento = MovimientoHuevos.objects.order_by('-id').first()
+            if ultimo_movimiento and ultimo_movimiento.numero_comprobante and ultimo_movimiento.numero_comprobante.isdigit():
+                proximo_numero = int(ultimo_movimiento.numero_comprobante) + 1
+                proximo_comprobante = f"{proximo_numero:04d}"
+            else:
+                proximo_comprobante = "0001"
+        except Exception:
+            proximo_comprobante = "0001"
+            
+        form = MovimientoHuevosForm(initial={'numero_comprobante': proximo_comprobante})
         formset = DetalleMovimientoHuevosFormSet()
     
     # Obtener inventarios para mostrar stock disponible
@@ -1250,9 +1542,13 @@ def bitacora_detail(request, pk):
         objeto_id=bitacora.id
     ).select_related('usuario').order_by('-fecha_modificacion')
     
+    # Obtener movimientos de huevos para la fecha (Despachos)
+    movimientos = MovimientoHuevos.objects.filter(fecha=bitacora.fecha)
+    
     context = {
         'bitacora': bitacora,
         'registros_modificacion': registros_modificacion,
+        'movimientos': movimientos,
     }
     return render(request, 'aves/bitacora_detail.html', context)
 
@@ -1272,10 +1568,12 @@ def bitacora_edit(request, pk):
                 # Convertir objetos date a string para JSON serialization
                 if hasattr(valor, 'isoformat'):
                     valores_anteriores_originales[field] = valor.isoformat()
+                elif hasattr(valor, 'name'):
+                    valores_anteriores_originales[field] = valor.name
                 else:
                     valores_anteriores_originales[field] = valor
         
-        form = BitacoraDiariaEditForm(request.POST, instance=bitacora)
+        form = BitacoraDiariaEditForm(request.POST, request.FILES, instance=bitacora)
         
         if form.is_valid():
             # Verificar si realmente hay cambios
@@ -1297,6 +1595,8 @@ def bitacora_edit(request, pk):
                 valor_nuevo = form.cleaned_data[field]
                 if hasattr(valor_nuevo, 'isoformat'):
                     valor_nuevo = valor_nuevo.isoformat()
+                elif hasattr(valor_nuevo, 'name'):
+                    valor_nuevo = valor_nuevo.name
                 valores_nuevos[field] = valor_nuevo
             
             bitacora_actualizada = form.save()

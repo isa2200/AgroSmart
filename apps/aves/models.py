@@ -106,6 +106,7 @@ class BitacoraDiaria(BaseModel):
     recoleccion_2 = models.PositiveIntegerField('Segunda recolección', default=0, help_text='Cantidad total de huevos en la segunda recolección')
     recoleccion_3 = models.PositiveIntegerField('Tercera recolección', default=0, help_text='Cantidad total de huevos en la tercera recolección')
     huevos_rotos = models.PositiveIntegerField('Huevos rotos', default=0, help_text='Cantidad total de huevos rotos en el día')
+    imagen_huevos_rotos = models.ImageField('Evidencia de huevos rotos', upload_to='aves/huevos_rotos/', null=True, blank=True, help_text='Requerida si hay huevos rotos')
     
     # Clasificación de huevos por tipo
     produccion_aaa = models.PositiveIntegerField('Producción AAA', default=0)
@@ -113,6 +114,10 @@ class BitacoraDiaria(BaseModel):
     produccion_a = models.PositiveIntegerField('Producción A', default=0)
     produccion_b = models.PositiveIntegerField('Producción B', default=0)
     produccion_c = models.PositiveIntegerField('Producción C', default=0)
+    produccion_jumbo = models.PositiveIntegerField('Producción Jumbo', default=0)
+    huevos_sucios = models.PositiveIntegerField('Huevos sucios', default=0)
+    huevos_farfara = models.PositiveIntegerField('Huevos fárfara', default=0)
+    descarte = models.PositiveIntegerField('Descarte', default=0)
     
     # Mortalidad
     mortalidad = models.PositiveIntegerField('Mortalidad', default=0)
@@ -120,6 +125,7 @@ class BitacoraDiaria(BaseModel):
     consumo_concentrado = models.DecimalField('Consumo concentrado (kg)', max_digits=10, decimal_places=2, default=0)
     
     observaciones = models.TextField('Observaciones', blank=True)
+    firma_responsable = models.ImageField('Firma del responsable', upload_to='aves/firmas/', null=True, blank=True, help_text='Foto de la firma del encargado')
     usuario_registro = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuario que registra')
     
     class Meta:
@@ -139,7 +145,17 @@ class BitacoraDiaria(BaseModel):
     @property
     def produccion_total(self):
         """Calcula la producción total de huevos clasificados."""
-        return self.produccion_aaa + self.produccion_aa + self.produccion_a + self.produccion_b + self.produccion_c
+        return (
+            self.produccion_aaa + 
+            self.produccion_aa + 
+            self.produccion_a + 
+            self.produccion_b + 
+            self.produccion_c + 
+            self.produccion_jumbo + 
+            self.huevos_sucios + 
+            self.huevos_farfara + 
+            self.descarte
+        )
     
     @property
     def porcentaje_postura(self):
@@ -237,6 +253,38 @@ class ControlConcentrado(BaseModel):
     
     def __str__(self):
         return f"{self.tipo_concentrado.nombre} - {self.fecha} - {self.tipo_movimiento}"
+
+
+class InventarioAves(BaseModel):
+    fecha = models.DateField(default=timezone.now, verbose_name='Fecha')
+    detalle = models.CharField(max_length=200, help_text='Descripción del movimiento o estado', verbose_name='Detalle')
+    aves_inicio = models.PositiveIntegerField(default=0, verbose_name='Aves Inicio (Cría)')
+    pollitas_levante = models.PositiveIntegerField(default=0, verbose_name='Pollitas Levante')
+    aves_postura = models.PositiveIntegerField(default=0, verbose_name='Aves Postura')
+    aves_engorde = models.PositiveIntegerField(default=0, verbose_name='Aves Engorde')
+    reproductores = models.PositiveIntegerField(default=0, verbose_name='Reproductores')
+    
+    # Movimientos (Flujo)
+    compras = models.PositiveIntegerField(default=0, verbose_name='Compras')
+    nacimientos = models.PositiveIntegerField(default=0, verbose_name='Nacimientos')
+    ventas = models.PositiveIntegerField(default=0, verbose_name='Ventas')
+    mortalidad = models.PositiveIntegerField(default=0, verbose_name='Mortalidad')
+    autoconsumo = models.PositiveIntegerField(default=0, verbose_name='Autoconsumo')
+    descartes = models.PositiveIntegerField(default=0, verbose_name='Descartes')
+    
+    firma_responsable = models.ImageField('Firma del responsable', upload_to='aves/firmas_inventario/', null=True, blank=True, help_text='Foto de la firma del encargado')
+
+    class Meta:
+        verbose_name = 'Inventario de Aves'
+        verbose_name_plural = 'Inventarios de Aves'
+        ordering = ['-fecha']
+
+    def __str__(self):
+        return f"Inventario {self.fecha}"
+
+    @property
+    def total(self):
+        return self.aves_inicio + self.pollitas_levante + self.aves_postura + self.aves_engorde + self.reproductores
 
 
 class TipoVacuna(BaseModel):
@@ -612,3 +660,31 @@ class RegistroModificacion(BaseModel):
     
     def __str__(self):
         return f"{self.usuario.username} - {self.accion} - {self.modelo} - {self.fecha_modificacion}"
+
+
+class Tarea(BaseModel):
+    PRIORIDAD_CHOICES = [
+        ('alta', 'Alta'),
+        ('media', 'Media'),
+        ('baja', 'Baja'),
+    ]
+    ESTADO_CHOICES = [
+        ('pendiente', 'Pendiente'),
+        ('en_proceso', 'En Proceso'),
+        ('completada', 'Completada'),
+    ]
+
+    titulo = models.CharField('Título', max_length=200)
+    descripcion = models.TextField('Descripción', blank=True, null=True)
+    prioridad = models.CharField('Prioridad', max_length=20, choices=PRIORIDAD_CHOICES, default='media')
+    estado = models.CharField('Estado', max_length=20, choices=ESTADO_CHOICES, default='pendiente')
+    fecha_limite = models.DateTimeField('Fecha Límite', blank=True, null=True)
+    responsable = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='tareas_aves', verbose_name='Responsable')
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Tarea'
+        verbose_name_plural = 'Tareas'
+
+    def __str__(self):
+        return self.titulo

@@ -1,0 +1,72 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Código QR Visitante - AgroSmart{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="unified-dashboard-card">
+                <div class="card-header bg-transparent border-0 text-center pt-4 pb-2">
+                    <h2 class="text-white mb-0" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                        <i class="fas fa-qrcode me-2"></i>Acceso para Visitantes
+                    </h2>
+                    <p class="text-white-50 mt-2">Comparte este código QR para permitir el acceso de solo lectura</p>
+                </div>
+                
+                <div class="card-body text-center">
+                    <div class="bg-white p-4 rounded-3 d-inline-block shadow-lg mb-4">
+                        <img src="data:image/png;base64,{{ qr_image }}" alt="QR Code" class="img-fluid" style="max-width: 300px;">
+                    </div>
+                    
+                    <div class="alert alert-info bg-opacity-25 border-0 text-white d-inline-block text-start mx-auto" style="background: rgba(255,255,255,0.1);">
+                        <h5 class="alert-heading"><i class="fas fa-info-circle me-2"></i>Instrucciones</h5>
+                        <ul class="mb-0 ps-3">
+                            <li>Escanea el código con la cámara de tu celular.</li>
+                            <li>Ingresa tu nombre y documento.</li>
+                            <li>Accederás al sistema en modo <strong>Solo Lectura</strong>.</li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-4">
+                        <label class="text-white mb-2">Enlace directo:</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-transparent text-white border-light" value="{{ url_registro }}" id="urlInput" readonly>
+                            <button class="btn btn-light" type="button" onclick="copiarUrl()">
+                                <i class="fas fa-copy me-1"></i>Copiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer bg-transparent border-0 text-center pb-4">
+                    <a href="{% url 'dashboard:principal' %}" class="btn btn-outline-light px-4">
+                        <i class="fas fa-arrow-left me-2"></i>Volver al Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copiarUrl() {
+    var copyText = document.getElementById("urlInput");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(copyText.value);
+    
+    // Feedback visual simple
+    const btn = document.querySelector('button[onclick="copiarUrl()"]');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check me-1"></i>Copiado';
+    btn.classList.replace('btn-light', 'btn-success');
+    
+    setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.classList.replace('btn-success', 'btn-light');
+    }, 2000);
+}
+</script>

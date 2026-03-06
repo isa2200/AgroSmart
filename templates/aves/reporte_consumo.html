@@ -1,21 +1,89 @@
 {% extends 'aves/base.html' %}
-{% load static %}
-
 {% block title %}Reporte de Consumo - AgroSmart{% endblock %}
 
+{% block page_title %}{% endblock %}
+{% block breadcrumb_items %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos unificados Glassmorphism */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 2rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    .glass-wrap {
+        width: 100%;
+        max-width: 98%;
+        margin: 0 auto;
+    }
+
+    .unified-dashboard-card .form-label {
+        color: white;
+        font-weight: 500;
+    }
+
+    .unified-dashboard-card .form-control,
+    .unified-dashboard-card .form-select {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: #333;
+    }
+
+    .unified-dashboard-card .form-control:focus,
+    .unified-dashboard-card .form-select:focus {
+        background: white;
+        box-shadow: 0 0 0 0.25rem rgba(46, 125, 50, 0.25);
+        border-color: #2e7d32;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container-fluid">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2><i class="fas fa-chart-bar text-success me-2"></i>Reporte de Consumo de Alimento</h2>
-        </div>
+<div class="glass-wrap">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white fw-bold mb-0" style="font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+            Reporte de Consumo
+        </h2>
+        <a href="{% url 'aves:reportes' %}" class="btn btn-light-custom">
+            <i class="fas fa-arrow-left me-2"></i>Volver
+        </a>
     </div>
     
     <div class="row">
         <div class="col-md-4">
-            <div class="card">
+            <div class="unified-dashboard-card">
                 <div class="card-header">
-                    <h5><i class="fas fa-filter me-2"></i>Filtros</h5>
+                    <h5 class="section-title"><i class="fas fa-filter"></i>Filtros</h5>
                 </div>
                 <div class="card-body">
                     <form method="post">
@@ -48,7 +116,7 @@
                             </select>
                         </div>
                         
-                        <button type="submit" class="btn btn-success w-100">
+                        <button type="submit" class="btn btn-light-custom w-100">
                             <i class="fas fa-chart-bar me-2"></i>Generar Reporte
                         </button>
                     </form>
@@ -57,11 +125,11 @@
         </div>
         
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-body text-center">
-                    <i class="fas fa-chart-bar fa-5x text-muted mb-3"></i>
-                    <h5>Selecciona los filtros y genera tu reporte</h5>
-                    <p class="text-muted">Configura los parámetros en el panel izquierdo y haz clic en "Generar Reporte"</p>
+            <div class="unified-dashboard-card h-100">
+                <div class="card-body text-center d-flex flex-column justify-content-center align-items-center" style="min-height: 400px;">
+                    <i class="fas fa-chart-bar fa-5x text-white-50 mb-4"></i>
+                    <h4 class="text-white mb-3">Selecciona los filtros y genera tu reporte</h4>
+                    <p class="text-white-50">Configura los parámetros en el panel izquierdo y haz clic en "Generar Reporte"</p>
                 </div>
             </div>
         </div>

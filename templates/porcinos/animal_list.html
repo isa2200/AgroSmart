@@ -1,0 +1,401 @@
+{% extends 'porcinos/base.html' %}
+{% load static %}
+
+{% block title %}Perfiles de Animales - AgroSmart{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos unificados Glassmorphism */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    /* Form Styles in Glass */
+    .form-label {
+        color: rgba(255,255,255,0.9);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control, .form-select {
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        backdrop-filter: blur(5px);
+    }
+
+    .form-control:focus, .form-select:focus {
+        background: rgba(255,255,255,0.2);
+        border-color: rgba(255,255,255,0.5);
+        color: white;
+        box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.1);
+    }
+
+    .form-control::placeholder {
+        color: rgba(255,255,255,0.6);
+    }
+
+    option {
+        background: #333;
+        color: white;
+    }
+
+    /* Table Styles */
+    .table-custom {
+        width: 100%;
+        margin-bottom: 0;
+        color: black;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .table-custom thead th {
+        background-color: rgba(0,0,0,0.2);
+        color: white;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 1rem;
+        border-bottom: 2px solid rgba(255,255,255,0.1);
+    }
+
+    .table-custom tbody tr {
+        background: rgba(255,255,255,0.8);
+        transition: all 0.2s;
+    }
+    
+    .table-custom tbody tr:hover {
+        background: rgba(255,255,255,0.95);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .table-custom td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        color: black;
+    }
+    
+    .btn-action {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        margin: 0 2px;
+        transition: all 0.2s;
+        border: 1px solid rgba(0,0,0,0.1);
+        background: white;
+        color: #333;
+    }
+
+    .btn-action:hover {
+        transform: translateY(-2px);
+        background: #f8f9fa;
+        color: #000;
+    }
+
+    .btn-edit:hover { background: rgba(255, 193, 7, 0.4); }
+    .btn-delete:hover { background: rgba(220, 53, 69, 0.4); }
+    .btn-view:hover { background: rgba(13, 202, 240, 0.4); }
+
+    /* Pagination */
+    .pagination {
+        margin-bottom: 0;
+    }
+
+    .pagination .page-link {
+        background: rgba(255,255,255,0.1);
+        border-color: rgba(255,255,255,0.2);
+        color: white;
+    }
+
+    .pagination .page-item.active .page-link {
+        background: #2e7d32;
+        border-color: #2e7d32;
+        color: white;
+    }
+
+    .pagination .page-link:hover {
+        background: rgba(255,255,255,0.2);
+        color: white;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        background: rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.5);
+    }
+    /* Buttons */
+    .btn-light-custom {
+        background: rgba(255,255,255,0.2);
+        border: 1px solid rgba(255,255,255,0.3);
+        color: white;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+    
+    .btn-light-custom:hover {
+        background: rgba(255,255,255,0.3);
+        color: white;
+        transform: translateY(-1px);
+    }
+
+    .btn-outline-light-custom {
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.3);
+        color: white;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .btn-outline-light-custom:hover {
+        background: rgba(255,255,255,0.1);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="glass-wrap">
+    <!-- Header Personalizado -->
+    <div class="text-center mb-4">
+        <h2 class="text-white fw-bold" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5); font-size: 2.5rem;">
+            Perfiles de Animales
+        </h2>
+    </div>
+
+    <!-- Filters -->
+    <div class="unified-dashboard-card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Buscar</label>
+                    <input type="text" name="q" class="form-control" placeholder="Código o Nombre..." value="{{ request.GET.q }}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Etapa</label>
+                    <select name="etapa" class="form-select">
+                        <option value="">Todas</option>
+                        {% for codigo, nombre in etapa_choices %}
+                        <option value="{{ codigo }}" {% if request.GET.etapa == codigo %}selected{% endif %}>{{ nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Sexo</label>
+                    <select name="sexo" class="form-select">
+                        <option value="">Todos</option>
+                        {% for codigo, nombre in sexo_choices %}
+                        <option value="{{ codigo }}" {% if request.GET.sexo == codigo %}selected{% endif %}>{{ nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-light-custom w-100">
+                        <i class="fas fa-filter me-2"></i>Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="unified-dashboard-card">
+        <div class="card-header">
+            <h5 class="section-title"><i class="fas fa-list"></i> Listado de Animales</h5>
+            <div class="d-flex gap-2">
+                <a href="{% url 'porcinos:dashboard' %}" class="btn btn-sm btn-glass-green fw-bold">
+                    <i class="fas fa-arrow-left me-2"></i>Volver
+                </a>
+                <a href="{% url 'porcinos:animal_create' %}" class="btn btn-sm btn-glass-green fw-bold">
+                    <i class="fas fa-plus me-2"></i>Nuevo Animal
+                </a>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-custom align-middle">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Sexo</th>
+                            <th>Etapa</th>
+                            <th>Lote</th>
+                            <th>Edad (Meses)</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for animal in page_obj %}
+                        <tr>
+                            <td class="fw-bold">{{ animal.codigo }}</td>
+                            <td>{{ animal.nombre|default:"-" }}</td>
+                            <td>
+                                {% if animal.sexo == 'M' %}
+                                <span class="badge bg-primary bg-opacity-75"><i class="fas fa-mars"></i> Macho</span>
+                                {% else %}
+                                <span class="badge bg-danger bg-opacity-75"><i class="fas fa-venus"></i> Hembra</span>
+                                {% endif %}
+                            </td>
+                            <td><span class="badge bg-info bg-opacity-75 text-dark">{{ animal.get_etapa_display }}</span></td>
+                            <td>{{ animal.lote.codigo|default:"Sin Lote" }}</td>
+                            <td>{{ animal.edad_meses|default:"-" }}</td>
+                            <td>
+                                <div class="d-flex justify-content-center">
+                                    <a href="{% url 'porcinos:animal_detail' animal.pk %}" class="btn-action btn-view" title="Ver Detalle">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'porcinos:animal_update' animal.pk %}" class="btn-action btn-edit" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button type="button" class="btn-action btn-delete" title="Eliminar"
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#deleteModal"
+                                            data-url="{% url 'porcinos:animal_delete' animal.pk %}"
+                                            data-codigo="{{ animal.codigo }}"
+                                            data-nombre="{{ animal.nombre|default:'-' }}"
+                                            data-sexo="{% if animal.sexo == 'M' %}Macho{% else %}Hembra{% endif %}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <div class="text-white opacity-50">
+                                    <i class="fas fa-paw fa-3x mb-3"></i>
+                                    <p class="mb-0">No se encontraron perfiles de animales.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <div class="d-flex justify-content-center py-3">
+                <nav>
+                    <ul class="pagination pagination-glass">
+                        {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.etapa %}&etapa={{ request.GET.etapa }}{% endif %}{% if request.GET.sexo %}&sexo={{ request.GET.sexo }}{% endif %}">
+                            <i class="fas fa-angle-double-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.etapa %}&etapa={{ request.GET.etapa }}{% endif %}{% if request.GET.sexo %}&sexo={{ request.GET.sexo }}{% endif %}">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    <li class="page-item active">
+                        <span class="page-link">
+                            {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </li>
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.etapa %}&etapa={{ request.GET.etapa }}{% endif %}{% if request.GET.sexo %}&sexo={{ request.GET.sexo }}{% endif %}">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.etapa %}&etapa={{ request.GET.etapa }}{% endif %}{% if request.GET.sexo %}&sexo={{ request.GET.sexo }}{% endif %}">
+                            <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 15px; overflow: hidden;">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title fw-bold"><i class="fas fa-exclamation-triangle me-2"></i>Confirmar Eliminación</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 text-center bg-light">
+                <div class="mb-3">
+                    <i class="fas fa-trash-alt text-danger fa-3x"></i>
+                </div>
+                <h5 class="mb-3 text-dark">¿Está seguro?</h5>
+                <p class="text-dark mb-1" id="deleteMessageQuestion">¿Confirma eliminar el animal?</p>
+                <p class="text-muted small"><i class="fas fa-info-circle me-1"></i>Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer bg-light justify-content-center border-top-0 pb-4">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancelar</button>
+                <form method="post" action="" id="deleteForm">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger px-4">
+                        <i class="fas fa-trash me-2"></i>Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var url = button.getAttribute('data-url');
+            var codigo = button.getAttribute('data-codigo');
+            var nombre = button.getAttribute('data-nombre');
+            var sexo = button.getAttribute('data-sexo');
+            
+            var form = document.getElementById('deleteForm');
+            form.action = url;
+            
+            var question = document.getElementById('deleteMessageQuestion');
+            question.innerHTML = '¿Confirma eliminar el animal <strong>' + codigo + '</strong> (' + sexo + ')?<br><small class="text-muted">' + nombre + '</small>';
+        });
+    });
+</script>
+{% endblock %}

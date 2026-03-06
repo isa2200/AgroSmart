@@ -1,0 +1,280 @@
+{% extends 'porcinos/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Editar Lote {{ lote.codigo }} - AgroSmart{% endblock %}
+
+{% block page_title %}{% endblock %}
+{% block breadcrumb %}{% endblock %}
+{% block page_header %}{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 2rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    .glass-wrap{
+        width: 100%;
+        max-width: 800px; /* Ancho limitado para formulario centrado */
+        margin: 0 auto;
+    }
+
+    .unified-dashboard-card .form-label{
+        color: #fff;
+    }
+    .unified-dashboard-card .form-text{
+        color: rgba(255,255,255,0.8);
+    }
+    .unified-dashboard-card .form-control, .unified-dashboard-card .form-select{
+        background: rgba(255,255,255,0.85);
+        border: 1px solid rgba(255,255,255,0.25);
+        color: #1b1b1b;
+    }
+    .unified-dashboard-card .form-control:focus, .unified-dashboard-card .form-select:focus{
+        border-color: rgba(52, 199, 89, 0.9);
+        box-shadow: 0 0 0 0.2rem rgba(52, 199, 89, 0.25);
+    }
+    .unified-dashboard-card .is-invalid{
+        border-color: rgba(220,53,69,0.9);
+        box-shadow: 0 0 0 0.2rem rgba(220,53,69,0.15);
+    }
+    .form-section-title{
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        color: #fff;
+        font-weight: 600;
+        margin-bottom: 12px;
+        border-left: 4px solid #34c759;
+        padding-left: 8px;
+        margin-top: 1rem;
+    }
+    
+    .btn-glass-green {
+        background: rgba(46, 125, 50, 0.8);
+        color: white;
+        border: 1px solid rgba(255,255,255,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .btn-glass-green:hover {
+        background: rgba(46, 125, 50, 1);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12">
+        <div class="glass-wrap">
+            <h2 class="text-center text-white mb-4 fw-bold" style="font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Gestión de Lotes</h2>
+            
+            <div class="unified-dashboard-card">
+                <div class="card-header">
+                    <h5 class="section-title">
+                        <i class="fas fa-edit"></i>Editar Lote {{ lote.codigo }}
+                    </h5>
+                    <a href="{% url 'porcinos:lote_detail' lote.pk %}" class="btn btn-sm btn-glass-green fw-bold">
+                        <i class="fas fa-arrow-left me-2"></i>Volver al Lote
+                    </a>
+                </div>
+                <div class="card-body">
+                    <!-- Alerta de información -->
+                    <div class="alert alert-info" style="background: rgba(13, 202, 240, 0.2); border: 1px solid rgba(13, 202, 240, 0.3); color: white;">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Importante:</strong> Cualquier modificación debe ser justificada. 
+                        Los cambios quedarán registrados en el sistema de auditoría.
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <!-- Información Básica -->
+                            <div class="col-md-6">
+                                <div class="form-section-title"><i class="fas fa-info-circle"></i>Información Básica</div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.codigo.id_for_label }}" class="form-label"><i class="fas fa-barcode me-1"></i>Código del Lote *</label>
+                                    {% if form.codigo.errors %}
+                                        {{ form.codigo|add_class:"form-control is-invalid" }}
+                                        <div class="text-danger small">{{ form.codigo.errors.0 }}</div>
+                                    {% else %}
+                                        {{ form.codigo|add_class:"form-control" }}
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.corral.id_for_label }}" class="form-label"><i class="fas fa-warehouse me-1"></i>Corral *</label>
+                                    {% if form.corral.errors %}
+                                        {{ form.corral|add_class:"form-control is-invalid" }}
+                                        <div class="text-danger small">{{ form.corral.errors.0 }}</div>
+                                    {% else %}
+                                        {{ form.corral|add_class:"form-control" }}
+                                    {% endif %}
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="{{ form.procedencia.id_for_label }}" class="form-label"><i class="fas fa-truck me-1"></i>Procedencia</label>
+                                    {% if form.procedencia.errors %}
+                                        {{ form.procedencia|add_class:"form-control is-invalid" }}
+                                        <div class="text-danger small">{{ form.procedencia.errors.0 }}</div>
+                                    {% else %}
+                                        {{ form.procedencia|add_class:"form-control" }}
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.estado.id_for_label }}" class="form-label"><i class="fas fa-clipboard-check me-1"></i>Estado *</label>
+                                    {% if form.estado.errors %}
+                                        {{ form.estado|add_class:"form-select is-invalid" }}
+                                        <div class="text-danger small">{{ form.estado.errors.0 }}</div>
+                                    {% else %}
+                                        {{ form.estado|add_class:"form-select" }}
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.fecha_llegada.id_for_label }}" class="form-label"><i class="fas fa-calendar-alt me-1"></i>Fecha de Llegada *</label>
+                                    {% if form.fecha_llegada.errors %}
+                                        {{ form.fecha_llegada|add_class:"form-control is-invalid" }}
+                                        <div class="text-danger small">{{ form.fecha_llegada.errors.0 }}</div>
+                                    {% else %}
+                                        {{ form.fecha_llegada|add_class:"form-control"|attr:"type:date" }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Datos Numéricos -->
+                            <div class="col-md-6">
+                                <div class="form-section-title"><i class="fas fa-chart-line"></i>Datos del Lote</div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.numero_cerdos_inicial.id_for_label }}" class="form-label"><i class="fas fa-hashtag me-1"></i>Cerdos Inicial *</label>
+                                    {% if form.numero_cerdos_inicial.errors %}
+                                        {{ form.numero_cerdos_inicial|add_class:"form-control is-invalid" }}
+                                        <div class="text-danger small">{{ form.numero_cerdos_inicial.errors.0 }}</div>
+                                    {% else %}
+                                        {{ form.numero_cerdos_inicial|add_class:"form-control" }}
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.peso_total_llegada.id_for_label }}" class="form-label"><i class="fas fa-weight-hanging me-1"></i>Peso Total (kg) *</label>
+                                    {% if form.peso_total_llegada.errors %}
+                                        {{ form.peso_total_llegada|add_class:"form-control is-invalid" }}
+                                        <div class="text-danger small">{{ form.peso_total_llegada.errors.0 }}</div>
+                                    {% else %}
+                                        {{ form.peso_total_llegada|add_class:"form-control" }}
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.peso_promedio_llegada.id_for_label }}" class="form-label"><i class="fas fa-balance-scale me-1"></i>Promedio (kg) *</label>
+                                    {% if form.peso_promedio_llegada.errors %}
+                                        {{ form.peso_promedio_llegada|add_class:"form-control is-invalid" }}
+                                        <div class="text-danger small">{{ form.peso_promedio_llegada.errors.0 }}</div>
+                                    {% else %}
+                                        {{ form.peso_promedio_llegada|add_class:"form-control" }}
+                                    {% endif %}
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="{{ form.observaciones.id_for_label }}" class="form-label"><i class="fas fa-comment-dots me-1"></i>Observaciones</label>
+                                    {{ form.observaciones|add_class:"form-control"|attr:"rows:3" }}
+                                    {% if form.observaciones.errors %}
+                                        <div class="text-danger small">{{ form.observaciones.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Justificación de Cambios (Requerido para edición) -->
+                        <div class="form-section-title text-warning" style="border-left-color: #ffc107;">
+                            <i class="fas fa-exclamation-triangle"></i>Control de Cambios
+                        </div>
+                        <div class="mb-4">
+                            <label for="{{ form.justificacion.id_for_label }}" class="form-label">Justificación del Cambio *</label>
+                            {% if form.justificacion.errors %}
+                                {{ form.justificacion|add_class:"form-control is-invalid" }}
+                                <div class="text-danger small">{{ form.justificacion.errors.0 }}</div>
+                            {% else %}
+                                {{ form.justificacion|add_class:"form-control" }}
+                            {% endif %}
+                            <div class="form-text text-white-50">{{ form.justificacion.help_text }}</div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'porcinos:lote_detail' lote.pk %}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-glass-green">
+                                <i class="fas fa-save me-2"></i>Guardar Cambios
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Calcular peso promedio automáticamente
+    const pesoTotalInput = document.getElementById('{{ form.peso_total_llegada.id_for_label }}');
+    const numeroCerdosInput = document.getElementById('{{ form.numero_cerdos_inicial.id_for_label }}');
+    const pesoPromedioInput = document.getElementById('{{ form.peso_promedio_llegada.id_for_label }}');
+    
+    function calcularPesoPromedio() {
+        const pesoTotal = parseFloat(pesoTotalInput.value) || 0;
+        const numeroCerdos = parseInt(numeroCerdosInput.value) || 0;
+        
+        if (pesoTotal > 0 && numeroCerdos > 0) {
+            // Peso promedio en Kg
+            const pesoPromedio = pesoTotal / numeroCerdos;
+            pesoPromedioInput.value = pesoPromedio.toFixed(2);
+        }
+    }
+    
+    if(pesoTotalInput && numeroCerdosInput && pesoPromedioInput) {
+        pesoTotalInput.addEventListener('input', calcularPesoPromedio);
+        numeroCerdosInput.addEventListener('input', calcularPesoPromedio);
+    }
+});
+</script>
+{% endblock %}

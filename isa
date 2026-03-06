@@ -1,0 +1,42 @@
+[33mcommit 190b76f838dc9eb649b1d5414a8cb368d8be0412[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32misa[m[33m, [m[1;31morigin/isa[m[33m)[m
+Author: isa2200 <senaisa2025@gmail.com>
+Date:   Thu Feb 12 12:03:17 2026 -0500
+
+    Rediseño del front end, unidad cunicola y porcinos
+
+[33mcommit a7a6720856615e6837b399f0245b25d4a24db9df[m
+Author: isa2200 <senaisa2025@gmail.com>
+Date:   Thu Nov 27 08:25:16 2025 -0500
+
+    Add proper .gitignore and remove .env from repository
+
+[33mcommit e9405e463a2b8d7313a7afd938d4b54f4be3b099[m
+Author: Bryan Steven Puerta Velasquez <bp8772443@gmail.com>
+Date:   Fri Oct 31 09:05:58 2025 -0500
+
+    fix(network): update IP address from 10.2.66.58 to 10.2.66.1
+    
+    Update all references to the old IP address (10.2.66.58) to the new one (10.2.66.1) across configuration files and test scripts. This includes changes to ALLOWED_HOSTS, CSRF_TRUSTED_ORIGINS, and test host configurations to ensure proper network access and CSRF functionality.
+
+[33mcommit 2b45fc0f0dc8553c353702a93294a76de90ac5d4[m
+Author: Bryan Steven Puerta Velasquez <bp8772443@gmail.com>
+Date:   Mon Oct 27 08:57:48 2025 -0500
+
+    fix: update IP addresses and egg movement form logic
+    
+    - Replace old IP address 172.30.0.58 with new 10.2.66.58 across multiple files
+    - Add 'babcock_brown' to chicken breed options
+    - Remove unused movement types 'baja' and 'devolucion'
+    - Implement price field toggling for 'autoconsumo' movement type
+
+[33mcommit a7a0a35fd6e777b8f172fadfdbd99438e29ddfe8[m
+Author: Bryan Steven Puerta Velasquez <bp8772443@gmail.com>
+Date:   Fri Oct 17 09:20:11 2025 -0500
+
+    feat(auth): enhance login security and UI with role-based access controls
+    
+    - Add user account status check and improved error handling in login
+    - Implement role-based access controls across aves module templates
+    - Improve login form validation and error display UX
+    - Add visual feedback for disabled accounts and invalid credentials
+    - Restrict UI actions based on user roles (admin_aves, veterinario, etc)

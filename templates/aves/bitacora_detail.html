@@ -3,296 +3,571 @@
 
 {% block title %}Detalle Bitácora - AgroSmart{% endblock %}
 
-{% block page_title %}Detalle de Bitácora{% endblock %}
-
-{% block breadcrumb_items %}
-    <li class="breadcrumb-item"><a href="{% url 'aves:bitacora_list' %}">Bitácoras</a></li>
-    <li class="breadcrumb-item active">{{ bitacora.fecha|date:"d/m/Y" }}</li>
-{% endblock %}
-
-{% block page_actions %}
-    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
-    <a href="{% url 'aves:bitacora_edit' bitacora.id %}" class="btn btn-warning">
-        <i class="fas fa-edit me-2"></i>Editar
-    </a>
-    {% endif %}
-    <a href="{% url 'aves:bitacora_list' %}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left me-2"></i>Volver
-    </a>
-{% endblock %}
+{% block breadcrumb %}{% endblock %}
+{% block page_header %}{% endblock %}
 
 {% block extra_css %}
 <style>
-.modification-entry {
-    transition: all 0.3s ease;
-}
-
-.modification-entry:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.change-item {
-    transition: all 0.2s ease;
-}
-
-.change-item:hover {
-    background-color: #f8f9fa !important;
-}
-
-.old-value, .new-value {
-    font-family: 'Courier New', monospace;
-    font-size: 0.9em;
-    min-height: 2.5rem;
-    display: flex;
-    align-items: center;
-}
-
-.change-values .row > div {
-    position: relative;
-}
-
-.change-values .row > div:first-child::after {
-    content: '→';
-    position: absolute;
-    right: -10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #6c757d;
-    font-weight: bold;
-    z-index: 1;
-}
-
-@media (max-width: 768px) {
-    .change-values .row > div:first-child::after {
-        display: none;
+    /* Estilos unificados Glassmorphism */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
     }
-}
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 2rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    .glass-wrap {
+        width: 100%;
+        max-width: 98%;
+        margin: 0 auto;
+    }
+
+    /* Estilos para secciones internas */
+    .detail-section {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 25px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    
+    .detail-section-header {
+        border-left: 4px solid #34c759;
+        padding-left: 15px;
+        margin-bottom: 20px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding: 10px 0;
+    }
+    
+    .info-label {
+        font-weight: 600;
+        color: rgba(255,255,255,0.8);
+    }
+
+    .info-value {
+        color: white;
+        font-weight: 500;
+    }
+
+    /* Stat Cards adaptation */
+    .stat-card {
+        background: rgba(255,255,255,0.15);
+        border-radius: 12px;
+        padding: 15px;
+        text-align: center;
+        height: 100%;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .stat-label {
+        color: rgba(255,255,255,0.9);
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Print Styles */
+    @media print {
+        @page { size: letter; margin: 10mm; }
+        body * { visibility: hidden; }
+        .print-layout, .print-layout * { visibility: visible; }
+        .print-layout { position: absolute; left: 0; top: 0; width: 100%; display: block !important; background-color: white; padding: 10px; }
+        .no-print, .sidebar, .navbar, .card-footer, .btn, form, .card-header, .page-header, .breadcrumb, .modal, .glass-wrap h2, .pagination, .page-actions, .breadcrumb-item, .detail-container, .card, footer, .unified-dashboard-card, .glass-wrap { display: none !important; }
+        .main-content { margin: 0 !important; padding: 0 !important; background-color: white !important; }
+        
+        table { width: 100% !important; border-collapse: collapse !important; font-size: 11px !important; font-family: Arial, sans-serif !important; }
+        th, td { border: 1px solid black !important; padding: 4px !important; color: black !important; vertical-align: middle !important; }
+        th { background-color: #f0f0f0 !important; font-weight: bold !important; text-align: center !important; }
+        
+        .text-center { text-align: center !important; }
+        .text-start { text-align: left !important; }
+        .text-end { text-align: right !important; }
+        .fw-bold { font-weight: bold !important; }
+        
+        .print-section-title {
+            background-color: #e0e0e0 !important;
+            font-weight: bold;
+            padding: 5px;
+            margin-top: 10px;
+            border: 1px solid black;
+            border-bottom: none;
+            font-size: 12px;
+        }
+    }
+    .print-layout { display: none; }
 </style>
 {% endblock %}
 
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('print')) {
+            window.print();
+        }
+    });
+</script>
+{% endblock %}
+
 {% block content %}
-<div class="row">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Información General</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>Fecha:</strong> {{ bitacora.fecha|date:"d/m/Y" }}</p>
-                        <p><strong>Lote:</strong> {{ bitacora.lote.codigo }}</p>
-                        <p><strong>Galpón:</strong> {{ bitacora.lote.galpon }}</p>
-                        <p><strong>Semana de Vida:</strong> {{ bitacora.semana_vida|default:"No especificada" }}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <p><strong>Mortalidad:</strong> {{ bitacora.mortalidad }}</p>
-                        <p><strong>Causa Mortalidad:</strong> {{ bitacora.causa_mortalidad|default:"N/A" }}</p>
-                        <p><strong>Consumo Concentrado:</strong> {{ bitacora.consumo_concentrado }} kg</p>
-                        <p><strong>Registrado por:</strong> {{ bitacora.usuario_registro.get_full_name|default:bitacora.usuario_registro.username }}</p>
-                    </div>
-                </div>
+<!-- Title -->
+<h2 class="text-center mb-4" style="color: white; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); font-size: 2.5rem;">DETALLE DE BITÁCORA</h2>
+
+<div class="glass-wrap">
+    <div class="unified-dashboard-card">
+        <div class="card-header">
+            <h5 class="section-title"><i class="fas fa-file-alt"></i> Detalle del Registro - {{ bitacora.fecha|date:"d/m/Y" }}</h5>
+            <div class="d-flex gap-2">
+                {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' or user.perfilusuario.rol == 'veterinario' or user.is_superuser %}
+                <a href="{% url 'aves:bitacora_edit' bitacora.id %}" class="btn btn-warning btn-sm fw-bold">
+                    <i class="fas fa-edit me-2"></i>Editar
+                </a>
+                {% endif %}
+                <button type="button" class="btn btn-light-custom btn-sm fw-bold" onclick="window.print()">
+                    <i class="fas fa-print me-2"></i>Imprimir
+                </button>
+                <a href="{% url 'aves:bitacora_list' %}" class="btn btn-light-custom btn-sm fw-bold">
+                    <i class="fas fa-arrow-left me-2"></i>Volver
+                </a>
             </div>
         </div>
-
-        <div class="card mt-4">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-basket-shopping me-2"></i>Recolecciones de Huevos</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="text-center">
-                            <h4 class="text-primary">{{ bitacora.recoleccion_1 }}</h4>
-                            <small>Primera Recolección</small>
+        
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <!-- Info General -->
+                    <div class="detail-section">
+                        <div class="detail-section-header">
+                            <i class="fas fa-info-circle"></i> Información General
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="text-center">
-                            <h4 class="text-info">{{ bitacora.recoleccion_2 }}</h4>
-                            <small>Segunda Recolección</small>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="text-center">
-                            <h4 class="text-warning">{{ bitacora.recoleccion_3 }}</h4>
-                            <small>Tercera Recolección</small>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="text-center">
-                            <h4 class="text-success">{{ bitacora.total_recolecciones }}</h4>
-                            <small><strong>TOTAL RECOLECTADO</strong></small>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="text-center">
-                            <h4 class="text-danger">{{ bitacora.huevos_rotos }}</h4>
-                            <small>Huevos Rotos</small>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="text-center">
-                            <h4 class="text-dark">{{ bitacora.produccion_total }}</h4>
-                            <small><strong>HUEVOS CLASIFICADOS</strong></small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mt-4">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-egg me-2"></i>Producción por Categoría</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="text-center">
-                            <h4 class="text-success">{{ bitacora.produccion_aaa }}</h4>
-                            <small>AAA</small>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="text-center">
-                            <h4 class="text-info">{{ bitacora.produccion_aa }}</h4>
-                            <small>AA</small>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="text-center">
-                            <h4 class="text-primary">{{ bitacora.produccion_a }}</h4>
-                            <small>A</small>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="text-center">
-                            <h4 class="text-warning">{{ bitacora.produccion_b }}</h4>
-                            <small>B</small>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="text-center">
-                            <h4 class="text-danger">{{ bitacora.produccion_c }}</h4>
-                            <small>C</small>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="text-center">
-                            <h4 class="text-dark">{{ bitacora.produccion_total }}</h4>
-                            <small><strong>TOTAL</strong></small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {% if bitacora.observaciones %}
-        <div class="card mt-4">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-comment me-2"></i>Observaciones</h5>
-            </div>
-            <div class="card-body">
-                <p>{{ bitacora.observaciones }}</p>
-            </div>
-        </div>
-        {% endif %}
-    </div>
-
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="fas fa-history me-2"></i>
-                    Historial de Modificaciones
-                    {% if registros_modificacion %}
-                        <span class="badge bg-secondary ms-2">{{ registros_modificacion|length }}</span>
-                    {% endif %}
-                </h5>
-            </div>
-            <div class="card-body">
-                {% for registro in registros_modificacion %}
-                <div class="modification-entry border rounded p-3 mb-3 {% if forloop.first %}border-primary{% else %}border-light{% endif %}">
-                    <!-- Encabezado de la modificación -->
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <div>
-                            <h6 class="mb-1">
-                                <i class="fas fa-user-edit me-1"></i>
-                                {{ registro.usuario.get_full_name|default:registro.usuario.username }}
-                            </h6>
-                            <small class="text-muted">
-                                <i class="fas fa-clock me-1"></i>
-                                {{ registro.fecha_modificacion|date:"d/m/Y H:i:s" }}
-                            </small>
-                        </div>
-                        <span class="badge bg-primary">{{ registro.accion }}</span>
-                    </div>
-                    
-                    <!-- Justificación -->
-                    {% if registro.justificacion %}
-                    <div class="alert alert-light border-start border-4 border-info mb-3">
-                        <small class="fw-bold text-info">Justificación:</small><br>
-                        <em>{{ registro.justificacion }}</em>
-                    </div>
-                    {% endif %}
-                    
-                    <!-- Campos modificados -->
-                    {% if registro.campos_modificados %}
-                    <div class="changes-section">
-                        <small class="fw-bold text-secondary mb-2 d-block">
-                            <i class="fas fa-exchange-alt me-1"></i>
-                            Campos modificados ({{ registro.campos_modificados|length }}):
-                        </small>
-                        
                         <div class="row">
-                            {% for campo in registro.campos_modificados %}
-                            <div class="col-12 mb-2">
-                                <div class="change-item p-2 bg-light rounded">
-                                    <div class="d-flex align-items-center mb-1">
-                                        <span class="{{ campo|get_change_badge_class }} me-2">
-                                            {{ campo|format_field_name }}
-                                        </span>
+                            <div class="col-md-6">
+                                <div class="info-row">
+                                    <span class="info-label">Fecha:</span>
+                                    <span class="info-value">{{ bitacora.fecha|date:"d/m/Y" }}</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Lote:</span>
+                                    <span class="badge bg-light text-dark">{{ bitacora.lote.codigo }}</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Galpón:</span>
+                                    <span class="info-value">{{ bitacora.lote.galpon.nombre }}</span>
+                                </div>
+                                <div class="info-row border-0">
+                                    <span class="info-label">Semana de Vida:</span>
+                                    <span class="info-value">{{ bitacora.semana_vida|default:"No especificada" }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-row">
+                                    <span class="info-label">Mortalidad:</span>
+                                    <span class="info-value {% if bitacora.mortalidad > 0 %}text-danger fw-bold bg-white px-2 rounded{% endif %}">{{ bitacora.mortalidad }}</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Causa Mortalidad:</span>
+                                    <span class="info-value">{{ bitacora.causa_mortalidad|default:"N/A" }}</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Consumo Concentrado:</span>
+                                    <span class="info-value">{{ bitacora.consumo_concentrado }} kg</span>
+                                </div>
+                                <div class="info-row border-0">
+                                    <span class="info-label">Registrado por:</span>
+                                    <span class="info-value">{{ bitacora.usuario_registro.get_full_name|default:bitacora.usuario_registro.username }}</span>
+                                </div>
+                                {% if bitacora.firma_responsable %}
+                                <div class="info-row border-0 mt-2">
+                                    <span class="info-label">Firma Encargado:</span>
+                                    <div class="mt-1">
+                                        <img src="{{ bitacora.firma_responsable.url }}" alt="Firma" class="img-fluid bg-white p-1 rounded" style="max-height: 60px;">
                                     </div>
-                                    
-                                    <div class="change-values">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <small class="text-muted">Valor anterior:</small>
-                                                <div class="old-value p-2 bg-danger bg-opacity-10 border border-danger border-opacity-25 rounded">
-                                                    {% with registro.valores_anteriores|parse_json_safe as valores_ant %}
-                                                        {{ valores_ant|default_if_none:"{}"|lookup:campo|format_field_value:campo|safe }}
-                                                    {% endwith %}
-                                                </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recolecciones -->
+                    <div class="detail-section">
+                        <div class="detail-section-header d-flex justify-content-between">
+                            <span><i class="fas fa-basket-shopping"></i> Recolecciones de Huevos</span>
+                            <span class="badge bg-light text-dark">{{ bitacora.total_recolecciones }} Total</span>
+                        </div>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <div class="stat-card">
+                                    <div class="stat-value">{{ bitacora.recoleccion_1 }}</div>
+                                    <div class="stat-label">1ª Recolección</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-card">
+                                    <div class="stat-value">{{ bitacora.recoleccion_2 }}</div>
+                                    <div class="stat-label">2ª Recolección</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-card">
+                                    <div class="stat-value">{{ bitacora.recoleccion_3 }}</div>
+                                    <div class="stat-label">3ª Recolección</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row align-items-center mt-4">
+                            <div class="col-md-6">
+                                <div class="card border-0 bg-danger bg-opacity-25 text-white mb-3">
+                                    <div class="card-header bg-danger text-white py-2 border-0">
+                                        <h6 class="mb-0 text-center">Huevos Rotos</h6>
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <h3 class="fw-bold mb-0">{{ bitacora.huevos_rotos }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-0 bg-success bg-opacity-25 text-white mb-3">
+                                    <div class="card-header bg-success text-white py-2 border-0">
+                                        <h6 class="mb-0 text-center">Huevos Clasificados</h6>
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <h3 class="fw-bold mb-0">{{ bitacora.produccion_total }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <!-- Historial -->
+                    <div class="detail-section">
+                        <div class="detail-section-header">
+                            <i class="fas fa-history"></i> Historial
+                        </div>
+                        <div class="history-container" style="max-height: 400px; overflow-y: auto;">
+                            {% for registro in bitacora.historial_modificaciones.all %}
+                            <div class="modification-entry mb-3 p-3 rounded" style="background: rgba(255,255,255,0.1);">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge bg-info text-dark">{{ registro.usuario.username }}</span>
+                                    <small class="text-white-50">{{ registro.fecha_modificacion|date:"d/m/Y H:i" }}</small>
+                                </div>
+                                <div class="change-values small">
+                                    {% for campo, cambio in registro.cambios.items %}
+                                    <div class="mb-2 border-bottom border-secondary pb-2">
+                                        <div class="text-warning fw-bold mb-1">{{ campo|title }}</div>
+                                        <div class="d-flex justify-content-between">
+                                            <div class="text-danger me-2">
+                                                <i class="fas fa-minus-circle small"></i> 
+                                                {% with registro.valores_anteriores|parse_json_safe as valores_ant %}
+                                                    {{ valores_ant|default_if_none:"{}"|lookup:campo|format_field_value:campo|safe }}
+                                                {% endwith %}
                                             </div>
-                                            <div class="col-md-6">
-                                                <small class="text-muted">Valor nuevo:</small>
-                                                <div class="new-value p-2 bg-success bg-opacity-10 border border-success border-opacity-25 rounded">
-                                                    {% with registro.valores_nuevos|parse_json_safe as valores_nue %}
-                                                        {{ valores_nue|default_if_none:"{}"|lookup:campo|format_field_value:campo|safe }}
-                                                    {% endwith %}
-                                                </div>
+                                            <div class="text-success">
+                                                <i class="fas fa-plus-circle small"></i> 
+                                                {% with registro.valores_nuevos|parse_json_safe as valores_nue %}
+                                                    {{ valores_nue|default_if_none:"{}"|lookup:campo|format_field_value:campo|safe }}
+                                                {% endwith %}
                                             </div>
                                         </div>
                                     </div>
+                                    {% endfor %}
                                 </div>
+                            </div>
+                            {% empty %}
+                            <div class="text-center py-4">
+                                <i class="fas fa-clock fa-2x text-white-50 mb-2"></i>
+                                <p class="text-white-50 mb-0">No hay modificaciones</p>
                             </div>
                             {% endfor %}
                         </div>
                     </div>
+
+                    <!-- Evidencia -->
+                    {% if bitacora.imagen_huevos_rotos %}
+                    <div class="detail-section">
+                        <div class="detail-section-header">
+                            <i class="fas fa-camera"></i> Evidencia
+                        </div>
+                        <div class="evidence-container text-center">
+                            <img src="{{ bitacora.imagen_huevos_rotos.url }}" class="img-fluid rounded border border-light" alt="Evidencia" style="max-height: 200px; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#imageModal">
+                            <div class="mt-2 text-white-50 small">Click para ampliar</div>
+                        </div>
+                    </div>
                     {% endif %}
                 </div>
-                {% empty %}
-                <div class="text-center py-4">
-                    <i class="fas fa-history fa-3x text-muted mb-3"></i>
-                    <p class="text-muted mb-0">No hay modificaciones registradas</p>
-                    <small class="text-muted">Los cambios aparecerán aquí cuando se edite la bitácora</small>
-                </div>
-                {% endfor %}
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Modal de Imagen -->
+<div class="modal fade" id="imageModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-3 bg-white" data-bs-dismiss="modal"></button>
+                <img src="{% if bitacora.imagen_huevos_rotos %}{{ bitacora.imagen_huevos_rotos.url }}{% endif %}" class="img-fluid w-100" alt="Evidencia Detallada">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Print Layout -->
+<div class="print-layout">
+    <table class="table table-bordered mb-0" style="width: 100%; margin-bottom: 0 !important; border: 2px solid black;">
+        <tbody>
+            <tr>
+                <td style="width: 60%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height:20mm; width:auto; object-fit:contain;">
+                        <div class="fw-bold" style="font-size: 14px; line-height: 1.2;">
+                            Centro de los Recursos Naturales Renovables La Salada<br>
+                            Regional Antioquia
+                        </div>
+                    </div>
+                </td>
+                <td style="width: 40%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="fw-bold">Código del documento: <span class="fw-normal">-</span></div>
+                    <div class="mt-1 fw-bold">Versión: <span class="fw-normal">01</span></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-center" style="text-align: center !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="fw-bold">Unidad productiva de avicultura</div>
+                    <div class="h5 mb-0 fw-bold">BITÁCORA DIARIA DE AVES - DETALLE</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Información General -->
+    <div class="print-section-title">INFORMACIÓN GENERAL</div>
+    <table class="table table-bordered mt-0" style="width: 100%; border: 1px solid black; font-size: 11px !important;">
+        <tbody>
+            <tr>
+                <td width="15%" class="fw-bold bg-light">Fecha:</td>
+                <td width="35%">{{ bitacora.fecha|date:"d/m/Y" }}</td>
+                <td width="15%" class="fw-bold bg-light">Semana Vida:</td>
+                <td width="35%">{{ bitacora.semana_vida|default:"-" }}</td>
+            </tr>
+            <tr>
+                <td class="fw-bold bg-light">Lote:</td>
+                <td>{{ bitacora.lote.codigo }}</td>
+                <td class="fw-bold bg-light">Galpón:</td>
+                <td>{{ bitacora.lote.galpon.nombre }}</td>
+            </tr>
+            <tr>
+                <td class="fw-bold bg-light">Mortalidad:</td>
+                <td>{{ bitacora.mortalidad }}</td>
+                <td class="fw-bold bg-light">Causa:</td>
+                <td>{{ bitacora.causa_mortalidad|default:"-" }}</td>
+            </tr>
+            <tr>
+                <td class="fw-bold bg-light">Responsable:</td>
+                <td colspan="3">{{ bitacora.usuario_registro.get_full_name|default:bitacora.usuario_registro.username }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Recolección y Clasificación -->
+    <div class="row">
+        <div class="col-6">
+            <div class="print-section-title">RECOLECCIÓN DE HUEVOS</div>
+            <table class="table table-bordered mt-0" style="width: 100%; border: 1px solid black; font-size: 11px !important;">
+                <tbody>
+                    <tr>
+                        <td width="60%" class="fw-bold">1ª Recolección:</td>
+                        <td width="40%" class="text-center">{{ bitacora.recoleccion_1 }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">2ª Recolección:</td>
+                        <td class="text-center">{{ bitacora.recoleccion_2 }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">3ª Recolección:</td>
+                        <td class="text-center">{{ bitacora.recoleccion_3 }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">4ª Recolección:</td>
+                        <td class="text-center">{{ bitacora.recoleccion_4|default:0 }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold text-danger">Rotos:</td>
+                        <td class="text-center text-danger">{{ bitacora.huevos_rotos }}</td>
+                    </tr>
+                    <tr class="bg-light">
+                        <td class="fw-bold">TOTAL RECOLECCIÓN:</td>
+                        <td class="text-center fw-bold">{{ bitacora.total_recolecciones }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-6">
+            <div class="print-section-title">CLASIFICACIÓN COMERCIAL</div>
+            <table class="table table-bordered mt-0" style="width: 100%; border: 1px solid black; font-size: 11px !important;">
+                <tbody>
+                    <tr>
+                        <td width="60%" class="fw-bold">Extra (AAA):</td>
+                        <td width="40%" class="text-center">{{ bitacora.produccion_aaa }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Tipo AA:</td>
+                        <td class="text-center">{{ bitacora.produccion_aa }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Tipo A:</td>
+                        <td class="text-center">{{ bitacora.produccion_a }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Tipo B:</td>
+                        <td class="text-center">{{ bitacora.produccion_b }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Tipo C:</td>
+                        <td class="text-center">{{ bitacora.produccion_c }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Jumbo:</td>
+                        <td class="text-center">{{ bitacora.produccion_jumbo|default:0 }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Otros (Sucios/Fárfara/Descarte):</td>
+                        <td class="text-center">{{ bitacora.huevos_sucios|add:bitacora.huevos_farfara|add:bitacora.descarte|default:0 }}</td>
+                    </tr>
+                    <tr class="bg-light">
+                        <td class="fw-bold">TOTAL CLASIFICADO:</td>
+                        <td class="text-center fw-bold">{{ bitacora.produccion_total }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Alimentación -->
+    <div class="print-section-title">ALIMENTACIÓN</div>
+    <table class="table table-bordered mt-0" style="width: 100%; border: 1px solid black; font-size: 11px !important;">
+        <tbody>
+            <tr>
+                <td width="30%" class="fw-bold bg-light">Consumo Concentrado (kg):</td>
+                <td width="70%">{{ bitacora.consumo_concentrado }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Despachos / Movimientos -->
+    <div class="print-section-title">DESPACHOS / MOVIMIENTOS DEL DÍA</div>
+    <table class="table table-bordered mt-0" style="width: 100%; border: 1px solid black; font-size: 11px !important;">
+        <thead>
+            <tr class="bg-light">
+                <th width="15%">Tipo</th>
+                <th width="25%">Cliente/Destino</th>
+                <th width="20%">Conductor</th>
+                <th width="15%" class="text-center">Cant. (Docenas)</th>
+                <th width="25%">Observación</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mov in movimientos %}
+            <tr>
+                <td>{{ mov.get_tipo_movimiento_display }}</td>
+                <td>{{ mov.cliente|default:"-" }}</td>
+                <td>{{ mov.conductor|default:"-" }}</td>
+                <td class="text-center">{{ mov.cantidad_total_docenas }}</td>
+                <td>{{ mov.observaciones|truncatechars:30|default:"-" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center fst-italic">No hay movimientos registrados para esta fecha.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Observaciones -->
+    {% if bitacora.observaciones %}
+    <div class="print-section-title">OBSERVACIONES</div>
+    <div style="border: 1px solid black; padding: 10px; font-size: 11px; min-height: 50px;">
+        {{ bitacora.observaciones|linebreaksbr }}
+    </div>
+    {% endif %}
+
+    <!-- Firmas -->
+    <table class="table table-bordered mt-4" style="width: 100%; border: none !important;">
+        <tbody>
+            <tr style="height: 80px; border: none !important;">
+                <td style="width: 50%; vertical-align: bottom !important; padding: 5px; border: none !important;">
+                    <div style="font-size: 11px; font-weight: bold; margin-bottom: 5px;">Responsable de Bitácora:</div>
+                    {% if bitacora.firma_responsable %}
+                        <div style="height: 60px; display: flex; align-items: flex-end;">
+                            <img src="{{ bitacora.firma_responsable.url }}" style="max-height: 60px; max-width: 200px;" alt="Firma">
+                        </div>
+                        <div style="border-bottom: 1px solid black; width: 90%;"></div>
+                    {% else %}
+                        <div style="height: 60px;"></div>
+                        <div style="border-bottom: 1px solid black; width: 90%;"></div>
+                    {% endif %}
+                    <div style="font-size: 10px; margin-top: 5px;">{{ bitacora.usuario_registro.get_full_name|default:bitacora.usuario_registro.username }}</div>
+                </td>
+                <td style="width: 50%; vertical-align: bottom !important; padding: 5px; border: none !important;">
+                    <div style="font-size: 11px; font-weight: bold; margin-bottom: 40px;">Visto Bueno Instructor:</div>
+                    <div style="border-bottom: 1px solid black; width: 90%;"></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div style="font-size: 9px; text-align: center; margin-top: 20px; color: #666;">
+        Generado por AgroSmart - Sistema de Gestión Agropecuaria | Fecha de impresión: {% now "d/m/Y H:i" %}
     </div>
 </div>
 {% endblock %}

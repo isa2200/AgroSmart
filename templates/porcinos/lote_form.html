@@ -1,32 +1,339 @@
-{% extends 'aves/base.html' %}
+{% extends 'porcinos/base.html' %}
+{% load widget_tweaks %}
 
-{% block title %}Nuevo Lote Porcinos{% endblock %}
-{% block page_title %}Nuevo Lote Porcinos{% endblock %}
+{% block title %}Gestión de Lotes - Porcinos{% endblock %}
 
-{% block breadcrumb %}
-<nav aria-label="breadcrumb" class="mb-3">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'dashboard:principal' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'porcinos:dashboard' %}">Porcinos</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'porcinos:lote_list' %}">Lotes</a></li>
-        <li class="breadcrumb-item active">Nuevo</li>
-    </ol>
-    </nav>
+{% block breadcrumb %}{% endblock %}
+{% block page_header %}{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    /* Estilos unificados Glassmorphism - Copiados de Aves */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+        padding: 0;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 2rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    .glass-wrap {
+        width: 100%;
+        max-width: 95%;
+        margin: 0 auto;
+    }
+    @media (min-width: 1600px){
+        .glass-wrap{ max-width: 95%; }
+    }
+
+    .unified-dashboard-card .form-label{
+        color: #fff;
+    }
+    .unified-dashboard-card .form-text{
+        color: rgba(255,255,255,0.8);
+    }
+    .unified-dashboard-card .table {
+        color: white;
+    }
+    .unified-dashboard-card .table thead th {
+        background-color: #2e7d32 !important;
+        color: white !important;
+        border: none;
+    }
+    .unified-dashboard-card .table td {
+        border-color: rgba(255,255,255,0.1);
+        color: white;
+    }
+    .unified-dashboard-card .table-hover tbody tr:hover {
+        background-color: rgba(255,255,255,0.1);
+    }
+    
+    .unified-dashboard-card .form-control, 
+    .unified-dashboard-card .form-select {
+        background: rgba(255,255,255,0.85);
+        border: 1px solid rgba(255,255,255,0.25);
+        color: #1b1b1b;
+    }
+    .unified-dashboard-card .form-control:focus,
+    .unified-dashboard-card .form-select:focus {
+        border-color: rgba(52, 199, 89, 0.9);
+        box-shadow: 0 0 0 0.2rem rgba(52, 199, 89, 0.25);
+    }
+    .unified-dashboard-card .is-invalid {
+        border-color: rgba(220,53,69,0.9);
+        box-shadow: 0 0 0 0.2rem rgba(220,53,69,0.15);
+    }
+    .unified-dashboard-card hr {
+        border-color: rgba(255,255,255,0.2);
+    }
+    .form-section-title {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        color: #fff;
+        font-weight: 600;
+        margin-bottom: 12px;
+        border-left: 4px solid #34c759;
+        padding-left: 8px;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="card">
-    <div class="card-body">
-        <form method="post">
-            {% csrf_token %}
-            <div class="row g-3">
-                {{ form.as_p }}
+<div class="row justify-content-center">
+    <div class="col-12">
+        <div class="glass-wrap">
+            <h2 class="text-center text-white mb-4 fw-bold" style="font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Gestión de Lotes Porcinos</h2>
+            <div class="row">
+                <!-- Columna Izquierda: Lista de Lotes -->
+                <div class="col-lg-5 col-md-12 mb-4">
+                    <div class="unified-dashboard-card h-100">
+                        <div class="card-header">
+                            <h5 class="section-title"><i class="fas fa-list"></i>Últimos Lotes Registrados</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if lotes_recientes %}
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Código</th>
+                                                <th>Corral</th>
+                                                <th>Estado</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for lote in lotes_recientes %}
+                                                <tr>
+                                                    <td><strong>{{ lote.codigo }}</strong></td>
+                                                    <td>{{ lote.corral }}</td>
+                                                    <td>
+                                                        {% if lote.estado == 'activo' %}
+                                                            <span class="badge bg-success">Activo</span>
+                                                        {% elif lote.estado == 'engorde' %}
+                                                            <span class="badge bg-warning text-dark">Engorde</span>
+                                                        {% elif lote.estado == 'vendido' %}
+                                                            <span class="badge bg-info text-dark">Vendido</span>
+                                                        {% else %}
+                                                            <span class="badge bg-secondary">Cerrado</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <a href="{% url 'porcinos:lote_detail' lote.pk %}" class="btn btn-sm btn-outline-light" title="Ver detalle">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <p class="text-white mb-0">Aún no hay lotes registrados.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Formulario -->
+                <div class="col-lg-7 col-md-12 mb-4">
+                    <div class="unified-dashboard-card h-100">
+                        <div class="card-header">
+                            <h5 class="section-title"><i class="fas fa-layer-group"></i>Gestión de Lotes</h5>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="text-white mb-3">Crear Nuevo Lote</h6>
+                            <form method="post" id="loteForm">
+                                {% csrf_token %}
+                                
+                                <div class="row">
+                                    <!-- Información Básica -->
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-section-title"><i class="fas fa-info-circle"></i>Información Básica</div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="{{ form.codigo.id_for_label }}" class="form-label"><i class="fas fa-barcode me-1"></i>Código del Lote *</label>
+                                            {% if form.codigo.errors %}
+                                                {{ form.codigo|add_class:"form-control is-invalid" }}
+                                                <div class="text-danger small">{{ form.codigo.errors.0 }}</div>
+                                            {% else %}
+                                                {{ form.codigo|add_class:"form-control" }}
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="{{ form.corral.id_for_label }}" class="form-label"><i class="fas fa-warehouse me-1"></i>Corral *</label>
+                                            {% if form.corral.errors %}
+                                                {{ form.corral|add_class:"form-control is-invalid" }}
+                                                <div class="text-danger small">{{ form.corral.errors.0 }}</div>
+                                            {% else %}
+                                                {{ form.corral|add_class:"form-control" }}
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="{{ form.procedencia.id_for_label }}" class="form-label"><i class="fas fa-truck me-1"></i>Procedencia</label>
+                                            {% if form.procedencia.errors %}
+                                                {{ form.procedencia|add_class:"form-control is-invalid" }}
+                                                <div class="text-danger small">{{ form.procedencia.errors.0 }}</div>
+                                            {% else %}
+                                                {{ form.procedencia|add_class:"form-control" }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <!-- Datos del Lote -->
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-section-title"><i class="fas fa-chart-line"></i>Datos del Lote</div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="{{ form.numero_cerdos_inicial.id_for_label }}" class="form-label"><i class="fas fa-piggy-bank me-1"></i>N° Cerdos Inicial *</label>
+                                            {% if form.numero_cerdos_inicial.errors %}
+                                                {{ form.numero_cerdos_inicial|add_class:"form-control is-invalid" }}
+                                                <div class="text-danger small">{{ form.numero_cerdos_inicial.errors.0 }}</div>
+                                            {% else %}
+                                                {{ form.numero_cerdos_inicial|add_class:"form-control" }}
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="{{ form.peso_total_llegada.id_for_label }}" class="form-label"><i class="fas fa-weight-hanging me-1"></i>Peso Total Llegada (kg)</label>
+                                            {% if form.peso_total_llegada.errors %}
+                                                {{ form.peso_total_llegada|add_class:"form-control is-invalid" }}
+                                                <div class="text-danger small">{{ form.peso_total_llegada.errors.0 }}</div>
+                                            {% else %}
+                                                {{ form.peso_total_llegada|add_class:"form-control" }}
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="{{ form.peso_promedio_llegada.id_for_label }}" class="form-label"><i class="fas fa-weight me-1"></i>Peso Promedio (kg)</label>
+                                            {% if form.peso_promedio_llegada.errors %}
+                                                {{ form.peso_promedio_llegada|add_class:"form-control is-invalid" }}
+                                                <div class="text-danger small">{{ form.peso_promedio_llegada.errors.0 }}</div>
+                                            {% else %}
+                                                {{ form.peso_promedio_llegada|add_class:"form-control" }}
+                                            {% endif %}
+                                            <div class="form-text text-white-50 small">Se calcula automáticamente si se deja vacío.</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Otros Datos -->
+                                    <div class="col-12 mt-2">
+                                        <div class="form-section-title"><i class="fas fa-calendar-alt"></i>Fecha y Detalles</div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="{{ form.fecha_llegada.id_for_label }}" class="form-label"><i class="fas fa-calendar-day me-1"></i>Fecha de Llegada *</label>
+                                                {% if form.fecha_llegada.errors %}
+                                                    {{ form.fecha_llegada|add_class:"form-control is-invalid" }}
+                                                    <div class="text-danger small">{{ form.fecha_llegada.errors.0 }}</div>
+                                                {% else %}
+                                                    {{ form.fecha_llegada|add_class:"form-control" }}
+                                                {% endif %}
+                                            </div>
+                                            
+                                            <div class="col-md-6 mb-3">
+                                                <label for="{{ form.estado.id_for_label }}" class="form-label"><i class="fas fa-toggle-on me-1"></i>Estado *</label>
+                                                {% if form.estado.errors %}
+                                                    {{ form.estado|add_class:"form-select is-invalid" }}
+                                                    <div class="text-danger small">{{ form.estado.errors.0 }}</div>
+                                                {% else %}
+                                                    {{ form.estado|add_class:"form-select" }}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="{{ form.observaciones.id_for_label }}" class="form-label"><i class="fas fa-comment-alt me-1"></i>Observaciones</label>
+                                            {% if form.observaciones.errors %}
+                                                {{ form.observaciones|add_class:"form-control is-invalid" }}
+                                                <div class="text-danger small">{{ form.observaciones.errors.0 }}</div>
+                                            {% else %}
+                                                {{ form.observaciones|add_class:"form-control" }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Campos ocultos necesarios -->
+                                {{ form.numero_cerdos_actual.as_hidden }}
+                                
+
+                                <div class="d-flex justify-content-end gap-2 mt-4">
+                                    <a href="{% url 'porcinos:dashboard' %}" class="btn btn-sm btn-glass-green fw-bold">
+                                        <i class="fas fa-times me-1"></i>Cancelar
+                                    </a>
+                                    <button type="submit" class="btn btn-sm btn-glass-green fw-bold">
+                                        <i class="fas fa-save me-1"></i>Guardar Lote
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="mt-3">
-                <button type="submit" class="btn btn-primary">Guardar</button>
-                <a href="{% url 'porcinos:lote_list' %}" class="btn btn-secondary">Cancelar</a>
-            </div>
-        </form>
+        </div>
     </div>
- </div>
+</div>
+
+<script>
+    // Script para cálculo automático de peso promedio
+    document.addEventListener('DOMContentLoaded', function() {
+        const pesoTotalInput = document.getElementById('{{ form.peso_total_llegada.id_for_label }}');
+        const cerdosInicialInput = document.getElementById('{{ form.numero_cerdos_inicial.id_for_label }}');
+        const pesoPromedioInput = document.getElementById('{{ form.peso_promedio_llegada.id_for_label }}');
+        
+        function calcularPromedio() {
+            const pesoTotal = parseFloat(pesoTotalInput.value) || 0;
+            const cerdos = parseInt(cerdosInicialInput.value) || 0;
+            
+            if (pesoTotal > 0 && cerdos > 0 && !pesoPromedioInput.value) {
+                const promedio = (pesoTotal / cerdos).toFixed(2);
+                pesoPromedioInput.value = promedio;
+            }
+        }
+        
+        pesoTotalInput.addEventListener('change', calcularPromedio);
+        cerdosInicialInput.addEventListener('change', calcularPromedio);
+        
+        // Sincronizar numero_cerdos_actual con numero_cerdos_inicial al crear
+        const form = document.getElementById('loteForm');
+        form.addEventListener('submit', function() {
+            const cerdosActualHidden = document.getElementById('{{ form.numero_cerdos_actual.id_for_label }}');
+            if (cerdosActualHidden && !cerdosActualHidden.value) {
+                cerdosActualHidden.value = cerdosInicialInput.value;
+            }
+        });
+    });
+</script>
 {% endblock %}

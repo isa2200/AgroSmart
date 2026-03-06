@@ -1,0 +1,174 @@
+{% extends 'cunicultura/base.html' %}
+{% load static %}
+
+{% block title %}Historial de Movimientos - AgroSmart{% endblock %}
+
+{% block breadcrumb %}{% endblock %}
+{% block page_header %}{% endblock %}
+
+{% block content %}
+<div class="glass-wrap fade-in">
+    <div class="unified-dashboard-card">
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+                <div class="header-icon-box me-3">
+                    <i class="fas fa-history fa-lg text-white"></i>
+                </div>
+                <div>
+                    <h5 class="section-title mb-0 fw-bold">Historial de Movimientos</h5>
+                    <small class="text-white-50">Auditoría de cambios y eliminaciones en el inventario</small>
+                </div>
+            </div>
+            <a href="{% url 'cunicultura:inventario_permanente' %}" class="btn btn-outline-light btn-sm d-flex align-items-center gap-2">
+                <i class="fas fa-arrow-left"></i>
+                <span>Volver al Inventario</span>
+            </a>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-custom align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Fecha Acción</th>
+                            <th>Usuario</th>
+                            <th>Acción</th>
+                            <th>Registro Afectado</th>
+                            <th>Justificación</th>
+                            <th>Detalle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in historial %}
+                        <tr>
+                            <td class="fw-bold">{{ log.fecha_accion|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="avatar-circle-sm bg-success text-white fw-bold shadow-sm">
+                                        {{ log.usuario.username|slice:":1"|upper }}
+                                    </div>
+                                    <span class="fw-medium">{{ log.usuario.username }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                {% if log.accion == 'CREAR' %}
+                                    <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill">
+                                        <i class="fas fa-plus-circle me-1"></i>Crear
+                                    </span>
+                                {% elif log.accion == 'EDITAR' %}
+                                    <span class="badge bg-warning bg-opacity-10 text-warning border border-warning px-3 py-2 rounded-pill">
+                                        <i class="fas fa-edit me-1"></i>Editar
+                                    </span>
+                                {% elif log.accion == 'ELIMINAR' %}
+                                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-2 rounded-pill">
+                                        <i class="fas fa-trash-alt me-1"></i>Eliminar
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column text-start">
+                                    <span class="badge bg-light text-dark border mb-1" style="width: fit-content;">
+                                        <i class="fas fa-calendar-alt me-1 text-muted"></i>{{ log.fecha_registro|date:"d/m/Y" }}
+                                    </span>
+                                    <small class="text-muted">ID: #{{ log.registro_id }}</small>
+                                </div>
+                            </td>
+                            <td class="text-start" style="max-width: 300px;">
+                                {% if log.justificacion %}
+                                    <div class="p-2 bg-light border rounded text-secondary small fst-italic">
+                                        "{{ log.justificacion }}"
+                                    </div>
+                                {% else %}
+                                    <span class="text-muted small fst-italic">Sin justificación</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-outline-success" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#detalleModal{{ log.id }}">
+                                    <i class="fas fa-eye me-1"></i>Ver
+                                </button>
+
+                                <!-- Modal Detalle -->
+                                <div class="modal fade" id="detalleModal{{ log.id }}" tabindex="-1">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content glass-modal border-0 shadow-lg">
+                                            <div class="modal-header bg-success text-white">
+                                                <h5 class="modal-title text-white"><i class="fas fa-info-circle me-2"></i>Detalle del Registro</h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body text-start bg-light">
+                                                <h6 class="text-success fw-bold mb-3">Snapshot de Datos</h6>
+                                                <div class="bg-white p-3 rounded border shadow-sm">
+                                                    {% if log.datos_anteriores %}
+                                                        <pre class="text-secondary mb-0" style="white-space: pre-wrap; font-size: 0.8rem; font-family: monospace;">{{ log.datos_anteriores }}</pre>
+                                                    {% else %}
+                                                        <p class="mb-0 text-muted fst-italic">No hay datos JSON guardados.</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer bg-light border-top-0">
+                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="py-5 text-center bg-white">
+                                <div class="d-flex flex-column align-items-center opacity-50">
+                                    <div class="mb-3 p-4 rounded-circle bg-light">
+                                        <i class="fas fa-history fa-3x text-success"></i>
+                                    </div>
+                                    <h5 class="text-muted">No hay historial registrado aún</h5>
+                                    <p class="small text-muted mb-0">Los movimientos de inventario aparecerán aquí.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer bg-white border-top">
+            <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">
+                    <i class="fas fa-check-circle me-1 text-success"></i>Registros sincronizados
+                </small>
+                <small class="text-muted">Total: {{ historial.count }} registros</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Icon box for header */
+    .header-icon-box {
+        width: 45px;
+        height: 45px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(5px);
+    }
+    
+    /* Avatar circular */
+    .avatar-circle-sm {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+    }
+</style>
+{% endblock %}
+

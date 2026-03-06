@@ -4,89 +4,111 @@
 
 {% block page_title %}Reportes Porcinos{% endblock %}
 
-
-
 {% block breadcrumb_items %}
     <li class="breadcrumb-item active">Reportes</li>
 {% endblock %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="card bg-primary text-white">
-            <div class="card-body text-center">
-                <h4><i class="fas fa-chart-line me-2"></i>Dashboard de Porcinos</h4>
-                <p class="mb-3">Accede al dashboard interactivo con métricas en tiempo real</p>
-                <a href="{% url 'porcinos:dashboard' %}" class="btn btn-light">
+<div class="animate-fade-in">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="unified-dashboard-card text-center py-4">
+                <h4 class="text-white fw-bold"><i class="fas fa-chart-line me-2"></i>Dashboard de Porcinos</h4>
+                <p class="text-white-50 mb-3">Accede al dashboard interactivo con métricas en tiempo real</p>
+                <a href="{% url 'porcinos:dashboard' %}" class="btn btn-sm btn-glass-green fw-bold px-4">
                     <i class="fas fa-tachometer-alt me-2"></i>Ir al Dashboard
                 </a>
             </div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <!-- Inventario Permanente -->
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center">
+    <div class="row">
+        <!-- Inventario Permanente -->
+        <div class="col-md-3 mb-4">
+            <div class="unified-dashboard-card h-100 d-flex flex-column text-center">
                 <div class="mb-3">
-                    <i class="fas fa-table fa-3x text-primary"></i>
+                    <div class="rounded-circle bg-white p-3 d-inline-block shadow-sm">
+                        <i class="fas fa-table fa-3x text-success"></i>
+                    </div>
                 </div>
-                <h5 class="card-title">Inventario Permanente</h5>
-                <p class="card-text">Genera e imprime el formato oficial del SENA de inventario permanente.</p>
-                <a href="{% url 'porcinos:inventario_permanente' %}" class="btn btn-primary">
-                    <i class="fas fa-file-alt me-2"></i>Ir al Inventario
-                </a>
+                <h5 class="fw-bold text-white">Inventario Permanente</h5>
+                <p class="text-white-50 flex-grow-1">Genera e imprime el formato oficial del SENA de inventario permanente.</p>
+                <div class="mt-3">
+                    <a href="{% url 'porcinos:inventario_permanente' %}" class="btn btn-glass-green w-100">
+                        <i class="fas fa-file-alt me-2"></i>Ir al Inventario
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Plan Sanitario -->
+        <div class="col-md-3 mb-4">
+            <div class="unified-dashboard-card h-100 d-flex flex-column text-center">
+                <div class="mb-3">
+                    <div class="rounded-circle bg-white p-3 d-inline-block shadow-sm">
+                        <i class="fas fa-notes-medical fa-3x text-success"></i>
+                    </div>
+                </div>
+                <h5 class="fw-bold text-white">Plan Sanitario</h5>
+                <p class="text-white-50 flex-grow-1">Control sanitario de cerdas gestantes y calendario de vacunación.</p>
+                <div class="mt-3">
+                    <a href="{% url 'porcinos:plan_gestante' %}" class="btn btn-glass-green w-100">
+                        <i class="fas fa-file-medical me-2"></i>Ir al Plan
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Registro de Alimento -->
+        <div class="col-md-3 mb-4">
+            <div class="unified-dashboard-card h-100 d-flex flex-column text-center">
+                <div class="mb-3">
+                    <div class="rounded-circle bg-white p-3 d-inline-block shadow-sm">
+                        <i class="fas fa-drumstick-bite fa-3x text-success"></i>
+                    </div>
+                </div>
+                <h5 class="fw-bold text-white">Gasto de Alimento</h5>
+                <p class="text-white-50 flex-grow-1">Registro y control detallado del consumo de alimento por etapas.</p>
+                <div class="mt-3">
+                    <a href="{% url 'porcinos:registro_alimento' %}" class="btn btn-glass-green w-100">
+                        <i class="fas fa-utensils me-2"></i>Ir al Registro
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Centro de Alertas -->
+        <div class="col-md-3 mb-4">
+            <div class="unified-dashboard-card h-100 d-flex flex-column text-center">
+                <div class="mb-3">
+                    <div class="rounded-circle bg-white p-3 d-inline-block shadow-sm">
+                        <i class="fas fa-exclamation-triangle fa-3x text-warning"></i>
+                    </div>
+                </div>
+                <h5 class="fw-bold text-white">Centro de Alertas</h5>
+                <p class="text-white-50 flex-grow-1">Gestión de alertas de mortalidad, consumo y salud.</p>
+                <div class="mt-3">
+                    <a href="{% url 'porcinos:alertas_list' %}" class="btn btn-glass-green w-100">
+                        <i class="fas fa-bell me-2"></i>Ver Alertas
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-    
-    <!-- Plan Sanitario -->
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <div class="mb-3">
-                    <i class="fas fa-notes-medical fa-3x text-success"></i>
-                </div>
-                <h5 class="card-title">Plan Sanitario</h5>
-                <p class="card-text">Control sanitario de cerdas gestantes y calendario de vacunación.</p>
-                <a href="{% url 'porcinos:plan_gestante' %}" class="btn btn-success">
-                    <i class="fas fa-file-medical me-2"></i>Ir al Plan
-                </a>
-            </div>
-        </div>
-    </div>
 
-    <!-- Registro de Alimento -->
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <div class="mb-3">
-                    <i class="fas fa-drumstick-bite fa-3x text-warning"></i>
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="unified-dashboard-card">
+                <div class="d-flex align-items-center mb-3">
+                    <h5 class="mb-0 fw-bold text-white"><i class="fas fa-info-circle me-2"></i>Información</h5>
                 </div>
-                <h5 class="card-title">Gasto de Alimento</h5>
-                <p class="card-text">Registro y control detallado del consumo de alimento por etapas.</p>
-                <a href="{% url 'porcinos:registro_alimento' %}" class="btn btn-warning text-white">
-                    <i class="fas fa-utensils me-2"></i>Ir al Registro
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Información</h5>
-            </div>
-            <div class="card-body">
-                <p class="mb-0">
-                    Los reportes de porcinos te permiten gestionar y documentar las actividades clave de tu unidad productiva.
-                    Todos los formatos están alineados con los estándares del SENA para facilitar el cumplimiento normativo.
-                    Utiliza el dashboard para obtener una vista general en tiempo real de tus indicadores de producción y mortalidad.
-                </p>
+                <div>
+                    <p class="mb-0 text-white-50">
+                        Los reportes de porcinos te permiten gestionar y documentar las actividades clave de tu unidad productiva.
+                        Todos los formatos están alineados con los estándares del SENA para facilitar el cumplimiento normativo.
+                        Utiliza el dashboard para obtener una vista general en tiempo real de tus indicadores de producción y mortalidad.
+                    </p>
+                </div>
             </div>
         </div>
     </div>

@@ -3,8 +3,174 @@
 
 {% block title %}Centro de Alertas - AgroSmart{% endblock %}
 
+{% block page_title %}{% endblock %}
+{% block breadcrumb_items %}{% endblock %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'aves/css/alertas.css' %}">
+<style>
+    /* Estilos unificados Glassmorphism */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    /* Glass Stat Cards */
+    .glass-stat-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        padding: 1.5rem;
+        color: white;
+        height: 100%;
+        transition: transform 0.2s;
+    }
+    
+    .glass-stat-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    .glass-stat-card.danger { border-left: 4px solid #dc3545; }
+    .glass-stat-card.warning { border-left: 4px solid #ffc107; }
+    .glass-stat-card.info { border-left: 4px solid #0dcaf0; }
+
+    /* Form Styles in Glass */
+    .form-label {
+        color: rgba(255,255,255,0.9);
+        font-weight: 500;
+    }
+
+    .form-select, .form-control {
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+    }
+
+    .form-select:focus, .form-control:focus {
+        background: rgba(255,255,255,0.2);
+        border-color: rgba(255,255,255,0.5);
+        color: white;
+        box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.1);
+    }
+    
+    .form-select option {
+        background: #2e7d32;
+        color: white;
+    }
+
+    /* Table Styles */
+    .table-custom {
+        margin-bottom: 0;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        color: white;
+    }
+    
+    .table-custom thead th {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        color: white !important;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+        vertical-align: middle;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 15px;
+        letter-spacing: 0.5px;
+    }
+
+    .table-custom tbody tr {
+        background-color: transparent !important;
+        transition: all 0.2s;
+    }
+    
+    .table-custom tbody tr:hover {
+        background-color: rgba(255,255,255,0.1) !important;
+    }
+    
+    .table-custom td {
+        padding: 15px;
+        vertical-align: middle;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.9);
+    }
+
+    /* Badges */
+    .badge {
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+
+    /* Pagination */
+    .pagination .page-link {
+        background: rgba(255,255,255,0.1);
+        border-color: rgba(255,255,255,0.2);
+        color: white;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background: rgba(255,255,255,0.3);
+        border-color: rgba(255,255,255,0.4);
+    }
+    
+    .pagination .page-item.disabled .page-link {
+        background: rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.5);
+    }
+
+    /* Checkbox */
+    .form-check-input {
+        background-color: rgba(255,255,255,0.1);
+        border-color: rgba(255,255,255,0.3);
+    }
+    .form-check-input:checked {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+    
+    /* Buttons */
+    .btn-light-custom {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.5);
+        color: #2e7d32;
+        font-weight: 600;
+    }
+    .btn-light-custom:hover {
+        background: #fff;
+        color: #1b5e20;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -14,55 +180,53 @@
     <!-- Header con Estadísticas -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2><i class="fas fa-exclamation-triangle text-warning me-2"></i>Centro de Alertas</h2>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-outline-primary" id="btnRefresh">
-                        <i class="fas fa-sync-alt me-1"></i>Actualizar
-                    </button>
-                    <button type="button" class="btn btn-outline-success" id="btnMarkAllRead">
-                        <i class="fas fa-check-double me-1"></i>Marcar Todo Leído
-                    </button>
+            <div class="unified-dashboard-card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="section-title" style="font-size: 2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+                        <i class="fas fa-exclamation-triangle text-warning me-2"></i>Centro de Alertas
+                    </h2>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-light-custom" id="btnRefresh">
+                            <i class="fas fa-sync-alt me-1"></i>Actualizar
+                        </button>
+                        <button type="button" class="btn btn-light-custom" id="btnMarkAllRead">
+                            <i class="fas fa-check-double me-1"></i>Marcar Todo Leído
+                        </button>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- Estadísticas de Alertas -->
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card bg-danger text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
+                
+                <!-- Estadísticas de Alertas -->
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="glass-stat-card danger">
+                            <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h4 class="mb-0">{{ stats.criticas }}</h4>
-                                    <p class="mb-0">Críticas</p>
+                                    <h3 class="mb-0 fw-bold">{{ stats.criticas }}</h3>
+                                    <p class="mb-0 opacity-75">Críticas</p>
                                 </div>
-                                <i class="fas fa-exclamation-circle fa-2x"></i>
+                                <i class="fas fa-exclamation-circle fa-2x text-danger opacity-75"></i>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card bg-warning text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
+                    <div class="col-md-4">
+                        <div class="glass-stat-card warning">
+                            <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h4 class="mb-0">{{ stats.altas }}</h4>
-                                    <p class="mb-0">Normales</p>
+                                    <h3 class="mb-0 fw-bold">{{ stats.altas }}</h3>
+                                    <p class="mb-0 opacity-75">Normales</p>
                                 </div>
-                                <i class="fas fa-exclamation-triangle fa-2x"></i>
+                                <i class="fas fa-exclamation-triangle fa-2x text-warning opacity-75"></i>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card bg-info text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
+                    <div class="col-md-4">
+                        <div class="glass-stat-card info">
+                            <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h4 class="mb-0">{{ stats.total_no_leidas }}</h4>
-                                    <p class="mb-0">No Leídas</p>
+                                    <h3 class="mb-0 fw-bold">{{ stats.total_no_leidas }}</h3>
+                                    <p class="mb-0 opacity-75">No Leídas</p>
                                 </div>
-                                <i class="fas fa-info-circle fa-2x"></i>
+                                <i class="fas fa-info-circle fa-2x text-info opacity-75"></i>
                             </div>
                         </div>
                     </div>
@@ -72,12 +236,15 @@
     </div>
     
     <!-- Filtros -->
-    <div class="row mb-3">
+    <div class="row mb-4">
         <div class="col-12">
-            <div class="card">
+            <div class="unified-dashboard-card">
+                <div class="card-header">
+                    <h5 class="section-title"><i class="fas fa-filter me-2"></i>Filtros</h5>
+                </div>
                 <div class="card-body">
                     <form method="get" id="filtrosForm">
-                        <div class="row">
+                        <div class="row g-3">
                             <div class="col-md-3">
                                 <label class="form-label">Nivel</label>
                                 <select name="nivel" class="form-select">
@@ -123,10 +290,10 @@
                         </div>
                         <div class="row mt-3">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-light-custom">
                                     <i class="fas fa-filter me-1"></i>Filtrar
                                 </button>
-                                <a href="{% url 'aves:alertas_list' %}" class="btn btn-outline-secondary ms-2">
+                                <a href="{% url 'aves:alertas_list' %}" class="btn btn-outline-light ms-2">
                                     <i class="fas fa-times me-1"></i>Limpiar
                                 </a>
                             </div>
@@ -140,11 +307,11 @@
     <!-- Lista de Alertas -->
     <div class="row">
         <div class="col-12">
-            <div class="card">
-                <div class="card-body">
+            <div class="unified-dashboard-card">
+                <div class="card-body p-0">
                     {% if alertas %}
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-custom table-hover">
                                 <thead>
                                     <tr>
                                         <th width="5%">
@@ -161,7 +328,7 @@
                                 </thead>
                                 <tbody>
                                     {% for alerta in alertas %}
-                                        <tr class="alerta-row {% if not alerta.leida %}table-warning{% endif %}" data-id="{{ alerta.id }}">
+                                        <tr class="alerta-row {% if not alerta.leida %}alerta-unread{% endif %}" data-id="{{ alerta.id }}">
                                             <td>
                                                 <input type="checkbox" class="form-check-input alerta-checkbox" value="{{ alerta.id }}">
                                             </td>
@@ -171,7 +338,7 @@
                                                         <i class="fas fa-exclamation-circle me-1"></i>Crítica
                                                     </span>
                                                 {% else %}
-                                                    <span class="badge bg-warning">
+                                                    <span class="badge bg-warning text-dark">
                                                         <i class="fas fa-exclamation-triangle me-1"></i>Normal
                                                     </span>
                                                 {% endif %}
@@ -181,16 +348,16 @@
                                             </td>
                                             <td>
                                                 <strong>{{ alerta.titulo }}</strong>
-                                                <br><small class="text-muted">{{ alerta.mensaje|truncatechars:50 }}</small>
+                                                <br><small class="opacity-75">{{ alerta.mensaje|truncatechars:50 }}</small>
                                             </td>
                                             <td>
                                                 {% if alerta.lote %}
                                                     <strong>{{ alerta.lote.codigo }}</strong>
-                                                    <br><small class="text-muted">{{ alerta.lote.galpon }}</small>
+                                                    <br><small class="opacity-75">{{ alerta.lote.galpon }}</small>
                                                 {% elif alerta.galpon_nombre %}
-                                                    <span class="text-muted">{{ alerta.galpon_nombre }}</span>
+                                                    <span class="opacity-75">{{ alerta.galpon_nombre }}</span>
                                                 {% else %}
-                                                    <span class="text-muted">General</span>
+                                                    <span class="opacity-75">General</span>
                                                 {% endif %}
                                             </td>
                                             <td>
@@ -203,7 +370,7 @@
                                                     {% if alerta.leida %}
                                                         <span class="badge bg-primary">Leída</span>
                                                     {% else %}
-                                                        <span class="badge bg-warning">Nueva</span>
+                                                        <span class="badge bg-warning text-dark">Nueva</span>
                                                     {% endif %}
                                                 {% else %}
                                                     <span class="badge bg-success">Resuelta</span>
@@ -211,19 +378,19 @@
                                             </td>
                                             <td>
                                                 <div class="btn-group btn-group-sm">
-                                                    <button type="button" class="btn btn-outline-primary btn-sm" 
-                                                            onclick="verDetalle({{ alerta.id }})" title="Ver detalle">
+                                                    <button type="button" class="btn btn-light-custom btn-sm" 
+                                                            onclick="verDetalle('{{ alerta.id }}')" title="Ver detalle">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
                                                     {% if alerta.is_active and not alerta.leida %}
                                                         <button type="button" class="btn btn-outline-info btn-sm" 
-                                                                onclick="marcarLeida({{ alerta.id }})" title="Marcar como leída">
+                                                                onclick="marcarLeida('{{ alerta.id }}')" title="Marcar como leída">
                                                             <i class="fas fa-eye-slash"></i>
                                                         </button>
                                                     {% endif %}
                                                     {% if alerta.is_active %}
                                                         <button type="button" class="btn btn-outline-success btn-sm" 
-                                                                onclick="marcarResuelta({{ alerta.id }})" title="Marcar como resuelta">
+                                                                onclick="marcarResuelta('{{ alerta.id }}')" title="Marcar como resuelta">
                                                             <i class="fas fa-check"></i>
                                                         </button>
                                                     {% endif %}
@@ -237,37 +404,39 @@
                         
                         <!-- Paginación -->
                         {% if is_paginated %}
-                            <nav aria-label="Paginación de alertas">
-                                <ul class="pagination justify-content-center">
-                                    {% if page_obj.has_previous %}
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page=1{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Primera</a>
+                            <div class="p-3 border-top border-secondary">
+                                <nav aria-label="Paginación de alertas">
+                                    <ul class="pagination justify-content-center mb-0">
+                                        {% if page_obj.has_previous %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page=1{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Primera</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Anterior</a>
+                                            </li>
+                                        {% endif %}
+                                        
+                                        <li class="page-item active">
+                                            <span class="page-link">{{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
                                         </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Anterior</a>
-                                        </li>
-                                    {% endif %}
-                                    
-                                    <li class="page-item active">
-                                        <span class="page-link">{{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
-                                    </li>
-                                    
-                                    {% if page_obj.has_next %}
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Siguiente</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Última</a>
-                                        </li>
-                                    {% endif %}
-                                </ul>
-                            </nav>
+                                        
+                                        {% if page_obj.has_next %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Siguiente</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.lote %}&lote={{ request.GET.lote }}{% endif %}">Última</a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            </div>
                         {% endif %}
                         
                         <!-- Acciones en Lote -->
-                        <div class="mt-3">
+                        <div class="p-3 border-top border-secondary">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-outline-primary" id="btnMarcarLeidas" disabled>
+                                <button type="button" class="btn btn-light-custom" id="btnMarcarLeidas" disabled>
                                     <i class="fas fa-eye me-1"></i>Marcar como Leídas
                                 </button>
                                 <button type="button" class="btn btn-outline-success" id="btnMarcarResueltas" disabled>
@@ -277,9 +446,9 @@
                         </div>
                     {% else %}
                         <div class="text-center py-5">
-                            <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
-                            <h5 class="text-muted">No hay alertas</h5>
-                            <p class="text-muted">No se encontraron alertas con los filtros aplicados.</p>
+                            <i class="fas fa-bell-slash fa-3x text-white opacity-50 mb-3"></i>
+                            <h5 class="text-white opacity-75">No hay alertas</h5>
+                            <p class="text-white opacity-50">No se encontraron alertas con los filtros aplicados.</p>
                         </div>
                     {% endif %}
                 </div>
@@ -291,23 +460,30 @@
 <!-- Modal de Detalle -->
 <div class="modal fade" id="modalDetalleAlerta" tabindex="-1">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Detalle de Alerta</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-content glass-modal">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title text-white">Detalle de Alerta</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body" id="modalDetalleContent">
+            <div class="modal-body text-white" id="modalDetalleContent">
                 <!-- Contenido cargado dinámicamente -->
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <div class="modal-footer border-top-0">
+                <button type="button" class="btn btn-light-custom" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .glass-modal {
+        background: rgba(40, 50, 40, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+</style>
 {% endblock %}
 
 {% block extra_js %}
 <script src="{% static 'aves/js/alertas.js' %}"></script>
-
 {% endblock %}

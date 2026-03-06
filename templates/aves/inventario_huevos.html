@@ -1,125 +1,342 @@
 {% extends 'aves/base.html' %}
+{% load static %}
 
 {% block title %}Inventario de Huevos - AgroSmart{% endblock %}
 
-{% block page_title %}Inventario de Huevos{% endblock %}
+{% block breadcrumb %}{% endblock %}
+{% block page_header %}{% endblock %}
 
-{% block breadcrumb_items %}
-    <li class="breadcrumb-item active">Inventario Huevos</li>
+{% block extra_css %}
+<style>
+    /* Estilos unificados Glassmorphism */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    .glass-wrap {
+        width: 100%;
+        max-width: 98%;
+        margin: 0 auto;
+    }
+
+    /* Metric Card Styles (from Dashboard) - Compact Version */
+    .metric-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+        color: white;
+    }
+
+    .metric-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: rgba(255,255,255,0.5);
+    }
+
+    .metric-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+        background: rgba(0, 175, 0, 0.35);
+    }
+
+    .metric-card.danger {
+        background: rgba(220, 53, 69, 0.25);
+        border-color: rgba(220, 53, 69, 0.4);
+    }
+    
+    .metric-card.danger:hover {
+        background: rgba(220, 53, 69, 0.35);
+    }
+
+    .metric-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.25rem;
+    }
+
+    .metric-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        color: white;
+        background: rgba(255,255,255,0.2);
+        backdrop-filter: blur(5px);
+    }
+
+    .metric-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        line-height: 1.1;
+    }
+
+    .metric-label {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9rem;
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .metric-subtitle {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin-top: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    /* Table Styles within Glass Card */
+    .table-custom {
+        margin-bottom: 0;
+        width: 100%;
+        border-collapse: separate; 
+        border-spacing: 0;
+    }
+    
+    .table-custom thead th {
+        background-color: #2E7D32 !important;
+        color: white !important;
+        border: 1px solid rgba(255,255,255,0.1);
+        vertical-align: middle;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 12px 8px;
+        letter-spacing: 0.5px;
+    }
+
+    .table-custom tbody tr {
+        background-color: white !important;
+        color: #444 !important;
+        transition: all 0.2s;
+    }
+    
+    .table-custom tbody tr:hover {
+        background-color: #f1f8e9 !important;
+    }
+    
+    .table-custom tbody td {
+        border: 1px solid #e9ecef;
+        padding: 10px 8px;
+        vertical-align: middle;
+    }
+
+    /* Botones */
+    .btn-light-custom {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.5);
+        color: #2e7d32;
+        font-weight: 600;
+    }
+    .btn-light-custom:hover {
+        background: #fff;
+        color: #1b5e20;
+    }
+    
+    /* Alerts in Glass */
+    .alert-glass {
+        background: rgba(255, 193, 7, 0.2);
+        border: 1px solid rgba(255, 193, 7, 0.5);
+        color: #fff;
+        border-radius: 10px;
+    }
+    
+    .alert-glass strong {
+        color: #ffd54f;
+    }
+</style>
 {% endblock %}
 
-{% block page_actions %}
-    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
-    <div class="btn-group">
-        <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-primary">
-            <i class="fas fa-plus me-2"></i>Nuevo Movimiento
-        </a>
-        <button type="button" class="btn btn-success" onclick="actualizarStockAutomatico()">
-            <i class="fas fa-sync-alt me-2"></i>Actualizar Stock Automático
-        </button>
-    </div>
-    {% endif %}
+{% block breadcrumb_items %}
+<!-- Breadcrumb hidden by block override above -->
 {% endblock %}
 
 {% block content %}
-<!-- Resumen de Inventario -->
-<div class="row mb-4">
-    {% for inventario in inventarios %}
-    <div class="col-md-2">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">{{ inventario.categoria }}</h5>
-                <h3 class="text-primary">{{ inventario.cantidad_actual }}</h3>
-                <p class="card-text">
-                    <small class="text-muted">
-                        {% if inventario.stock_automatico %}
-                            <i title="Stock automático"></i>
-                            Mín: {{ inventario.cantidad_minima }}
-                        {% else %}
-                            <i class="fas fa-user text-warning" title="Stock manual"></i>
-                            Mín: {{ inventario.cantidad_minima }}
-                        {% endif %}
-                    </small>
-                </p>
-                {% if inventario.necesita_reposicion %}
-                    <span class="badge bg-danger">Stock Bajo</span>
-                {% else %}
-                    <span class="badge bg-success">Stock OK</span>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    {% empty %}
-    <div class="col-12">
-        <div class="alert alert-info">
-            <i class="fas fa-info-circle me-2"></i>
-            No hay datos de inventario disponibles
-        </div>
-    </div>
-    {% endfor %}
-</div>
-
-<!-- Gráfico de Distribución -->
-<div class="row mb-4">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Distribución de Inventario</h5>
-            </div>
-            <div class="card-body">
-                <canvas id="inventarioChart" width="400" height="200"></canvas>
-            </div>
-        </div>
-    </div>
+<div class="glass-wrap">
+    <h2 class="text-center text-white mb-4 fw-bold" style="font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Inventario de Huevos</h2>
     
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Alertas de Stock</h5>
-            </div>
-            <div class="card-body">
-                {% for inventario in inventarios %}
-                    {% if inventario.necesita_reposicion %}
-                        <div class="alert alert-warning alert-sm">
-                            <strong>{{ inventario.categoria }}:</strong> Stock bajo ({{ inventario.cantidad_actual }} unidades)
-                            <br><small>Mínimo requerido: {{ inventario.cantidad_minima_calculada }}
-                            {% if inventario.stock_automatico %}(Automático){% endif %}</small>
-                        </div>
-                    {% endif %}
-                {% empty %}
-                    <div class="text-center text-muted">
-                        <i class="fas fa-check-circle fa-2x mb-2"></i>
-                        <p>No hay alertas de stock</p>
+    <!-- Action Buttons -->
+    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
+    <div class="d-flex justify-content-end mb-4 gap-2">
+        <button type="button" class="btn btn-light-custom" onclick="actualizarStockAutomatico()">
+            <i class="fas fa-sync-alt me-2"></i>Actualizar Stock Automático
+        </button>
+        <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-light-custom">
+            <i class="fas fa-plus me-2"></i>Nuevo Movimiento
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- Resumen de Inventario (Cards) -->
+    <div class="row mb-4 g-2 row-cols-2 row-cols-md-3 row-cols-xl-5">
+        {% for inventario in inventarios %}
+        <div class="col">
+            <div class="metric-card {% if inventario.necesita_reposicion %}danger{% endif %} h-100">
+                {% if user.perfilusuario.rol == 'superusuario' or user.perfilusuario.rol == 'admin_aves' %}
+                <button class="btn btn-sm btn-link text-white position-absolute top-0 end-0 p-3" 
+                        onclick="abrirConfiguracionStock('{{ inventario.id }}', '{{ inventario.categoria }}', {{ inventario.stock_automatico|yesno:'true,false' }}, {{ inventario.factor_calculo|stringformat:'f' }}, {{ inventario.dias_stock }})"
+                        title="Configurar Stock" style="z-index: 5;">
+                    <i class="fas fa-cog"></i>
+                </button>
+                {% endif %}
+                
+                <div class="metric-header">
+                    <div>
+                        <h3 class="metric-value">{{ inventario.cantidad_actual }}</h3>
+                        <p class="metric-label">{{ inventario.categoria }}</p>
                     </div>
-                {% endfor %}
+                    <div class="metric-icon">
+                        <i class="fas fa-egg"></i>
+                    </div>
+                </div>
+
+                <div class="metric-subtitle mb-2">
+                    {% if inventario.stock_automatico %}
+                        <i class="fas fa-robot me-1" title="Stock automático"></i> Automático
+                    {% else %}
+                        <i class="fas fa-user me-1" title="Stock manual"></i> Manual
+                    {% endif %}
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top border-white-50">
+                    <small class="text-white-50">Mín: {{ inventario.cantidad_minima }}</small>
+                    {% if inventario.necesita_reposicion %}
+                        <span class="badge bg-danger rounded-pill">Stock Bajo</span>
+                    {% else %}
+                        <span class="badge bg-success rounded-pill">Stock OK</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info bg-opacity-75">
+                <i class="fas fa-info-circle me-2"></i>
+                No hay datos de inventario disponibles
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row mb-4">
+        <!-- Gráfico de Distribución -->
+        <div class="col-md-7">
+            <div class="unified-dashboard-card h-100">
+                <div class="card-header">
+                    <h5 class="section-title">
+                        <i class="fas fa-chart-pie"></i>
+                        Distribución de Inventario
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div style="height: 300px;">
+                        <canvas id="inventarioChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Alertas de Stock -->
+        <div class="col-md-5">
+            <div class="unified-dashboard-card h-100">
+                <div class="card-header">
+                    <h5 class="section-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Alertas de Stock
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% for inventario in inventarios %}
+                        {% if inventario.necesita_reposicion %}
+                            <div class="alert alert-glass mb-3">
+                                <strong>{{ inventario.categoria }}:</strong> Stock bajo ({{ inventario.cantidad_actual }} unidades)
+                                <div class="small mt-1 text-white-50">Mínimo requerido: {{ inventario.cantidad_minima_calculada }}
+                                {% if inventario.stock_automatico %}(Automático){% endif %}</div>
+                            </div>
+                        {% endif %}
+                    {% empty %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-check-circle fa-3x text-success mb-3" style="opacity: 0.8;"></i>
+                            <p class="text-white">No hay alertas de stock</p>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Sección de Movimientos Recientes -->
-<div class="col-12">
-    <div class="card border-0 shadow-sm">
-        <div class="card-header bg-light border-0 d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">
-                <i class="fas fa-history me-2 text-primary"></i>Movimientos Recientes
+    <!-- Sección de Movimientos Recientes -->
+    <div class="unified-dashboard-card">
+        <div class="card-header">
+            <h5 class="section-title">
+                <i class="fas fa-history"></i>
+                Movimientos Recientes
             </h5>
             <div class="d-flex gap-2">
                 <!-- Filtros mejorados -->
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-outline-primary btn-sm active" data-filter="todos">
-                        <i class="fas fa-list me-1"></i>Todos
+                    <button type="button" class="btn btn-sm btn-light-custom active" data-filter="todos">
+                        Todos
                     </button>
-                    <button type="button" class="btn btn-outline-success btn-sm" data-filter="entrada">
-                        <i class="fas fa-arrow-down me-1"></i>Entradas
+                    <button type="button" class="btn btn-sm btn-light-custom" data-filter="entrada">
+                        Entradas
                     </button>
-                    <button type="button" class="btn btn-outline-danger btn-sm" data-filter="salida">
-                        <i class="fas fa-arrow-up me-1"></i>Salidas
+                    <button type="button" class="btn btn-sm btn-light-custom" data-filter="salida">
+                        Salidas
                     </button>
                 </div>
                 <!-- Filtro por fecha -->
                 <div class="dropdown">
-                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <button class="btn btn-sm btn-light-custom dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         <i class="fas fa-calendar me-1"></i>Período
                     </button>
                     <ul class="dropdown-menu">
@@ -129,33 +346,28 @@
                         <li><a class="dropdown-item" href="#" data-days="all">Todos</a></li>
                     </ul>
                 </div>
-                {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
-                <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-primary btn-sm">
-                    <i class="fas fa-plus me-1"></i>Nuevo Movimiento
-                </a>
-                {% endif %}
             </div>
         </div>
         <div class="card-body p-0">
             {% if movimientos_recientes %}
                 <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
+                    <table class="table table-custom text-center mb-0">
+                        <thead>
                             <tr>
                                 <th>Fecha</th>
                                 <th>Tipo</th>
-                                <th>Categoría Huevo</th>
+                                <th>Categoría</th>
                                 <th>Cantidad</th>
                                 <th>Cliente/Destino</th>
                                 <th>Usuario</th>
                                 <th>Estado</th>
-                                <th class="text-center">Acciones</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for detalle in movimientos_recientes %}
                             <tr data-tipo="{{ detalle.movimiento.tipo_movimiento }}" data-fecha="{{ detalle.movimiento.fecha|date:'Y-m-d' }}">
-                                <td>{{ detalle.movimiento.fecha|date:"d/m/Y" }}</td>
+                                <td class="fw-bold">{{ detalle.movimiento.fecha|date:"d/m/Y" }}</td>
                                 <td>
                                     {% if detalle.movimiento.tipo_movimiento == 'entrada' or detalle.movimiento.tipo_movimiento == 'devolucion' %}
                                         <span class="badge bg-success">
@@ -167,16 +379,19 @@
                                         </span>
                                     {% endif %}
                                 </td>
-                                <td>{{ detalle.categoria_huevo }}</td>
-                                <td><strong>{{ detalle.cantidad_docenas|floatformat:2 }} docenas</strong> ({{ detalle.cantidad_unidades }} unidades)</td>
-                                <td>{{ detalle.movimiento.cliente|default:"N/A" }}</td>
+                                <td><span class="badge bg-light text-dark">{{ detalle.categoria_huevo }}</span></td>
+                                <td class="text-start">
+                                    <div class="fw-bold">{{ detalle.cantidad_docenas|floatformat:2 }} docenas</div>
+                                    <div class="small text-muted">{{ detalle.cantidad_unidades }} unidades</div>
+                                </td>
+                                <td>{{ detalle.movimiento.cliente|default:"-" }}</td>
                                 <td>{{ detalle.movimiento.usuario_registro.get_full_name|default:detalle.movimiento.usuario_registro.username }}</td>
                                 <td>
                                     <span class="badge bg-info">Procesado</span>
                                 </td>
-                                <td class="text-center">
+                                <td>
                                     <a href="{% url 'aves:movimiento_huevos_detail' detalle.movimiento.pk %}" 
-                                       class="btn btn-outline-primary btn-sm" 
+                                       class="btn btn-sm btn-outline-success" 
                                        title="Ver detalles">
                                         <i class="fas fa-eye"></i>
                                     </a>
@@ -188,11 +403,11 @@
                 </div>
             {% else %}
                 <div class="text-center py-5">
-                    <i class="fas fa-exchange-alt fa-3x text-muted mb-3"></i>
-                    <h5 class="text-muted">No hay movimientos registrados</h5>
-                    <p class="text-muted">Los movimientos de huevos aparecerán aquí</p>
+                    <i class="fas fa-exchange-alt fa-3x text-white-50 mb-3"></i>
+                    <h5 class="text-white">No hay movimientos registrados</h5>
+                    <p class="text-white-50">Los movimientos de huevos aparecerán aquí</p>
                     {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
-                    <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-primary">
+                    <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-light-custom">
                         <i class="fas fa-plus me-2"></i>Registrar Primer Movimiento
                     </a>
                     {% endif %}
@@ -203,11 +418,11 @@
 </div>
 {% endblock %}
 
-<!-- Modal de Configuración de Stock -->
+<!-- Modal de Configuración de Stock (Mantener estructura pero adaptar estilos si es necesario, o dejar standard bootstrap) -->
 <div class="modal fade" id="modalConfigStock" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-primary text-white border-0">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
                 <h5 class="modal-title">
                     <i class="fas fa-cog me-2"></i>Configurar Stock Automático
                 </h5>
@@ -215,6 +430,7 @@
             </div>
             <div class="modal-body p-4">
                 <form id="formConfigStock">
+                    <input type="hidden" id="inventarioId">
                     <div class="mb-4">
                         <label class="form-label fw-bold">Categoría</label>
                         <input type="text" class="form-control form-control-lg" id="categoriaStock" readonly>
@@ -236,7 +452,7 @@
                                 <label for="factorCalculo" class="form-label fw-bold">Factor de cálculo</label>
                                 <div class="input-group">
                                     <input type="number" class="form-control" id="factorCalculo" 
-                                           min="0.1" max="1.0" step="0.01" value="0.75">
+                                           min="0.1" max="1.0" step="0.01">
                                     <span class="input-group-text">%</span>
                                 </div>
                                 <small class="text-muted">Porcentaje de producción esperada</small>
@@ -245,7 +461,7 @@
                                 <label for="diasStock" class="form-label fw-bold">Días de stock</label>
                                 <div class="input-group">
                                     <input type="number" class="form-control" id="diasStock" 
-                                           min="1" max="30" value="3">
+                                           min="1" max="30">
                                     <span class="input-group-text">días</span>
                                 </div>
                                 <small class="text-muted">Stock mínimo a mantener</small>
@@ -257,81 +473,24 @@
                                 <i class="fas fa-calculator text-info me-3"></i>
                                 <div>
                                     <strong>Stock calculado:</strong> 
-                                    <span id="stockCalculado" class="fw-bold text-primary">-</span> unidades
+                                    <span id="stockCalculado" class="fw-bold text-success">-</span> unidades
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer border-0 bg-light">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="fas fa-times me-2"></i>Cancelar
                 </button>
-                <button type="button" class="btn btn-primary" onclick="guardarConfigStock()">
+                <button type="button" class="btn btn-success" onclick="guardarConfigStock()">
                     <i class="fas fa-save me-2"></i>Guardar Configuración
                 </button>
             </div>
         </div>
     </div>
 </div>
-
-{% block extra_css %}
-{{ block.super }}
-<style>
-    .hover-shadow {
-        transition: all 0.3s ease;
-    }
-    
-    .hover-shadow:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-    }
-    
-    .transition-all {
-        transition: all 0.3s ease;
-    }
-    
-    .bg-gradient-primary {
-        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    }
-    
-    .card {
-        border-radius: 0.75rem;
-    }
-    
-    .btn {
-        border-radius: 0.5rem;
-    }
-    
-    .btn-group .btn-check:checked + .btn {
-        background-color: var(--bs-primary);
-        border-color: var(--bs-primary);
-        color: white;
-    }
-    
-    .table th {
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 0.5px;
-    }
-    
-    .badge {
-        font-weight: 500;
-        border-radius: 0.5rem;
-    }
-    
-    .modal-content {
-        border-radius: 1rem;
-    }
-    
-    .form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-    }
-</style>
-{% endblock %}
 
 {% block extra_js %}
 {{ block.super }}
@@ -394,7 +553,7 @@ function initInventarioChart() {
                 'rgba(153, 102, 255, 1)',
                 'rgba(255, 159, 64, 1)'
             ],
-            borderWidth: 2
+            borderWidth: 1
         }]
     };
 
@@ -407,8 +566,9 @@ function initInventarioChart() {
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'bottom',
+                        position: 'right',
                         labels: {
+                            color: 'white',
                             padding: 20,
                             usePointStyle: true,
                             font: {
@@ -418,16 +578,13 @@ function initInventarioChart() {
                         }
                     },
                     title: {
-                        display: true,
-                        text: 'Distribución por Categoría',
-                        font: {
-                            size: 16,
-                            weight: 'bold'
-                        },
-                        padding: 20
+                        display: false
                     }
                 },
-                cutout: '60%'
+                cutout: '60%',
+                layout: {
+                    padding: 20
+                }
             }
         });
         
@@ -445,8 +602,15 @@ function setupMovementFilters() {
             filtrarMovimientos(filter);
             
             // Actualizar botones activos
-            document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('[data-filter]').forEach(b => {
+                b.classList.remove('active');
+                b.classList.remove('btn-light-custom');
+                b.classList.add('btn-light-custom'); // Reset to default
+            });
             this.classList.add('active');
+            // Make active button slightly different if needed, or rely on active class style
+            this.style.background = '#fff';
+            this.style.color = '#1b5e20';
         });
     });
 }
@@ -488,178 +652,118 @@ function filtrarMovimientos(tipo) {
     });
 }
 
-function actualizarStockAutomatico() {
-    const btn = event.target;
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Actualizando...';
-    btn.disabled = true;
-
-    fetch('{% url "aves:actualizar_stock_automatico" %}', {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': getCookie('csrftoken'),
-            'Content-Type': 'application/json',
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification('success', data.message);
-            setTimeout(() => location.reload(), 1500);
-        } else {
-            showNotification('error', data.message);
-        }
-    })
-    .catch(error => {
-        showNotification('error', 'Error al actualizar stocks automáticos');
-        console.error('Error:', error);
-    })
-    .finally(() => {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-    });
-}
-
-function configurarStock(inventarioId, categoria, stockAutomatico, factorCalculo, diasStock) {
-    window.inventarioIdActual = inventarioId;
-    
-    // Llenar el formulario
+function abrirConfiguracionStock(id, categoria, stockAuto, factor, dias) {
+    document.getElementById('inventarioId').value = id;
     document.getElementById('categoriaStock').value = categoria;
-    document.getElementById('stockAutomatico').checked = stockAutomatico;
-    document.getElementById('factorCalculo').value = factorCalculo;
-    document.getElementById('diasStock').value = diasStock;
     
-    // Mostrar/ocultar configuración automática
-    const configDiv = document.getElementById('configAutomatica');
-    if (stockAutomatico) {
-        configDiv.style.display = 'block';
+    const stockSwitch = document.getElementById('stockAutomatico');
+    stockSwitch.checked = stockAuto;
+    
+    document.getElementById('factorCalculo').value = factor.toString().replace(',', '.');
+    document.getElementById('diasStock').value = dias;
+    
+    // Disparar evento change para mostrar/ocultar campos
+    const event = new Event('change');
+    stockSwitch.dispatchEvent(event);
+    
+    // Calcular stock inicial si está activo
+    if (stockAuto) {
         calcularStockAutomatico();
-    } else {
-        configDiv.style.display = 'none';
     }
     
-    // Mostrar modal
     const modal = new bootstrap.Modal(document.getElementById('modalConfigStock'));
     modal.show();
 }
 
-function calcularStockAutomatico() {
-    const factor = parseFloat(document.getElementById('factorCalculo').value) || 0.75;
-    const dias = parseInt(document.getElementById('diasStock').value) || 3;
-    const categoria = document.getElementById('categoriaStock').value;
-    const totalGallinas = {{ total_gallinas|default:0 }};
+function actualizarStockAutomatico() {
+    const btn = event.target.closest('button');
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Actualizando...';
+    btn.disabled = true;
     
-    // Factores de distribución por categoría
-    const factoresCategoria = {
-        'AAA': 0.40,
-        'AA': 0.35,
-        'A': 0.15,
-        'B': 0.08,
-        'C': 0.02
-    };
-    
-    const factorCategoria = factoresCategoria[categoria] || 0.20;
-    const produccionEsperada = totalGallinas * factor * factorCategoria;
-    const stockCalculado = Math.max(Math.round(produccionEsperada * dias), 50);
-    
-    document.getElementById('stockCalculado').textContent = stockCalculado;
-}
-
-function guardarConfigStock() {
-    if (!window.inventarioIdActual) return;
-    
-    const formData = {
-        stock_automatico: document.getElementById('stockAutomatico').checked,
-        factor_calculo: document.getElementById('factorCalculo').value,
-        dias_stock: document.getElementById('diasStock').value,
-        csrfmiddlewaretoken: getCookie('csrftoken')
-    };
-    
-    showLoading('Guardando configuración...');
-    
-    fetch(`/aves/inventario-huevos/configurar-stock/${window.inventarioIdActual}/`, {
+    fetch('{% url "aves:actualizar_stock_automatico" %}', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
         },
-        body: new URLSearchParams(formData)
+        body: JSON.stringify({})
     })
     .then(response => response.json())
     .then(data => {
-        hideLoading();
         if (data.success) {
-            const modal = bootstrap.Modal.getInstance(document.getElementById('modalConfigStock'));
-            modal.hide();
-            showNotification('success', 'Configuración guardada correctamente');
-            setTimeout(() => location.reload(), 1500);
+            // Mostrar mensaje de éxito
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success position-fixed top-0 end-0 m-3';
+            alertDiv.style.zIndex = '9999';
+            alertDiv.innerHTML = `<i class="fas fa-check-circle me-2"></i>${data.message}`;
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+                window.location.reload();
+            }, 1500);
         } else {
-            showNotification('error', 'Error: ' + (data.error || 'Error desconocido'));
+            alert('Error: ' + data.message);
+            btn.innerHTML = originalContent;
+            btn.disabled = false;
         }
     })
     .catch(error => {
-        hideLoading();
-        showNotification('error', 'Error al guardar la configuración');
         console.error('Error:', error);
+        alert('Ocurrió un error al actualizar el stock');
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
     });
 }
 
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
+function guardarConfigStock() {
+    const inventarioId = document.getElementById('inventarioId').value;
+    const stockAutomatico = document.getElementById('stockAutomatico').checked;
+    const factorCalculo = document.getElementById('factorCalculo').value;
+    const diasStock = document.getElementById('diasStock').value;
+    
+    const formData = new FormData();
+    formData.append('stock_automatico', stockAutomatico);
+    formData.append('factor_calculo', factorCalculo);
+    formData.append('dias_stock', diasStock);
+    
+    const url = '{% url "aves:configurar_stock_automatico" 0 %}'.replace('0', inventarioId);
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalConfigStock'));
+            modal.hide();
+            window.location.reload();
+        } else {
+            alert('Error al guardar configuración: ' + data.message);
         }
-    }
-    return cookieValue;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ocurrió un error al guardar la configuración');
+    });
 }
 
-function showNotification(type, message) {
-    const alertClass = type === 'success' ? 'alert-success' : 
-                      type === 'error' ? 'alert-danger' : 'alert-info';
+function calcularStockAutomatico() {
+    // Esta función es solo visual, el cálculo real lo hace el servidor
+    // Podríamos implementar una estimación aquí si tuviéramos el total de gallinas
+    const factor = parseFloat(document.getElementById('factorCalculo').value) || 0;
+    const dias = parseInt(document.getElementById('diasStock').value) || 0;
     
-    const alert = document.createElement('div');
-    alert.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
-    alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
-    alert.innerHTML = `
-        ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    `;
-    
-    document.body.appendChild(alert);
-    
-    setTimeout(() => {
-        if (alert.parentNode) {
-            alert.remove();
-        }
-    }, 5000);
-}
-
-function showLoading(message = 'Cargando...') {
-    const loading = document.createElement('div');
-    loading.id = 'loadingOverlay';
-    loading.className = 'position-fixed w-100 h-100 d-flex align-items-center justify-content-center';
-    loading.style.cssText = 'top: 0; left: 0; background: rgba(0,0,0,0.5); z-index: 9999;';
-    loading.innerHTML = `
-        <div class="bg-white p-4 rounded shadow">
-            <div class="d-flex align-items-center">
-                <div class="spinner-border text-primary me-3" role="status"></div>
-                <span>${message}</span>
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(loading);
-}
-
-function hideLoading() {
-    const loading = document.getElementById('loadingOverlay');
-    if (loading) {
-        loading.remove();
+    // Por ahora mostramos un mensaje indicando que se calculará al guardar
+    const stockCalculadoSpan = document.getElementById('stockCalculado');
+    if (stockCalculadoSpan) {
+        stockCalculadoSpan.textContent = "Calculado al guardar";
+        stockCalculadoSpan.className = "fw-bold text-muted";
     }
 }
 </script>

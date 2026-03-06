@@ -15,8 +15,9 @@ class InventarioConejosAdmin(admin.ModelAdmin):
 
 @admin.register(LibroDiarioConejos)
 class LibroDiarioConejosAdmin(admin.ModelAdmin):
-    list_display = ('fecha', 'parto_jaula', 'parto_vivos', 'monta_jaula', 'destete_jaula')
+    list_display = ('fecha', 'parto_jaula', 'parto_vivos', 'monta_jaula', 'destete_jaula', 'alimentacion_total')
     list_filter = ('fecha',)
+    readonly_fields = ('alimentacion_total',)
 
 @admin.register(RegistroAlimentoConejos)
 class RegistroAlimentoConejosAdmin(admin.ModelAdmin):
@@ -31,6 +32,6 @@ class BitacoraActividadesConejosAdmin(admin.ModelAdmin):
 
 @admin.register(ControlDestetes)
 class ControlDestetesAdmin(admin.ModelAdmin):
-    list_display = ('camada_numero', 'fecha_destete', 'numero_animales', 'madre_numero', 'peso_promedio')
+    list_display = ('camada_numero', 'fecha_destete', 'numero_animales', 'madre_numero', 'hembras_cantidad', 'machos_cantidad')
     search_fields = ('camada_numero', 'madre_numero', 'padre_numero')
-    list_filter = ('fecha_destete', 'sexo')
+    list_filter = ('fecha_destete',)

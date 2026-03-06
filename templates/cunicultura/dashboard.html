@@ -3,8 +3,12 @@
 
 {% block title %}Dashboard Cunícola - AgroSmart{% endblock %}
 
+{% block page_title %}Dashboard Cunícola{% endblock %}
+
+{% block breadcrumb %}{% endblock %}
+{% block page_header %}{% endblock %}
+
 {% block extra_css %}
-    {{ block.super }}
 <style>
     :root {
         --primary-color: #2c3e50;
@@ -20,7 +24,7 @@
         --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
     }
 
-    /* Layout mejorado */
+    /* Layout mejorado - Glassmorphism */
     .dashboard-container {
         padding: 1rem;
         min-height: 100vh;
@@ -41,63 +45,6 @@
         margin-bottom: 2rem;
     }
 
-    /* Filtros dentro del unificado */
-    .unified-dashboard-card .filters-section {
-        background: transparent;
-        backdrop-filter: none;
-        box-shadow: none;
-        border: none;
-        padding: 0;
-        margin-bottom: 2rem;
-    }
-
-    /* Dashboard Section dentro del unificado */
-    .unified-dashboard-card .dashboard-section {
-        background: transparent;
-        backdrop-filter: none;
-        box-shadow: none;
-        border: none;
-        margin-bottom: 2rem;
-        padding: 0;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .unified-dashboard-card .section-body {
-        padding: 0;
-        flex: 1;
-    }
-
-    .unified-dashboard-card .table-responsive {
-        height: 100%;
-    }
-
-    .unified-dashboard-card .table-modern {
-        height: 100%;
-    }
-
-    /* Asegurar filas blancas */
-    .unified-dashboard-card .table-modern tbody tr {
-        background-color: white !important;
-    }
-    
-    .unified-dashboard-card .table-modern tbody td {
-        color: #2c3e50 !important;
-        vertical-align: middle;
-    }
-
-    /* Encabezado de tabla verde si no lo tiene */
-    .unified-dashboard-card .table-modern thead th {
-        background-color: #2e7d32 !important;
-        color: white !important;
-        border: none;
-    }
-
-    .unified-dashboard-card .table-modern strong {
-        color: #2c3e50 !important;
-    }
-
     /* Filtros */
     .filters-section {
         background: rgba(0, 175, 0, 0.25);
@@ -109,33 +56,23 @@
         border: 1px solid rgba(255,255,255,0.2);
     }
 
-    .filters-section label {
-        color: white;
-    }
-
-    .filters-section h6 {
+    .filters-section label, .filters-section h6 {
         color: white;
     }
 
     /* Métricas principales mejoradas */
     .metrics-grid {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 1.5rem;
         margin-bottom: 2rem;
     }
-    
-    .metrics-grid > .metric-card {
-        flex: 0 1 calc(25% - 1.5rem);
-        min-width: 220px;
-    }
 
     .metric-card {
-        background: rgba(46, 125, 50, 0.85); /* Green background matching screenshot */
+        background: rgba(0, 175, 0, 0.25);
         backdrop-filter: blur(5px);
-        border-radius: 12px;
-        padding: 1.25rem;
+        border-radius: 15px;
+        padding: 2rem;
         box-shadow: var(--shadow);
         border: 1px solid rgba(255,255,255,0.2);
         position: relative;
@@ -149,139 +86,55 @@
         top: 0;
         left: 0;
         right: 0;
-        height: 3px;
+        height: 4px;
         background: rgba(255,255,255,0.5);
     }
 
     .metric-card:hover {
-        transform: translateY(-3px);
+        transform: translateY(-5px);
         box-shadow: var(--shadow-hover);
-        background: rgba(46, 125, 50, 0.95);
+        background: rgba(0, 175, 0, 0.35);
     }
 
     .metric-header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.5rem;
+        align-items: flex-start;
+        margin-bottom: 1rem;
     }
 
     .metric-icon {
-        width: 45px;
-        height: 45px;
-        border-radius: 10px;
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.2rem;
+        font-size: 1.5rem;
         color: white;
         background: rgba(255,255,255,0.2);
         backdrop-filter: blur(5px);
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     .metric-value {
-        font-size: 1.8rem;
+        font-size: 2.5rem;
         font-weight: 700;
-        color: white; /* White text */
+        color: white;
         margin: 0;
         text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .metric-label {
-        color: rgba(255, 255, 255, 0.9); /* White text */
-        font-size: 0.9rem;
-        margin: 0.25rem 0 0 0;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1rem;
+        margin: 0.5rem 0 0 0;
         font-weight: 500;
     }
 
     .metric-subtitle {
         font-size: 0.85rem;
-        color: rgba(255, 255, 255, 0.7); /* White text */
+        color: rgba(255, 255, 255, 0.7);
         margin-top: 0.5rem;
-    }
-
-    /* Secciones del dashboard */
-    .dashboard-section {
-        background: transparent;
-        backdrop-filter: none;
-        border-radius: 15px;
-        box-shadow: none;
-        border: none;
-        overflow: hidden;
-        margin-bottom: 2rem;
-    }
-
-    .section-header {
-        padding: 1.5rem 2rem;
-        border-bottom: none;
-        background: transparent;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .section-title {
-        margin: 0;
-        color: white; /* White text for section titles */
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .section-body {
-        padding: 2rem;
-    }
-
-    /* Alertas mejoradas */
-    .alerts-container {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .alert-item {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem;
-        border-radius: 10px;
-        border-left: 4px solid;
-    }
-
-    .alert-item, .alert-item span, .alert-item div, .alert-item p {
-        color: black !important;
-    }
-
-    .alert-item.warning {
-        background: white;
-        border-left-color: var(--warning-color);
-    }
-
-    .alert-item.danger {
-        background: white;
-        border-left-color: var(--danger-color);
-    }
-
-    .alert-item.success {
-        background: white;
-        border-left-color: var(--success-color);
-    }
-
-    /* Botones mejorados */
-    .btn-modern {
-        border-radius: 8px;
-        font-weight: 500;
-        padding: 0.75rem 1.5rem;
-        transition: all 0.3s ease;
-        border: none;
-    }
-
-    .btn-modern:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
 
     /* Header Styles matching Principal */
@@ -327,15 +180,51 @@
 
     .user-profile-widget {
         z-index: 10;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
     }
-    
-    /* Table Modern */
+
+    /* Secciones del dashboard */
+    .dashboard-section {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(255,255,255,0.2);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .section-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .section-body {
+        padding: 2rem;
+    }
+
+    /* Tablas mejoradas */
     .table-modern {
-        width: 100%;
         margin-bottom: 0;
+        width: 100%;
         background: transparent;
     }
-    
+
     .table-modern thead th {
         background-color: #2e7d32 !important;
         color: white !important;
@@ -343,12 +232,12 @@
         padding: 1rem;
         font-weight: 500;
     }
-    
+
     .table-modern tbody tr {
         background-color: white !important;
         transition: all 0.2s;
     }
-    
+
     .table-modern tbody td {
         padding: 1rem;
         color: #2c3e50 !important;
@@ -360,15 +249,85 @@
         background-color: #f8f9fa !important;
     }
 
-    /* Table Responsive inside Unified Card */
-    .unified-dashboard-card .table-responsive {
-        border-radius: 10px;
-        overflow: hidden;
+    /* Botones mejorados */
+    .btn-modern {
+        border-radius: 8px;
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    
+    /* Botones Glass Green para Accesos Rápidos */
+    .btn-glass-green {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 1rem 1.5rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        color: white;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+    }
+
+    .btn-glass-green:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-3px);
+        color: white;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .metrics-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .dashboard-container {
+            padding: 0.5rem;
+        }
+        
+        .section-body {
+            padding: 1rem;
+        }
+        
+        .welcome-text h1 {
+            font-size: 2rem;
+        }
+    }
+
+    /* Animaciones */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .metric-card {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .dashboard-section {
+        animation: fadeInUp 0.8s ease-out;
     }
 </style>
 {% endblock %}
 
-{% block dashboard_content %}
+{% block content %}
 <div class="dashboard-container">
     <!-- Dashboard Header -->
     <div class="dashboard-header">
@@ -378,6 +337,7 @@
             </div>
             <!-- User Profile Widget (Unified Style) -->
             <div class="user-profile-widget">
+                <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height: 50px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); margin-right: 15px;">
                 {% if user.is_authenticated %}
                 <a href="{% url 'usuarios:perfil' %}" style="text-decoration: none;">
                     <div style="width: 50px; height: 50px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid rgba(255,255,255,0.5); box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
@@ -393,129 +353,271 @@
         </div>
     </div>
 
-    <!-- Contenedor Unificado: Filtros -->
-    <div class="unified-dashboard-card mb-4">
-        <h6 class="mb-3 text-white"><i class="fas fa-filter me-2"></i>Filtros</h6>
-        <form method="GET" class="row g-3">
-            <div class="col-md-4">
-                <label class="form-label text-white">Tipo</label>
-                <select name="tipo" class="form-select">
-                    <option value="">Todos los tipos</option>
-                    <option value="reproductores">Reproductores</option>
-                    <option value="gazapos">Gazapos</option>
-                    <option value="levante">Levante/Ceba</option>
-                </select>
+    <!-- Métricas Principales -->
+    <div class="metrics-grid">
+        <!-- Total Conejos -->
+        <div class="metric-card">
+            <div class="metric-header">
+                <div>
+                    <h3 class="metric-value">{{ total_conejos }}</h3>
+                    <p class="metric-label">Total Conejos</p>
+                    <div class="metric-subtitle">Población actual</div>
+                </div>
+                <div class="metric-icon">
+                    <i class="fas fa-paw"></i>
+                </div>
             </div>
-            <div class="col-md-4">
-                <label class="form-label text-white">Jaula</label>
-                <input type="text" name="jaula" class="form-control" placeholder="Buscar jaula...">
-            </div>
-            <div class="col-md-4 d-flex align-items-end">
-                <button type="submit" class="btn btn-modern me-2" style="background-color: #5cd65c; color: white;">
-                    <i class="fas fa-search me-1"></i>Filtrar
-                </button>
-                <a href="{% url 'cunicultura:dashboard' %}" class="btn btn-outline-light btn-modern">
-                    <i class="fas fa-times me-1"></i>Limpiar
-                </a>
-            </div>
-        </form>
-    </div>
-
-    <!-- Contenedor Unificado: Alertas -->
-    <div class="unified-dashboard-card mb-4">
-        <div class="section-header p-0 mb-3 border-0">
-            <h5 class="section-title text-white">
-                <i class="fas fa-exclamation-triangle text-warning"></i>
-                Alertas Críticas
-            </h5>
         </div>
-        <div class="section-body p-0">
-            <div class="alerts-container">
-                <div class="alert-item warning">
-                    <i class="fas fa-thermometer-three-quarters text-warning" style="margin-right: 10px;"></i>
-                    <span style="font-weight: 600;">Revisar temperatura en área de gazapos</span>
+
+        <!-- Reproductores -->
+        <div class="metric-card">
+            <div class="metric-header">
+                <div>
+                    <h3 class="metric-value">{{ reproductores }}</h3>
+                    <p class="metric-label">Reproductores</p>
+                    <div class="metric-subtitle">Hembras y Machos</div>
+                </div>
+                <div class="metric-icon">
+                    <i class="fas fa-venus-mars"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gazapos -->
+        <div class="metric-card">
+            <div class="metric-header">
+                <div>
+                    <h3 class="metric-value">{{ gazapos }}</h3>
+                    <p class="metric-label">Gazapos</p>
+                    <div class="metric-subtitle">En lactancia</div>
+                </div>
+                <div class="metric-icon">
+                    <i class="fas fa-baby"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Levante/Ceba -->
+        <div class="metric-card">
+            <div class="metric-header">
+                <div>
+                    <h3 class="metric-value">{{ levante_ceba }}</h3>
+                    <p class="metric-label">Levante / Ceba</p>
+                    <div class="metric-subtitle">Engorde</div>
+                </div>
+                <div class="metric-icon">
+                    <i class="fas fa-weight"></i>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <!-- Columna Izquierda: Resumen Inventario (Tabla 1) -->
-        <div class="col-lg-6">
-            <div class="unified-dashboard-card h-100">
-                <div class="section-header pt-0 pb-2 border-0">
-                    <h5 class="section-title text-white" style="font-size: 1.1rem;">
-                        <i class="fas fa-chart-pie"></i>
-                        Resumen de Inventario
+        <!-- Accesos Rápidos (Izquierda) -->
+        <div class="col-md-6 mb-4">
+            <div class="dashboard-section h-100">
+                <div class="section-header">
+                    <h5 class="section-title">
+                        <i class="fas fa-bolt text-warning"></i>
+                        Accesos Rápidos
+                    </h5>
+                </div>
+                <div class="section-body">
+                    <div class="d-grid gap-3">
+                        <a href="{% url 'cunicultura:inventario_permanente' %}" class="btn-glass-green">
+                            <i class="fas fa-list-ol me-3 fa-lg"></i>Registrar Inventario
+                        </a>
+                        <a href="{% url 'cunicultura:libro_diario' %}" class="btn-glass-green">
+                            <i class="fas fa-book me-3 fa-lg"></i>Nuevo Evento Diario
+                        </a>
+                        <a href="{% url 'cunicultura:control_destetes' %}" class="btn-glass-green">
+                            <i class="fas fa-balance-scale me-3 fa-lg"></i>Control de Destetes
+                        </a>
+                        <a href="{% url 'cunicultura:registro_alimento' %}" class="btn-glass-green">
+                            <i class="fas fa-utensils me-3 fa-lg"></i>Registro de Alimento
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Precios de Mercado (Derecha) -->
+        <div class="col-md-6 mb-4">
+            <div class="dashboard-section h-100">
+                <div class="section-header">
+                    <h5 class="section-title">
+                        <i class="fas fa-tags text-warning"></i>
+                        Precios de Mercado (Editable)
                     </h5>
                 </div>
                 <div class="section-body p-0">
-                    <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
-                        <table class="table table-modern table-sm mb-0" style="font-size: 0.8rem;">
-                            <thead style="position: sticky; top: 0; z-index: 1;">
+                    <div class="table-responsive">
+                        <table class="table table-modern table-hover mb-0">
+                            <thead>
                                 <tr>
-                                    <th class="py-2">Categoría</th>
-                                    <th class="py-2">Cantidad</th>
-                                    <th class="py-2">Detalle</th>
+                                    <th class="ps-4">Descripción</th>
+                                    <th class="text-center">Edad (Días)</th>
+                                    <th class="text-end pe-4">Valor Unitario</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                {% for precio in precios %}
                                 <tr>
-                                    <td class="py-2"><strong>Total Animales</strong></td>
-                                    <td class="text-end fw-bold py-2">{{ total_conejos|default:0 }}</td>
-                                    <td class="text-muted py-2">Inventario general</td>
+                                    <td class="ps-4" contenteditable="true" onblur="updatePrice( '{{ precio.id }}' , 'descripcion', this.innerText)">{{ precio.descripcion }}</td>
+                                    <td class="text-center" contenteditable="true" onblur="updatePrice('{{ precio.id }}' , 'edad_dias', this.innerText)">{{ precio.edad_dias }}</td>
+                                    <td class="text-end pe-4" contenteditable="true" onblur="updatePrice( '{{ precio.id }}' , 'valor', this.innerText)">{{ precio.valor }}</td>
                                 </tr>
+                                {% empty %}
                                 <tr>
-                                    <td class="py-2"><strong>Reproductores</strong></td>
-                                    <td class="text-end fw-bold py-2">{{ reproductores|default:0 }}</td>
-                                    <td class="text-muted py-2">Machos y Hembras</td>
+                                    <td colspan="3" class="text-center text-muted py-4">No hay precios registrados</td>
                                 </tr>
-                                <tr>
-                                    <td class="py-2"><strong>Gazapos</strong></td>
-                                    <td class="text-end fw-bold py-2">{{ gazapos|default:0 }}</td>
-                                    <td class="text-muted py-2">Lactancia/Destete</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-2"><strong>Levante/Ceba</strong></td>
-                                    <td class="text-end fw-bold py-2">{{ levante_ceba|default:0 }}</td>
-                                    <td class="text-muted py-2">En engorde</td>
-                                </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Columna Derecha: Lista de Precios (Tabla 2) -->
-        <div class="col-lg-6">
-            <div class="unified-dashboard-card h-100">
-                <div class="section-header pt-0 pb-2 border-0">
-                    <h5 class="section-title text-white" style="font-size: 1.1rem;">
-                        <i class="fas fa-tag"></i>
-                        Precios
+    <!-- Tablero de Tareas Pendientes -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h5 class="section-title">
+                <i class="fas fa-clipboard-list text-warning"></i>
+                Tareas Pendientes
+            </h5>
+            <button type="button" class="btn btn-sm btn-light rounded-pill text-success fw-bold" title="Añadir Tarea" data-bs-toggle="modal" data-bs-target="#nuevaTareaModal">
+                <i class="fas fa-plus me-1"></i>Nueva
+            </button>
+        </div>
+        <div class="section-body p-0">
+            <div class="table-responsive">
+                <table class="table table-modern table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">Tarea</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                            <th>Fecha Límite</th>
+                            <th>Responsable</th>
+                            <th class="text-end pe-4">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tarea in tareas %}
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="form-check m-0">
+                                        <input class="form-check-input" type="checkbox" id="task{{ tarea.id }}" {% if tarea.estado == 'completada' %}checked{% endif %}>
+                                    </div>
+                                    <label class="form-check-label fw-bold {% if tarea.estado == 'completada' %}text-muted text-decoration-line-through{% else %}text-dark{% endif %}" for="task{{ tarea.id }}">
+                                        {{ tarea.titulo }}
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                {% if tarea.prioridad == 'alta' %}
+                                    <span class="badge bg-danger rounded-pill px-3">Alta</span>
+                                {% elif tarea.prioridad == 'media' %}
+                                    <span class="badge bg-info text-dark rounded-pill px-3">Media</span>
+                                {% else %}
+                                    <span class="badge bg-secondary rounded-pill px-3">Baja</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if tarea.estado == 'pendiente' %}
+                                    <span class="badge bg-warning text-dark rounded-pill px-3">Pendiente</span>
+                                {% elif tarea.estado == 'en_proceso' %}
+                                    <span class="badge bg-primary rounded-pill px-3">En Proceso</span>
+                                {% else %}
+                                    <span class="badge bg-success rounded-pill px-3">Completada</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-muted fw-bold">
+                                {% if tarea.fecha_limite %}
+                                    {{ tarea.fecha_limite|date:"d M, H:i" }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    {% if tarea.responsable %}
+                                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center fw-bold" style="width:28px;height:28px;font-size:10px;">
+                                            {{ tarea.responsable.username|slice:":2"|upper }}
+                                        </div>
+                                        <small class="text-muted fw-bold">{{ tarea.responsable.username }}</small>
+                                    {% else %}
+                                        <small class="text-muted">-</small>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="text-end pe-4">
+                                <a href="{% url 'cunicultura:completar_tarea' tarea.id %}" class="btn btn-sm btn-outline-success me-1" title="Marcar como hecha">
+                                    <i class="fas fa-check"></i>
+                                </a>
+                                <a href="{% url 'cunicultura:eliminar_tarea' tarea.id %}" class="btn btn-sm btn-outline-danger" title="Eliminar" onclick="return confirm('¿Estás seguro de eliminar esta tarea?');">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">No hay tareas pendientes</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Últimas Actividades (Ancho Completo) -->
+    <div class="row">
+        <div class="col-12">
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h5 class="section-title">
+                        <i class="fas fa-history text-warning"></i>
+                        Últimas Actividades
                     </h5>
+                    <a href="{% url 'cunicultura:bitacora_actividades' %}" class="btn btn-sm btn-outline-light">
+                        Ver todas
+                    </a>
                 </div>
                 <div class="section-body p-0">
-                    <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
-                        <table class="table table-modern table-sm mb-0" id="tabla-precios" style="font-size: 0.8rem;">
-                            <thead style="position: sticky; top: 0; z-index: 1;">
+                    <div class="table-responsive">
+                        <table class="table table-modern table-hover mb-0">
+                            <thead>
                                 <tr>
-                                    <th class="py-2">Desc.</th>
-                                    <th class="py-2">Edad</th>
-                                    <th class="py-2">$</th>
+                                    <th class="ps-4">Fecha</th>
+                                    <th>Actividad</th>
+                                    <th>Responsable</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for precio in precios %}
-                                <tr data-id="{{ precio.id }}">
-                                    <td contenteditable="true" onblur="updatePrecio(this, 'descripcion')" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;" class="py-2">{{ precio.descripcion }}</td>
-                                    <td contenteditable="true" onblur="updatePrecio(this, 'edad_dias')" class="py-2">{{ precio.edad_dias }}</td>
-                                    <td contenteditable="true" onblur="updatePrecio(this, 'valor')" class="py-2">{{ precio.valor|default:0 }}</td>
+                                {% for actividad in ultimas_actividades %}
+                                <tr>
+                                    <td class="ps-4 fw-bold">{{ actividad.fecha|date:"d M Y" }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-check-circle text-success me-2"></i>
+                                            {{ actividad.actividad|truncatechars:100 }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if actividad.responsable %}
+                                            <span class="badge bg-secondary rounded-pill">{{ actividad.responsable }}</span>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                                 {% empty %}
                                 <tr>
-                                    <td colspan="3" class="text-center py-2">Sin datos</td>
+                                    <td colspan="3" class="text-center py-4 text-muted">No hay actividades recientes</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -527,41 +629,62 @@
     </div>
 </div>
 
-<script>
-    function updatePrecio(element, field) {
-        const row = element.closest('tr');
-        const id = row.dataset.id;
-        const value = element.innerText.trim();
+<!-- Modal Nueva Tarea -->
+<div class="modal fade" id="nuevaTareaModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content glass-wrap" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3);">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title fw-bold" style="color: #39A900; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">Nueva Tarea</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{% url 'cunicultura:crear_tarea' %}" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    {% for field in tarea_form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <div class="form-text">{{ field.help_text }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success fw-bold">Guardar Tarea</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-        fetch('{% url "cunicultura:dashboard" %}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: JSON.stringify({
-                id: id,
-                field: field,
-                value: value
-            })
+<script>
+function updatePrice(id, field, value) {
+    fetch('{% url "cunicultura:dashboard" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({
+            id: id,
+            field: field,
+            value: value.trim()
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                // Optional: Show success feedback
-                element.style.backgroundColor = '#d4edda';
-                setTimeout(() => {
-                    element.style.backgroundColor = '';
-                }, 500);
-            } else {
-                alert('Error al actualizar: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error de conexión');
-        });
-    }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            console.log('Actualizado correctamente');
+        } else {
+            alert('Error al actualizar: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 </script>
 {% endblock %}

@@ -22,7 +22,7 @@
     body {
         background-color: var(--light-bg);
         font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-image: url('{% static "img/gallina_2.png" %}');
+        background-image: url('{% static "img/fondo_dashboard.png" %}');
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
@@ -141,23 +141,26 @@
     /* Estilo especial para el botón Inicio */
     .nav-link.home-link {
         justify-content: flex-start;
-        font-size: 1rem; /* Reducido drásticamente */
-        font-weight: 500;
-        background-color: transparent; /* Quitar fondo destacado */
-        margin-bottom: 0.2rem; /* Reducido margen */
-        border: none;
-        padding: 0.6rem 1rem; /* Padding más compacto */
-        box-shadow: none;
+        font-size: 1rem;
+        font-weight: 600;
+        background-color: rgba(46, 125, 50, 0.8); /* Solid green background like image */
+        margin-bottom: 1.5rem; /* Space below button */
+        border: 1px solid rgba(255,255,255,0.2);
+        padding: 0.8rem 1.5rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        color: white;
+        border-radius: 10px;
     }
     
     .nav-link.home-link i {
-        font-size: 1rem; /* Icono tamaño normal */
+        font-size: 1rem;
         margin-right: 0.8rem;
     }
     
     .nav-link.home-link:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-        transform: translateX(5px);
+        background-color: rgba(46, 125, 50, 1);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
     }
 
     .nav-link:hover {
@@ -184,12 +187,113 @@
         font-size: 0.7rem;
     }
 
-    /* Main Content */
+    /* Dashboard Content Styles */
     .main-content {
         margin-left: var(--sidebar-width);
-        min-height: 100vh;
+        flex: 1;
         padding: 2rem;
         transition: all 0.3s ease;
+        background-color: transparent; /* Transparente para ver fondo */
+    }
+
+    .unified-dashboard-card {
+        background: rgba(30, 80, 30, 0.5); /* Verde más claro y translúcido */
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        color: white;
+    }
+
+    .welcome-header {
+        background: transparent;
+        backdrop-filter: none;
+        border-radius: 0;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        color: white;
+        border: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    .welcome-header h1 {
+        color: white;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        font-family: 'Playfair Display', serif;
+        font-size: 3.5rem;
+        text-align: center;
+    }
+
+    .user-profile-icon {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #2e7d32;
+        font-size: 1.2rem;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    
+    .dashboard-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+        border-radius: 12px;
+        padding: 1.5rem;
+        height: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        color: white;
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    .dashboard-card h3 {
+        color: #fff;
+        font-weight: 600;
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .dashboard-card p {
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+    
+    .card-icon-large {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
     }
 
     .dashboard-header {
@@ -365,7 +469,6 @@
         <div class="nav-section-title">UNIDADES PRODUCTIVAS</div>
 
         <!-- Módulos Section -->
-        {% if user.perfilusuario and user.perfilusuario.rol == 'admin_aves' or user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'solo_vista' %}
         <div class="nav-item">
             <a href="{% url 'aves:dashboard' %}" class="nav-link">
                 <div class="module-logo">
@@ -374,8 +477,7 @@
                 <span>Avicola</span>
             </a>
         </div>
-        {% endif %}
-        {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'solo_vista' %}
+        
         <div class="nav-item">
             <a href="{% url 'porcinos:dashboard' %}" class="nav-link">
                 <div class="module-logo">
@@ -384,8 +486,24 @@
                 <span>Porcinos</span>
             </a>
         </div>
-        {% endif %}
-        {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' %}
+
+        <div class="nav-item">
+            <a href="{% url 'cunicultura:dashboard' %}" class="nav-link">
+                <div class="module-logo">
+                    <i class="fas fa-carrot"></i>
+                </div>
+                <span>Unidad Cunícola</span>
+            </a>
+        </div>
+
+        <div class="nav-item">
+            <a href="{% url 'equinos:dashboard' %}" class="nav-link">
+                <div class="module-logo">
+                    <i class="fas fa-horse-head"></i>
+                </div>
+                <span>Equinos</span>
+            </a>
+        </div>
         <div class="nav-item">
             <a href="#" class="nav-link">
                 <div class="module-logo">
@@ -395,19 +513,7 @@
                 <span class="badge bg-secondary">Próximamente</span>
             </a>
         </div>
-        {% endif %}
-        {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' %}
-        <div class="nav-item">
-            <a href="#" class="nav-link">
-                <div class="module-logo">
-                    <i class="fas fa-horse-head"></i>
-                </div>
-                <span>Equinos</span>
-                <span class="badge bg-secondary">Próximamente</span>
-            </a>
-        </div>
-        {% endif %}
-        {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' %}
+
         <div class="nav-item">
             <a href="#" class="nav-link">
                 <div class="module-logo">
@@ -417,8 +523,7 @@
                 <span class="badge bg-secondary">Próximamente</span>
             </a>
         </div>
-        {% endif %}
-        {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' %}
+
         <div class="nav-item">
             <a href="#" class="nav-link">
                 <div class="module-logo">
@@ -428,14 +533,15 @@
                 <span class="badge bg-secondary">Próximamente</span>
             </a>
         </div>
-        {% endif %}
-        {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' %}
+        
+        <!-- Punto de Venta Module -->
+        {% if user.is_superuser or user.perfilusuario.rol == 'punto_blanco' %}
         <div class="nav-item">
-            <a href="{% url 'cunicultura:dashboard' %}" class="nav-link">
+            <a href="{% url 'punto_blanco:dashboard' %}" class="nav-link">
                 <div class="module-logo">
-                    <i class="fas fa-carrot"></i>
+                    <i class="fas fa-store"></i>
                 </div>
-                <span>Unidad Cunícola</span>
+                <span>Punto de Venta</span>
             </a>
         </div>
         {% endif %}
@@ -500,4 +606,8 @@
         }
     });
 </script>
+{% endblock %}
+
+{% block extra_js %}
+    {% block dashboard_extra_js %}{% endblock %}
 {% endblock %}

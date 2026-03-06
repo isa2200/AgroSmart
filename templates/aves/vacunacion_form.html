@@ -1,111 +1,229 @@
 {% extends 'aves/base.html' %}
+{% load widget_tweaks %}
 
 {% block title %}Plan de Vacunación - AgroSmart{% endblock %}
 
-{% block page_title %}Plan de Vacunación{% endblock %}
+{% block page_title %}{% endblock %}
 
-{% block breadcrumb_items %}
-    <li class="breadcrumb-item"><a href="{% url 'aves:plan_vacunacion_list' %}">Vacunación</a></li>
-    <li class="breadcrumb-item active">{% if object %}Editar Plan{% else %}Nuevo Plan{% endif %}</li>
-{% endblock %}
+{% block breadcrumb_items %}{% endblock %}
 
-{% block page_actions %}
-    <a href="{% url 'aves:plan_vacunacion_list' %}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left me-2"></i>Volver
-    </a>
+{% block page_actions %}{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    /* Estilos unificados Glassmorphism */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        padding: 0;
+        margin-bottom: 2rem;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 2rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    /* Envoltura para ampliar el ancho útil del contenedor */
+    .glass-wrap {
+        width: 100%;
+        max-width: 95%;
+        margin: 0 auto;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+    @media (min-width: 1600px){
+        .glass-wrap{ max-width: 95%; }
+    }
+
+    .unified-dashboard-card .form-label {
+        color: #fff;
+        font-weight: 500;
+    }
+    
+    .unified-dashboard-card .text-muted {
+        color: rgba(255,255,255,0.7) !important;
+    }
+
+    .unified-dashboard-card .form-control, 
+    .unified-dashboard-card .form-select {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.25);
+        color: #1b1b1b;
+        border-radius: 8px;
+    }
+    
+    .unified-dashboard-card .form-control:focus, 
+    .unified-dashboard-card .form-select:focus {
+        background: #fff;
+        border-color: rgba(52, 199, 89, 0.9);
+        box-shadow: 0 0 0 0.2rem rgba(52, 199, 89, 0.25);
+    }
+
+    /* Secciones del formulario adaptadas */
+    .form-section {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 25px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    
+    .section-header {
+        border-left: 4px solid #34c759;
+        padding-left: 15px;
+        margin-bottom: 20px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .stock-info {
+        margin-top: 0.5rem;
+        padding: 1rem;
+        background: rgba(23, 162, 184, 0.2);
+        border-radius: 8px;
+        border-left: 4px solid #17a2b8;
+        color: white;
+    }
+    
+    .stock-info h6 {
+        color: white;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .btn-light-custom {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #2e7d32;
+        font-weight: 600;
+    }
+    
+    .btn-light-custom:hover {
+        background: #fff;
+        color: #1b5e20;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-10">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="fas fa-syringe me-2"></i>
-                    {% if object %}Editar Plan de Vacunación{% else %}Nuevo Plan de Vacunación{% endif %}
-                </h5>
-            </div>
-            <div class="card-body">
-                <form method="post" id="vacunacionForm">
-                    {% csrf_token %}
-                    
-                    <div class="row">
-                        <!-- Información del Lote -->
-                        <div class="col-md-6">
-                            <div class="card mb-3">
-                                <div class="card-header">
-                                    <h6 class="mb-0">Información del Lote</h6>
-                                </div>
-                                <div class="card-body">
+<div class="glass-wrap">
+    <h2 class="text-center text-white mb-4 fw-bold" style="font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Plan de Vacunación</h2>
+    
+    <div class="row justify-content-center">
+        <div class="col-12 col-xl-10">
+            <div class="unified-dashboard-card">
+                <div class="card-header">
+                    <h5 class="section-title">
+                        <i class="fas fa-syringe"></i>
+                        {% if object %}Editar Plan{% else %}Nuevo Plan{% endif %}
+                    </h5>
+                    <a href="{% url 'aves:plan_vacunacion_list' %}" class="btn btn-light-custom btn-sm">
+                        <i class="fas fa-arrow-left me-2"></i>Volver
+                    </a>
+                </div>
+                
+                <div class="card-body">
+                    <form method="post" id="vacunacionForm">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <!-- Información del Lote -->
+                            <div class="col-md-6">
+                                <div class="form-section h-100">
+                                    <h6 class="section-header">Información del Lote</h6>
+                                    
                                     <div class="mb-3">
                                         <label for="{{ form.lote.id_for_label }}" class="form-label">Lote *</label>
-                                        {{ form.lote }}
+                                        {{ form.lote|add_class:"form-select" }}
                                         {% if form.lote.errors %}
-                                            <div class="text-danger">{{ form.lote.errors }}</div>
+                                            <div class="text-danger small mt-1">{{ form.lote.errors.0 }}</div>
                                         {% endif %}
                                     </div>
                                     
-                                    <div id="loteInfo" class="alert alert-info d-none">
-                                        <h6>Información del Lote:</h6>
+                                    <div id="loteInfo" class="stock-info d-none">
+                                        <h6><i class="fas fa-info-circle me-2"></i>Información del Lote:</h6>
                                         <p class="mb-1"><strong>Galpón:</strong> <span id="galponInfo"></span></p>
                                         <p class="mb-1"><strong>Aves Actuales:</strong> <span id="avesInfo"></span></p>
                                         <p class="mb-0"><strong>Edad:</strong> <span id="edadInfo"></span> días</p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <!-- Información de la Vacuna -->
-                        <div class="col-md-6">
-                            <div class="card mb-3">
-                                <div class="card-header">
-                                    <h6 class="mb-0">Información de la Vacuna</h6>
-                                </div>
-                                <div class="card-body">
+                            
+                            <!-- Información de la Vacuna -->
+                            <div class="col-md-6">
+                                <div class="form-section h-100">
+                                    <h6 class="section-header">Información de la Vacuna</h6>
+                                    
                                     <div class="mb-3">
                                         <label for="{{ form.tipo_vacuna.id_for_label }}" class="form-label">Tipo de Vacuna *</label>
-                                        {{ form.tipo_vacuna }}
+                                        {{ form.tipo_vacuna|add_class:"form-select" }}
                                         {% if form.tipo_vacuna.errors %}
-                                            <div class="text-danger">{{ form.tipo_vacuna.errors }}</div>
+                                            <div class="text-danger small mt-1">{{ form.tipo_vacuna.errors.0 }}</div>
                                         {% endif %}
                                     </div>
                                     
                                     <div class="mb-3">
                                         <label for="{{ form.fecha_programada.id_for_label }}" class="form-label">Fecha Programada *</label>
-                                        {{ form.fecha_programada }}
+                                        {{ form.fecha_programada|add_class:"form-control" }}
                                         {% if form.fecha_programada.errors %}
-                                            <div class="text-danger">{{ form.fecha_programada.errors }}</div>
+                                            <div class="text-danger small mt-1">{{ form.fecha_programada.errors.0 }}</div>
                                         {% endif %}
                                     </div>
                                     
                                     <div class="mb-3">
                                         <label for="{{ form.fecha_aplicada.id_for_label }}" class="form-label">Fecha de Aplicación</label>
-                                        {{ form.fecha_aplicada }}
+                                        {{ form.fecha_aplicada|add_class:"form-control" }}
                                         {% if form.fecha_aplicada.errors %}
-                                            <div class="text-danger">{{ form.fecha_aplicada.errors }}</div>
+                                            <div class="text-danger small mt-1">{{ form.fecha_aplicada.errors.0 }}</div>
                                         {% endif %}
-                                        <div class="form-text">Dejar vacío si aún no se ha aplicado</div>
+                                        <div class="form-text text-white-50">Dejar vacío si aún no se ha aplicado</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Detalles de Aplicación -->
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card mb-3">
-                                <div class="card-header">
-                                    <h6 class="mb-0">Detalles de Aplicación</h6>
-                                </div>
-                                <div class="card-body">
+                        
+                        <!-- Detalles de Aplicación -->
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <div class="form-section">
+                                    <h6 class="section-header">Detalles de Aplicación</h6>
+                                    
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="{{ form.numero_aves_vacunadas.id_for_label }}" class="form-label">Número de Aves Vacunadas</label>
-                                                {{ form.numero_aves_vacunadas }}
+                                                {{ form.numero_aves_vacunadas|add_class:"form-control" }}
                                                 {% if form.numero_aves_vacunadas.errors %}
-                                                    <div class="text-danger">{{ form.numero_aves_vacunadas.errors }}</div>
+                                                    <div class="text-danger small mt-1">{{ form.numero_aves_vacunadas.errors.0 }}</div>
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -113,9 +231,9 @@
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="{{ form.lote_vacuna.id_for_label }}" class="form-label">Lote de Vacuna</label>
-                                                {{ form.lote_vacuna }}
+                                                {{ form.lote_vacuna|add_class:"form-control" }}
                                                 {% if form.lote_vacuna.errors %}
-                                                    <div class="text-danger">{{ form.lote_vacuna.errors }}</div>
+                                                    <div class="text-danger small mt-1">{{ form.lote_vacuna.errors.0 }}</div>
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -124,14 +242,14 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <div class="form-check">
-                                                    {{ form.aplicada }}
-                                                    <label class="form-check-label" for="{{ form.aplicada.id_for_label }}">
+                                                <div class="form-check form-switch">
+                                                    {{ form.aplicada|add_class:"form-check-input" }}
+                                                    <label class="form-check-label text-white" for="{{ form.aplicada.id_for_label }}">
                                                         Vacuna Aplicada
                                                     </label>
                                                 </div>
                                                 {% if form.aplicada.errors %}
-                                                    <div class="text-danger">{{ form.aplicada.errors }}</div>
+                                                    <div class="text-danger small mt-1">{{ form.aplicada.errors.0 }}</div>
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -139,32 +257,31 @@
                                     
                                     <div class="mb-3">
                                         <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
-                                        {{ form.observaciones }}
+                                        {{ form.observaciones|add_class:"form-control" }}
                                         {% if form.observaciones.errors %}
-                                            <div class="text-danger">{{ form.observaciones.errors }}</div>
+                                            <div class="text-danger small mt-1">{{ form.observaciones.errors.0 }}</div>
                                         {% endif %}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Botones de Acción -->
-                    <div class="row">
-                        <div class="col-12">
-                            <hr>
-                            <div class="d-flex justify-content-end gap-2">
-                                <a href="{% url 'aves:plan_vacunacion_list' %}" class="btn btn-secondary">
-                                    <i class="fas fa-times me-2"></i>Cancelar
-                                </a>
-                                <button type="submit" class="btn btn-success">
-                                    <i class="fas fa-save me-2"></i>
-                                    {% if object %}Actualizar{% else %}Guardar{% endif %} Plan
-                                </button>
+                        
+                        <!-- Botones de Acción -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a href="{% url 'aves:plan_vacunacion_list' %}" class="btn btn-light-custom">
+                                        <i class="fas fa-times me-2"></i>Cancelar
+                                    </a>
+                                    <button type="submit" class="btn btn-success fw-bold">
+                                        <i class="fas fa-save me-2"></i>
+                                        {% if object %}Actualizar{% else %}Guardar{% endif %} Plan
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -181,11 +298,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (loteSelect) {
         loteSelect.addEventListener('change', function() {
             if (this.value) {
-                // Aquí puedes agregar una llamada AJAX para obtener información del lote
-                // Por ahora, solo mostramos el div de información
+                // Mostrar el div de información
                 loteInfo.classList.remove('d-none');
                 
-                // Ejemplo de cómo podrías obtener la información del lote
+                // Intentar obtener información del lote
                 fetch(`/aves/api/lote/${this.value}/info/`)
                     .then(response => response.json())
                     .then(data => {
@@ -195,40 +311,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                     .catch(error => {
                         console.log('Error al cargar información del lote:', error);
-                        // Mostrar información básica si no hay API
+                        // Fallback: mostrar info básica del texto seleccionado
                         const selectedOption = this.options[this.selectedIndex];
-                        document.getElementById('galponInfo').textContent = selectedOption.text.split(' - ')[1] || 'N/A';
-                        document.getElementById('avesInfo').textContent = 'Consultar en detalle';
-                        document.getElementById('edadInfo').textContent = 'Consultar en detalle';
+                        const text = selectedOption.text;
+                        if (text.includes('-')) {
+                            document.getElementById('galponInfo').textContent = text.split('-')[1].trim();
+                        } else {
+                            document.getElementById('galponInfo').textContent = 'N/A';
+                        }
+                        document.getElementById('avesInfo').textContent = 'Consultar';
+                        document.getElementById('edadInfo').textContent = 'Consultar';
                     });
             } else {
                 loteInfo.classList.add('d-none');
             }
         });
-    }
-    
-    // Validación del formulario
-    const form = document.getElementById('vacunacionForm');
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            const fechaProgramada = document.getElementById('{{ form.fecha_programada.id_for_label }}').value;
-            const fechaAplicada = document.getElementById('{{ form.fecha_aplicada.id_for_label }}').value;
-            const aplicada = document.getElementById('{{ form.aplicada.id_for_label }}').checked;
-            
-            // Si está marcada como aplicada, debe tener fecha de aplicación
-            if (aplicada && !fechaAplicada) {
-                e.preventDefault();
-                alert('Si la vacuna está marcada como aplicada, debe especificar la fecha de aplicación.');
-                return false;
-            }
-            
-            // La fecha de aplicación no puede ser anterior a la programada
-            if (fechaAplicada && fechaProgramada && fechaAplicada < fechaProgramada) {
-                e.preventDefault();
-                alert('La fecha de aplicación no puede ser anterior a la fecha programada.');
-                return false;
-            }
-        });
+        
+        // Disparar evento si ya hay valor seleccionado (edición)
+        if (loteSelect.value) {
+            loteSelect.dispatchEvent(new Event('change'));
+        }
     }
 });
 </script>

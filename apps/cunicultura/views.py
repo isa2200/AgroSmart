@@ -1,145 +1,183 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
+from django.contrib import messages
+from django.db.models import Sum, Count, F
+from django.db.models.functions import TruncDate
 from django.http import JsonResponse
-from django.views.decorators.http import require_POST
+from django.forms.models import model_to_dict
+from django.utils import timezone
+from datetime import timedelta
 import json
-from .models import InventarioConejos, PrecioConejo, LibroDiarioConejos
-from .forms import InventarioConejosForm, LibroDiarioConejosForm
+from apps.usuarios.decorators import role_required
+from .models import InventarioConejos, LibroDiarioConejos, ControlDestetes, RegistroAlimentoConejos, BitacoraActividadesConejos, PrecioConejo, HistorialInventarioConejos, TareaCunicultura, PlanVacunacion
+from .forms import InventarioConejosForm, LibroDiarioConejosForm, ControlDestetesForm, RegistroAlimentoConejosForm, BitacoraActividadesConejosForm, TareaCuniculturaForm, PlanVacunacionForm
 
 @login_required
+@role_required(['superusuario', 'admin_cunicola', 'practicante_cunicola', 'veterinario', 'solo_vista'])
 def dashboard_cunicultura(request):
     """
     Dashboard principal del módulo de cunicultura.
+    Muestra métricas generales y acceso a los diferentes submódulos.
     """
-    # Manejar actualizaciones de precios vía AJAX
-    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+    # Si es veterinario, redirigir directamente al plan de vacunación
+    if request.user.perfilusuario.rol == 'veterinario':
+        return redirect('cunicultura:plan_vacunacion_list')
+
+    # Manejo de actualizaciones de precios via AJAX
+    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
         try:
             data = json.loads(request.body)
             precio_id = data.get('id')
-            campo = data.get('field')  # 'descripcion', 'edad_dias', o 'valor'
-            nuevo_valor = data.get('value')
+            field = data.get('field')
+            value = data.get('value')
             
-            if precio_id:
-                precio = PrecioConejo.objects.get(id=precio_id)
-                if campo == 'descripcion':
-                    precio.descripcion = nuevo_valor
-                elif campo == 'edad_dias':
-                    precio.edad_dias = nuevo_valor
-                elif campo == 'valor':
-                    precio.valor = nuevo_valor if nuevo_valor else None
-                precio.save()
-                return JsonResponse({'status': 'success'})
+            precio = PrecioConejo.objects.get(id=precio_id)
+            
+            if field == 'descripcion':
+                precio.descripcion = value
+            elif field == 'edad_dias':
+                precio.edad_dias = value
+            elif field == 'valor':
+                precio.valor = value
+                
+            precio.save()
+            return JsonResponse({'status': 'success'})
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
-    # Inicializar precios si no existen
-    if not PrecioConejo.objects.exists():
-        precios_iniciales = [
-            (35, 42), (43, 49), (50, 56), (57, 63), (64, 70), 
-            (71, 77), (78, 84), (85, 91), (92, 98), (99, 105),
-            (106, 112), (113, 119), (120, 127), (127, 133), 
-            (134, 140), (141, 147), (148, 154), (155, 161),
-            (162, 168), (168, 175), (176, 182), (183, 189),
-            (190, 196), (197, 203), (204, 210)
-        ]
-        
-        for i, (min_d, max_d) in enumerate(precios_iniciales):
-            PrecioConejo.objects.create(
-                descripcion="Conejo en pie",
-                edad_dias=f"{min_d} a {max_d}",
-                orden=i
-            )
-
-    # Obtener precios para mostrar
-    precios = PrecioConejo.objects.all()
-
-    # Obtener el último registro de inventario para mostrar totales
-    ultimo_inventario = InventarioConejos.objects.order_by('-fecha').first()
+    # Obtener el último registro de inventario para las métricas actuales
+    ultimo_inventario = InventarioConejos.objects.order_by('-fecha', '-id').first()
     
-    # Valores por defecto si no hay registros
     total_conejos = 0
-    gazapos = 0
     reproductores = 0
+    gazapos = 0
     levante_ceba = 0
     
     if ultimo_inventario:
-        total_conejos = ultimo_inventario.total
+        reproductores = (ultimo_inventario.reproductores + 
+                        ultimo_inventario.hembra_reemplazo + 
+                        ultimo_inventario.hembra_no_lactando + 
+                        ultimo_inventario.hembra_lactando)
         gazapos = ultimo_inventario.gazapos
-        reproductores = ultimo_inventario.reproductores + ultimo_inventario.hembra_reemplazo + ultimo_inventario.hembra_no_lactando + ultimo_inventario.hembra_lactando
-        levante_ceba = ultimo_inventario.macho_levante_ceba + ultimo_inventario.hembra_levante_ceba
-        
+        levante_ceba = (ultimo_inventario.macho_levante_ceba + 
+                       ultimo_inventario.hembra_levante_ceba)
+        total_conejos = ultimo_inventario.total
+    
+    # Precios para la tabla de precios (si existe en el dashboard)
+    precios = PrecioConejo.objects.all().order_by('orden')
+
+    # Últimas actividades/novedades
+    ultimas_actividades = BitacoraActividadesConejos.objects.all().order_by('-fecha', '-id')[:5]
+
+    # Tareas Pendientes
+    tareas = TareaCunicultura.objects.exclude(estado='completada').order_by('-prioridad', 'fecha_limite')
+    tarea_form = TareaCuniculturaForm()
+    
     context = {
         'total_conejos': total_conejos,
-        'gazapos': gazapos,
         'reproductores': reproductores,
+        'gazapos': gazapos,
         'levante_ceba': levante_ceba,
         'ultimo_inventario': ultimo_inventario,
         'precios': precios,
+        'ultimas_actividades': ultimas_actividades,
+        'tareas': tareas,
+        'tarea_form': tarea_form,
     }
-    
     return render(request, 'cunicultura/dashboard.html', context)
 
 @login_required
+@role_required(['superusuario', 'admin_cunicola', 'practicante_cunicola', 'veterinario', 'solo_vista', 'punto_blanco'])
 def inventario_permanente(request):
     """
-    Vista para el Registro Inventario Permanente de Conejos
+    Vista para el Inventario Permanente de Conejos
     """
-    # Manejar actualizaciones inline vía AJAX
-    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        try:
-            data = json.loads(request.body)
-            registro_id = data.get('id')
-            campo = data.get('field')
-            valor = data.get('value')
-            
-            if registro_id:
-                registro = InventarioConejos.objects.get(id=registro_id)
-                
-                # Campos numéricos
-                campos_numericos = [
-                    'gazapos_vivos', 'gazapos_muertos', 'compra', 'venta', 'muerte',
-                    'macho_levante_ceba', 'hembra_levante_ceba', 'reproductores',
-                    'hembra_reemplazo', 'hembra_no_lactando', 'hembra_lactando', 'gazapos'
-                ]
-                
-                if campo in campos_numericos:
-                    setattr(registro, campo, int(valor) if valor else 0)
-                elif campo == 'detalle':
-                    registro.detalle = valor
-                elif campo == 'madre_id':
-                    registro.madre_id = valor
-                
-                registro.save()
-                return JsonResponse({
-                    'status': 'success', 
-                    'new_total': registro.total
-                })
-        except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
-
     registros = InventarioConejos.objects.all().order_by('-fecha', '-id')
     
+    # Filtros de fecha
+    fecha_inicio = request.GET.get('fecha_inicio')
+    fecha_fin = request.GET.get('fecha_fin')
+    
+    if fecha_inicio and fecha_fin:
+        registros = registros.filter(fecha__range=[fecha_inicio, fecha_fin])
+    elif fecha_inicio:
+        registros = registros.filter(fecha__gte=fecha_inicio)
+
     if request.method == 'POST':
-        form = InventarioConejosForm(request.POST)
-        if form.is_valid():
-            form.save()
+        if 'eliminar' in request.POST:
+            registro_id = request.POST.get('id') or request.POST.get('eliminar')
+            justificacion = request.POST.get('justificacion')
+            
+            registro = get_object_or_404(InventarioConejos, id=registro_id)
+            
+            # Guardar estado anterior
+            datos_anteriores = model_to_dict(registro)
+            datos_anteriores['fecha'] = str(datos_anteriores['fecha'])
+            
+            # Registrar historial ANTES de eliminar
+            HistorialInventarioConejos.objects.create(
+                usuario=request.user,
+                accion='ELIMINAR',
+                justificacion=justificacion,
+                registro_id=registro.id,
+                fecha_registro=registro.fecha,
+                detalle_registro=registro.detalle,
+                datos_anteriores=json.dumps(datos_anteriores, default=str)
+            )
+            
+            registro.delete()
+            messages.success(request, 'Registro eliminado correctamente')
             return redirect('cunicultura:inventario_permanente')
+            
+        else: # Crear nuevo
+            form = InventarioConejosForm(request.POST, request.FILES)
+            if form.is_valid():
+                registro = form.save()
+                # Opcional: Registrar creación
+                HistorialInventarioConejos.objects.create(
+                    usuario=request.user,
+                    accion='CREAR',
+                    registro_id=registro.id,
+                    fecha_registro=registro.fecha,
+                    detalle_registro=registro.detalle
+                )
+                messages.success(request, 'Registro creado correctamente')
+                return redirect('cunicultura:inventario_permanente')
     else:
         form = InventarioConejosForm()
-    
+        
     context = {
         'registros': registros,
         'form': form,
+        'fecha_inicio': fecha_inicio,
+        'fecha_fin': fecha_fin,
     }
     return render(request, 'cunicultura/inventario_permanente.html', context)
 
 @login_required
+@role_required(['superusuario', 'admin_cunicola', 'practicante_cunicola', 'veterinario', 'solo_vista', 'punto_blanco'])
+def historial_inventario(request):
+    historial = HistorialInventarioConejos.objects.all().order_by('-fecha_accion')
+    return render(request, 'cunicultura/historial_inventario.html', {'historial': historial})
+
+@login_required
+@role_required(['superusuario', 'admin_cunicola', 'practicante_cunicola', 'veterinario', 'solo_vista', 'punto_blanco'])
 def libro_diario(request):
     """
-    Vista para el Registro Libro Diario de Conejos
+    Vista para el Libro Diario de Conejos
     """
     registros = LibroDiarioConejos.objects.all().order_by('-fecha', '-id')
+    
+    # Filtros de fecha
+    fecha_inicio = request.GET.get('fecha_inicio')
+    fecha_fin = request.GET.get('fecha_fin')
+    
+    if fecha_inicio and fecha_fin:
+        registros = registros.filter(fecha__range=[fecha_inicio, fecha_fin])
+    elif fecha_inicio:
+        registros = registros.filter(fecha__gte=fecha_inicio)
+    elif fecha_fin:
+        registros = registros.filter(fecha__lte=fecha_fin)
     
     if request.method == 'POST':
         form = LibroDiarioConejosForm(request.POST)
@@ -148,9 +186,202 @@ def libro_diario(request):
             return redirect('cunicultura:libro_diario')
     else:
         form = LibroDiarioConejosForm()
+        
+    context = {
+        'registros': registros,
+        'form': form,
+        'fecha_inicio': fecha_inicio,
+        'fecha_fin': fecha_fin,
+    }
+    return render(request, 'cunicultura/libro_diario.html', context)
+
+@login_required
+@role_required(['superusuario', 'admin_cunicola', 'practicante_cunicola', 'veterinario', 'solo_vista', 'punto_blanco'])
+def control_destetes(request):
+    """
+    Vista para el Control de Destetes
+    """
+    registros = ControlDestetes.objects.all().order_by('-fecha_destete', '-id')
+    
+    # Filtros de fecha
+    fecha_inicio = request.GET.get('fecha_inicio')
+    fecha_fin = request.GET.get('fecha_fin')
+    
+    if fecha_inicio and fecha_fin:
+        registros = registros.filter(fecha_destete__range=[fecha_inicio, fecha_fin])
+    elif fecha_inicio:
+        registros = registros.filter(fecha_destete__gte=fecha_inicio)
+    elif fecha_fin:
+        registros = registros.filter(fecha_destete__lte=fecha_fin)
+    
+    if request.method == 'POST':
+        form = ControlDestetesForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('cunicultura:control_destetes')
+    else:
+        form = ControlDestetesForm()
+        
+    context = {
+        'registros': registros,
+        'form': form,
+        'fecha_inicio': fecha_inicio,
+        'fecha_fin': fecha_fin,
+    }
+    return render(request, 'cunicultura/control_destetes.html', context)
+
+@login_required
+@role_required(['superusuario', 'admin_cunicola', 'practicante_cunicola', 'veterinario', 'solo_vista', 'punto_blanco'])
+def registro_alimento(request):
+    """
+    Vista para el Registro de Alimento de Conejos
+    """
+    registros = RegistroAlimentoConejos.objects.all().order_by('-fecha', '-id')
+    
+    # Filtros de fecha
+    fecha_inicio = request.GET.get('fecha_inicio')
+    fecha_fin = request.GET.get('fecha_fin')
+    
+    if fecha_inicio and fecha_fin:
+        registros = registros.filter(fecha__range=[fecha_inicio, fecha_fin])
+    elif fecha_inicio:
+        registros = registros.filter(fecha__gte=fecha_inicio)
+    elif fecha_fin:
+        registros = registros.filter(fecha__lte=fecha_fin)
+    
+    if request.method == 'POST':
+        form = RegistroAlimentoConejosForm(request.POST)
+        if form.is_valid():
+            registro = form.save(commit=False)
+            # Calcular saldo basico
+            # Buscamos el último registro anterior a la fecha actual para obtener saldo inicial
+            ultimo = RegistroAlimentoConejos.objects.filter(fecha__lte=registro.fecha).exclude(id=registro.id).order_by('-fecha', '-id').first()
+            saldo_anterior = ultimo.saldo if ultimo else 0
+            registro.saldo = saldo_anterior + registro.entrada - registro.salida
+            registro.save()
+            return redirect('cunicultura:registro_alimento')
+    else:
+        form = RegistroAlimentoConejosForm()
     
     context = {
         'registros': registros,
         'form': form,
+        'fecha_inicio': fecha_inicio,
+        'fecha_fin': fecha_fin,
     }
-    return render(request, 'cunicultura/libro_diario.html', context)
+    return render(request, 'cunicultura/registro_alimento.html', context)
+
+@login_required
+@role_required(['superusuario', 'admin_cunicola', 'practicante_cunicola', 'veterinario', 'solo_vista', 'punto_blanco'])
+def bitacora_actividades(request):
+    """
+    Vista para la Bitácora de Actividades de Conejos
+    """
+    registros = BitacoraActividadesConejos.objects.all().order_by('-fecha', '-id')
+    
+    # Filtros de fecha
+    fecha_inicio = request.GET.get('fecha_inicio')
+    fecha_fin = request.GET.get('fecha_fin')
+    
+    if fecha_inicio and fecha_fin:
+        registros = registros.filter(fecha__range=[fecha_inicio, fecha_fin])
+    elif fecha_inicio:
+        registros = registros.filter(fecha__gte=fecha_inicio)
+    elif fecha_fin:
+        registros = registros.filter(fecha__lte=fecha_fin)
+    
+    if request.method == 'POST':
+        form = BitacoraActividadesConejosForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('cunicultura:bitacora_actividades')
+    else:
+        form = BitacoraActividadesConejosForm()
+    
+    context = {
+        'registros': registros,
+        'form': form,
+        'fecha_inicio': fecha_inicio,
+        'fecha_fin': fecha_fin,
+    }
+    return render(request, 'cunicultura/bitacora_actividades.html', context)
+
+@login_required
+def crear_tarea(request):
+    if request.method == 'POST':
+        form = TareaCuniculturaForm(request.POST)
+        if form.is_valid():
+            tarea = form.save(commit=False)
+            if not tarea.responsable:
+                tarea.responsable = request.user
+            tarea.creado_por = request.user
+            tarea.save()
+            messages.success(request, 'Tarea creada exitosamente.')
+        else:
+            messages.error(request, 'Error al crear la tarea. Verifique los datos.')
+    return redirect('cunicultura:dashboard')
+
+@login_required
+@role_required(['superusuario', 'admin_cunicola', 'practicante_cunicola', 'veterinario'])
+def completar_tarea(request, tarea_id):
+    tarea = get_object_or_404(TareaCunicultura, id=tarea_id)
+    tarea.estado = 'completada'
+    tarea.save()
+    messages.success(request, 'Tarea marcada como completada.')
+    return redirect('cunicultura:dashboard')
+
+@login_required
+@role_required(['superusuario', 'admin_cunicola', 'practicante_cunicola', 'veterinario'])
+def eliminar_tarea(request, tarea_id):
+    tarea = get_object_or_404(TareaCunicultura, id=tarea_id)
+    tarea.delete()
+    messages.success(request, 'Tarea eliminada exitosamente.')
+    return redirect('cunicultura:dashboard')
+
+# Plan de Vacunación
+
+@login_required
+@role_required(['superusuario', 'admin_cunicola', 'practicante_cunicola', 'veterinario', 'solo_vista', 'punto_blanco'])
+def plan_vacunacion_list(request):
+    planes = PlanVacunacion.objects.filter(is_active=True).order_by('fecha_programada')
+    return render(request, 'cunicultura/plan_vacunacion_list.html', {'planes': planes})
+
+@login_required
+@role_required(['superusuario', 'admin_cunicola', 'practicante_cunicola', 'veterinario'])
+def plan_vacunacion_create(request):
+    if request.method == 'POST':
+        form = PlanVacunacionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Plan de vacunación creado correctamente')
+            return redirect('cunicultura:plan_vacunacion_list')
+        else:
+            messages.error(request, 'Revise los campos del formulario')
+    else:
+        form = PlanVacunacionForm()
+    return render(request, 'cunicultura/plan_vacunacion_form.html', {'form': form, 'title': 'Crear Plan de Vacunación'})
+
+@login_required
+@role_required(['superusuario', 'admin_aves', 'veterinario'])
+def plan_vacunacion_update(request, pk):
+    plan = get_object_or_404(PlanVacunacion, pk=pk)
+    if request.method == 'POST':
+        form = PlanVacunacionForm(request.POST, instance=plan)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Plan de vacunación actualizado correctamente')
+            return redirect('cunicultura:plan_vacunacion_list')
+        else:
+            messages.error(request, 'Revise los campos del formulario')
+    else:
+        form = PlanVacunacionForm(instance=plan)
+    return render(request, 'cunicultura/plan_vacunacion_form.html', {'form': form, 'title': 'Editar Plan de Vacunación'})
+
+@login_required
+@role_required(['superusuario', 'admin_cunicola', 'practicante_cunicola', 'veterinario'])
+def plan_vacunacion_delete(request, pk):
+    plan = get_object_or_404(PlanVacunacion, pk=pk)
+    plan.is_active = False
+    plan.save()
+    messages.success(request, 'Plan de vacunación eliminado correctamente')
+    return redirect('cunicultura:plan_vacunacion_list')

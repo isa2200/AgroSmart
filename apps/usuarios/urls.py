@@ -5,6 +5,7 @@ URLs para la app de usuarios.
 from django.urls import path
 from django.contrib.auth.views import LogoutView
 from . import views
+from . import views_qr
 
 app_name = 'usuarios'
 
@@ -23,4 +24,7 @@ urlpatterns = [
     # Punto Blanco - Inventarios
     path('punto-blanco/', views.PuntoBlancoDashboardView.as_view(), name='punto_blanco_dashboard'),
     path('punto-blanco/inventario-huevos/', views.PuntoBlancoInventarioHuevosView.as_view(), name='punto_blanco_inventario_huevos'),
+    # QR Visitantes
+    path('generar-qr-visitante/', views_qr.GenerarQRVisitanteView.as_view(), name='generar_qr_visitante'),
+    path('acceso-visitante/', views_qr.RegistroVisitanteView.as_view(), name='registro_visitante'),
 ]

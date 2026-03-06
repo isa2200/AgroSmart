@@ -1,96 +1,461 @@
-{% extends 'aves/base.html' %}
+{% extends 'porcinos/base.html' %}
+{% load static %}
 
-{% block title %}Bitácora Porcinos{% endblock %}
-{% block page_title %}Bitácora Porcinos{% endblock %}
+{% block title %}Bitácora Diaria - Porcinos{% endblock %}
 
-{% block breadcrumb %}
-<nav aria-label="breadcrumb" class="mb-3">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'dashboard:principal' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'porcinos:dashboard' %}">Porcinos</a></li>
-        <li class="breadcrumb-item active">Bitácora</li>
-    </ol>
-    </nav>
+{% block breadcrumb %}{% endblock %}
+{% block page_header %}{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    /* Estilos unificados Glassmorphism (Copiados de animal_list.html) */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    /* Form Styles in Glass */
+    .form-label {
+        color: rgba(255,255,255,0.9);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control, .form-select {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: #333;
+        backdrop-filter: blur(5px);
+    }
+
+    .form-control:focus, .form-select:focus {
+        background: #ffffff;
+        border-color: rgba(255,255,255,0.5);
+        color: #000;
+        box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+    }
+
+    .form-control::placeholder {
+        color: #6c757d;
+    }
+
+    option {
+        background: white;
+        color: #333;
+    }
+
+    /* Table Styles */
+    .table-custom {
+        width: 100%;
+        margin-bottom: 0;
+        color: black;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .table-custom thead th {
+        background-color: rgba(0,0,0,0.2);
+        color: white;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 1rem;
+        border-bottom: 2px solid rgba(255,255,255,0.1);
+    }
+
+    .table-custom tbody tr {
+        background: rgba(255,255,255,0.9);
+        transition: all 0.2s;
+    }
+    
+    .table-custom tbody tr:hover {
+        background: rgba(255,255,255,1);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .table-custom td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        color: #000000 !important;
+    }
+
+    .btn-outline-action {
+        background: transparent;
+        border: 1px solid #2e7d32;
+        color: #2e7d32;
+    }
+    .btn-outline-action:hover {
+        background: #2e7d32;
+        color: white;
+    }
+    
+    .btn-group-sm > .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        border-radius: 0.2rem;
+    }
+    
+    .btn-action {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        margin: 0 2px;
+        transition: all 0.2s;
+        border: 1px solid rgba(0,0,0,0.1);
+        background: white;
+        color: #333;
+    }
+
+    .btn-action:hover {
+        transform: translateY(-2px);
+        background: #f8f9fa;
+        color: #000;
+    }
+
+    .btn-view:hover { background: rgba(13, 202, 240, 0.4); }
+    .btn-edit:hover { background: rgba(255, 193, 7, 0.4); }
+    .btn-delete:hover { background: rgba(220, 53, 69, 0.4); }
+
+    /* Pagination */
+    .pagination {
+        margin-bottom: 0;
+    }
+
+    .pagination .page-link {
+        background: rgba(255,255,255,0.1);
+        border-color: rgba(255,255,255,0.2);
+        color: white;
+    }
+
+    .pagination .page-item.active .page-link {
+        background: #2e7d32;
+        border-color: #2e7d32;
+        color: white;
+    }
+
+    .pagination .page-link:hover {
+        background: rgba(255,255,255,0.2);
+        color: white;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        background: rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.5);
+    }
+
+    /* Buttons */
+    .btn-light-custom {
+        background: rgba(255,255,255,0.2);
+        border: 1px solid rgba(255,255,255,0.3);
+        color: white;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+    
+    .btn-light-custom:hover {
+        background: rgba(255,255,255,0.3);
+        color: white;
+        transform: translateY(-1px);
+    }
+
+    /* Print Styles */
+    @media print {
+        @page { size: legal landscape; margin: 5mm; }
+        body * { visibility: hidden; }
+        .print-layout, .print-layout * { visibility: visible; }
+        .print-layout { position: absolute; left: 0; top: 0; width: 100%; display: block !important; background-color: white; padding: 10px; }
+        .no-print, .sidebar, .navbar, .card-footer, .btn, form, .card-header, .page-header, .breadcrumb, .modal, .glass-wrap h2, .pagination { display: none !important; }
+        .main-content { margin: 0 !important; padding: 0 !important; background-color: white !important; }
+        table { width: 100% !important; border-collapse: collapse !important; font-size: 10px !important; font-family: Arial, sans-serif !important; }
+        th, td { border: 1px solid black !important; padding: 2px !important; color: black !important; vertical-align: middle !important; }
+        th { background-color: white !important; font-weight: bold !important; text-align: center !important; }
+        .text-center { text-align: center !important; }
+        .text-start { text-align: left !important; }
+        .fw-bold { font-weight: bold !important; }
+    }
+    .print-layout { display: none; }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="card">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <form class="row g-2" method="get">
-                <div class="col-auto">
-                    <select name="lote" class="form-select">
-                        <option value="">Todos los lotes</option>
-                        {% for l in lotes %}
-                        <option value="{{ l.id }}" {% if filtros.lote == l.id|stringformat:'s' %}selected{% endif %}>{{ l.codigo }}</option>
+<div class="row justify-content-center">
+    <div class="col-12">
+        <h2 class="text-center text-white mb-4 fw-bold" style="font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Bitácora Diaria</h2>
+        
+        <!-- Filtros -->
+        <div class="unified-dashboard-card mb-4 no-print">
+            <div class="card-body">
+                <form method="get" class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label">Lote</label>
+                        <select name="lote" class="form-select">
+                            <option value="">Todos los lotes</option>
+                            {% for lote in lotes %}
+                                <option value="{{ lote.id }}" {% if filtros.lote == lote.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ lote.codigo }} - {{ lote.corral }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Fecha Desde</label>
+                        <input type="date" name="fecha_desde" class="form-control" value="{{ filtros.fecha_desde|default:'' }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Fecha Hasta</label>
+                        <input type="date" name="fecha_hasta" class="form-control" value="{{ filtros.fecha_hasta|default:'' }}">
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-light fw-bold w-100" style="color: #2e7d32;">
+                            <i class="fas fa-search me-2"></i>Filtrar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Lista de Bitácoras -->
+        <div class="unified-dashboard-card">
+            <div class="card-header">
+                <h5 class="section-title"><i class="fas fa-list"></i>Registros de Bitácora</h5>
+                <div class="d-flex gap-3 ms-auto">
+                    {% if user.is_superuser or user.perfilusuario.rol == 'admin_aves' or user.perfilusuario.rol == 'veterinario' %}
+                    <a href="{% url 'porcinos:bitacora_create' %}" class="btn btn-sm btn-glass-green fw-bold no-print">
+                        <i class="fas fa-plus me-2"></i>Nueva Bitácora
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-body p-0">
+                {% if bitacoras %}
+                <div class="table-responsive">
+                    <table class="table table-custom align-middle">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Lote</th>
+                                <th>Peso (Avg)</th>
+                                <th>Consumo (kg)</th>
+                                <th>Enfermos</th>
+                                <th>Mortalidad</th>
+                                <th class="text-center no-print">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for b in bitacoras %}
+                            <tr>
+                                <td><strong>{{ b.fecha|date:"d/m/Y" }}</strong></td>
+                                <td>{{ b.lote.codigo }}</td>
+                                <td>{{ b.peso_promedio }} kg</td>
+                                <td>{{ b.consumo_alimento_kg }}</td>
+                                <td>
+                                    {% if b.animales_enfermos > 0 %}
+                                        <span class="badge bg-warning text-dark">{{ b.animales_enfermos }}</span>
+                                    {% else %}
+                                        0
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if b.mortalidad > 0 %}
+                                        <span class="badge bg-danger">{{ b.mortalidad }}</span>
+                                    {% else %}
+                                        0
+                                    {% endif %}
+                                </td>
+                                <td class="text-center no-print">
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{% url 'porcinos:bitacora_detail' b.id %}?print=true" target="_blank" class="btn btn-outline-action" title="Imprimir detalle">
+                                            <i class="fas fa-print"></i>
+                                        </a>
+                                        <a href="{% url 'porcinos:bitacora_detail' b.id %}" class="btn btn-outline-action" title="Ver Detalle">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        {% if user.is_superuser or perms.porcinos.change_bitacoradiariaporcinos %}
+                                        <a href="{% url 'porcinos:bitacora_update' b.id %}" class="btn btn-outline-action" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Paginación -->
+                {% if bitacoras.has_other_pages %}
+                <nav aria-label="Page navigation" class="mt-4 mb-4 no-print">
+                    <ul class="pagination justify-content-center">
+                        {% if bitacoras.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ bitacoras.previous_page_number }}{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}" aria-label="Anterior">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">&laquo;</span>
+                            </li>
+                        {% endif %}
+
+                        {% for i in bitacoras.paginator.page_range %}
+                            {% if bitacoras.number == i %}
+                                <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                            {% elif i > bitacoras.number|add:'-3' and i < bitacoras.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ i }}{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}">{{ i }}</a>
+                                </li>
+                            {% endif %}
                         {% endfor %}
-                    </select>
-                </div>
-                <div class="col-auto">
-                    <input type="date" name="fecha_desde" class="form-control" value="{{ filtros.fecha_desde }}">
-                </div>
-                <div class="col-auto">
-                    <input type="date" name="fecha_hasta" class="form-control" value="{{ filtros.fecha_hasta }}">
-                </div>
-                <div class="col-auto">
-                    <button class="btn btn-primary" type="submit">Filtrar</button>
-                </div>
-            </form>
-            {% if user.is_superuser %}
-            <a href="{% url 'porcinos:bitacora_create' %}" class="btn btn-success">
-                <i class="fas fa-plus me-2"></i>Nueva Bitácora
-            </a>
-            {% endif %}
-        </div>
 
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Lote</th>
-                        <th>Peso promedio</th>
-                        <th>Consumo alimento (kg)</th>
-                        <th>Enfermos</th>
-                        <th>Mortalidad</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for b in bitacoras %}
-                    <tr>
-                        <td>{{ b.fecha }}</td>
-                        <td>{{ b.lote.codigo }}</td>
-                        <td>{{ b.peso_promedio }}</td>
-                        <td>{{ b.consumo_alimento_kg }}</td>
-                        <td>{{ b.animales_enfermos }}</td>
-                        <td>{{ b.mortalidad }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="6" class="text-center text-muted">No hay registros</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                        {% if bitacoras.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ bitacoras.next_page_number }}{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}" aria-label="Siguiente">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">&raquo;</span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
 
-        {% if bitacoras.has_other_pages %}
-        <nav>
-            <ul class="pagination">
-                {% if bitacoras.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ bitacoras.previous_page_number }}{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}">Anterior</a>
-                </li>
+                {% else %}
+                <div class="alert alert-info text-center m-3" style="background: rgba(255,255,255,0.9); color: #0c5460; border: none;">
+                    <i class="fas fa-info-circle me-2"></i>No se encontraron registros de bitácora con los filtros seleccionados.
+                </div>
                 {% endif %}
-                <li class="page-item disabled"><span class="page-link">Página {{ bitacoras.number }} de {{ bitacoras.paginator.num_pages }}</span></li>
-                {% if bitacoras.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ bitacoras.next_page_number }}{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}">Siguiente</a>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
-        {% endif %}
+            </div>
+        </div>
     </div>
- </div>
+</div>
+
+<!-- Print Layout -->
+<div class="print-layout">
+    <table class="table table-bordered mb-0" style="width: 100%; margin-bottom: 0 !important; border: 2px solid black;">
+        <tbody>
+            <tr>
+                <td style="width: 60%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height:20mm; width:auto; object-fit:contain;">
+                        <div class="fw-bold" style="font-size: 14px; line-height: 1.2;">
+                            Centro de los Recursos Naturales Renovables La Salada<br>
+                            Regional Antioquia
+                        </div>
+                    </div>
+                </td>
+                <td style="width: 40%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="fw-bold">Código del documento: <span class="fw-normal">-</span></div>
+                    <div class="mt-1 fw-bold">Versión: <span class="fw-normal">01</span></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-center" style="text-align: center !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="fw-bold">Unidad productiva de porcinos</div>
+                    <div class="h5 mb-0 fw-bold">BITÁCORA DIARIA DE PORCINOS</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-bordered mt-0" style="width: 100%; border: 2px solid black; border-top: none; margin-top: -2px !important; font-size: 9px !important;">
+        <thead>
+            <tr style="background-color: #f0f0f0;">
+                <th class="text-center" style="width: 15%;">Fecha</th>
+                <th class="text-center" style="width: 15%;">Lote</th>
+                <th class="text-center" style="width: 15%;">Peso Promedio</th>
+                <th class="text-center" style="width: 15%;">Consumo (kg)</th>
+                <th class="text-center" style="width: 15%;">Enfermos</th>
+                <th class="text-center" style="width: 15%;">Mortalidad</th>
+                <th class="text-center" style="width: 10%;">Firma</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in bitacoras %}
+            <tr>
+                <td class="text-center">{{ b.fecha|date:"d/m/Y" }}</td>
+                <td class="text-center">{{ b.lote.codigo }}</td>
+                <td class="text-center">{{ b.peso_promedio }} kg</td>
+                <td class="text-center">{{ b.consumo_alimento_kg }}</td>
+                <td class="text-center">{{ b.animales_enfermos }}</td>
+                <td class="text-center">{{ b.mortalidad }}</td>
+                <td></td>
+            </tr>
+            {% endfor %}
+            <!-- Filas vacías para llenado manual si es necesario -->
+            {% if bitacoras|length < 10 %}
+                {% for i in "12345" %}
+                <tr>
+                    <td style="height: 25px;"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="7" class="p-2">
+                    <div class="d-flex justify-content-between mt-4">
+                        <div class="text-center" style="width: 30%;">
+                            <div style="border-top: 1px solid black; width: 80%; margin: 0 auto;"></div>
+                            <small>Realizado por</small>
+                        </div>
+                        <div class="text-center" style="width: 30%;">
+                            <div style="border-top: 1px solid black; width: 80%; margin: 0 auto;"></div>
+                            <small>Revisado por</small>
+                        </div>
+                        <div class="text-center" style="width: 30%;">
+                            <div style="border-top: 1px solid black; width: 80%; margin: 0 auto;"></div>
+                            <small>Aprobado por</small>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
 {% endblock %}

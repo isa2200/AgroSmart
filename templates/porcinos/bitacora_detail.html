@@ -3,235 +3,298 @@
 {% block title %}Detalle Bitácora - Porcinos{% endblock %}
 {% block page_title %}Detalle de Bitácora{% endblock %}
 
-{% block breadcrumb %}
-<nav aria-label="breadcrumb" class="mb-3">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'dashboard:principal' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'porcinos:dashboard' %}">Porcinos</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'porcinos:bitacora_list' %}">Bitácora</a></li>
-        <li class="breadcrumb-item active">{{ bitacora.fecha|date:'d/m/Y' }}</li>
-    </ol>
-    </nav>
+{% block breadcrumb %}{% endblock %}
+
+
+
+{% block extra_css %}
+<style>
+    /* Estilos unificados Glassmorphism */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 1.5rem;
+    }
+
+    /* Print Styles */
+    .print-layout {
+        display: none;
+    }
+    
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        .print-layout, .print-layout * {
+            visibility: visible;
+        }
+        .print-layout {
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            background: white;
+            color: black;
+            padding: 20px;
+        }
+        .no-print {
+            display: none !important;
+        }
+        
+        /* Reset glass styles for print */
+        .unified-dashboard-card {
+            background: white !important;
+            color: black !important;
+            border: 1px solid #000 !important;
+            box-shadow: none !important;
+        }
+        
+        .table-bordered {
+            border: 1px solid #000 !important;
+        }
+        
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #000 !important;
+        }
+    }
+</style>
 {% endblock %}
 
-
-
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3 no-print">
-    <div class="btn-group">
-        <a href="{% url 'porcinos:bitacora_list' %}" class="btn btn-secondary"><i class="fas fa-arrow-left me-2"></i>Volver</a>
-        <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print me-2"></i>Imprimir</button>
-    </div>
-    {% if user.is_superuser %}
-    <a href="{% url 'porcinos:bitacora_update' bitacora.id %}" class="btn btn-warning"><i class="fas fa-edit me-2"></i>Editar</a>
-    {% endif %}
- </div>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-9">
+            <div class="d-flex justify-content-between align-items-center mb-3 no-print">
+                <div class="btn-group">
+                    <a href="{% url 'porcinos:bitacora_list' %}" class="btn btn-sm btn-glass-green fw-bold"><i class="fas fa-arrow-left me-2"></i>Volver</a>
+                    <button class="btn btn-sm btn-glass-green fw-bold" onclick="window.print()"><i class="fas fa-print me-2"></i>Imprimir</button>
+                    {% if user.is_superuser or perms.porcinos.change_bitacoradiariaporcinos %}
+                    <a href="{% url 'porcinos:bitacora_update' bitacora.pk %}" class="btn btn-warning"><i class="fas fa-edit me-2"></i>Editar</a>
+                    {% endif %}
+                </div>
+            </div>
 
-<div class="row">
+            <!-- Screen View -->
+            <div class="row no-print">
     <div class="col-md-8">
-        <div class="card">
+        <div class="unified-dashboard-card mb-4">
             <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Información General</h5>
+                <h5 class="mb-0 fw-bold"><i class="fas fa-info-circle me-2"></i>Información General</h5>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <p><strong>Fecha:</strong> {{ bitacora.fecha|date:'d/m/Y' }}</p>
-                        <p><strong>Lote:</strong> {{ bitacora.lote.codigo }}</p>
-                        <p><strong>Corral:</strong> {{ bitacora.lote.corral }}</p>
-                        <p><strong>Registrado por:</strong> {{ bitacora.usuario_registro.get_full_name|default:bitacora.usuario_registro.username }}</p>
+                        <p><strong>Fecha:</strong> <span class="text-white-50">{{ bitacora.fecha|date:'d/m/Y' }}</span></p>
+                        <p><strong>Lote:</strong> <span class="text-white-50">{{ bitacora.lote.codigo }}</span></p>
+                        <p><strong>Corral:</strong> <span class="text-white-50">{{ bitacora.lote.corral }}</span></p>
+                        <p><strong>Registrado por:</strong> <span class="text-white-50">{{ bitacora.usuario_registro.get_full_name|default:bitacora.usuario_registro.username }}</span></p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Peso promedio (kg):</strong> {{ bitacora.peso_promedio }}</p>
-                        <p><strong>Consumo alimento (kg):</strong> {{ bitacora.consumo_alimento_kg }}</p>
-                        <p><strong>Animales enfermos:</strong> {{ bitacora.animales_enfermos }}</p>
-                        <p><strong>Mortalidad:</strong> {{ bitacora.mortalidad }}</p>
+                        <p><strong>Peso promedio (kg):</strong> <span class="text-white-50">{{ bitacora.peso_promedio }}</span></p>
+                        <p><strong>Consumo alimento (kg):</strong> <span class="text-white-50">{{ bitacora.consumo_alimento_kg }}</span></p>
+                        <p><strong>Animales enfermos:</strong> <span class="text-white-50">{{ bitacora.animales_enfermos }}</span></p>
+                        <p><strong>Mortalidad:</strong> <span class="text-white-50">{{ bitacora.mortalidad }}</span></p>
                     </div>
                 </div>
             </div>
         </div>
 
         {% if bitacora.tratamiento_aplicado %}
-        <div class="card mt-4">
+        <div class="unified-dashboard-card mb-4">
             <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-syringe me-2"></i>Tratamiento aplicado</h5>
+                <h5 class="mb-0 fw-bold"><i class="fas fa-syringe me-2"></i>Tratamiento aplicado</h5>
             </div>
             <div class="card-body">
-                <p class="mb-0">{{ bitacora.tratamiento_aplicado }}</p>
+                <p class="mb-0 text-white-50">{{ bitacora.tratamiento_aplicado }}</p>
             </div>
         </div>
         {% endif %}
 
         {% if bitacora.observaciones %}
-        <div class="card mt-4">
+        <div class="unified-dashboard-card mb-4">
             <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-comment me-2"></i>Observaciones</h5>
+                <h5 class="mb-0 fw-bold"><i class="fas fa-comment me-2"></i>Observaciones</h5>
             </div>
             <div class="card-body">
-                <pre class="mb-0" style="white-space: pre-wrap; font-family: inherit;">{{ bitacora.observaciones }}</pre>
+                <pre class="mb-0 text-white-50" style="white-space: pre-wrap; font-family: inherit; background: transparent; border: none; color: rgba(255,255,255,0.7) !important;">{{ bitacora.observaciones }}</pre>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if bitacora.firma_encargado %}
+        <div class="unified-dashboard-card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0 fw-bold"><i class="fas fa-signature me-2"></i>Firma del Encargado</h5>
+            </div>
+            <div class="card-body text-center">
+                <img src="{{ bitacora.firma_encargado.url }}" alt="Firma Encargado" class="img-fluid" style="max-height: 150px; background: white; padding: 10px; border-radius: 5px;">
             </div>
         </div>
         {% endif %}
     </div>
 
     <div class="col-md-4">
-        <div class="card">
+        <div class="unified-dashboard-card">
             <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Resumen</h5>
+                <h5 class="mb-0 fw-bold"><i class="fas fa-chart-line me-2"></i>Resumen</h5>
             </div>
             <div class="card-body">
                 <div class="row text-center">
                     <div class="col-6 mb-3">
-                        <div class="border rounded p-3 bg-light">
-                            <div class="text-muted">Peso prom.</div>
+                        <div class="border rounded p-3" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2) !important;">
+                            <div class="text-white-50">Peso prom.</div>
                             <div class="h4 mb-0">{{ bitacora.peso_promedio }}</div>
                         </div>
                     </div>
                     <div class="col-6 mb-3">
-                        <div class="border rounded p-3 bg-light">
-                            <div class="text-muted">Consumo (kg)</div>
+                        <div class="border rounded p-3" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2) !important;">
+                            <div class="text-white-50">Consumo (kg)</div>
                             <div class="h4 mb-0">{{ bitacora.consumo_alimento_kg }}</div>
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="border rounded p-3 bg-light">
-                            <div class="text-muted">Enfermos</div>
+                        <div class="border rounded p-3" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2) !important;">
+                            <div class="text-white-50">Enfermos</div>
                             <div class="h4 mb-0">{{ bitacora.animales_enfermos }}</div>
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="border rounded p-3 bg-light">
-                            <div class="text-muted">Mortalidad</div>
+                        <div class="border rounded p-3" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2) !important;">
+                            <div class="text-white-50">Mortalidad</div>
                             <div class="h4 mb-0">{{ bitacora.mortalidad }}</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+            </div>
+        </div>
     </div>
-<div id="printLayout" class="print-layout mt-4">
-    <!-- Standard Header -->
-    <table class="table table-bordered mb-0" style="width: 100%; margin-bottom: 0 !important;">
+</div>
+
+<!-- Print Layout -->
+<div class="print-layout">
+    <table class="table table-bordered mb-0" style="width: 100%; margin-bottom: 0 !important; border: 2px solid black;">
         <tbody>
             <tr>
-                <td style="width: 60%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
-                    <div class="d-flex align-items-center gap-3">
-                        <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height:20mm; width:auto; object-fit:contain;">
-                        <div class="fw-bold" style="font-size: 14px; line-height: 1.2;">{{ centro|default:"Centro de los Recursos Naturales Renovables La Salada" }}</div>
-                    </div>
+                <td style="width: 20%; text-align: center; vertical-align: middle; padding: 10px;">
+                    <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height:20mm; width:auto;">
                 </td>
-                <td style="width: 40%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
-                    <div class="fw-bold">Código del documento: <span class="fw-normal">{{ codigo_documento|default:"" }}</span></div>
-                    <div class="mt-1 fw-bold">Versión <span class="fw-normal">{{ version }}</span></div>
+                <td style="width: 50%; text-align: center; vertical-align: middle; padding: 10px;">
+                    <h5 class="fw-bold mb-1">BITÁCORA DIARIA DE PORCINOS - DETALLE</h5>
+                    <div class="small">Centro de los Recursos Naturales Renovables La Salada</div>
                 </td>
-            </tr>
-            <tr>
-                <td colspan="2" class="text-center" style="text-align: center !important; vertical-align: middle !important; padding: 10px !important;">
-                    <div class="fw-bold">{{ unidad_productiva }}</div>
-                    <div class="h5 mb-0 fw-bold">BITÁCORA DIARIA - PORCINOS</div>
+                <td style="width: 30%; text-align: left; vertical-align: middle; padding: 10px;">
+                    <div class="fw-bold">Código: <span class="fw-normal">-</span></div>
+                    <div class="fw-bold">Versión: <span class="fw-normal">01</span></div>
+                    <div class="fw-bold">Fecha: <span class="fw-normal">{{ bitacora.fecha|date:"d/m/Y" }}</span></div>
                 </td>
             </tr>
         </tbody>
     </table>
 
-    <!-- Info Table -->
-    <table class="table table-bordered mb-0" style="width: 100%; margin-bottom: 0 !important; margin-top: -2px !important;">
-        <tbody>
+    <table class="table table-bordered mt-3" style="width: 100%; border: 1px solid black;">
+        <thead class="table-light">
             <tr>
-                <th class="bg-light" style="width: 20%;">Fecha</th>
-                <td style="width: 30%;">{{ bitacora.fecha|date:'d/m/Y' }}</td>
-                <th class="bg-light" style="width: 20%;">Lote</th>
-                <td style="width: 30%;">{{ bitacora.lote.codigo }}</td>
-            </tr>
-            <tr>
-                <th class="bg-light">Corral</th>
-                <td>{{ bitacora.lote.corral }}</td>
-                <th class="bg-light">Registrado por</th>
-                <td>{{ bitacora.usuario_registro.get_full_name|default:bitacora.usuario_registro.username }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- Metrics Table -->
-    <table class="table table-bordered mb-4" style="width: 100%; margin-top: -2px !important;">
-        <thead>
-            <tr class="bg-light">
-                <th class="text-center">Peso Promedio (kg)</th>
-                <th class="text-center">Consumo Alimento (kg)</th>
-                <th class="text-center">Animales Enfermos</th>
-                <th class="text-center">Mortalidad</th>
+                <th colspan="4" class="text-center">INFORMACIÓN DEL LOTE</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td class="text-center">{{ bitacora.peso_promedio }}</td>
-                <td class="text-center">{{ bitacora.consumo_alimento_kg }}</td>
-                <td class="text-center">{{ bitacora.animales_enfermos }}</td>
-                <td class="text-center">{{ bitacora.mortalidad }}</td>
+                <td class="fw-bold" style="width: 25%">Lote:</td>
+                <td style="width: 25%">{{ bitacora.lote.codigo }}</td>
+                <td class="fw-bold" style="width: 25%">Corral:</td>
+                <td style="width: 25%">{{ bitacora.lote.corral }}</td>
+            </tr>
+            <tr>
+                <td class="fw-bold">Registrado por:</td>
+                <td colspan="3">{{ bitacora.usuario_registro.get_full_name|default:bitacora.usuario_registro.username }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-bordered mt-3" style="width: 100%; border: 1px solid black;">
+        <thead class="table-light">
+            <tr>
+                <th colspan="4" class="text-center">DATOS DE PRODUCCIÓN</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="fw-bold">Peso Promedio:</td>
+                <td>{{ bitacora.peso_promedio }} kg</td>
+                <td class="fw-bold">Consumo Alimento:</td>
+                <td>{{ bitacora.consumo_alimento_kg }} kg</td>
+            </tr>
+            <tr>
+                <td class="fw-bold">Animales Enfermos:</td>
+                <td>{{ bitacora.animales_enfermos }}</td>
+                <td class="fw-bold">Mortalidad:</td>
+                <td>{{ bitacora.mortalidad }}</td>
             </tr>
         </tbody>
     </table>
 
     {% if bitacora.tratamiento_aplicado %}
-    <div class="mb-3">
-        <strong>Tratamiento aplicado:</strong>
-        <div class="border border-dark p-2 mt-1">{{ bitacora.tratamiento_aplicado }}</div>
+    <div class="mt-3 border p-2" style="border: 1px solid black !important;">
+        <h6 class="fw-bold border-bottom pb-2">TRATAMIENTO APLICADO</h6>
+        <p class="mb-0">{{ bitacora.tratamiento_aplicado }}</p>
     </div>
     {% endif %}
 
     {% if bitacora.observaciones %}
-    <div class="mb-3">
-        <strong>Observaciones:</strong>
-        <div class="border border-dark p-2 mt-1">{{ bitacora.observaciones }}</div>
+    <div class="mt-3 border p-2" style="border: 1px solid black !important;">
+        <h6 class="fw-bold border-bottom pb-2" style="border-bottom: 1px solid black !important;">OBSERVACIONES</h6>
+        <p class="mb-0">{{ bitacora.observaciones }}</p>
     </div>
     {% endif %}
-</div>
-{% endblock %}
 
-{% block extra_css %}
-<style>
-@media print {
-  @page { size: A4 portrait; margin: 10mm; }
-  body * { visibility: hidden; }
-  .print-layout, .print-layout * { visibility: visible; }
-  .print-layout { position: static; left: auto; top: auto; width: 100%; display:block; }
-  
-  .print-layout table {  
-    font-size: 11px !important; 
-    border-collapse: collapse !important;
-    border: 2px solid black !important;
-    width: 100% !important;
-  }
-  .print-layout table th, .print-layout table td {
-    border: 2px solid black !important;
-    padding: 5px !important;
-    vertical-align: middle !important;
-  }
-  .print-layout .bg-light {
-    background-color: #f0f0f0 !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-}
-.print-layout { display:none; }
-</style>
-{% endblock %}
-<div class="sidebar">
-    <div class="p-3">
-        <h6 class="text-light mb-3"><i class="fas fa-pig me-2"></i>Modo Porcinos</h6>
-        <nav class="nav flex-column">
-            <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'porcinos:dashboard' %}"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
-            <a class="nav-link {% if 'lote' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'porcinos:lote_list' %}"><i class="fas fa-layer-group me-2"></i>Lotes Porcinos</a>
-            <a class="nav-link {% if 'bitacora' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'porcinos:bitacora_list' %}"><i class="fas fa-clipboard-list me-2"></i>Bitácora Diaria</a>
-            <a class="nav-link {% if request.resolver_match.url_name == 'inventario_permanente' %}active{% endif %}" href="{% url 'porcinos:inventario_permanente' %}"><i class="fas fa-table me-2"></i>Inventario Permanente</a>
-            <a class="nav-link {% if request.resolver_match.url_name == 'plan_gestante' %}active{% endif %}" href="{% url 'porcinos:plan_gestante' %}"><i class="fas fa-notes-medical me-2"></i>Plan Sanitario Cerda Gestante</a>
-            <a class="nav-link {% if request.resolver_match.url_name == 'registro_alimento' %}active{% endif %}" href="{% url 'porcinos:registro_alimento' %}"><i class="fas fa-drumstick-bite me-2"></i>Registro Gasto de Alimento</a>
-            <a class="nav-link {% if request.resolver_match.url_name == 'reportes' %}active{% endif %}" href="{% url 'porcinos:reportes' %}"><i class="fas fa-chart-bar me-2"></i>Reportes</a>
-        </nav>
-        <hr class="text-light">
-        <nav class="nav flex-column">
-            <a class="nav-link" href="{% url 'dashboard:principal' %}"><i class="fas fa-home me-2"></i>Volver al Dashboard</a>
-        </nav>
+    <div class="mt-5">
+        <div class="row justify-content-center">
+            <div class="col-6 text-center">
+                {% if bitacora.firma_encargado %}
+                    <div style="height: 80px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 5px;">
+                        <img src="{{ bitacora.firma_encargado.url }}" alt="Firma Encargado" style="max-height: 80px; max-width: 200px; display: block;">
+                    </div>
+                {% else %}
+                    <div style="height: 80px;"></div>
+                {% endif %}
+                <div style="border-top: 1px solid black; width: 80%; margin: 0 auto;"></div>
+                <small class="fw-bold">Firma del Encargado</small>
+            </div>
+        </div>
     </div>
 </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('print') === 'true') {
+            window.print();
+        }
+    });
+</script>
 {% endblock %}

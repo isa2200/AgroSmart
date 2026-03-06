@@ -37,6 +37,8 @@ LOCAL_APPS = [
     'apps.dashboard',
     'apps.punto_blanco',
     'apps.porcinos',
+    'apps.cunicultura',
+    'apps.equinos',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -93,6 +95,11 @@ LANGUAGE_CODE = 'es-es'
 TIME_ZONE = 'America/Bogota'
 USE_I18N = True
 USE_TZ = True
+
+# Configuración de URLs
+LOGIN_URL = '/usuarios/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/usuarios/login/'
 
 # Configuración de warnings para ignorar el warning de DateTimeField naive
 import warnings

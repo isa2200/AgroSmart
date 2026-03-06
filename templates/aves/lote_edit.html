@@ -3,199 +3,279 @@
 
 {% block title %}Editar Lote - AgroSmart{% endblock %}
 
-{% block page_title %}{{ titulo }}{% endblock %}
+{% block page_title %}{% endblock %}
+{% block breadcrumb_items %}{% endblock %}
+{% block page_actions %}{% endblock %}
 
-{% block breadcrumb_items %}
-    <li class="breadcrumb-item"><a href="{% url 'aves:lote_list' %}">Lotes</a></li>
-    <li class="breadcrumb-item"><a href="{% url 'aves:lote_detail' lote.pk %}">{{ lote.codigo }}</a></li>
-    <li class="breadcrumb-item active">Editar</li>
-{% endblock %}
+{% block extra_css %}
+{{ block.super }}
+<style>
+    /* Estilos copiados de dashboard-section para consistencia */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden; /* Importante para el header */
+        padding: 0; /* Reset padding para que el header ocupe todo el ancho */
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1); /* Fondo oscuro para el header */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-{% block page_actions %}
-    <a href="{% url 'aves:lote_detail' lote.pk %}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left me-2"></i>Volver al Lote
-    </a>
+    .unified-dashboard-card .card-body {
+        padding: 2rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    /* Envoltura para ampliar el ancho útil del contenedor */
+    .glass-wrap{
+        width: 100%;
+        max-width: 95%; /* Ampliado para layout de 2 columnas */
+        margin: 0 auto;
+    }
+    @media (min-width: 1600px){
+        .glass-wrap{ max-width: 95%; }
+    }
+
+    .unified-dashboard-card .form-label{
+        color: #fff;
+    }
+    .unified-dashboard-card .form-text{
+        color: rgba(255,255,255,0.8);
+    }
+    .unified-dashboard-card .form-control{
+        background: rgba(255,255,255,0.85);
+        border: 1px solid rgba(255,255,255,0.25);
+        color: #1b1b1b;
+    }
+    .unified-dashboard-card .form-control:focus{
+        border-color: rgba(52, 199, 89, 0.9);
+        box-shadow: 0 0 0 0.2rem rgba(52, 199, 89, 0.25);
+    }
+    .unified-dashboard-card .is-invalid{
+        border-color: rgba(220,53,69,0.9);
+        box-shadow: 0 0 0 0.2rem rgba(220,53,69,0.15);
+    }
+    .unified-dashboard-card hr{
+        border-color: rgba(255,255,255,0.2);
+    }
+    .form-section-title{
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        color: #fff;
+        font-weight: 600;
+        margin-bottom: 12px;
+        border-left: 4px solid #34c759;
+        padding-left: 8px;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-10">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="fas fa-edit me-2"></i>Editar Lote {{ lote.codigo }}
-                </h5>
-            </div>
-            <div class="card-body">
-                <!-- Alerta de información -->
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle me-2"></i>
-                    <strong>Importante:</strong> Cualquier modificación debe ser justificada. 
-                    Los cambios quedarán registrados en el sistema de auditoría.
+    <div class="col-12">
+        <div class="glass-wrap">
+            <h2 class="text-center text-white mb-4 fw-bold" style="font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Gestión de Lotes</h2>
+            
+            <div class="unified-dashboard-card">
+                <div class="card-header">
+                    <h5 class="section-title">
+                        <i class="fas fa-edit"></i>Editar Lote {{ lote.codigo }}
+                    </h5>
+                    <a href="{% url 'aves:lote_detail' lote.pk %}" class="btn btn-sm btn-light-custom">
+                        <i class="fas fa-arrow-left me-2"></i>Volver al Lote
+                    </a>
                 </div>
+                <div class="card-body">
+                    <!-- Alerta de información -->
+                    <div class="alert alert-info" style="background: rgba(13, 202, 240, 0.2); border: 1px solid rgba(13, 202, 240, 0.3); color: white;">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Importante:</strong> Cualquier modificación debe ser justificada. 
+                        Los cambios quedarán registrados en el sistema de auditoría.
+                    </div>
 
-                <form method="post" id="loteEditForm">
-                    {% csrf_token %}
-                    
-                    <div class="row">
-                        <!-- Información Básica -->
-                        <div class="col-md-6">
-                            <h6 class="text-primary mb-3">Información Básica</h6>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.codigo.id_for_label }}" class="form-label">Código del Lote *</label>
-                                {{ form.codigo|add_class:"form-control" }}
-                                {% if form.codigo.errors %}
-                                    <div class="text-danger small">{{ form.codigo.errors.0 }}</div>
-                                {% endif %}
-                                {% if form.codigo.help_text %}
-                                    <div class="form-text">{{ form.codigo.help_text }}</div>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.galpon.id_for_label }}" class="form-label">Galpón *</label>
-                                {{ form.galpon|add_class:"form-control" }}
-                                {% if form.galpon.errors %}
-                                    <div class="text-danger small">{{ form.galpon.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.linea_genetica.id_for_label }}" class="form-label">Línea Genética *</label>
-                                {{ form.linea_genetica|add_class:"form-control" }}
-                                {% if form.linea_genetica.errors %}
-                                    <div class="text-danger small">{{ form.linea_genetica.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.estado.id_for_label }}" class="form-label">Estado del Lote *</label>
-                                {{ form.estado|add_class:"form-control" }}
-                                {% if form.estado.errors %}
-                                    <div class="text-danger small">{{ form.estado.errors.0 }}</div>
-                                {% endif %}
-                                <div class="form-text">
-                                    <small>
-                                        <strong>Levante:</strong> Pollas jóvenes en crecimiento<br>
-                                        <strong>Postura:</strong> Gallinas en producción de huevos<br>
-                                        <strong>Finalizado:</strong> Lote terminado
-                                    </small>
+                    <form method="post" id="loteEditForm">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <!-- Información Básica -->
+                            <div class="col-md-6">
+                                <div class="form-section-title"><i class="fas fa-info-circle"></i>Información Básica</div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.codigo.id_for_label }}" class="form-label">Código del Lote *</label>
+                                    {{ form.codigo|add_class:"form-control" }}
+                                    {% if form.codigo.errors %}
+                                        <div class="text-danger small">{{ form.codigo.errors.0 }}</div>
+                                    {% endif %}
+                                    {% if form.codigo.help_text %}
+                                        <div class="form-text text-white-50">{{ form.codigo.help_text }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.galpon.id_for_label }}" class="form-label">Galpón *</label>
+                                    {{ form.galpon|add_class:"form-control" }}
+                                    {% if form.galpon.errors %}
+                                        <div class="text-danger small">{{ form.galpon.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.linea_genetica.id_for_label }}" class="form-label">Línea Genética *</label>
+                                    {{ form.linea_genetica|add_class:"form-control" }}
+                                    {% if form.linea_genetica.errors %}
+                                        <div class="text-danger small">{{ form.linea_genetica.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.estado.id_for_label }}" class="form-label">Estado del Lote *</label>
+                                    {{ form.estado|add_class:"form-control" }}
+                                    {% if form.estado.errors %}
+                                        <div class="text-danger small">{{ form.estado.errors.0 }}</div>
+                                    {% endif %}
+                                    <div class="form-text text-white-50">
+                                        <small>
+                                            <strong>Levante:</strong> Pollas jóvenes en crecimiento<br>
+                                            <strong>Postura:</strong> Gallinas en producción de huevos<br>
+                                            <strong>Finalizado:</strong> Lote terminado
+                                        </small>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.procedencia.id_for_label }}" class="form-label">Procedencia *</label>
+                                    {{ form.procedencia|add_class:"form-control" }}
+                                    {% if form.procedencia.errors %}
+                                        <div class="text-danger small">{{ form.procedencia.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.fecha_llegada.id_for_label }}" class="form-label">Fecha de Llegada *</label>
+                                    {{ form.fecha_llegada|add_class:"form-control" }}
+                                    {% if form.fecha_llegada.errors %}
+                                        <div class="text-danger small">{{ form.fecha_llegada.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="{{ form.fecha_inicio_postura.id_for_label }}" class="form-label">Fecha Inicio Postura</label>
+                                    {{ form.fecha_inicio_postura|add_class:"form-control" }}
+                                    {% if form.fecha_inicio_postura.errors %}
+                                        <div class="text-danger small">{{ form.fecha_inicio_postura.errors.0 }}</div>
+                                    {% endif %}
+                                    {% if form.fecha_inicio_postura.help_text %}
+                                        <div class="form-text text-white-50">{{ form.fecha_inicio_postura.help_text }}</div>
+                                    {% endif %}
                                 </div>
                             </div>
                             
-                            <div class="mb-3">
-                                <label for="{{ form.procedencia.id_for_label }}" class="form-label">Procedencia *</label>
-                                {{ form.procedencia|add_class:"form-control" }}
-                                {% if form.procedencia.errors %}
-                                    <div class="text-danger small">{{ form.procedencia.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.fecha_llegada.id_for_label }}" class="form-label">Fecha de Llegada *</label>
-                                {{ form.fecha_llegada|add_class:"form-control" }}
-                                {% if form.fecha_llegada.errors %}
-                                    <div class="text-danger small">{{ form.fecha_llegada.errors.0 }}</div>
-                                {% endif %}
-                            </div>
+                            <!-- Datos del Lote -->
+                            <div class="col-md-6">
+                                <div class="form-section-title"><i class="fas fa-chart-line"></i>Datos del Lote</div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.numero_aves_inicial.id_for_label }}" class="form-label">Número de Aves Inicial *</label>
+                                    {{ form.numero_aves_inicial|add_class:"form-control" }}
+                                    {% if form.numero_aves_inicial.errors %}
+                                        <div class="text-danger small">{{ form.numero_aves_inicial.errors.0 }}</div>
+                                    {% endif %}
+                                    {% if form.numero_aves_inicial.help_text %}
+                                        <div class="form-text text-white-50">{{ form.numero_aves_inicial.help_text }}</div>
+                                    {% endif %}
+                                </div>
 
-                            <div class="mb-3">
-                                <label for="{{ form.fecha_inicio_postura.id_for_label }}" class="form-label">Fecha Inicio Postura</label>
-                                {{ form.fecha_inicio_postura|add_class:"form-control" }}
-                                {% if form.fecha_inicio_postura.errors %}
-                                    <div class="text-danger small">{{ form.fecha_inicio_postura.errors.0 }}</div>
-                                {% endif %}
-                                {% if form.fecha_inicio_postura.help_text %}
-                                    <div class="form-text">{{ form.fecha_inicio_postura.help_text }}</div>
-                                {% endif %}
+                                <div class="mb-3">
+                                    <label for="{{ form.numero_aves_actual.id_for_label }}" class="form-label">Número de Aves Actual *</label>
+                                    {{ form.numero_aves_actual|add_class:"form-control" }}
+                                    {% if form.numero_aves_actual.errors %}
+                                        <div class="text-danger small">{{ form.numero_aves_actual.errors.0 }}</div>
+                                    {% endif %}
+                                    {% if form.numero_aves_actual.help_text %}
+                                        <div class="form-text text-white-50">{{ form.numero_aves_actual.help_text }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.peso_total_llegada.id_for_label }}" class="form-label">Peso Total Llegada (kg) *</label>
+                                    {{ form.peso_total_llegada|add_class:"form-control" }}
+                                    {% if form.peso_total_llegada.errors %}
+                                        <div class="text-danger small">{{ form.peso_total_llegada.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.peso_promedio_llegada.id_for_label }}" class="form-label">Peso Promedio Llegada (g) *</label>
+                                    {{ form.peso_promedio_llegada|add_class:"form-control" }}
+                                    {% if form.peso_promedio_llegada.errors %}
+                                        <div class="text-danger small">{{ form.peso_promedio_llegada.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            
+                                <div class="mb-3">
+                                    <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
+                                    {{ form.observaciones|add_class:"form-control" }}
+                                    {% if form.observaciones.errors %}
+                                        <div class="text-danger small">{{ form.observaciones.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                         
-                        <!-- Datos del Lote -->
-                        <div class="col-md-6">
-                            <h6 class="text-success mb-3">Datos del Lote</h6>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.numero_aves_inicial.id_for_label }}" class="form-label">Número de Aves Inicial *</label>
-                                {{ form.numero_aves_inicial|add_class:"form-control" }}
-                                {% if form.numero_aves_inicial.errors %}
-                                    <div class="text-danger small">{{ form.numero_aves_inicial.errors.0 }}</div>
-                                {% endif %}
-                                {% if form.numero_aves_inicial.help_text %}
-                                    <div class="form-text">{{ form.numero_aves_inicial.help_text }}</div>
-                                {% endif %}
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="{{ form.numero_aves_actual.id_for_label }}" class="form-label">Número de Aves Actual *</label>
-                                {{ form.numero_aves_actual|add_class:"form-control" }}
-                                {% if form.numero_aves_actual.errors %}
-                                    <div class="text-danger small">{{ form.numero_aves_actual.errors.0 }}</div>
-                                {% endif %}
-                                {% if form.numero_aves_actual.help_text %}
-                                    <div class="form-text">{{ form.numero_aves_actual.help_text }}</div>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.peso_total_llegada.id_for_label }}" class="form-label">Peso Total Llegada (kg) *</label>
-                                {{ form.peso_total_llegada|add_class:"form-control" }}
-                                {% if form.peso_total_llegada.errors %}
-                                    <div class="text-danger small">{{ form.peso_total_llegada.errors.0 }}</div>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="{{ form.peso_promedio_llegada.id_for_label }}" class="form-label">Peso Promedio Llegada (g) *</label>
-                                {{ form.peso_promedio_llegada|add_class:"form-control" }}
-                                {% if form.peso_promedio_llegada.errors %}
-                                    <div class="text-danger small">{{ form.peso_promedio_llegada.errors.0 }}</div>
-                                {% endif %}
-                            </div>
+                        <hr class="my-4">
                         
-                            <div class="mb-3">
-                                <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
-                                {{ form.observaciones|add_class:"form-control" }}
-                                {% if form.observaciones.errors %}
-                                    <div class="text-danger small">{{ form.observaciones.errors.0 }}</div>
-                                {% endif %}
+                        <!-- Justificación -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-section-title text-warning" style="border-left-color: #ffc107;">
+                                    <i class="fas fa-exclamation-triangle"></i>Justificación de la Modificación
+                                </div>
+                                <div class="mb-3">
+                                    <label for="{{ form.justificacion.id_for_label }}" class="form-label">{{ form.justificacion.label }} *</label>
+                                    {{ form.justificacion|add_class:"form-control" }}
+                                    {% if form.justificacion.errors %}
+                                        <div class="text-danger small">{{ form.justificacion.errors.0 }}</div>
+                                    {% endif %}
+                                    {% if form.justificacion.help_text %}
+                                        <div class="form-text text-white-50">{{ form.justificacion.help_text }}</div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <hr>
-                    
-                    <!-- Justificación -->
-                    <div class="row">
-                        <div class="col-12">
-                            <h6 class="text-warning mb-3">
-                                <i class="fas fa-exclamation-triangle me-2"></i>Justificación de la Modificación
-                            </h6>
-                            <div class="mb-3">
-                                <label for="{{ form.justificacion.id_for_label }}" class="form-label">{{ form.justificacion.label }} *</label>
-                                {{ form.justificacion|add_class:"form-control" }}
-                                {% if form.justificacion.errors %}
-                                    <div class="text-danger small">{{ form.justificacion.errors.0 }}</div>
-                                {% endif %}
-                                {% if form.justificacion.help_text %}
-                                    <div class="form-text">{{ form.justificacion.help_text }}</div>
-                                {% endif %}
-                            </div>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'aves:lote_detail' lote.pk %}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-save me-2"></i>Guardar Cambios
+                            </button>
                         </div>
-                    </div>
-                    
-                    <hr>
-                    
-                    <div class="d-flex justify-content-between">
-                        <a href="{% url 'aves:lote_detail' lote.pk %}" class="btn btn-secondary">
-                            <i class="fas fa-times me-2"></i>Cancelar
-                        </a>
-                        <button type="submit" class="btn btn-warning">
-                            <i class="fas fa-save me-2"></i>Guardar Cambios
-                        </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

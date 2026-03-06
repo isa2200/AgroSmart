@@ -1,0 +1,414 @@
+{% extends 'equinos/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard Equino - AgroSmart{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #34495e;
+        --accent-color: #3498db;
+        --success-color: #27ae60;
+        --warning-color: #f39c12;
+        --danger-color: #e74c3c;
+        --info-color: #17a2b8;
+        --light-bg: #f8f9fa;
+        --border-color: #dee2e6;
+        --shadow: 0 2px 20px rgba(0,0,0,0.08);
+        --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    }
+
+    /* Layout mejorado - Glassmorphism */
+    .dashboard-container {
+        padding: 1rem;
+        min-height: 100vh;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Contenedor Unificado */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        margin-bottom: 2rem;
+    }
+
+    /* Métricas principales mejoradas */
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .metric-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(255,255,255,0.2);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .metric-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: rgba(255,255,255,0.5);
+    }
+
+    .metric-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+        background: rgba(0, 175, 0, 0.35);
+    }
+
+    .metric-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+
+    .metric-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+        background: rgba(255,255,255,0.2);
+        backdrop-filter: blur(5px);
+    }
+
+    .metric-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .metric-label {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1rem;
+        margin: 0.5rem 0 0 0;
+        font-weight: 500;
+    }
+
+    /* Header Styles matching Principal */
+    .dashboard-header {
+        background: rgba(0, 175, 0, 0.25) !important;
+        backdrop-filter: blur(5px) !important;
+        border-radius: 15px !important;
+        padding: 1.5rem 2rem !important;
+        margin-bottom: 2rem !important;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08) !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+    }
+    
+    .welcome-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .welcome-text {
+        flex: 1;
+        text-align: center;
+        pointer-events: none;
+        z-index: 0;
+        position: relative;
+    }
+
+    .welcome-text h1 {
+        margin: 0;
+        color: white;
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 3.5rem;
+        text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        letter-spacing: 1px;
+    }
+
+    /* Secciones del dashboard */
+    .dashboard-section {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(255,255,255,0.2);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .section-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    .section-body {
+        padding: 0; /* Removed padding for table to fit flush */
+    }
+
+    /* Tablas mejoradas */
+    .table-modern {
+        margin-bottom: 0;
+        width: 100%;
+        background: transparent;
+    }
+
+    .table-modern thead th {
+        background-color: #2e7d32 !important;
+        color: white !important;
+        border: none;
+        padding: 1rem;
+        font-weight: 500;
+    }
+
+    .table-modern tbody tr {
+        background-color: white !important;
+        transition: all 0.2s;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .table-modern tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    .table-modern tbody tr:hover {
+        background-color: #f8f9fa !important;
+    }
+
+    .table-modern tbody td {
+        padding: 1rem;
+        color: #2c3e50 !important;
+        vertical-align: middle;
+    }
+
+    /* User Widget in Header */
+    .user-profile-widget {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background: rgba(255, 255, 255, 0.15);
+        padding: 8px 20px;
+        border-radius: 50px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .user-profile-widget:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #2e7d32; /* Green */
+        font-size: 1.2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        border: 2px solid rgba(255, 255, 255, 0.8);
+    }
+
+    .user-info-header {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .user-name-header {
+        color: white;
+        font-weight: 600;
+        font-size: 0.95rem;
+        line-height: 1.2;
+    }
+
+    .user-role-header {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.75rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid dashboard-container">
+    
+    <!-- Header Welcome -->
+    <div class="dashboard-header">
+        <div class="welcome-section">
+            <div class="welcome-text">
+                <h1>Bienvenido al Módulo Equino</h1>
+            </div>
+            
+            <div class="user-profile-widget">
+                <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height: 40px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); margin-right: 10px;">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-info-header">
+                    <span class="user-name-header">{{ user.first_name|default:user.username }}</span>
+                    <span class="user-role-header">
+                        {% if user.is_superuser %}Administrador{% else %}Usuario{% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Metrics Cards -->
+    <div class="metrics-grid">
+        <!-- Total Equinos -->
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon">
+                    <i class="fas fa-horse-head"></i>
+                </div>
+            </div>
+            <h2 class="metric-value">{{ total_equinos }}</h2>
+            <p class="metric-label">Total Equinos</p>
+        </div>
+
+        <!-- Machos -->
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon">
+                    <i class="fas fa-mars"></i>
+                </div>
+            </div>
+            <h2 class="metric-value">{{ equinos_machos }}</h2>
+            <p class="metric-label">Machos</p>
+        </div>
+
+        <!-- Hembras -->
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon">
+                    <i class="fas fa-venus"></i>
+                </div>
+            </div>
+            <h2 class="metric-value">{{ equinos_hembras }}</h2>
+            <p class="metric-label">Hembras</p>
+        </div>
+
+        <!-- Bitácoras Hoy -->
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon">
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+            </div>
+            <h2 class="metric-value">{{ bitacoras_hoy }}</h2>
+            <p class="metric-label">Bitácoras Hoy</p>
+        </div>
+    </div>
+
+    <!-- Recent Activity Table -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h3 class="section-title">
+                <i class="fas fa-history me-2"></i> Últimos Registros de Bitácora
+            </h3>
+            <a href="{% url 'equinos:crear_registro_diario' %}" class="btn btn-sm btn-light text-success fw-bold">
+                <i class="fas fa-plus me-1"></i> Nuevo Registro
+            </a>
+        </div>
+        <div class="section-body">
+            <div class="table-responsive">
+                <table class="table table-modern align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 15%;">Fecha</th>
+                            <th scope="col" style="width: 25%;">Actividad</th>
+                            <th scope="col" style="width: 40%;">Contexto</th>
+                            <th scope="col" style="width: 20%;">Responsable</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bitacora in ultimas_bitacoras %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <i class="far fa-calendar-alt text-success me-2"></i>
+                                    <span class="fw-bold">{{ bitacora.fecha|date:"d/m/Y" }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">
+                                    {{ bitacora.actividad }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="text-truncate d-inline-block" style="max-width: 300px;">
+                                    {{ bitacora.observaciones|truncatechars:80 }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-secondary bg-opacity-10 rounded-circle p-1 me-2">
+                                        <i class="fas fa-user text-secondary"></i>
+                                    </div>
+                                    <span>{{ bitacora.responsable.get_full_name|default:bitacora.responsable.username }}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-5">
+                                <div class="text-muted">
+                                    <i class="fas fa-clipboard-list fa-3x mb-3 opacity-50"></i>
+                                    <p class="mb-0">No hay registros recientes.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

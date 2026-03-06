@@ -1,0 +1,147 @@
+{% extends 'cunicultura/base.html' %}
+{% load static %}
+
+{% block title %}Bitácora de Actividades - AgroSmart{% endblock %}
+
+{% block content %}
+<div class="glass-wrap">
+    <div class="unified-dashboard-card">
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <h5 class="section-title mb-0 fw-bold">
+                <i class="fas fa-clipboard-check me-2"></i>Bitácora de Actividades
+            </h5>
+            
+            <div class="d-flex gap-2 flex-wrap">
+                <!-- Filtros de fecha -->
+                <form class="d-flex gap-2 align-items-center" method="get">
+                    <input type="date" name="fecha_inicio" class="form-control form-control-sm form-control-glass" value="{{ fecha_inicio|default:'' }}" placeholder="Desde">
+                    <span class="text-white">-</span>
+                    <input type="date" name="fecha_fin" class="form-control form-control-sm form-control-glass" value="{{ fecha_fin|default:'' }}" placeholder="Hasta">
+                    <button type="submit" class="btn btn-sm btn-light-custom" title="Filtrar">
+                        <i class="fas fa-filter"></i>
+                    </button>
+                    {% if fecha_inicio or fecha_fin %}
+                        <a href="{% url 'cunicultura:bitacora_actividades' %}" class="btn btn-sm btn-outline-light" title="Limpiar Filtros">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    {% endif %}
+                </form>
+
+                <button type="button" class="btn btn-light-custom" onclick="window.print()">
+                    <i class="fas fa-print me-2"></i>Imprimir
+                </button>
+                <button type="button" class="btn btn-light-custom" data-bs-toggle="modal" data-bs-target="#registroModal">
+                    <i class="fas fa-plus me-2"></i>Nueva Actividad
+                </button>
+            </div>
+        </div>
+        
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-custom table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Fecha</th>
+                            <th style="width: 60%;">Actividad</th>
+                            <th style="width: 25%;">Responsable</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for registro in registros %}
+                        <tr>
+                            <td>{{ registro.fecha|date:"d/m/Y" }}</td>
+                            <td class="text-start">{{ registro.actividad|linebreaksbr }}</td>
+                            <td>{{ registro.responsable }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center py-4">No hay actividades registradas</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nuevo Registro -->
+<div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="registroModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content glass-modal">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title" id="registroModalLabel">
+                    <i class="fas fa-plus-circle me-2"></i>Nueva Actividad
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="{{ form.fecha.id_for_label }}" class="form-label text-success">Fecha</label>
+                        {{ form.fecha }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.actividad.id_for_label }}" class="form-label text-success">Actividad</label>
+                        {{ form.actividad }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.responsable.id_for_label }}" class="form-label text-success">Responsable</label>
+                        {{ form.responsable }}
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-light-custom">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    @media print {
+        .sidebar, .navbar, .btn, form, .modal {
+            display: none !important;
+        }
+        .main-content {
+            margin-left: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+        }
+        .glass-wrap {
+            padding: 0 !important;
+        }
+        .unified-dashboard-card {
+            background: none !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        .card-header {
+            background: none !important;
+            border-bottom: 2px solid #000 !important;
+            color: #000 !important;
+        }
+        .card-header h5 {
+            color: #000 !important;
+        }
+        .text-white, .text-white-50 {
+            color: #000 !important;
+        }
+        .table {
+            color: #000 !important;
+        }
+        .table th {
+            background-color: #f8f9fa !important;
+            color: #000 !important;
+            border: 1px solid #dee2e6 !important;
+        }
+        .table td {
+            border: 1px solid #dee2e6 !important;
+            color: #000 !important;
+        }
+    }
+</style>
+{% endblock %}
+
