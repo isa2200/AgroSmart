@@ -1,0 +1,278 @@
+{% extends 'cunicultura/base.html' %}
+{% load static %}
+{% block title %}Control de Destetes - AgroSmart{% endblock %}
+
+{% block breadcrumb %}{% endblock %}
+{% block page_header %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos Modal Glassmorphism Dark */
+    .modal-content-dark-green {
+        background: rgba(20, 50, 20, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .modal-content-dark-green .modal-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        background: transparent;
+        padding: 1.5rem;
+    }
+
+    .modal-content-dark-green .modal-title {
+        color: white;
+        font-size: 1.25rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .modal-content-dark-green .btn-close {
+        filter: invert(1) grayscale(100%) brightness(200%);
+        opacity: 0.8;
+    }
+
+    .modal-content-dark-green .modal-body {
+        padding: 2rem;
+    }
+
+    .modal-content-dark-green .form-label {
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .modal-content-dark-green .form-control,
+    .modal-content-dark-green .form-select {
+        background-color: rgba(255, 255, 255, 0.9);
+        border: none;
+        color: #333;
+        padding: 0.6rem 1rem;
+        border-radius: 8px;
+        font-size: 0.95rem;
+    }
+
+    .modal-content-dark-green .form-control:focus,
+    .modal-content-dark-green .form-select:focus {
+        background-color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
+        outline: none;
+    }
+
+    .modal-section-title {
+        color: #81c784;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        padding-left: 0.5rem;
+        border-left: 3px solid #81c784;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .modal-content-dark-green .modal-footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1.5rem;
+        background: transparent;
+    }
+
+    .btn-outline-light-custom {
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: rgba(255, 255, 255, 0.8);
+        background: transparent;
+        transition: all 0.2s;
+    }
+
+    .btn-outline-light-custom:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border-color: white;
+    }
+
+    .btn-success-custom {
+        background: #2e7d32;
+        border: none;
+        color: white;
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        transition: all 0.2s;
+    }
+
+    .btn-success-custom:hover {
+        background: #1b5e20;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 8px rgba(0,0,0,0.3);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="glass-wrap">
+    <div class="unified-dashboard-card">
+        <div class="card-header">
+            <h5 class="section-title mb-0 fw-bold">
+                <i class="fas fa-baby me-2"></i>Control de Destetes
+            </h5>
+            <div class="d-flex gap-2">
+                <form class="d-flex gap-2 align-items-center me-2" method="get">
+                    <input type="date" name="fecha_inicio" class="form-control form-control-sm form-control-glass" value="{{ fecha_inicio|default:'' }}" placeholder="Desde">
+                    <span class="text-white">-</span>
+                    <input type="date" name="fecha_fin" class="form-control form-control-sm form-control-glass" value="{{ fecha_fin|default:'' }}" placeholder="Hasta">
+                    <button type="submit" class="btn btn-sm btn-light-custom">
+                        <i class="fas fa-filter"></i>
+                    </button>
+                    {% if fecha_inicio or fecha_fin %}
+                        <a href="{% url 'cunicultura:control_destetes' %}" class="btn btn-sm btn-outline-light" title="Limpiar Filtros">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    {% endif %}
+                </form>
+
+                <button type="button" class="btn btn-light-custom" onclick="window.print()">
+                    <i class="fas fa-print me-2"></i>Imprimir
+                </button>
+                <button type="button" class="btn btn-light-custom" data-bs-toggle="modal" data-bs-target="#nuevoRegistroModal">
+                    <i class="fas fa-plus me-2"></i>Nuevo Registro
+                </button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-custom text-center mb-0">
+                <thead>
+                    <tr>
+                        <th>Camada Nro.</th>
+                        <th>Nro. Animales</th>
+                        <th>H</th>
+                        <th>Peso X (H)</th>
+                        <th>M</th>
+                        <th>Peso X (M)</th>
+                        <th>Nro. Madre</th>
+                        <th>Nro. Padre</th>
+                        <th>Fecha Nacimiento</th>
+                        <th>Fecha Destete</th>
+                        <th>Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if registros %}
+                    {% for r in registros %}
+                    <tr>
+                        <td class="fw-bold">{{ r.camada_numero }}</td>
+                        <td>{{ r.numero_animales }}</td>
+                        <td>{{ r.hembras_cantidad }}</td>
+                        <td>{{ r.hembras_peso_promedio }}</td>
+                        <td>{{ r.machos_cantidad }}</td>
+                        <td>{{ r.machos_peso_promedio }}</td>
+                        <td>{{ r.madre_numero }}</td>
+                        <td>{{ r.padre_numero }}</td>
+                        <td>{{ r.fecha_nacimiento|date:"d/m/Y" }}</td>
+                        <td>{{ r.fecha_destete|date:"d/m/Y" }}</td>
+                        <td class="text-start">{{ r.observaciones|default:"-" }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="11" class="py-4 text-muted">
+                            <i class="fas fa-info-circle me-2"></i>No hay registros de destetes
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nuevo Registro -->
+<div class="modal fade" id="nuevoRegistroModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content modal-content-dark-green">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Nuevo Registro de Destete</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+            <div class="row g-3">
+                <div class="col-12">
+                    <h6 class="modal-section-title">
+                        <i class="fas fa-info-circle me-2"></i>Información General
+                    </h6>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Fecha Destete</label>
+                    {{ form.fecha_destete }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Camada Nro.</label>
+                    {{ form.camada_numero }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Nro. Animales</label>
+                    {{ form.numero_animales }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Nro. Madre</label>
+                    {{ form.madre_numero }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Nro. Padre</label>
+                    {{ form.padre_numero }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Fecha Nacimiento</label>
+                    {{ form.fecha_nacimiento }}
+                </div>
+
+                <div class="col-12 mt-4">
+                    <h6 class="modal-section-title">
+                        <i class="fas fa-venus-mars me-2"></i>Detalle por Sexo
+                    </h6>
+                </div>
+                <!-- Hembras -->
+                <div class="col-md-3">
+                    <label class="form-label">Hembras (Cant)</label>
+                    {{ form.hembras_cantidad }}
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Peso Prom (H)</label>
+                    {{ form.hembras_peso_promedio }}
+                </div>
+                <!-- Machos -->
+                <div class="col-md-3">
+                    <label class="form-label">Machos (Cant)</label>
+                    {{ form.machos_cantidad }}
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Peso Prom (M)</label>
+                    {{ form.machos_peso_promedio }}
+                </div>
+
+                <div class="col-12 mt-4">
+                    <h6 class="modal-section-title">
+                        <i class="fas fa-sticky-note me-2"></i>Observaciones
+                    </h6>
+                </div>
+                <div class="col-12">
+                    {{ form.observaciones }}
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-light-custom" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-success-custom"><i class="fas fa-save me-2"></i>Guardar Registro</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

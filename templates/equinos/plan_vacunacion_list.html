@@ -1,0 +1,68 @@
+{% extends 'equinos/base.html' %}
+{% load static %}
+
+{% block title %}Plan de Vacunación - Equinos{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Plan de Vacunación</h1>
+        <a href="{% url 'equinos:plan_vacunacion_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Nueva Vacunación
+        </a>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Listado de Vacunaciones Programadas</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Fecha Programada</th>
+                            <th>Vacuna</th>
+                            <th>Equino</th>
+                            <th>Estado</th>
+                            <th>Fecha Aplicada</th>
+                            <th>Observaciones</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for plan in planes %}
+                        <tr>
+                            <td>{{ plan.fecha_programada|date:"d/m/Y" }}</td>
+                            <td>{{ plan.nombre_vacuna }}</td>
+                            <td>{{ plan.equino }}</td>
+                            <td>
+                                {% if plan.aplicada %}
+                                    <span class="badge bg-success">Aplicada</span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">Pendiente</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ plan.fecha_aplicada|date:"d/m/Y"|default:"-" }}</td>
+                            <td>{{ plan.observaciones|truncatechars:50 }}</td>
+                            <td>
+                                <a href="{% url 'equinos:plan_vacunacion_update' plan.pk %}" class="btn btn-warning btn-sm" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'equinos:plan_vacunacion_delete' plan.pk %}" class="btn btn-danger btn-sm" title="Eliminar" onclick="return confirm('¿Está seguro de eliminar este registro?');">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">No hay planes de vacunación registrados.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

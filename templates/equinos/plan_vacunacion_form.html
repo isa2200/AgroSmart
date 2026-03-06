@@ -1,0 +1,87 @@
+{% extends 'equinos/base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} - Equinos{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">{{ title }}</h1>
+        <a href="{% url 'equinos:plan_vacunacion_list' %}" class="btn btn-secondary btn-sm">
+            <i class="fas fa-arrow-left"></i> Volver al listado
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Formulario de Vacunación</h6>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.equino.id_for_label }}" class="form-label">Equino *</label>
+                            {{ form.equino }}
+                            {% if form.equino.errors %}
+                                <div class="text-danger small">{{ form.equino.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.fecha_programada.id_for_label }}" class="form-label">Fecha Programada *</label>
+                                {{ form.fecha_programada }}
+                                {% if form.fecha_programada.errors %}
+                                    <div class="text-danger small">{{ form.fecha_programada.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.nombre_vacuna.id_for_label }}" class="form-label">Nombre de la Vacuna *</label>
+                                {{ form.nombre_vacuna }}
+                                {% if form.nombre_vacuna.errors %}
+                                    <div class="text-danger small">{{ form.nombre_vacuna.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.fecha_aplicada.id_for_label }}" class="form-label">Fecha Aplicada</label>
+                                {{ form.fecha_aplicada }}
+                                {% if form.fecha_aplicada.errors %}
+                                    <div class="text-danger small">{{ form.fecha_aplicada.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3 d-flex align-items-end">
+                                <div class="form-check mb-2">
+                                    {{ form.aplicada }}
+                                    <label class="form-check-label" for="{{ form.aplicada.id_for_label }}">
+                                        ¿Ya fue aplicada?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
+                            {{ form.observaciones }}
+                            {% if form.observaciones.errors %}
+                                <div class="text-danger small">{{ form.observaciones.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Guardar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import LotePorcino, BitacoraDiariaPorcinos
+from .models import LotePorcino, BitacoraDiariaPorcinos, AlertaPorcinos
 
 
 @admin.register(LotePorcino)
@@ -16,3 +16,11 @@ class BitacoraDiariaPorcinosAdmin(admin.ModelAdmin):
     list_filter = ['fecha', 'lote']
     search_fields = ['lote__codigo']
     ordering = ['-fecha']
+
+
+@admin.register(AlertaPorcinos)
+class AlertaPorcinosAdmin(admin.ModelAdmin):
+    list_display = ['titulo', 'lote', 'nivel', 'fecha_generacion', 'leida']
+    list_filter = ['nivel', 'leida', 'tipo_alerta', 'fecha_generacion']
+    search_fields = ['titulo', 'mensaje', 'lote__codigo']
+    date_hierarchy = 'fecha_generacion'

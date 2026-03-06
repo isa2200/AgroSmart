@@ -1,40 +1,32 @@
-# Imagen base
-FROM python:3.13.3-slim
+# Usar una imagen base oficial de Python
+FROM python:3.10-slim
 
-# Evita archivos pyc y asegura logs en stdout/stderr
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+# Establecer variables de entorno
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# Directorio de trabajo
+# Establecer el directorio de trabajo
 WORKDIR /app
 
-# Dependencias del sistema necesarias para mysqlclient
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
+# Instalar dependencias del sistema necesarias para mysqlclient y Pillow
+RUN apt-get update && apt-get install -y \
     default-libmysqlclient-dev \
+    build-essential \
     pkg-config \
-    default-mysql-client \
+    libjpeg-dev \
+    zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Dependencias de Python
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Instalar dependencias de Python
+COPY requirements.txt /app/
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-# Copiar el código del proyecto
-COPY . .
+# Copiar el proyecto
+COPY . /app/
 
-# Crear directorio de logs esperado por configuración de producción
-RUN mkdir -p /app/logs
-
-# Copiar entrypoint
-COPY scripts/entrypoint.sh /app/scripts/entrypoint.sh
-RUN chmod +x /app/scripts/entrypoint.sh
-
-# Variables de entorno por defecto
-ENV DJANGO_SETTINGS_MODULE=config.settings.prod
-
-# Exponer puerto del servidor
+# Exponer el puerto
 EXPOSE 8000
 
-# Entrypoint que espera DB, migra, colecta static y arranca gunicorn
-ENTRYPOINT ["/app/scripts/entrypoint.sh"]
+# Comando por defecto (aunque docker-compose lo sobrescribe, es bueno tenerlo)
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]

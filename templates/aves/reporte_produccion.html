@@ -2,146 +2,301 @@
 
 {% block title %}Reporte de Producción - AgroSmart{% endblock %}
 
-{% block page_title %}Reporte de Producción{% endblock %}
+{% block page_title %}{% endblock %}
+{% block breadcrumb_items %}{% endblock %}
+{% block page_actions %}{% endblock %}
 
-{% block breadcrumb_items %}
-    <li class="breadcrumb-item"><a href="{% url 'aves:reportes' %}">Reportes</a></li>
-    <li class="breadcrumb-item active">Producción</li>
-{% endblock %}
+{% block extra_css %}
+<style>
+    /* Estilos unificados Glassmorphism */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-{% block page_actions %}
-    <a href="{% url 'aves:reportes' %}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left me-2"></i>Volver
-    </a>
+    .unified-dashboard-card .card-body {
+        padding: 2rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    .glass-wrap {
+        width: 100%;
+        max-width: 98%;
+        margin: 0 auto;
+    }
+
+    .unified-dashboard-card .form-label {
+        color: white;
+        font-weight: 500;
+    }
+
+    .unified-dashboard-card .form-control,
+    .unified-dashboard-card .form-select {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: #333;
+    }
+
+    .unified-dashboard-card .form-control:focus,
+    .unified-dashboard-card .form-select:focus {
+        background: white;
+        box-shadow: 0 0 0 0.25rem rgba(46, 125, 50, 0.25);
+        border-color: #2e7d32;
+    }
+
+    .btn-light-custom {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.5);
+        color: #2e7d32;
+        font-weight: 600;
+    }
+    
+    .btn-light-custom:hover {
+        background: white;
+        color: #1b5e20;
+    }
+
+    /* Metric Cards */
+    .metric-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        text-align: center;
+        height: 100%;
+    }
+
+    .metric-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        background: rgba(0, 175, 0, 0.35);
+    }
+
+    .metric-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 0.5rem;
+    }
+
+    .metric-label {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1rem;
+        margin: 0;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .metric-icon {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 1.5rem;
+        color: white;
+        opacity: 0.5;
+    }
+
+    /* Table Styles */
+    .table-custom {
+        margin-bottom: 0;
+        width: 100%;
+        border-collapse: separate; 
+        border-spacing: 0;
+        color: white;
+    }
+    
+    .table-custom thead th {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        color: white !important;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+        vertical-align: middle;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 15px;
+    }
+
+    .table-custom tbody tr:hover {
+        background-color: rgba(255,255,255,0.1) !important;
+    }
+    
+    .table-custom tbody td {
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding: 15px;
+        vertical-align: middle;
+        color: white;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<!-- Filtros -->
-<div class="card mb-4">
-    <div class="card-header">
-        <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filtros</h5>
+<div class="glass-wrap">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white fw-bold mb-0" style="font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+            Reporte de Producción
+        </h2>
+        <a href="{% url 'aves:reportes' %}" class="btn btn-light-custom">
+            <i class="fas fa-arrow-left me-2"></i>Volver
+        </a>
     </div>
-    <div class="card-body">
-        <form method="get" class="row g-3">
-            <div class="col-md-3">
-                <label class="form-label">Lote</label>
-                <select name="lote" class="form-select">
-                    <option value="">Todos los lotes</option>
-                    {% for lote in lotes_disponibles %}
-                        <option value="{{ lote.id }}" {% if request.GET.lote == lote.id|stringformat:"s" %}selected{% endif %}>
-                            {{ lote.codigo }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Fecha Desde</label>
-                <input type="date" name="fecha_desde" class="form-control" value="{{ request.GET.fecha_desde }}">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Fecha Hasta</label>
-                <input type="date" name="fecha_hasta" class="form-control" value="{{ request.GET.fecha_hasta }}">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">&nbsp;</label>
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-search me-2"></i>Generar
-                    </button>
+
+    <!-- Filtros -->
+    <div class="unified-dashboard-card">
+        <div class="card-header">
+            <h5 class="section-title"><i class="fas fa-filter"></i>Filtros</h5>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Lote</label>
+                    <select name="lote" class="form-select">
+                        <option value="">Todos los lotes</option>
+                        {% for lote in lotes_disponibles %}
+                            <option value="{{ lote.id }}" {% if request.GET.lote == lote.id|stringformat:"s" %}selected{% endif %}>
+                                {{ lote.codigo }}
+                            </option>
+                        {% endfor %}
+                    </select>
                 </div>
-            </div>
-        </form>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Desde</label>
+                    <input type="date" name="fecha_desde" class="form-control" value="{{ request.GET.fecha_desde }}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Hasta</label>
+                    <input type="date" name="fecha_hasta" class="form-control" value="{{ request.GET.fecha_hasta }}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">&nbsp;</label>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-light-custom">
+                            <i class="fas fa-search me-2"></i>Generar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-{% if datos_reporte %}
-<!-- Resumen -->
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h3 class="text-primary">{{ resumen.total_huevos|default:0 }}</h3>
-                <p class="mb-0">Total Huevos</p>
+    {% if datos_reporte %}
+    <!-- Resumen -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="metric-card">
+                <i class="fas fa-egg metric-icon"></i>
+                <div class="metric-value text-white">{{ resumen.total_huevos|default:0 }}</div>
+                <div class="metric-label">Total Huevos</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card">
+                <i class="fas fa-chart-line metric-icon"></i>
+                <div class="metric-value text-success">{{ resumen.promedio_diario|default:0|floatformat:1 }}</div>
+                <div class="metric-label">Promedio Diario</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card">
+                <i class="fas fa-trophy metric-icon"></i>
+                <div class="metric-value text-info">{{ resumen.mejor_dia|default:0 }}</div>
+                <div class="metric-label">Mejor Día</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card">
+                <i class="fas fa-percent metric-icon"></i>
+                <div class="metric-value text-warning">{{ resumen.porcentaje_postura|default:0|floatformat:1 }}%</div>
+                <div class="metric-label">% Postura</div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h3 class="text-success">{{ resumen.promedio_diario|default:0|floatformat:1 }}</h3>
-                <p class="mb-0">Promedio Diario</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h3 class="text-info">{{ resumen.mejor_dia|default:0 }}</h3>
-                <p class="mb-0">Mejor Día</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h3 class="text-warning">{{ resumen.porcentaje_postura|default:0|floatformat:1 }}%</h3>
-                <p class="mb-0">% Postura</p>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Tabla de Datos -->
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0"><i class="fas fa-table me-2"></i>Datos Detallados</h5>
-        {% if datos_reporte %}
-        <div class="btn-group">
-            <a href="{% url 'aves:exportar_reporte_produccion' %}?{{ request.GET.urlencode }}&formato=excel" 
-                class="btn btn-success btn-sm" title="Exportar a Excel">
-                <i class="fas fa-file-excel me-2"></i>Excel
-            </a>
+    <!-- Tabla de Datos -->
+    <div class="unified-dashboard-card">
+        <div class="card-header">
+            <h5 class="section-title"><i class="fas fa-table"></i>Datos Detallados</h5>
+            <div class="btn-group">
+                <a href="{% url 'aves:exportar_reporte_produccion' %}?{{ request.GET.urlencode }}&formato=excel" 
+                    class="btn btn-light-custom btn-sm" title="Exportar a Excel">
+                    <i class="fas fa-file-excel me-2"></i>Excel
+                </a>
+            </div>
         </div>
-        {% endif %}
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Lote</th>
-                        <th>Huevos Buenos (AAA+AA+A)</th>
-                        <th>Huevos Defectuosos (B+C)</th>
-                        <th>Total</th>
-                        <th>% Postura</th>
-                        <th>Mortalidad</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for dato in datos_reporte %}
-                    <tr>
-                        <td>{{ dato.fecha|date:"d/m/Y" }}</td>
-                        <td>{{ dato.lote.codigo }}</td>
-                        <td>{{ dato.huevos_buenos|default:0 }}</td>
-                        <td>{{ dato.huevos_defectuosos|default:0 }}</td>
-                        <td>{{ dato.total_huevos }}</td>
-                        <td>{{ dato.porcentaje_postura|floatformat:1 }}%</td>
-                        <td>{{ dato.mortalidad|default:0 }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-custom">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Lote</th>
+                            <th>Huevos Buenos (AAA+AA+A)</th>
+                            <th>Huevos Defectuosos (B+C)</th>
+                            <th>Total</th>
+                            <th>% Postura</th>
+                            <th>Mortalidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dato in datos_reporte %}
+                        <tr>
+                            <td>{{ dato.fecha|date:"d/m/Y" }}</td>
+                            <td><span class="badge bg-light text-dark">{{ dato.lote.codigo }}</span></td>
+                            <td>{{ dato.huevos_buenos|default:0 }}</td>
+                            <td>{{ dato.huevos_defectuosos|default:0 }}</td>
+                            <td><strong>{{ dato.total_huevos }}</strong></td>
+                            <td>
+                                <span class="badge {% if dato.porcentaje_postura >= 90 %}bg-success{% elif dato.porcentaje_postura >= 80 %}bg-info{% else %}bg-warning{% endif %}">
+                                    {{ dato.porcentaje_postura|floatformat:1 }}%
+                                </span>
+                            </td>
+                            <td class="{% if dato.mortalidad > 0 %}text-danger fw-bold{% endif %}">{{ dato.mortalidad|default:0 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
-{% else %}
-<div class="card">
-    <div class="card-body text-center py-5">
-        <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
-        <h5 class="text-muted">No hay datos para mostrar</h5>
-        <p class="text-muted">Selecciona los filtros y haz clic en "Generar" para ver el reporte.</p>
+    {% else %}
+    <div class="unified-dashboard-card">
+        <div class="card-body text-center py-5">
+            <i class="fas fa-chart-line fa-5x text-white-50 mb-3"></i>
+            <h5 class="text-white">No hay datos para mostrar</h5>
+            <p class="text-white-50">Selecciona los filtros y haz clic en "Generar" para ver el reporte.</p>
+        </div>
     </div>
+    {% endif %}
 </div>
-{% endif %}
 {% endblock %}

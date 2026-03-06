@@ -1,0 +1,43 @@
+{% extends 'aves/base.html' %}
+{% load static %}
+
+{% block title %}AgroSmart - Punto Blanco{% endblock %}
+
+{% block sidebar_menu %}
+<nav class="nav flex-column">
+    <div class="nav-section-title">
+        <span>Punto Blanco</span>
+    </div>
+    <a href="{% url 'punto_blanco:dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+        <i class="fas fa-home me-2"></i>Inicio
+    </a>
+    <a href="{% url 'punto_blanco:lista_pedidos' %}" class="nav-link {% if request.resolver_match.url_name == 'lista_pedidos' %}active{% endif %}">
+        <i class="fas fa-list me-2"></i>Pedidos
+    </a>
+    <a href="{% url 'punto_blanco:crear_pedido' %}" class="nav-link {% if request.resolver_match.url_name == 'crear_pedido' %}active{% endif %}">
+        <i class="fas fa-plus-circle me-2"></i>Nuevo Pedido
+    </a>
+    <a href="{% url 'punto_blanco:inventario_huevos' %}" class="nav-link {% if request.resolver_match.url_name == 'inventario_huevos' %}active{% endif %}">
+        <i class="fas fa-boxes me-2"></i>Inventario
+    </a>
+    <a href="{% url 'punto_blanco:movimientos_huevos' %}" class="nav-link {% if request.resolver_match.url_name == 'movimientos_huevos' %}active{% endif %}">
+        <i class="fas fa-exchange-alt me-2"></i>Movimientos
+    </a>
+    <a href="{% url 'punto_blanco:configuracion' %}" class="nav-link {% if request.resolver_match.url_name == 'configuracion' %}active{% endif %}">
+        <i class="fas fa-cog me-2"></i>Configuración
+    </a>
+    <a href="{% url 'dashboard:principal' %}" class="nav-link mt-4">
+        <i class="fas fa-home me-2"></i>Volver al Dashboard
+    </a>
+</nav>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos específicos para Punto Blanco si es necesario */
+    .nav-section-title {
+        color: rgba(255, 255, 255, 0.9) !important;
+        border-top: 1px solid rgba(255,255,255,0.2) !important;
+    }
+</style>
+{% endblock %}

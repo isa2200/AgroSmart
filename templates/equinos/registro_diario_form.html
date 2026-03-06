@@ -1,0 +1,177 @@
+{% extends 'equinos/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Nuevo Registro Diario - AgroSmart{% endblock %}
+
+{% block breadcrumb %}{% endblock %}
+
+{% block page_header %}{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    /* Estilo "Clean White" para formularios de registros */
+    .unified-dashboard-card {
+        background: white !important;
+        backdrop-filter: none !important;
+        border: none !important;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08) !important;
+        color: #333 !important;
+        overflow: hidden;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        background: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .section-title {
+        margin: 0;
+        color: #1d5e21; /* Verde corporativo oscuro */
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.35rem;
+    }
+    
+    .unified-dashboard-card .card-body {
+        padding: 2.5rem;
+    }
+    
+    .form-label {
+        color: #444;
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control, .form-select {
+        background-color: #f9f9f9;
+        border: 1px solid #e0e0e0;
+        color: #333;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        transition: all 0.2s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        background-color: #fff;
+        border-color: #34c759;
+        box-shadow: 0 0 0 4px rgba(52, 199, 89, 0.1);
+    }
+    
+    .form-section-title {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        color: #1d5e21;
+        font-weight: 600;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e0e0e0;
+        font-size: 1.1rem;
+    }
+    
+    .btn-action-primary {
+        background: #1d5e21;
+        border: none;
+        color: white;
+        padding: 10px 30px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+    .btn-action-primary:hover {
+        background: #144518;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(29, 94, 33, 0.2);
+    }
+    
+    /* Layout Wrapper */
+    .clean-wrap {
+        width: 100%;
+        max-width: 800px;
+        margin: 40px auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12">
+        <div class="clean-wrap">
+            <div class="unified-dashboard-card">
+                <div class="card-header">
+                    <h5 class="section-title">
+                        <span style="background: #e8f5e9; padding: 8px; border-radius: 50%; color: #1d5e21;">
+                            <i class="fas fa-clipboard-check"></i>
+                        </span>
+                        Nuevo Registro Diario
+                    </h5>
+                    <a href="{% url 'equinos:dashboard' %}" class="btn btn-outline-secondary btn-sm border-0">
+                        <i class="fas fa-times fa-lg"></i>
+                    </a>
+                </div>
+                
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-12 mb-4">
+                                <div class="alert alert-light border-start border-success border-4 shadow-sm" role="alert">
+                                    <i class="fas fa-info-circle text-success me-2"></i>
+                                    Registre el contexto y actividades diarias de la unidad equina.
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <label for="{{ form.fecha.id_for_label }}" class="form-label">Fecha del Registro *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="far fa-calendar-alt text-muted"></i></span>
+                                    {{ form.fecha|add_class:"form-control border-start-0 ps-0" }}
+                                </div>
+                                {% if form.fecha.errors %}
+                                    <div class="text-danger small mt-1">{{ form.fecha.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <label for="{{ form.responsable.id_for_label }}" class="form-label">Responsable *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="far fa-user text-muted"></i></span>
+                                    {{ form.responsable|add_class:"form-control border-start-0 ps-0" }}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-12 mb-4">
+                                <label for="{{ form.actividad.id_for_label }}" class="form-label">Título del Registro *</label>
+                                {{ form.actividad|add_class:"form-control"|attr:"placeholder:Ej. Resumen del día, Visita Veterinaria, Limpieza General..." }}
+                                <div class="form-text">Un título breve para identificar este registro en la bitácora.</div>
+                            </div>
+                            
+                            <div class="col-md-12 mb-4">
+                                <label for="{{ form.observaciones.id_for_label }}" class="form-label">Contexto / Descripción Detallada</label>
+                                {{ form.observaciones|add_class:"form-control"|attr:"rows:6"|attr:"placeholder:Describa lo sucedido en el día, tareas realizadas, observaciones importantes..." }}
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-end gap-3 mt-4 pt-3 border-top">
+                            <a href="{% url 'equinos:dashboard' %}" class="btn btn-light text-muted fw-bold px-4">Cancelar</a>
+                            <button type="submit" class="btn btn-action-primary px-5">
+                                <i class="fas fa-save me-2"></i>Guardar Registro
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

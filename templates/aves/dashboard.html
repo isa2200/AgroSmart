@@ -5,9 +5,8 @@
 
 {% block page_title %}Dashboard Avícola{% endblock %}
 
-{% block breadcrumb_items %}
-    <li class="breadcrumb-item active">Dashboard</li>
-{% endblock %}
+{% block breadcrumb %}{% endblock %}
+{% block page_header %}{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -25,21 +24,40 @@
         --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
     }
 
-    /* Layout mejorado */
+    /* Layout mejorado - Glassmorphism */
     .dashboard-container {
         padding: 1rem;
-        background: var(--light-bg);
         min-height: 100vh;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Contenedor Unificado */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        margin-bottom: 2rem;
     }
 
     /* Filtros */
     .filters-section {
-        background: white;
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
         border-radius: 15px;
         padding: 1.5rem;
         margin-bottom: 2rem;
-        box-shadow: var(--shadow);
-        border: 1px solid var(--border-color);
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .filters-section label, .filters-section h6 {
+        color: white;
     }
 
     /* Métricas principales mejoradas */
@@ -51,11 +69,12 @@
     }
 
     .metric-card {
-        background: white;
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
         border-radius: 15px;
         padding: 2rem;
         box-shadow: var(--shadow);
-        border: 1px solid var(--border-color);
+        border: 1px solid rgba(255,255,255,0.2);
         position: relative;
         overflow: hidden;
         transition: all 0.3s ease;
@@ -68,17 +87,13 @@
         left: 0;
         right: 0;
         height: 4px;
-        background: var(--accent-color);
+        background: rgba(255,255,255,0.5);
     }
-
-    .metric-card.success::before { background: var(--success-color); }
-    .metric-card.warning::before { background: var(--warning-color); }
-    .metric-card.danger::before { background: var(--danger-color); }
-    .metric-card.info::before { background: var(--info-color); }
 
     .metric-card:hover {
         transform: translateY(-5px);
         box-shadow: var(--shadow-hover);
+        background: rgba(0, 175, 0, 0.35);
     }
 
     .metric-header {
@@ -97,30 +112,28 @@
         justify-content: center;
         font-size: 1.5rem;
         color: white;
-        background: var(--accent-color);
+        background: rgba(255,255,255,0.2);
+        backdrop-filter: blur(5px);
     }
-
-    .metric-icon.success { background: var(--success-color); }
-    .metric-icon.warning { background: var(--warning-color); }
-    .metric-icon.danger { background: var(--danger-color); }
-    .metric-icon.info { background: var(--info-color); }
 
     .metric-value {
         font-size: 2.5rem;
         font-weight: 700;
-        color: var(--primary-color);
+        color: white;
         margin: 0;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .metric-label {
-        color: #6c757d;
+        color: rgba(255, 255, 255, 0.9);
         font-size: 1rem;
         margin: 0.5rem 0 0 0;
+        font-weight: 500;
     }
 
     .metric-subtitle {
         font-size: 0.85rem;
-        color: #6c757d;
+        color: rgba(255, 255, 255, 0.7);
         margin-top: 0.5rem;
     }
 
@@ -130,30 +143,75 @@
         gap: 0.5rem;
         margin-top: 0.5rem;
         font-size: 0.9rem;
+        color: white;
     }
 
-    .comparison-positive {
-        color: var(--success-color);
+    .comparison-positive { color: #a5d6a7; }
+    .comparison-negative { color: #ef9a9a; }
+
+    /* Header Styles matching Principal */
+    .dashboard-header {
+        background: rgba(0, 175, 0, 0.25) !important;
+        backdrop-filter: blur(5px) !important;
+        border-radius: 15px !important;
+        padding: 1.5rem 2rem !important;
+        margin-bottom: 2rem !important;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08) !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+    }
+    
+    .welcome-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        width: 100%;
     }
 
-    .comparison-negative {
-        color: var(--danger-color);
+    .welcome-text {
+        flex: 1;
+        text-align: center;
+        pointer-events: none;
+        z-index: 0;
+        position: relative;
+    }
+
+    .welcome-text h1 {
+        margin: 0;
+        color: white;
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 4rem;
+        text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        letter-spacing: 1px;
+    }
+
+    .user-profile-widget {
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
     }
 
     /* Secciones del dashboard */
     .dashboard-section {
-        background: white;
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
         border-radius: 15px;
         box-shadow: var(--shadow);
-        border: 1px solid var(--border-color);
+        border: 1px solid rgba(255,255,255,0.2);
         overflow: hidden;
         margin-bottom: 2rem;
     }
 
     .section-header {
         padding: 1.5rem 2rem;
-        border-bottom: 1px solid var(--border-color);
-        background: #f8f9fa;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -161,7 +219,7 @@
 
     .section-title {
         margin: 0;
-        color: var(--primary-color);
+        color: white;
         font-weight: 600;
         display: flex;
         align-items: center;
@@ -197,7 +255,9 @@
         padding: 1rem;
         border-radius: 10px;
         border-left: 4px solid;
+        background: rgba(255,255,255,0.9);
     }
+
 
     .alert-item.warning {
         background: #fff8e1;
@@ -220,17 +280,32 @@
     /* Tablas mejoradas */
     .table-modern {
         margin-bottom: 0;
+        width: 100%;
+        background: transparent;
     }
 
-    .table-modern th {
-        border-top: none;
-        font-weight: 600;
-        color: var(--primary-color);
-        background: #f8f9fa;
+    .table-modern thead th {
+        background-color: #2e7d32 !important;
+        color: white !important;
+        border: none;
+        padding: 1rem;
+        font-weight: 500;
     }
 
-    .table-modern td {
+    .table-modern tbody tr {
+        background-color: white !important;
+        transition: all 0.2s;
+    }
+
+    .table-modern tbody td {
+        padding: 1rem;
+        color: #2c3e50 !important;
         vertical-align: middle;
+        border-bottom: 1px solid #eee;
+    }
+
+    .table-modern tbody tr:hover {
+        background-color: #f8f9fa !important;
     }
 
     /* Badges mejorados */
@@ -294,12 +369,160 @@
 
 {% block content %}
 <div class="dashboard-container">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="welcome-section">
+            <div class="welcome-text">
+                <h1>Bienvenido a la unidad avícola</h1>
+            </div>
+            <!-- User Profile Widget (Unified Style) -->
+            <div class="user-profile-widget">
+                <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height: 50px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); margin-right: 15px;">
+                {% if user.is_authenticated %}
+                <a href="{% url 'usuarios:perfil' %}" style="text-decoration: none;">
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid rgba(255,255,255,0.5); box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                        {% if user.perfilusuario and user.perfilusuario.foto %}
+                            <img src="{{ user.perfilusuario.foto.url }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            <i class="fas fa-user text-success" style="font-size: 1.5rem;"></i>
+                        {% endif %}
+                    </div>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Tablero de Tareas Pendientes -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h5 class="section-title">
+                <i class="fas fa-clipboard-list text-warning"></i>
+                Tareas Pendientes
+            </h5>
+            <button type="button" class="btn btn-sm btn-light rounded-pill text-success fw-bold" title="Añadir Tarea" data-bs-toggle="modal" data-bs-target="#nuevaTareaModal">
+                <i class="fas fa-plus me-1"></i>Nueva
+            </button>
+        </div>
+        <div class="section-body p-0">
+            <div class="table-responsive">
+                <table class="table table-modern table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">Tarea</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                            <th>Fecha Límite</th>
+                            <th>Responsable</th>
+                            <th class="text-end pe-4">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tarea in tareas %}
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="form-check m-0">
+                                        <input class="form-check-input" type="checkbox" id="task{{ tarea.id }}" {% if tarea.estado == 'completada' %}checked{% endif %}>
+                                    </div>
+                                    <label class="form-check-label fw-bold {% if tarea.estado == 'completada' %}text-muted text-decoration-line-through{% else %}text-dark{% endif %}" for="task{{ tarea.id }}">
+                                        {{ tarea.titulo }}
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                {% if tarea.prioridad == 'alta' %}
+                                    <span class="badge bg-danger rounded-pill px-3">Alta</span>
+                                {% elif tarea.prioridad == 'media' %}
+                                    <span class="badge bg-info text-dark rounded-pill px-3">Media</span>
+                                {% else %}
+                                    <span class="badge bg-secondary rounded-pill px-3">Baja</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if tarea.estado == 'pendiente' %}
+                                    <span class="badge bg-warning text-dark rounded-pill px-3">Pendiente</span>
+                                {% elif tarea.estado == 'en_proceso' %}
+                                    <span class="badge bg-primary rounded-pill px-3">En Proceso</span>
+                                {% else %}
+                                    <span class="badge bg-success rounded-pill px-3">Completada</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-muted fw-bold">
+                                {% if tarea.fecha_limite %}
+                                    {{ tarea.fecha_limite|date:"d M, H:i" }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    {% if tarea.responsable %}
+                                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center fw-bold" style="width:28px;height:28px;font-size:10px;">
+                                            {{ tarea.responsable.username|slice:":2"|upper }}
+                                        </div>
+                                        <small class="text-muted fw-bold">{{ tarea.responsable.username }}</small>
+                                    {% else %}
+                                        <small class="text-muted">-</small>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="text-end pe-4">
+                                <a href="{% url 'aves:completar_tarea' tarea.id %}" class="btn btn-sm btn-outline-success me-1" title="Marcar como hecha">
+                                    <i class="fas fa-check"></i>
+                                </a>
+                                <a href="{% url 'aves:eliminar_tarea' tarea.id %}" class="btn btn-sm btn-outline-danger" title="Eliminar" onclick="return confirm('¿Estás seguro de eliminar esta tarea?');">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">No hay tareas pendientes</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nueva Tarea -->
+    <div class="modal fade" id="nuevaTareaModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content glass-wrap" style="border: 1px solid rgba(255, 255, 255, 0.3);">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title fw-bold" style="color: #39A900; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">Nueva Tarea</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{% url 'aves:crear_tarea' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        {% for field in tarea_form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <div class="form-text">{{ field.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Guardar Tarea</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Filtros -->
     <div class="filters-section">
-        <h6 class="mb-3"><i class="fas fa-filter me-2"></i>Filtros</h6>
+        <h6 class="mb-3"><i class="fas fa-filter me-2"></i>Búsqueda de Galpones</h6>
         <form method="GET" class="row g-3">
             <div class="col-md-4">
-                <label class="form-label">Galpón</label>
+                <label class="form-label">Búsqueda de Galpón</label>
                 <select name="galpon" class="form-select">
                     <option value="">Todos los galpones</option>
                     {% for galpon in galpones_disponibles %}
@@ -310,7 +533,7 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <label class="form-label">Lote</label>
+                <label class="form-label">Búsqueda de Lote</label>
                 <select name="lote" class="form-select">
                     <option value="">Todos los lotes</option>
                     {% for lote in lotes_disponibles %}
@@ -322,7 +545,7 @@
             </div>
             <div class="col-md-4 d-flex align-items-end">
                 <button type="submit" class="btn btn-primary btn-modern me-2">
-                    <i class="fas fa-search me-1"></i>Filtrar
+                    <i class="fas fa-search me-1"></i>Buscar
                 </button>
                 <a href="{% url 'aves:dashboard' %}" class="btn btn-outline-secondary btn-modern">
                     <i class="fas fa-times me-1"></i>Limpiar
@@ -356,7 +579,7 @@
     <!-- Métricas Principales -->
     <div class="metrics-grid">
         <!-- Lotes Activos -->
-        <div class="metric-card info">
+        <div class="metric-card info" onclick="openMetricModal('lotes')" style="cursor: pointer;">
             <div class="metric-header">
                 <div>
                     <h3 class="metric-value">{{ total_lotes|default:0 }}</h3>
@@ -372,7 +595,7 @@
         </div>
 
         <!-- Total Aves -->
-        <div class="metric-card success">
+        <div class="metric-card success" onclick="openMetricModal('aves')" style="cursor: pointer;">
             <div class="metric-header">
                 <div>
                     <h3 class="metric-value">{{ total_aves|floatformat:0 }}</h3>
@@ -388,7 +611,7 @@
         </div>
 
         <!-- Producción Hoy -->
-        <div class="metric-card {% if porcentaje_postura_hoy >= 80 %}success{% elif porcentaje_postura_hoy >= 70 %}warning{% else %}danger{% endif %}">
+        <div class="metric-card {% if porcentaje_postura_hoy >= 80 %}success{% elif porcentaje_postura_hoy >= 70 %}warning{% else %}danger{% endif %}" onclick="openMetricModal('produccion_hoy')" style="cursor: pointer;">
             <div class="metric-header">
                 <div>
                     <h3 class="metric-value">{{ produccion_hoy|floatformat:0 }}</h3>
@@ -410,7 +633,7 @@
         </div>
 
         <!-- Producción Semanal -->
-        <div class="metric-card {% if porcentaje_postura_7d >= 80 %}success{% elif porcentaje_postura_7d >= 70 %}warning{% else %}danger{% endif %}">
+        <div class="metric-card {% if porcentaje_postura_7d >= 80 %}success{% elif porcentaje_postura_7d >= 70 %}warning{% else %}danger{% endif %}" onclick="openMetricModal('produccion_7d')" style="cursor: pointer;">
             <div class="metric-header">
                 <div>
                     <h3 class="metric-value">{{ produccion_7d|floatformat:0 }}</h3>
@@ -432,7 +655,7 @@
         </div>
 
         <!-- Producción Mensual -->
-        <div class="metric-card {% if porcentaje_postura_30d >= 80 %}success{% elif porcentaje_postura_30d >= 70 %}warning{% else %}danger{% endif %}">
+        <div class="metric-card {% if porcentaje_postura_30d >= 80 %}success{% elif porcentaje_postura_30d >= 70 %}warning{% else %}danger{% endif %}" onclick="openMetricModal('produccion_30d')" style="cursor: pointer;">
             <div class="metric-header">
                 <div>
                     <h3 class="metric-value">{{ produccion_30d|floatformat:0 }}</h3>
@@ -455,7 +678,7 @@
 
         <!-- Consumo de Alimento -->
         {% if aves_engorde > 0 %}
-        <div class="metric-card {% if consumo_por_ave_hoy >= 80 and consumo_por_ave_hoy <= 150 %}success{% else %}warning{% endif %}">
+        <div class="metric-card {% if consumo_por_ave_hoy >= 80 and consumo_por_ave_hoy <= 150 %}success{% else %}warning{% endif %}" onclick="openMetricModal('consumo')" style="cursor: pointer;">
             <div class="metric-header">
                 <div>
                     <h3 class="metric-value">{{ consumo_por_ave_hoy|floatformat:0 }}g</h3>
@@ -728,6 +951,32 @@
         </div>
     </div>
     {% endif %}
+    
+    <!-- Modal Genérico de Métricas -->
+    <div class="modal fade" id="metricModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content glass-wrap" style="border: 1px solid rgba(255, 255, 255, 0.3);">
+                <div class="modal-header border-bottom-0">
+                    <!-- Title removed as per user request -->
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="metricLoteSelect" class="form-label fw-bold">Filtrar por Lote:</label>
+                        <select id="metricLoteSelect" class="form-select">
+                            <option value="">Todos los lotes</option>
+                        </select>
+                    </div>
+                    <div class="chart-container" style="height: 400px;">
+                        <canvas id="metricChart"></canvas>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
@@ -747,8 +996,8 @@ $(document).ready(function() {
             datasets: [{
                 label: 'Huevos Producidos',
                 data: evolucionProduccion.map(item => item.produccion),
-                borderColor: '#3498db',
-                backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                borderColor: '#39A900',
+                backgroundColor: 'rgba(57, 169, 0, 0.1)',
                 borderWidth: 3,
                 fill: true,
                 tension: 0.4
@@ -798,7 +1047,7 @@ $(document).ready(function() {
                 },
                 title: {
                     display: true,
-                    text: 'Evolución de Producción (7 días)'
+                    text: 'Evolución de Producción (30 días)'
                 }
             }
         }
@@ -880,5 +1129,155 @@ $(document).ready(function() {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
 });
+
+// Logic for Generic Metric Modal
+let metricChart = null;
+let currentMetricType = '';
+const lotesData = JSON.parse('{{ lotes_data_json|default:"[]"|escapejs }}');
+
+const metricConfigs = {
+    'lotes': {
+        label: 'Cantidad de Lotes',
+        field: null, // Count
+        color: 'rgba(57, 169, 0, 0.6)',
+        borderColor: '#39A900',
+        title: 'Distribución de Lotes Activos por Galpón'
+    },
+    'aves': {
+        label: 'Total Aves',
+        field: 'numero_aves_actual',
+        color: 'rgba(39, 174, 96, 0.6)',
+        borderColor: '#27ae60',
+        title: 'Distribución de Aves por Galpón'
+    },
+    'produccion_hoy': {
+        label: 'Huevos Hoy',
+        field: 'produccion_hoy',
+        color: 'rgba(241, 196, 15, 0.6)',
+        borderColor: '#f1c40f',
+        title: 'Producción de Huevos (Hoy) por Galpón'
+    },
+    'produccion_7d': {
+        label: 'Huevos (7 días)',
+        field: 'produccion_7d',
+        color: 'rgba(230, 126, 34, 0.6)',
+        borderColor: '#e67e22',
+        title: 'Producción Acumulada (7 días) por Galpón'
+    },
+    'produccion_30d': {
+        label: 'Huevos (30 días)',
+        field: 'produccion_30d',
+        color: 'rgba(211, 84, 0, 0.6)',
+        borderColor: '#d35400',
+        title: 'Producción Acumulada (30 días) por Galpón'
+    },
+    'consumo': {
+        label: 'Consumo (g/kg)',
+        field: 'consumo_hoy',
+        color: 'rgba(155, 89, 182, 0.6)',
+        borderColor: '#9b59b6',
+        title: 'Consumo de Alimento (Hoy) por Galpón'
+    }
+};
+
+function updateMetricChart() {
+    const selectedLoteId = document.getElementById('metricLoteSelect').value;
+    const config = metricConfigs[currentMetricType];
+    
+    let filteredData = lotesData;
+    if (selectedLoteId) {
+        filteredData = lotesData.filter(l => l.id == selectedLoteId);
+    }
+    
+    // Aggregate by Galpon
+    const galpones = {};
+    filteredData.forEach(lote => {
+        if (!galpones[lote.galpon]) {
+            galpones[lote.galpon] = 0;
+        }
+        
+        if (currentMetricType === 'lotes') {
+            galpones[lote.galpon] += 1;
+        } else {
+            galpones[lote.galpon] += (lote[config.field] || 0);
+        }
+    });
+    
+    const labels = Object.keys(galpones);
+    const data = Object.values(galpones);
+    
+    const ctx = document.getElementById('metricChart').getContext('2d');
+    
+    if (metricChart) {
+        metricChart.destroy();
+    }
+    
+    metricChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: config.label,
+                data: data,
+                backgroundColor: config.color,
+                borderColor: config.borderColor,
+                borderWidth: 1,
+                maxBarThickness: 30,
+                barPercentage: 0.5
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: config.title
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: config.label },
+                    ticks: {
+                        stepSize: currentMetricType === 'consumo' ? undefined : 1,
+                        precision: currentMetricType === 'consumo' ? 2 : 0
+                    }
+                }
+            }
+        }
+    });
+}
+
+window.openMetricModal = function(type) {
+    currentMetricType = type;
+    const config = metricConfigs[type];
+    
+    // Title update removed as per user request
+    // document.getElementById('metricModalTitle').innerHTML = `<i class="fas fa-chart-bar me-2"></i>${config.title}`;
+    
+    const modalElement = document.getElementById('metricModal');
+    let modal = bootstrap.Modal.getInstance(modalElement);
+    if (!modal) {
+        modal = new bootstrap.Modal(modalElement);
+    }
+    modal.show();
+    
+    // Populate Lote Select
+    const loteSelect = document.getElementById('metricLoteSelect');
+    loteSelect.innerHTML = '<option value="">Todos los lotes</option>';
+    loteSelect.onchange = updateMetricChart; 
+    
+    // Filter unique lotes
+    lotesData.forEach(lote => {
+        const option = document.createElement('option');
+        option.value = lote.id;
+        option.textContent = `${lote.codigo} (${lote.galpon})`;
+        loteSelect.appendChild(option);
+    });
+    
+    updateMetricChart();
+};
 </script>
 {% endblock %}

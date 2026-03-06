@@ -2,31 +2,84 @@
 
 {% block title %}Detalle Plan de Vacunación - AgroSmart{% endblock %}
 
-{% block page_title %}Detalle del Plan de Vacunación{% endblock %}
+{% block page_title %}{% endblock %}
 
-{% block breadcrumb_items %}
-    <li class="breadcrumb-item"><a href="{% url 'aves:plan_vacunacion_list' %}">Vacunación</a></li>
-    <li class="breadcrumb-item active">Detalle</li>
-{% endblock %}
+{% block breadcrumb_items %}{% endblock %}
 
-{% block page_actions %}
-    <a href="{% url 'aves:plan_vacunacion_list' %}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left me-2"></i>Volver
-    </a>
-    {% if not plan.aplicada %}
-    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'veterinario' %}
-    <button class="btn btn-success" onclick="marcarAplicada({{ plan.pk }})">
-        <i class="fas fa-check me-2"></i>Marcar como Aplicada
-    </button>
-    {% endif %}
+{% block extra_css %}
+{{ block.super }}
+<style>
+    /* Estilos unificados Glassmorphism */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 2rem;
+    }
+    
+    .btn-light-custom {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #2e7d32;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-light-custom:hover {
+        background: #fff;
+        color: #1b5e20;
+        transform: translateY(-2px);
+    }
+    
+    .form-control-glass {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+    
+    .form-control-glass:focus {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
+        color: white;
+        box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.1);
+    }
+    
+    .form-control-glass::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    
+    /* Ajustes para inputs de fecha en glassmorphism */
+    input[type="date"].form-control-glass::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+        opacity: 0.7;
+        cursor: pointer;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="unified-dashboard-card">
+            <div class="card-header bg-transparent border-bottom border-light">
+                <h5 class="mb-0 text-white">
                     <i class="fas fa-syringe me-2"></i>
                     Plan de Vacunación #{{ plan.pk }}
                     {% if plan.aplicada %}
@@ -41,62 +94,67 @@
                         {% endif %}
                     {% endif %}
                 </h5>
+                {% if not plan.aplicada %}
+                <button onclick="marcarAplicada('{{ plan.pk }}')" class="btn btn-sm btn-light-custom">
+                    <i class="fas fa-check me-2"></i>Marcar Aplicada
+                </button>
+                {% endif %}
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <h6><i class="fas fa-info-circle me-2"></i>Información General</h6>
-                        <table class="table table-sm">
+                        <h6 class="text-white mb-3"><i class="fas fa-info-circle me-2"></i>Información General</h6>
+                        <table class="table table-borderless text-white">
                             <tr>
-                                <td><strong>Lote:</strong></td>
+                                <td class="fw-bold">Lote:</td>
                                 <td>{{ plan.lote.codigo }}</td>
                             </tr>
                             <tr>
-                                <td><strong>Galpón:</strong></td>
+                                <td class="fw-bold">Galpón:</td>
                                 <td>{{ plan.lote.galpon }}</td>
                             </tr>
                             <tr>
-                                <td><strong>Veterinario:</strong></td>
+                                <td class="fw-bold">Veterinario:</td>
                                 <td>{{ plan.veterinario.get_full_name|default:plan.veterinario.username }}</td>
                             </tr>
                             <tr>
-                                <td><strong>Fecha Programada:</strong></td>
+                                <td class="fw-bold">Fecha Programada:</td>
                                 <td>{{ plan.fecha_programada|date:"d/m/Y" }}</td>
                             </tr>
                             {% if plan.aplicada and plan.fecha_aplicada %}
                             <tr>
-                                <td><strong>Fecha Aplicada:</strong></td>
+                                <td class="fw-bold">Fecha Aplicada:</td>
                                 <td>{{ plan.fecha_aplicada|date:"d/m/Y" }}</td>
                             </tr>
                             {% endif %}
                         </table>
                     </div>
                     <div class="col-md-6">
-                        <h6><i class="fas fa-vial me-2"></i>Información de la Vacuna</h6>
-                        <table class="table table-sm">
+                        <h6 class="text-white mb-3"><i class="fas fa-vial me-2"></i>Información de la Vacuna</h6>
+                        <table class="table table-borderless text-white">
                             <tr>
-                                <td><strong>Vacuna:</strong></td>
+                                <td class="fw-bold">Vacuna:</td>
                                 <td>{{ plan.tipo_vacuna.nombre }}</td>
                             </tr>
                             <tr>
-                                <td><strong>Laboratorio:</strong></td>
+                                <td class="fw-bold">Laboratorio:</td>
                                 <td>{{ plan.tipo_vacuna.laboratorio }}</td>
                             </tr>
                             <tr>
-                                <td><strong>Previene:</strong></td>
+                                <td class="fw-bold">Previene:</td>
                                 <td>{{ plan.tipo_vacuna.enfermedad_previene }}</td>
                             </tr>
                             <tr>
-                                <td><strong>Vía de Aplicación:</strong></td>
+                                <td class="fw-bold">Vía de Aplicación:</td>
                                 <td>{{ plan.tipo_vacuna.via_aplicacion }}</td>
                             </tr>
                             <tr>
-                                <td><strong>Dosis por Ave:</strong></td>
+                                <td class="fw-bold">Dosis por Ave:</td>
                                 <td>{{ plan.tipo_vacuna.dosis_por_ave }} ml</td>
                             </tr>
                             {% if plan.tipo_vacuna.intervalo_dias %}
                             <tr>
-                                <td><strong>Intervalo:</strong></td>
+                                <td class="fw-bold">Intervalo:</td>
                                 <td>{{ plan.tipo_vacuna.intervalo_dias }} días</td>
                             </tr>
                             {% endif %}
@@ -105,20 +163,20 @@
                 </div>
                 
                 {% if plan.aplicada %}
-                <hr>
+                <hr class="border-light">
                 <div class="row">
                     <div class="col-12">
-                        <h6><i class="fas fa-check-circle me-2"></i>Información de Aplicación</h6>
-                        <table class="table table-sm">
+                        <h6 class="text-white mb-3"><i class="fas fa-check-circle me-2"></i>Información de Aplicación</h6>
+                        <table class="table table-borderless text-white">
                             {% if plan.numero_aves_vacunadas %}
                             <tr>
-                                <td><strong>Aves Vacunadas:</strong></td>
+                                <td class="fw-bold">Aves Vacunadas:</td>
                                 <td>{{ plan.numero_aves_vacunadas }}</td>
                             </tr>
                             {% endif %}
                             {% if plan.lote_vacuna %}
                             <tr>
-                                <td><strong>Lote de Vacuna:</strong></td>
+                                <td class="fw-bold">Lote de Vacuna:</td>
                                 <td>{{ plan.lote_vacuna }}</td>
                             </tr>
                             {% endif %}
@@ -128,11 +186,11 @@
                 {% endif %}
                 
                 {% if plan.observaciones %}
-                <hr>
+                <hr class="border-light">
                 <div class="row">
                     <div class="col-12">
-                        <h6><i class="fas fa-comment me-2"></i>Observaciones</h6>
-                        <p class="text-muted">{{ plan.observaciones|linebreaks }}</p>
+                        <h6 class="text-white mb-3"><i class="fas fa-comment me-2"></i>Observaciones</h6>
+                        <p class="text-white-50">{{ plan.observaciones|linebreaks }}</p>
                     </div>
                 </div>
                 {% endif %}
@@ -141,28 +199,28 @@
     </div>
     
     <div class="col-md-4">
-        <div class="card">
-            <div class="card-header">
-                <h6 class="mb-0"><i class="fas fa-chart-line me-2"></i>Estadísticas del Lote</h6>
+        <div class="unified-dashboard-card">
+            <div class="card-header bg-transparent border-bottom border-light">
+                <h6 class="mb-0 text-white"><i class="fas fa-chart-line me-2"></i>Estadísticas del Lote</h6>
             </div>
             <div class="card-body">
-                <table class="table table-sm">
+                <table class="table table-borderless text-white">
                     <tr>
-                        <td><strong>Aves Actuales:</strong></td>
+                        <td class="fw-bold">Aves Actuales:</td>
                         <td>{{ plan.lote.numero_aves_actual }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Edad:</strong></td>
+                        <td class="fw-bold">Edad:</td>
                         <td>{{ plan.lote.edad_dias }} días</td>
                     </tr>
                     <tr>
-                        <td><strong>Estado:</strong></td>
+                        <td class="fw-bold">Estado:</td>
                         <td>
                             <span class="badge bg-primary">{{ plan.lote.get_estado_display }}</span>
                         </td>
                     </tr>
                     <tr>
-                        <td><strong>Línea Genética:</strong></td>
+                        <td class="fw-bold">Línea Genética:</td>
                         <td>{{ plan.lote.get_linea_genetica_display }}</td>
                     </tr>
                 </table>
@@ -174,35 +232,37 @@
 <!-- Modal para marcar como aplicada -->
 <div class="modal fade" id="modalAplicarVacuna" tabindex="-1">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Marcar Vacuna como Aplicada</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-content unified-dashboard-card">
+            <div class="modal-header border-bottom border-light">
+                <h5 class="modal-title text-white">Marcar Vacuna como Aplicada</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <form id="formAplicarVacuna" method="post">
                 {% csrf_token %}
-                <div class="modal-body">
+                <div class="modal-body text-white">
                     <div class="mb-3">
-                        <label for="fecha_aplicada" class="form-label">Fecha de Aplicación *</label>
-                        <input type="date" class="form-control" id="fecha_aplicada" name="fecha_aplicada" required>
+                        <label for="fecha_aplicada" class="form-label text-white">Fecha de Aplicación *</label>
+                        <input type="date" class="form-control form-control-glass text-white" id="fecha_aplicada" name="fecha_aplicada" required>
                     </div>
                     <div class="mb-3">
-                        <label for="numero_aves_vacunadas" class="form-label">Número de Aves Vacunadas *</label>
-                        <input type="number" class="form-control" id="numero_aves_vacunadas" name="numero_aves_vacunadas" min="1" max="{{ plan.lote.numero_aves_actual }}" value="{{ plan.lote.numero_aves_actual }}" required>
-                        <small class="form-text text-muted">Máximo: {{ plan.lote.numero_aves_actual }} aves</small>
+                        <label for="numero_aves_vacunadas" class="form-label text-white">Número de Aves Vacunadas *</label>
+                        <input type="number" class="form-control form-control-glass text-white" id="numero_aves_vacunadas" name="numero_aves_vacunadas" min="1" max="{{ plan.lote.numero_aves_actual }}" value="{{ plan.lote.numero_aves_actual }}" required>
+                        <small class="form-text text-white-50">Máximo: {{ plan.lote.numero_aves_actual }} aves</small>
                     </div>
                     <div class="mb-3">
-                        <label for="lote_vacuna" class="form-label">Lote de Vacuna</label>
-                        <input type="text" class="form-control" id="lote_vacuna" name="lote_vacuna" value="{{ plan.lote_vacuna }}">
+                        <label for="lote_vacuna" class="form-label text-white">Lote de Vacuna</label>
+                        <input type="text" class="form-control form-control-glass text-white" id="lote_vacuna" name="lote_vacuna" value="{{ plan.lote_vacuna }}">
                     </div>
                     <div class="mb-3">
-                        <label for="observaciones" class="form-label">Observaciones</label>
-                        <textarea class="form-control" id="observaciones" name="observaciones" rows="3">{{ plan.observaciones }}</textarea>
+                        <label for="observaciones" class="form-label text-white">Observaciones</label>
+                        <textarea class="form-control form-control-glass text-white" id="observaciones" name="observaciones" rows="3">{{ plan.observaciones }}</textarea>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success">Marcar como Aplicada</button>
+                <div class="modal-footer border-top border-light">
+                    <button type="button" class="btn btn-light-custom" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check me-2"></i>Marcar como Aplicada
+                    </button>
                 </div>
             </form>
         </div>
@@ -215,8 +275,13 @@ function marcarAplicada(planId) {
     const form = document.getElementById('formAplicarVacuna');
     
     // Establecer la fecha actual por defecto
-    document.getElementById('fecha_aplicada').value = new Date().toISOString().split('T')[0];
+    const today = new Date();
+    const formattedDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+    document.getElementById('fecha_aplicada').value = formattedDate;
     
+    // Assuming form action is handled by JS fetch, we just need to make sure the URL is correct or used in the fetch call.
+    // The previous code set form.action but then used fetch(this.action). 
+    // The template logic below suggests plan.pk is available in the context.
     form.action = "{% url 'aves:plan_vacunacion_aplicar' plan.pk %}";
     modal.show();
 }

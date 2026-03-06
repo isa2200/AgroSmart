@@ -1,162 +1,386 @@
 {% extends 'aves/base.html' %}
+{% load static %}
 
 {% block title %}Bitácora Diaria - AgroSmart{% endblock %}
 
-{% block page_title %}Bitácora Diaria{% endblock %}
+{% block breadcrumb %}{% endblock %}
+{% block page_header %}{% endblock %}
 
-{% block breadcrumb_items %}
-    <li class="breadcrumb-item active">Bitácora</li>
-{% endblock %}
+{% block extra_css %}
+{{ block.super }}
+<style>
+    /* Estilos copiados de dashboard-section para consistencia (Glassmorphism) */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        padding: 0;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-{% block page_actions %}
-    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
-    <a href="{% url 'aves:bitacora_create' %}" class="btn btn-primary">
-        <i class="fas fa-plus me-2"></i>Nueva Bitácora
-    </a>
-    {% endif %}
+    .unified-dashboard-card .card-body {
+        padding: 2rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    /* Envoltura para ampliar el ancho útil del contenedor */
+    .glass-wrap{
+        width: 100%;
+        max-width: 95%;
+        margin: 0 auto;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+    @media (min-width: 1600px){
+        .glass-wrap{ max-width: 95%; }
+    }
+
+    .unified-dashboard-card .form-label{
+        color: #fff;
+    }
+    
+    .unified-dashboard-card .form-text{
+        color: rgba(255,255,255,0.8);
+    }
+    
+    .unified-dashboard-card .table {
+        color: white;
+        margin-bottom: 0;
+    }
+    
+    .unified-dashboard-card .table thead th {
+        background-color: #2e7d32 !important;
+        color: white !important;
+        border: none;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        padding: 1rem;
+    }
+    
+    .unified-dashboard-card .table tbody td {
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+        padding: 1rem;
+        vertical-align: middle;
+        background-color: white !important;
+        color: #333;
+    }
+    
+    .unified-dashboard-card .table tbody tr:hover td {
+        background-color: #f1f8e9 !important;
+        color: #1b5e20;
+    }
+    
+    .unified-dashboard-card .form-control,
+    .unified-dashboard-card .form-select{
+        background: rgba(255,255,255,0.85);
+        border: 1px solid rgba(255,255,255,0.25);
+        color: #1b1b1b;
+    }
+    
+    .unified-dashboard-card .form-control:focus,
+    .unified-dashboard-card .form-select:focus{
+        border-color: rgba(52, 199, 89, 0.9);
+        box-shadow: 0 0 0 0.2rem rgba(52, 199, 89, 0.25);
+        background-color: rgba(255,255,255,0.95);
+    }
+
+    /* Paginación */
+    .pagination .page-link {
+        background-color: rgba(255,255,255,0.8);
+        border-color: rgba(255,255,255,0.2);
+        color: #2e7d32;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: #2e7d32;
+        border-color: #2e7d32;
+        color: white;
+    }
+    
+    .pagination .page-link:hover {
+        background-color: #fff;
+        color: #1b5e20;
+    }
+
+    /* Print Styles */
+    @media print {
+        @page { size: legal landscape; margin: 5mm; }
+        body * { visibility: hidden; }
+        .print-layout, .print-layout * { visibility: visible; }
+        .print-layout { position: absolute; left: 0; top: 0; width: 100%; display: block !important; background-color: white; padding: 10px; }
+        .no-print, .sidebar, .navbar, .card-footer, .btn, form, .card-header, .page-header, .breadcrumb, .modal, .glass-wrap h2, .pagination { display: none !important; }
+        .main-content { margin: 0 !important; padding: 0 !important; background-color: white !important; }
+        table { width: 100% !important; border-collapse: collapse !important; font-size: 10px !important; font-family: Arial, sans-serif !important; }
+        th, td { border: 1px solid black !important; padding: 2px !important; color: black !important; vertical-align: middle !important; }
+        th { background-color: white !important; font-weight: bold !important; text-align: center !important; }
+        .text-center { text-align: center !important; }
+        .text-start { text-align: left !important; }
+        .fw-bold { font-weight: bold !important; }
+    }
+    .print-layout { display: none; }
+</style>
 {% endblock %}
 
 {% block content %}
-<!-- Filtros -->
-<div class="card mb-4">
-    <div class="card-body">
-        <form method="get" class="row g-3">
-            <div class="col-md-3">
-                <label class="form-label">Lote</label>
-                <select name="lote" class="form-select">
-                    <option value="">Todos los lotes</option>
-                    {% for lote in lotes_disponibles %}
-                        <option value="{{ lote.id }}" {% if request.GET.lote == lote.id|stringformat:"s" %}selected{% endif %}>
-                            {{ lote.codigo }} - {{ lote.galpon.nombre }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Fecha Desde</label>
-                <input type="date" name="fecha_desde" class="form-control" value="{{ filtros.fecha_desde }}">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Fecha Hasta</label>
-                <input type="date" name="fecha_hasta" class="form-control" value="{{ filtros.fecha_hasta }}">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">&nbsp;</label>
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-outline-primary">
-                        <i class="fas fa-search me-2"></i>Filtrar
-                    </button>
+<div class="row justify-content-center">
+    <div class="col-12">
+        <div class="glass-wrap">
+            <h2 class="text-center text-white mb-4 fw-bold" style="font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Bitácora Diaria</h2>
+            
+            <!-- Filtros -->
+            <div class="unified-dashboard-card mb-4 no-print">
+                <div class="card-body">
+                    <form method="get" class="row g-3 align-items-end">
+                        <div class="col-md-3">
+                            <label class="form-label">Lote</label>
+                            <select name="lote" class="form-select">
+                                <option value="">Todos los lotes</option>
+                                {% for lote in lotes %}
+                                    <option value="{{ lote.id }}" {% if filtros.lote == lote.id|stringformat:"s" %}selected{% endif %}>
+                                        {{ lote.codigo }} - {{ lote.galpon.nombre }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Fecha Desde</label>
+                            <input type="date" name="fecha_desde" class="form-control" value="{{ filtros.fecha_desde|default:'' }}">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Fecha Hasta</label>
+                            <input type="date" name="fecha_hasta" class="form-control" value="{{ filtros.fecha_hasta|default:'' }}">
+                        </div>
+                        <div class="col-md-3">
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-light fw-bold" style="color: #2e7d32;">
+                                    <i class="fas fa-search me-2"></i>Filtrar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </form>
+
+            <!-- Lista de Bitácoras -->
+            <div class="unified-dashboard-card">
+                <div class="card-header">
+                    <h5 class="section-title"><i class="fas fa-list"></i>Registros de Bitácora</h5>
+                    <div class="d-flex gap-2">
+                        {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' or user.perfilusuario.rol == 'veterinario' or user.is_superuser %}
+                        <a href="{% url 'aves:bitacora_create' %}" class="btn btn-light fw-bold no-print" style="color: #2e7d32;">
+                            <i class="fas fa-plus me-2"></i>Nueva Bitácora
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if bitacoras %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Lote</th>
+                                        <th>Galpón</th>
+                                        <th>Semana</th>
+                                        <th>Producción Total</th>
+                                        <th>Mortalidad</th>
+                                        <th>Consumo Concentrado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for bitacora in bitacoras %}
+                                    <tr>
+                                        <td>{{ bitacora.fecha|date:"d/m/Y" }}</td>
+                                        <td>
+                                            <span class="badge bg-primary">{{ bitacora.lote.codigo }}</span>
+                                        </td>
+                                        <td>{{ bitacora.lote.galpon.nombre }}</td>
+                                        <td>{{ bitacora.semana_vida }}</td>
+                                        <td>
+                                            <strong>{{ bitacora.produccion_total }}</strong>
+                                            <br>
+                                            <small class="text-muted">
+                                                AAA: {{ bitacora.produccion_aaa|default:0 }} | 
+                                                AA: {{ bitacora.produccion_aa|default:0 }} | 
+                                                A: {{ bitacora.produccion_a|default:0 }}
+                                            </small>
+                                        </td>
+                                        <td class="{% if bitacora.mortalidad > 0 %}text-danger fw-bold{% else %}text-success{% endif %}">
+                                            {{ bitacora.mortalidad|default:0 }}
+                                        </td>
+                                        <td>{{ bitacora.consumo_alimento|default:"0.00" }} kg</td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="{% url 'aves:bitacora_detail' bitacora.id %}?print=true" target="_blank" class="btn btn-outline-secondary" title="Imprimir detalle">
+                                                    <i class="fas fa-print"></i>
+                                                </a>
+                                                <a href="{% url 'aves:bitacora_detail' bitacora.id %}" class="btn btn-outline-info" title="Ver detalle">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
+                                                <a href="{% url 'aves:bitacora_edit' bitacora.id %}" class="btn btn-outline-warning" title="Editar">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Paginación -->
+                        {% if is_paginated %}
+                            <nav aria-label="Paginación" class="mt-4">
+                                <ul class="pagination justify-content-center">
+                                    {% if page_obj.has_previous %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page=1{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}">Primera</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}">Anterior</a>
+                                        </li>
+                                    {% endif %}
+                                    
+                                    <li class="page-item active">
+                                        <span class="page-link">
+                                            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                                        </span>
+                                    </li>
+                                    
+                                    {% if page_obj.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}">Siguiente</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}">Última</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        {% endif %}
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-clipboard-list fa-3x text-white mb-3" style="opacity: 0.7;"></i>
+                            <h5 class="text-white">No hay registros de bitácora</h5>
+                            <p class="text-white-50">Comienza creando tu primera bitácora diaria</p>
+                            {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' or user.perfilusuario.rol == 'veterinario' or user.is_superuser %}
+                            <a href="{% url 'aves:bitacora_create' %}" class="btn btn-light fw-bold" style="color: #2e7d32;">
+                                <i class="fas fa-plus me-2"></i>Crear Primera Bitácora
+                            </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- Lista de Bitácoras -->
-<div class="card">
-    <div class="card-header">
-        <h5 class="mb-0"><i class="fas fa-list me-2"></i>Registros de Bitácora</h5>
-    </div>
-    <div class="card-body">
-        {% if bitacoras %}
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Lote</th>
-                            <th>Galpón</th>
-                            <th>Semana</th>
-                            <th>Producción Total</th>
-                            <th>Mortalidad</th>
-                            <th>Consumo Concentrado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for bitacora in bitacoras %}
-                        <tr>
-                            <td>{{ bitacora.fecha|date:"d/m/Y" }}</td>
-                            <td>
-                                <span class="badge bg-primary">{{ bitacora.lote.codigo }}</span>
-                            </td>
-                            <td>{{ bitacora.lote.galpon }}</td>
-                            <td>{{ bitacora.semana_vida|default:"-" }}</td>
-                            <td>
-                                <strong>{{ bitacora.produccion_total|floatformat:0 }}</strong>
-                                <small class="text-muted d-block">
-                                    AAA: {{ bitacora.produccion_aaa|default:0 }} | 
-                                    AA: {{ bitacora.produccion_aa|default:0 }} | 
-                                    A: {{ bitacora.produccion_a|default:0 }}
-                                </small>
-                            </td>
-                            <td>
-                                {% if bitacora.mortalidad > 0 %}
-                                    <span class="text-danger">{{ bitacora.mortalidad }}</span>
-                                {% else %}
-                                    <span class="text-success">0</span>
-                                {% endif %}
-                            </td>
-                            <td>{{ bitacora.consumo_concentrado|default:"-" }} kg</td>
-                            <td>
-                                <div class="btn-group btn-group-sm">
-                                    <a href="{% url 'aves:bitacora_detail' bitacora.id %}" class="btn btn-outline-info" title="Ver detalle">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
-                                    <a href="{% url 'aves:bitacora_edit' bitacora.id %}" class="btn btn-outline-warning" title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    {% endif %}
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            
-            <!-- Paginación -->
-            {% if is_paginated %}
-                <nav aria-label="Paginación">
-                    <ul class="pagination justify-content-center">
-                        {% if page_obj.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page=1{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}">Primera</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}">Anterior</a>
-                            </li>
-                        {% endif %}
-                        
-                        <li class="page-item active">
-                            <span class="page-link">{{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
-                        </li>
-                        
-                        {% if page_obj.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}">Siguiente</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if filtros.lote %}&lote={{ filtros.lote }}{% endif %}{% if filtros.fecha_desde %}&fecha_desde={{ filtros.fecha_desde }}{% endif %}{% if filtros.fecha_hasta %}&fecha_hasta={{ filtros.fecha_hasta }}{% endif %}">Última</a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            {% endif %}
-        {% else %}
-            <div class="text-center py-5">
-                <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
-                <h5 class="text-muted">No hay registros de bitácora</h5>
-                <p class="text-muted">Comienza creando tu primera bitácora diaria</p>
-                {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
-                <a href="{% url 'aves:bitacora_create' %}" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i>Crear Primera Bitácora
-                </a>
-                {% endif %}
-            </div>
-        {% endif %}
-    </div>
+<!-- Print Layout -->
+<div class="print-layout">
+    <table class="table table-bordered mb-0" style="width: 100%; margin-bottom: 0 !important; border: 2px solid black;">
+        <tbody>
+            <tr>
+                <td style="width: 60%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height:20mm; width:auto; object-fit:contain;">
+                        <div class="fw-bold" style="font-size: 14px; line-height: 1.2;">
+                            Centro de los Recursos Naturales Renovables La Salada<br>
+                            Regional Antioquia
+                        </div>
+                    </div>
+                </td>
+                <td style="width: 40%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="fw-bold">Código del documento: <span class="fw-normal">-</span></div>
+                    <div class="mt-1 fw-bold">Versión: <span class="fw-normal">01</span></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-center" style="text-align: center !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="fw-bold">Unidad productiva de avicultura</div>
+                    <div class="h5 mb-0 fw-bold">BITÁCORA DIARIA DE AVES</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-bordered mt-0" style="width: 100%; border: 2px solid black; border-top: none; margin-top: -2px !important; font-size: 9px !important;">
+        <thead>
+            <tr style="background-color: white;">
+                <th rowspan="2" class="align-middle text-center">FECHA</th>
+                <th rowspan="2" class="align-middle text-center">LOTE</th>
+                <th rowspan="2" class="align-middle text-center">GALPÓN</th>
+                <th rowspan="2" class="align-middle text-center">SEM</th>
+                <th colspan="4" class="text-center">PRODUCCIÓN</th>
+                <th rowspan="2" class="align-middle text-center">MORT</th>
+                <th rowspan="2" class="align-middle text-center">CONSUMO (KG)</th>
+            </tr>
+            <tr style="background-color: white;">
+                <th class="text-center">AAA</th>
+                <th class="text-center">AA</th>
+                <th class="text-center">A</th>
+                <th class="text-center">TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bitacora in bitacoras %}
+            <tr>
+                <td class="text-center">{{ bitacora.fecha|date:"d/m/Y" }}</td>
+                <td class="text-center">{{ bitacora.lote.codigo }}</td>
+                <td class="text-center">{{ bitacora.lote.galpon.nombre }}</td>
+                <td class="text-center">{{ bitacora.semana_vida }}</td>
+                <td class="text-center">{{ bitacora.produccion_aaa|default:0 }}</td>
+                <td class="text-center">{{ bitacora.produccion_aa|default:0 }}</td>
+                <td class="text-center">{{ bitacora.produccion_a|default:0 }}</td>
+                <td class="text-center fw-bold">{{ bitacora.produccion_total }}</td>
+                <td class="text-center">{{ bitacora.mortalidad|default:0 }}</td>
+                <td class="text-center">{{ bitacora.consumo_alimento|default:"0.00" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <table class="table table-bordered mt-0" style="width: 100%; border: 2px solid black; border-top: none; margin-top: -2px !important;">
+        <tbody>
+            <tr style="height: 60px;">
+                <td style="width: 50%; vertical-align: bottom !important; padding: 5px;">
+                    <div style="font-size: 10px; font-weight: bold; margin-bottom: 30px;">Responsable de Bitácora:</div>
+                    <div style="border-bottom: 1px solid #ccc; width: 90%; margin: 0 auto;"></div>
+                </td>
+                <td style="width: 50%; vertical-align: bottom !important; padding: 5px;">
+                    <div style="font-size: 10px; font-weight: bold; margin-bottom: 30px;">Visto Bueno Instructor:</div>
+                    <div style="border-bottom: 1px solid #ccc; width: 90%; margin: 0 auto;"></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <!-- Modal para ver detalle -->
@@ -177,26 +401,6 @@
 
 {% block extra_js %}
 <script>
-function verDetalle(bitacoraId) {
-    window.location.href = '/aves/bitacora/' + bitacoraId + '/';
-}
-
-function editarBitacora(bitacoraId) {
-    window.location.href = '/aves/bitacora/' + bitacoraId + '/editar/';
-}
-
-$(document).ready(function() {
-    // Establecer fechas por defecto si no están establecidas
-    if (!$('input[name="fecha_desde"]').val()) {
-        let fechaDesde = new Date();
-        fechaDesde.setDate(fechaDesde.getDate() - 30);
-        $('input[name="fecha_desde"]').val(fechaDesde.toISOString().split('T')[0]);
-    }
-    
-    if (!$('input[name="fecha_hasta"]').val()) {
-        let fechaHasta = new Date();
-        $('input[name="fecha_hasta"]').val(fechaHasta.toISOString().split('T')[0]);
-    }
-});
+    // Script existente si es necesario
 </script>
 {% endblock %}

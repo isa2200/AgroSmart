@@ -1,69 +1,827 @@
-{% extends 'aves/base.html' %}
+{% extends 'porcinos/base.html' %}
+{% load static %}
 
-{% block title %}AgroSmart - Módulo Porcinos{% endblock %}
+{% block title %}Dashboard Porcinos - AgroSmart{% endblock %}
 
-{% block breadcrumb_items %}
-    <li class="breadcrumb-item"><a href="{% url 'porcinos:dashboard' %}">Porcinos</a></li>
-    <li class="breadcrumb-item active">Dashboard</li>
+{% block page_title %}Dashboard Porcinos{% endblock %}
+
+{% block breadcrumb %}{% endblock %}
+{% block page_header %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #34495e;
+        --accent-color: #3498db;
+        --success-color: #27ae60;
+        --warning-color: #f39c12;
+        --danger-color: #e74c3c;
+        --info-color: #17a2b8;
+        --light-bg: #f8f9fa;
+        --border-color: #dee2e6;
+        --shadow: 0 2px 20px rgba(0,0,0,0.08);
+        --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+    }
+
+    /* Layout mejorado - Glassmorphism */
+    .dashboard-container {
+        padding: 1rem;
+        min-height: 100vh;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Contenedor Unificado */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        margin-bottom: 2rem;
+    }
+
+    /* Filtros */
+    .filters-section {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .filters-section label, .filters-section h6 {
+        color: white;
+    }
+
+    /* Métricas principales mejoradas */
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .metric-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(255,255,255,0.2);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .metric-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: rgba(255,255,255,0.5);
+    }
+
+    .metric-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+        background: rgba(0, 175, 0, 0.35);
+    }
+
+    .metric-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+
+    .metric-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+        background: rgba(255,255,255,0.2);
+        backdrop-filter: blur(5px);
+    }
+
+    .metric-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .metric-label {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1rem;
+        margin: 0.5rem 0 0 0;
+        font-weight: 500;
+    }
+
+    .metric-subtitle {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-top: 0.5rem;
+        white-space: pre-line;
+    }
+
+    .metric-comparison {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: white;
+    }
+
+    .comparison-positive { color: #a5d6a7; }
+    .comparison-negative { color: #ef9a9a; }
+
+    /* Header Styles matching Principal */
+    .dashboard-header {
+        background: rgba(0, 175, 0, 0.25) !important;
+        backdrop-filter: blur(5px) !important;
+        border-radius: 15px !important;
+        padding: 1.5rem 2rem !important;
+        margin-bottom: 2rem !important;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08) !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+    }
+    
+    .welcome-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .welcome-text {
+        flex: 1;
+        text-align: center;
+        pointer-events: none;
+        z-index: 0;
+        position: relative;
+    }
+
+    .welcome-text h1 {
+        margin: 0;
+        color: white;
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 4rem;
+        text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        letter-spacing: 1px;
+    }
+
+    .user-profile-widget {
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    /* Secciones del dashboard */
+    .dashboard-section {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(255,255,255,0.2);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .section-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .section-body {
+        padding: 2rem;
+    }
+
+    /* Gráficos */
+    .chart-container {
+        position: relative;
+        height: 300px;
+        margin-bottom: 1rem;
+    }
+
+    .chart-small {
+        height: 200px;
+    }
+
+    /* Alertas mejoradas */
+    .alerts-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .alert-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        border-radius: 10px;
+        border-left: 4px solid;
+        background: rgba(255,255,255,0.9);
+    }
+
+
+    .alert-item.warning {
+        background: #fff8e1;
+        border-left-color: var(--warning-color);
+        color: #f57c00;
+    }
+
+    .alert-item.danger {
+        background: #ffebee;
+        border-left-color: var(--danger-color);
+        color: #c62828;
+    }
+
+    .alert-item.success {
+        background: #f1f8e9;
+        border-left-color: var(--success-color);
+        color: #388e3c;
+    }
+    
+    .alert-item.info {
+        background: #e1f5fe;
+        border-left-color: var(--info-color);
+        color: #0288d1;
+    }
+    
+    .alert-item.critica {
+        background: #ffebee;
+        border-left-color: var(--danger-color);
+        color: #c62828;
+    }
+    
+    .alert-item.alerta {
+        background: #fff8e1;
+        border-left-color: var(--warning-color);
+        color: #f57c00;
+    }
+
+    /* Tablas mejoradas */
+    .table-modern {
+        margin-bottom: 0;
+        width: 100%;
+        background: transparent;
+    }
+
+    .table-modern thead th {
+        background-color: #2e7d32 !important;
+        color: white !important;
+        border: none;
+        padding: 1rem;
+        font-weight: 500;
+    }
+
+    .table-modern tbody tr {
+        background-color: white !important;
+        transition: all 0.2s;
+    }
+
+    .table-modern tbody td {
+        padding: 1rem;
+        color: #2c3e50 !important;
+        vertical-align: middle;
+        border-bottom: 1px solid #eee;
+    }
+
+    .table-modern tbody tr:hover {
+        background-color: #f8f9fa !important;
+    }
+
+    /* Badges mejorados */
+    .badge-modern {
+        font-size: 0.75rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 500;
+    }
+
+    /* Botones mejorados */
+    .btn-modern {
+        border-radius: 8px;
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .metrics-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .dashboard-container {
+            padding: 0.5rem;
+        }
+        
+        .section-body {
+            padding: 1rem;
+        }
+    }
+
+    /* Animaciones */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .metric-card {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .dashboard-section {
+        animation: fadeInUp 0.8s ease-out;
+    }
+</style>
 {% endblock %}
-
-{% block breadcrumb %}
-<nav aria-label="breadcrumb" class="mb-3">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'dashboard:principal' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'porcinos:dashboard' %}">Porcinos</a></li>
-        <li class="breadcrumb-item active">Dashboard</li>
-    </ol>
-</nav>
-{% endblock %}
-
-{% block page_title %}Módulo Porcinos{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Dashboard de Porcinos</h5>
-                <p class="card-text">Bienvenido al módulo de porcinos.</p>
-                <div class="row g-3 mt-3">
-                    <div class="col-md-3">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <i class="fas fa-layer-group text-primary me-3"></i>
-                                    <div>
-                                        <div class="fw-bold">Lotes activos</div>
-                                        <div class="fs-4">{{ total_lotes|default:0 }}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+<div class="dashboard-container">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="welcome-section">
+            <div class="welcome-text">
+                <h1>Bienvenido a la unidad porcina</h1>
+            </div>
+            <!-- User Profile Widget (Unified Style) -->
+            <div class="user-profile-widget">
+                <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height: 50px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); margin-right: 15px;">
+                {% if user.is_authenticated %}
+                <a href="{% url 'usuarios:perfil' %}" style="text-decoration: none;">
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid rgba(255,255,255,0.5); box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                        {% if user.perfilusuario and user.perfilusuario.foto %}
+                            <img src="{{ user.perfilusuario.foto.url }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            <i class="fas fa-user text-success" style="font-size: 1.5rem;"></i>
+                        {% endif %}
                     </div>
-                    <div class="col-md-3">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <i class="fas fa-piggy-bank text-success me-3"></i>
-                                    <div>
-                                        <div class="fw-bold">Total cerdos</div>
-                                        <div class="fs-4">{{ total_cerdos|default:0 }}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 d-flex align-items-center justify-content-end">
-                        <a href="{% url 'porcinos:lote_list' %}" class="btn btn-outline-primary me-2">
-                            <i class="fas fa-layer-group me-2"></i>Ver Lotes
-                        </a>
-                        <a href="{% url 'porcinos:bitacora_list' %}" class="btn btn-outline-secondary">
-                            <i class="fas fa-clipboard-list me-2"></i>Ver Bitácora
-                        </a>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filters-section">
+        <h6 class="mb-3 text-white"><i class="fas fa-filter me-2"></i>Filtrar Información</h6>
+        <form method="GET" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label text-white">Lote</label>
+                <select name="lote" class="form-select border-0 bg-light">
+                    <option value="">Todos los lotes</option>
+                    {% for lote in lotes_list %}
+                        <option value="{{ lote.id }}" {% if filtros.lote == lote.id %}selected{% endif %}>
+                            {{ lote.codigo }} - {{ lote.corral }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label text-white">Corral</label>
+                <input type="text" name="corral" class="form-control border-0 bg-light" placeholder="Buscar por nombre de corral..." value="{{ filtros.corral|default:'' }}">
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-light text-success fw-bold me-2">
+                    <i class="fas fa-search me-1"></i>Filtrar
+                </button>
+                <a href="{% url 'porcinos:dashboard' %}" class="btn btn-outline-light">
+                    <i class="fas fa-times me-1"></i>Limpiar
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Métricas Principales -->
+    <div class="metrics-grid">
+        <!-- Resumen General -->
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon bg-primary">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <span class="badge bg-primary rounded-pill">Activos</span>
+            </div>
+            <h3 class="metric-value">{{ total_lotes }}</h3>
+            <p class="metric-label">Lotes Activos</p>
+            <div class="metric-subtitle">
+                Total Cerdos: {{ total_cerdos }}<br>
+                Mortalidad Global: {{ stats.mortalidad_porcentaje }}%
+            </div>
+        </div>
+
+        <!-- Consumo Alimento -->
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon bg-warning">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <span class="badge bg-warning text-dark rounded-pill">Alimento</span>
+            </div>
+            <h3 class="metric-value">{{ stats.consumo_hoy|floatformat:1 }} <small class="fs-6">kg</small></h3>
+            <p class="metric-label">Consumo Hoy</p>
+            <div class="metric-subtitle">
+                7d: {{ stats.consumo_7d|floatformat:0 }} kg<br>
+                30d: {{ stats.consumo_30d|floatformat:0 }} kg
+            </div>
+        </div>
+
+        <!-- Mortalidad -->
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon bg-danger">
+                    <i class="fas fa-skull-crossbones"></i>
+                </div>
+                <span class="badge bg-danger rounded-pill">Mortalidad</span>
+            </div>
+            <h3 class="metric-value">{{ stats.mortalidad_hoy }}</h3>
+            <p class="metric-label">Muertes Hoy</p>
+            <div class="metric-subtitle">
+                7d: {{ stats.mortalidad_7d }} ({{ stats.porcentaje_mortalidad_7d }}%)<br>
+                30d: {{ stats.mortalidad_30d }} ({{ stats.porcentaje_mortalidad_30d }}%)
+            </div>
+        </div>
+        
+        <!-- Salud -->
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon bg-info">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <span class="badge bg-info rounded-pill">Salud</span>
+            </div>
+            <h3 class="metric-value">{{ stats.enfermos_hoy }}</h3>
+            <p class="metric-label">Animales Enfermos Hoy</p>
+            <div class="metric-subtitle">
+                Reportados en bitácora diaria
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Gráfico Evolución -->
+        <div class="col-lg-8 mb-4">
+            <div class="dashboard-section h-100">
+                <div class="section-header">
+                    <h5 class="section-title">
+                        <i class="fas fa-chart-line text-info"></i>
+                        Evolución de Consumo y Mortalidad (30 días)
+                    </h5>
+                </div>
+                <div class="section-body">
+                    <div class="chart-container">
+                        <canvas id="evolucionChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Alertas -->
+        <div class="col-lg-4 mb-4">
+            <div class="dashboard-section h-100">
+                <div class="section-header">
+                    <h5 class="section-title">
+                        <i class="fas fa-exclamation-triangle text-warning"></i>
+                        Alertas y Novedades
+                    </h5>
+                </div>
+                <div class="section-body">
+                    {% if alertas %}
+                        <div class="alerts-container">
+                            {% for alerta in alertas %}
+                                <div class="alert-item {{ alerta.nivel }}">
+                                    {% if alerta.nivel == 'critica' or alerta.nivel == 'danger' %}
+                                        <i class="fas fa-exclamation-circle fa-lg"></i>
+                                    {% elif alerta.nivel == 'alerta' or alerta.nivel == 'warning' %}
+                                        <i class="fas fa-exclamation-triangle fa-lg"></i>
+                                    {% else %}
+                                        <i class="fas fa-info-circle fa-lg"></i>
+                                    {% endif %}
+                                    <div>
+                                        <strong>{{ alerta.titulo }}</strong>
+                                        <p class="mb-0 small">{{ alerta.mensaje }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5 text-white">
+                            <i class="fas fa-check-circle fa-3x mb-3 opacity-50"></i>
+                            <p>Todo en orden. No hay alertas activas.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tablero de Tareas Pendientes -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h5 class="section-title">
+                <i class="fas fa-clipboard-list text-warning"></i>
+                Tareas Pendientes
+            </h5>
+            <button type="button" class="btn btn-sm btn-light rounded-pill text-success fw-bold" title="Añadir Tarea" data-bs-toggle="modal" data-bs-target="#nuevaTareaModal">
+                <i class="fas fa-plus me-1"></i>Nueva
+            </button>
+        </div>
+        <div class="section-body p-0">
+            <div class="table-responsive">
+                <table class="table table-modern table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">Tarea</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                            <th>Fecha Límite</th>
+                            <th>Responsable</th>
+                            <th class="text-end pe-4">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tarea in tareas %}
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="form-check m-0">
+                                        <input class="form-check-input" type="checkbox" id="task{{ tarea.id }}" {% if tarea.estado == 'completada' %}checked{% endif %}>
+                                    </div>
+                                    <label class="form-check-label fw-bold {% if tarea.estado == 'completada' %}text-muted text-decoration-line-through{% else %}text-dark{% endif %}" for="task{{ tarea.id }}">
+                                        {{ tarea.titulo }}
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                {% if tarea.prioridad == 'alta' %}
+                                    <span class="badge bg-danger rounded-pill px-3">Alta</span>
+                                {% elif tarea.prioridad == 'media' %}
+                                    <span class="badge bg-info text-dark rounded-pill px-3">Media</span>
+                                {% else %}
+                                    <span class="badge bg-secondary rounded-pill px-3">Baja</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if tarea.estado == 'pendiente' %}
+                                    <span class="badge bg-warning text-dark rounded-pill px-3">Pendiente</span>
+                                {% elif tarea.estado == 'en_proceso' %}
+                                    <span class="badge bg-primary rounded-pill px-3">En Proceso</span>
+                                {% else %}
+                                    <span class="badge bg-success rounded-pill px-3">Completada</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-muted fw-bold">
+                                {% if tarea.fecha_limite %}
+                                    {{ tarea.fecha_limite|date:"d M, H:i" }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    {% if tarea.responsable %}
+                                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center fw-bold" style="width:28px;height:28px;font-size:10px;">
+                                            {{ tarea.responsable.username|slice:":2"|upper }}
+                                        </div>
+                                        <small class="text-muted fw-bold">{{ tarea.responsable.username }}</small>
+                                    {% else %}
+                                        <small class="text-muted">-</small>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="text-end pe-4">
+                                <a href="{% url 'porcinos:completar_tarea' tarea.id %}" class="btn btn-sm btn-outline-success me-1" title="Marcar como hecha">
+                                    <i class="fas fa-check"></i>
+                                </a>
+                                <a href="{% url 'porcinos:eliminar_tarea' tarea.id %}" class="btn btn-sm btn-outline-danger" title="Eliminar" onclick="return confirm('¿Estás seguro de eliminar esta tarea?');">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">No hay tareas pendientes</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actividad Reciente -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h5 class="section-title">
+                <i class="fas fa-history text-light"></i>
+                Actividad Reciente
+            </h5>
+            <a href="{% url 'porcinos:bitacora_list' %}" class="btn btn-sm btn-light text-success fw-bold rounded-pill">
+                Ver Todo
+            </a>
+        </div>
+        <div class="section-body p-0">
+            <div class="table-responsive">
+                <table class="table table-modern table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">Fecha</th>
+                            <th>Lote</th>
+                            <th>Consumo</th>
+                            <th>Mortalidad</th>
+                            <th>Usuario</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for actividad in actividades_recientes %}
+                        <tr>
+                            <td class="ps-4 fw-bold">{{ actividad.fecha|date:"d M Y" }}</td>
+                            <td>
+                                <span class="badge bg-light text-dark border">
+                                    {{ actividad.lote.codigo }}
+                                </span>
+                            </td>
+                            <td class="text-success fw-bold">{{ actividad.consumo_alimento_kg }} kg</td>
+                            <td class="text-danger fw-bold">{{ actividad.mortalidad }}</td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="rounded-circle bg-light text-secondary d-flex align-items-center justify-content-center" style="width:24px;height:24px;font-size:10px;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <span class="small text-muted">{{ actividad.usuario_registro.username }}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-white">No hay actividad reciente</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
+
+<!-- Modal Nueva Tarea -->
+<div class="modal fade" id="nuevaTareaModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content glass-wrap" style="border: 1px solid rgba(255, 255, 255, 0.3);">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title fw-bold" style="color: #39A900; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">Nueva Tarea</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{% url 'porcinos:crear_tarea' %}" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    {% for field in tarea_form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <div class="form-text">{{ field.help_text }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success fw-bold">Guardar Tarea</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Datos del gráfico
+        const rawData = JSON.parse('{{ evolucion_data|escapejs }}');
+        const labels = rawData.map(d => d.fecha);
+        const consumoData = rawData.map(d => d.consumo);
+        const mortalidadData = rawData.map(d => d.mortalidad);
+
+        // Gráfico de Evolución
+        const ctx = document.getElementById('evolucionChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Consumo Alimento (kg)',
+                        data: consumoData,
+                        borderColor: '#f1c40f', // Amarillo
+                        backgroundColor: 'rgba(241, 196, 15, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Mortalidad',
+                        data: mortalidadData,
+                        borderColor: '#e74c3c', // Rojo
+                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                        borderWidth: 3,
+                        borderDash: [5, 5],
+                        tension: 0.4,
+                        fill: true,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { color: 'white' }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { color: 'white' }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { color: 'white' },
+                        title: { display: true, text: 'Consumo (kg)', color: 'white' }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: { drawOnChartArea: false },
+                        ticks: { color: '#e74c3c' },
+                        title: { display: true, text: 'Mortalidad', color: '#e74c3c' }
+                    }
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}

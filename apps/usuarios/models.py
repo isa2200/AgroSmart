@@ -15,6 +15,19 @@ class PerfilUsuario(BaseModel):
     ROLES = [
         ('superusuario', 'Superusuario'),
         ('admin_aves', 'Administrador de Aves'),
+        ('admin_bovinos', 'Administrador de Bovinos'),
+        ('admin_equinos', 'Administrador de Equinos'),
+        ('admin_porcinos', 'Administrador de Porcinos'),
+        ('admin_ovinos', 'Administrador de Ovinos'),
+        ('admin_caprinos', 'Administrador de Caprinos'),
+        ('admin_cunicola', 'Administrador de Cunicola'),
+        ('practicante_aves', 'Practicante Aves'),
+        ('practicante_porcinos', 'Practicante Porcinos'),
+        ('practicante_equinos', 'Practicante Equinos'),
+        ('practicante_cunicola', 'Practicante Cunicola'),
+        ('practicante_bovinos', 'Practicante Bovinos'),
+        ('practicante_ovinos', 'Practicante Ovinos'),
+        ('practicante_caprinos', 'Practicante Caprinos'),
         ('veterinario', 'Veterinario'),
         ('punto_blanco', 'Punto Blanco (Venta)'),
         ('solo_vista', 'Solo Vista'),
@@ -44,8 +57,15 @@ class PerfilUsuario(BaseModel):
         if self.rol == 'superusuario':
             return True
         if area == 'aves':
-            return self.acceso_modulo_avicola
-        return f'admin_{area}' == self.rol
+            return self.acceso_modulo_avicola or self.rol == 'practicante_aves'
+        
+        # Mapping for special cases
+        role_suffix = area
+        if area == 'cunicultura':
+            role_suffix = 'cunicola'
+            
+        # Check for admin or practicante role for the area
+        return self.rol == f'admin_{role_suffix}' or self.rol == f'practicante_{role_suffix}'
     
     def puede_editar(self):
         """Verifica si el usuario puede editar datos."""
@@ -63,7 +83,7 @@ class PerfilUsuario(BaseModel):
     
     def puede_acceder_modulo_aves(self):
         """Verifica si el usuario puede acceder al módulo de aves."""
-        return self.rol in ['superusuario', 'admin_aves', 'veterinario', 'solo_vista'] or self.acceso_modulo_avicola
+        return self.rol in ['superusuario', 'admin_aves', 'practicante_aves', 'veterinario', 'solo_vista'] or self.acceso_modulo_avicola
     
     def puede_editar_modulo_aves(self):
         """Verifica si el usuario puede editar en el módulo de aves."""

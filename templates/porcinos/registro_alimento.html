@@ -1,50 +1,42 @@
 {% extends 'porcinos/base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 
 {% block title %}Registro Gasto de Alimento{% endblock %}
 {% block page_title %}Registro Gasto de Alimento{% endblock %}
 
-
-
-{% block breadcrumb %}
-<nav aria-label="breadcrumb" class="mb-3">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'dashboard:principal' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'porcinos:dashboard' %}">Porcinos</a></li>
-        <li class="breadcrumb-item active">Registro Gasto de Alimento</li>
-    </ol>
-</nav>
-{% endblock %}
+{% block breadcrumb %}{% endblock %}
 
 {% block content %}
-<div class="animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+<div class="glass-wrap animate-fade-in">
+    <!-- Header Title -->
+    <div class="d-flex justify-content-center align-items-center mb-4 no-print px-3">
         <div>
-            <h4 class="mb-1 fw-bold text-dark">Registro Gasto de Alimento</h4>
-            <div class="text-muted small">
-                <i class="fas fa-file-alt me-1"></i>Doc: {{ codigo_documento|default:"-" }} | 
-                <i class="fas fa-code-branch me-1"></i>Ver: {{ version }}
-            </div>
-        </div>
-        <div class="d-flex gap-2">
-            <a class="btn btn-outline-primary" href="{% url 'porcinos:reportes' %}">
-                <i class="fas fa-chart-bar me-2"></i>Reportes
-            </a>
-            <button class="btn btn-outline-secondary" onclick="window.print()">
-                <i class="fas fa-print me-2"></i>Imprimir
-            </button>
+            <h2 class="text-white fw-bold mb-0 text-center" style="font-size: 2.2rem; text-shadow: 0 4px 8px rgba(0,0,0,0.3);">
+                Registro Gasto de Alimento
+            </h2>
         </div>
     </div>
 
-    <!-- Historial de Registros -->
-    <div class="card no-print mb-4">
+    <!-- Unified Dashboard Card -->
+    <div class="unified-dashboard-card no-print">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h6 class="mb-0"><i class="fas fa-archive me-2"></i>Historial de Registros</h6>
+            <h5 class="mb-0 text-white fw-bold">
+                <i class="fas fa-history me-2"></i>Historial de Registros
+            </h5>
+            <div class="d-flex gap-2 align-items-center">
+                <button type="button" class="btn btn-sm btn-glass-green fw-bold" data-bs-toggle="modal" data-bs-target="#registroModal">
+                    <i class="fas fa-plus me-2"></i>Nuevo Registro
+                </button>
+                <button onclick="window.print()" class="btn btn-sm btn-glass-green fw-bold">
+                    <i class="fas fa-print me-2"></i>Imprimir Formato
+                </button>
+            </div>
         </div>
         <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
+            <div class="table-responsive" style="border-radius: 0 0 15px 15px; overflow: hidden;">
+                <table class="table table-modern align-middle mb-0">
+                    <thead>
                         <tr>
                             <th class="ps-4">Mes</th><th>Día</th>
                             <th>Lactancia E</th><th>Gestación E</th>
@@ -58,139 +50,156 @@
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Formulario de Nuevo Registro -->
-    <div class="card no-print">
-        <div class="card-header">
-            <h6 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Nuevo Registro de Gasto</h6>
-        </div>
-        <div class="card-body p-4">
-            <form method="post" id="alimentoForm">
-                {% csrf_token %}
-                <input type="hidden" name="registro_json" id="registro_json">
+<!-- Modal Nuevo Registro -->
+<div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="registroModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content modal-content-glass">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold text-white" id="registroModalLabel">
+                    <i class="fas fa-plus-circle me-2"></i>Nuevo Registro de Gasto
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="alimentoForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="registro_json" id="registro_json">
 
-                <div class="row g-3 mb-4">
-                    <div class="col-md-2">
-                        <label class="form-label small fw-bold text-muted">Mes</label>
-                        <input type="number" min="1" max="12" class="form-control ip-mes" placeholder="MM">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label small fw-bold text-muted">Día</label>
-                        <input type="number" min="1" max="31" class="form-control ip-dia" placeholder="DD">
-                    </div>
-                    <div class="col-md-8 d-flex align-items-end">
-                        <div class="alert alert-info py-2 mb-0 small w-100">
-                            <i class="fas fa-info-circle me-2"></i>E = Entrada (kg), S1 = Saldo (kg), S2 = Salida (kg)
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-2">
+                            <label class="form-label small fw-bold text-white">Mes</label>
+                            <input type="number" min="1" max="12" class="form-control form-control-glass ip-mes" placeholder="MM">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label small fw-bold text-white">Día</label>
+                            <input type="number" min="1" max="31" class="form-control form-control-glass ip-dia" placeholder="DD">
+                        </div>
+                        <div class="col-md-8 d-flex align-items-end">
+                            <div class="alert alert-info py-2 mb-0 small w-100" style="background: rgba(13, 202, 240, 0.2); border: 1px solid rgba(13, 202, 240, 0.3); color: white;">
+                                <i class="fas fa-info-circle me-2"></i>E = Entrada (kg), S1 = Saldo (kg), S2 = Salida (kg)
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <h6 class="text-primary border-bottom pb-2 mb-3"><i class="fas fa-balance-scale me-2"></i>Valores del día</h6>
-                
-                <div class="table-responsive">
-                    <table class="table table-bordered align-middle text-center table-sm">
-                        <thead class="bg-light text-muted small">
-                            <tr>
-                                <th style="width: 15%">Etapa</th>
-                                <th style="width: 25%">Lote</th>
-                                <th style="width: 20%">Entrada (kg)</th>
-                                <th style="width: 20%">Saldo (kg)</th>
-                                <th style="width: 20%">Salida (kg)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Lactancia -->
-                            <tr>
-                                <td class="fw-bold text-start ps-3">Lactancia</td>
-                                <td><input type="text" class="form-control form-control-sm ip-lac-lote text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-lac-e text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-lac-s1 text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-lac-s2 text-center"></td>
-                            </tr>
-                            <!-- Gestación -->
-                            <tr>
-                                <td class="fw-bold text-start ps-3">Gestación</td>
-                                <td><input type="text" class="form-control form-control-sm ip-ges-lote text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ges-e text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ges-s1 text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ges-s2 text-center"></td>
-                            </tr>
-                            <!-- Preinicio -->
-                            <tr>
-                                <td class="fw-bold text-start ps-3">Preinicio</td>
-                                <td><input type="text" class="form-control form-control-sm ip-pre-lote text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-pre-e text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-pre-s1 text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-pre-s2 text-center"></td>
-                            </tr>
-                            <!-- Inicio -->
-                            <tr>
-                                <td class="fw-bold text-start ps-3">Inicio</td>
-                                <td><input type="text" class="form-control form-control-sm ip-ini-lote text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ini-e text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ini-s1 text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ini-s2 text-center"></td>
-                            </tr>
-                            <!-- Levante -->
-                            <tr>
-                                <td class="fw-bold text-start ps-3">Levante</td>
-                                <td><input type="text" class="form-control form-control-sm ip-lev-lote text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-lev-e text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-lev-s1 text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-lev-s2 text-center"></td>
-                            </tr>
-                            <!-- Ceba -->
-                            <tr>
-                                <td class="fw-bold text-start ps-3">Ceba</td>
-                                <td><input type="text" class="form-control form-control-sm ip-ceb-lote text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ceb-e text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ceb-s1 text-center"></td>
-                                <td><input type="number" step="0.01" class="form-control form-control-sm ip-ceb-s2 text-center"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <h6 class="text-white border-bottom pb-2 mb-3"><i class="fas fa-balance-scale me-2"></i>Valores del día</h6>
+                    
+                    <div class="table-responsive mb-4">
+                        <table class="table-glass align-middle text-center">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%">Etapa</th>
+                                    <th style="width: 20%">Lote</th>
+                                     <th style="width: 20%">Entrada</th>
+                                     <th style="width: 25%">Saldo</th>
+                                     <th style="width: 20%">Salida</th>
+                                 </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Lactancia -->
+                                <tr>
+                                    <td class="fw-bold text-start ps-3">Lactancia</td>
+                                    <td><input type="text" class="form-control form-control-sm form-control-glass ip-lac-lote text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-lac-e text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-lac-s1 text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-lac-s2 text-center"></td>
+                                </tr>
+                                <!-- Gestación -->
+                                <tr>
+                                    <td class="fw-bold text-start ps-3">Gestación</td>
+                                    <td><input type="text" class="form-control form-control-sm form-control-glass ip-ges-lote text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-ges-e text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-ges-s1 text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-ges-s2 text-center"></td>
+                                </tr>
+                                <!-- Preinicio -->
+                                <tr>
+                                    <td class="fw-bold text-start ps-3">Preinicio</td>
+                                    <td><input type="text" class="form-control form-control-sm form-control-glass ip-pre-lote text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-pre-e text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-pre-s1 text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-pre-s2 text-center"></td>
+                                </tr>
+                                <!-- Inicio -->
+                                <tr>
+                                    <td class="fw-bold text-start ps-3">Inicio</td>
+                                    <td><input type="text" class="form-control form-control-sm form-control-glass ip-ini-lote text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-ini-e text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-ini-s1 text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-ini-s2 text-center"></td>
+                                </tr>
+                                <!-- Levante -->
+                                <tr>
+                                    <td class="fw-bold text-start ps-3">Levante</td>
+                                    <td><input type="text" class="form-control form-control-sm form-control-glass ip-lev-lote text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-lev-e text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-lev-s1 text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-lev-s2 text-center"></td>
+                                </tr>
+                                <!-- Ceba -->
+                                <tr>
+                                    <td class="fw-bold text-start ps-3">Ceba</td>
+                                    <td><input type="text" class="form-control form-control-sm form-control-glass ip-ceb-lote text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-ceb-e text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-ceb-s1 text-center"></td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm form-control-glass ip-ceb-s2 text-center"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                <div class="mt-4 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary px-5 shadow-sm">
-                        <i class="fas fa-save me-2"></i>Guardar Registro
-                    </button>
-                </div>
-            </form>
+                    <h6 class="text-white border-bottom pb-2 mb-3"><i class="fas fa-file-signature me-2"></i>Firmas Responsables</h6>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label small text-white">Realizado por</label>
+                            <input type="text" class="form-control form-control-glass ip-sig-realizado" placeholder="Nombre">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small text-white">Revisado por</label>
+                            <input type="text" class="form-control form-control-glass ip-sig-revisado" placeholder="Nombre">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small text-white">Aprobado por</label>
+                            <input type="text" class="form-control form-control-glass ip-sig-aprobado" placeholder="Nombre">
+                        </div>
+                    </div>
+
+                    <div class="mt-4 d-flex justify-content-end">
+                        <button type="button" class="btn btn-outline-light me-2" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-glass-green px-5">
+                            <i class="fas fa-save me-2"></i>Guardar Registro
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-
-
-
-    </div>
+</div>
 
 <div id="printLayout" class="print-layout">
-    <table class="table table-bordered mb-0" style="width: 100%; margin-bottom: 0 !important;">
+    <table class="table table-bordered mb-0" style="width: 100%; margin-bottom: 0 !important; border-bottom: none !important;">
         <tbody>
             <tr>
-                <td style="width: 60%; text-align: left !important; vertical-align: middle !important; padding: 5px !important;">
-                    <div class="d-flex align-items-center gap-3">
-                        <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height:12mm; width:auto; object-fit:contain;">
-                        <div class="fw-bold" style="font-size: 12px; line-height: 1.2;">{{ centro|default:"Centro de los Recursos Naturales Renovables La Salada" }}</div>
-                    </div>
+                <td style="width: 20%; text-align: center !important; vertical-align: middle !important; padding: 5px !important; border-right: none !important;">
+                    <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height:15mm; width:auto;">
+                    <div style="font-size: 9px; font-weight: bold; margin-top: 5px;">Centro de los Recursos Naturales Renovables La Salada</div>
                 </td>
-                <td style="width: 40%; text-align: left !important; vertical-align: middle !important; padding: 5px !important;">
-                    <div class="fw-bold" style="font-size: 10px;">Código del documento: <span class="fw-normal">{{ codigo_documento|default:"" }}</span></div>
-                    <div class="mt-1 fw-bold" style="font-size: 10px;">Versión <span class="fw-normal">{{ version }}</span></div>
+                <td style="width: 50%; text-align: center !important; vertical-align: middle !important; padding: 5px !important; border-left: none !important; border-right: none !important;">
+                    <div class="fw-bold" style="font-size: 14px;">Unidad de Productiva Porcicultura</div>
+                    <div class="fw-bold" style="font-size: 12px; margin-top: 5px;">REGISTRO DE COSTO DE ALIMENTO CONCENTRADO</div>
                 </td>
-            </tr>
-            <tr>
-                <td colspan="2" class="text-center" style="text-align: center !important; vertical-align: middle !important; padding: 5px !important;">
-                    <div class="fw-bold" style="font-size: 10px;">{{ unidad_productiva }}</div>
-                    <div class="h6 mb-0 fw-bold" style="font-size: 12px;">REGISTRO GASTO DE ALIMENTO</div>
+                <td style="width: 30%; text-align: left !important; vertical-align: middle !important; padding: 5px !important; border-left: none !important;">
+                    <div class="fw-bold" style="font-size: 10px;">Código del documento: <span class="fw-normal">{{ codigo_documento|default:"____________________" }}</span></div>
+                    <div class="mt-1 fw-bold" style="font-size: 10px;">Versión <span class="fw-normal">3</span></div>
                 </td>
             </tr>
         </tbody>
     </table>
     
-    <table class="table table-bordered table-sm align-middle" style="table-layout:fixed;width:100%;font-size:11px; margin-top: -2px !important;">
+    <table class="table table-bordered table-sm align-middle" style="table-layout:fixed;width:100%;font-size:10px; margin-top: 0 !important; border-top: 1px solid black !important;">
             <colgroup>
-                <col style="width:4%">
+                <col style="width:3%">
                 <col style="width:4%"><col style="width:4%"><col style="width:4%"><col style="width:4%">  {# Lactancia #}
                 <col style="width:4%"><col style="width:4%"><col style="width:4%"><col style="width:4%">  {# Gestación #}
                 <col style="width:4%"><col style="width:4%"><col style="width:4%"><col style="width:4%">  {# Preinicio #}
@@ -200,7 +209,7 @@
             </colgroup>
             <thead class="table-light">
                 <tr>
-                    <th rowspan="2">Día</th>
+                    <th rowspan="2" class="align-middle">Me</th>
                     <th colspan="4">Lactancia</th>
                     <th colspan="4">Gestación</th>
                     <th colspan="4">Preinicio</th>
@@ -218,48 +227,21 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td><span class="pv-dia"></span></td>
-                    <td><span class="pv-lac-lote"></span></td>
-                    <td><span class="pv-lac-e"></span></td>
-                    <td><span class="pv-lac-s1"></span></td>
-                    <td><span class="pv-lac-s2"></span></td>
-                    <td><span class="pv-ges-lote"></span></td>
-                    <td><span class="pv-ges-e"></span></td>
-                    <td><span class="pv-ges-s1"></span></td>
-                    <td><span class="pv-ges-s2"></span></td>
-                    <td><span class="pv-pre-lote"></span></td>
-                    <td><span class="pv-pre-e"></span></td>
-                    <td><span class="pv-pre-s1"></span></td>
-                    <td><span class="pv-pre-s2"></span></td>
-                    <td><span class="pv-ini-lote"></span></td>
-                    <td><span class="pv-ini-e"></span></td>
-                    <td><span class="pv-ini-s1"></span></td>
-                    <td><span class="pv-ini-s2"></span></td>
-                    <td><span class="pv-lev-lote"></span></td>
-                    <td><span class="pv-lev-e"></span></td>
-                    <td><span class="pv-lev-s1"></span></td>
-                    <td><span class="pv-lev-s2"></span></td>
-                    <td><span class="pv-ceb-lote"></span></td>
-                    <td><span class="pv-ceb-e"></span></td>
-                    <td><span class="pv-ceb-s1"></span></td>
-                    <td><span class="pv-ceb-s2"></span></td>
-                </tr>
-                {% for i in rango_print|slice:":10" %}
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-                    <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-                    <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-                    <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-                    <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-                    <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                {% for i in "x"|rjust:"31" %}
+                <tr id="print-row-{{ forloop.counter }}">
+                    <td style="height: 18px; text-align: center;">{{ forloop.counter }}</td>
+                    <td class="pv-lac-lote"></td><td class="pv-lac-e"></td><td class="pv-lac-s1"></td><td class="pv-lac-s2"></td>
+                    <td class="pv-ges-lote"></td><td class="pv-ges-e"></td><td class="pv-ges-s1"></td><td class="pv-ges-s2"></td>
+                    <td class="pv-pre-lote"></td><td class="pv-pre-e"></td><td class="pv-pre-s1"></td><td class="pv-pre-s2"></td>
+                    <td class="pv-ini-lote"></td><td class="pv-ini-e"></td><td class="pv-ini-s1"></td><td class="pv-ini-s2"></td>
+                    <td class="pv-lev-lote"></td><td class="pv-lev-e"></td><td class="pv-lev-s1"></td><td class="pv-lev-s2"></td>
+                    <td class="pv-ceb-lote"></td><td class="pv-ceb-e"></td><td class="pv-ceb-s1"></td><td class="pv-ceb-s2"></td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
         
-        <div class="mt-1 mb-2" style="font-size:10px; font-weight:bold;">E: ENTRADA &nbsp;&nbsp; S: SALDO &nbsp;&nbsp; S: SALIDA</div>
+        <div class="mt-1 mb-2 fw-bold" style="font-size:10px;">E: ENTRADA &nbsp;&nbsp; S: SALDO &nbsp;&nbsp; S: SALIDA</div>
 
         <table class="table table-bordered table-sm align-middle" style="table-layout:fixed;width:100%;font-size:10px; margin-top: -2px !important;">
             <colgroup>
@@ -268,15 +250,21 @@
                 <col style="width:33%">
             </colgroup>
             <tbody>
-                <tr style="height: 40px;">
+                <tr style="height: 60px;">
                     <td style="vertical-align: top !important; padding: 5px !important;">
-                        <div style="font-size: 10px; font-weight: bold;">Realizado por:</div>
+                        <div style="font-size: 10px;">
+                            <b>Realizado por:</b> <span class="pv-sig-realizado-nombre"></span>
+                        </div>
                     </td>
                     <td style="vertical-align: top !important; padding: 5px !important;">
-                        <div style="font-size: 10px; font-weight: bold;">Revisado por:</div>
+                        <div style="font-size: 10px;">
+                            <b>Revisado por:</b> <span class="pv-sig-revisado-nombre"></span>
+                        </div>
                     </td>
                     <td style="vertical-align: top !important; padding: 5px !important;">
-                        <div style="font-size: 10px; font-weight: bold;">Aprobado por:</div>
+                        <div style="font-size: 10px;">
+                            <b>Aprobado por:</b> <span class="pv-sig-aprobado-nombre"></span>
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -310,98 +298,173 @@
 {% endblock %}
 
 {% block extra_css %}
+    {{ block.super }}
 <style>
-    /* Estilos Modernos - Unificados */
-    .card {
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
+    /* Estilos copiados de Bitácora para consistencia */
+    .glass-wrap {
+        width: 100%;
+        max-width: 95%;
+        margin: 0 auto;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+    @media (min-width: 1600px){
+        .glass-wrap{ max-width: 95%; }
+    }
+
+    /* Table Styles within Glass Card */
+    /* Using .table-modern from base.html instead of local .table-custom */
+    .table-modern thead th {
+        border-top: none;
+        border-bottom: none !important; 
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        background-color: #2e7d32;
+        color: #fff;
     }
     
-    .card-header {
-        background: linear-gradient(135deg, #3498db, #2980b9);
+    .table-modern tbody tr {
+        background-color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .table-modern tbody tr:hover {
+        transform: scale(1.005);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        z-index: 10;
+        position: relative;
+        background-color: #ffffff !important;
+    }
+
+    /* Modal Glassmorphism Styles */
+    .modal-content-glass {
+        background: rgba(20, 50, 20, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
         color: white;
-        padding: 20px 25px;
-        border: none;
-    }
-
-    .card-header h6 {
-        color: white !important;
+        border-radius: 15px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.5);
     }
     
-    .card-header i {
-        color: white !important;
-    }
-
-    .form-control {
-        border-radius: 8px;
-        border: 1px solid #e0e0e0;
-        padding: 0.6rem 1rem;
-    }
-
-    .form-control:focus {
-        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
-        border-color: #0d6efd;
-    }
-
-    /* Tabla de entrada */
-    .table-sm td, .table-sm th {
-        padding: 0.25rem;
+    .modal-content-glass .modal-header {
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 15px 15px 0 0;
+        padding: 1.5rem 2rem;
     }
     
-    .table input.form-control-sm {
+    .modal-content-glass .modal-footer {
+        border-top: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 0 0 15px 15px;
+        padding: 1rem 2rem;
+    }
+
+    .modal-content-glass .modal-body {
+        padding: 2rem;
+    }
+
+    .modal-content-glass .form-control, 
+    .modal-content-glass .form-select {
+        background: rgba(255,255,255,0.85);
+        border: 1px solid rgba(255,255,255,0.25);
+        color: #1b1b1b;
+    }
+    
+    .modal-content-glass .form-control:focus,
+    .modal-content-glass .form-select:focus {
+        background: white;
+        border-color: rgba(52, 199, 89, 0.9);
+        box-shadow: 0 0 0 0.2rem rgba(52, 199, 89, 0.25);
+    }
+    
+    .modal-content-glass .form-label {
+        color: #fff;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Table Glass for Modal */
+    .table-glass {
+        width: 100%;
+        color: white;
+    }
+    .table-glass th {
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+        font-weight: 600;
+        padding: 0.5rem;
+    }
+    .table-glass td {
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 0.5rem;
+    }
+    .table-glass tr:hover {
+        background: rgba(255,255,255,0.05);
+    }
+
+    .table input.form-control-sm,
+    .table-glass input.form-control-sm {
         border: none;
         background: transparent;
         padding: 0;
         height: auto;
         font-size: 0.9rem;
+        color: white;
     }
     
-    .table input.form-control-sm:focus {
-        background: white;
+    .table input.form-control-sm:focus,
+    .table-glass input.form-control-sm:focus {
+        background: rgba(255, 255, 255, 0.1);
         box-shadow: none;
-        outline: 2px solid #86b7fe;
-    }
-
-    .btn-primary {
-        border-radius: 10px;
-        padding: 0.6rem 1.5rem;
-        font-weight: 500;
-        transition: all 0.2s;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
-    }
-    
-    .animate-fade-in {
-        animation: fadeInUp 0.5s ease-out;
-    }
-    
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+        outline: 1px solid #28a745;
+        color: white;
     }
 
     @media print {
         @page { size: A4 landscape; margin: 5mm; }
-        .no-print, .sidebar, .breadcrumb, .navbar { display: none !important; }
-        .print-layout { display:block !important; position: static; width: 100%; }
-        html, body { height:auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        
+        /* Ocultar todo por defecto y resetear fondos */
+        body {
+            background: white !important;
+            background-image: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        body * { visibility: hidden; }
+        
+        /* Elementos a ocultar explícitamente */
+        .no-print, .sidebar, .breadcrumb, .navbar, .glass-wrap, .unified-dashboard-card, .modal, #video-background { 
+            display: none !important; 
+        }
+        
+        /* Mostrar solo el layout de impresión */
+        .print-layout, .print-layout * { 
+            visibility: visible; 
+        }
+        
+        .print-layout { 
+            display: block !important; 
+            position: absolute; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            background-color: white; 
+            padding: 10px;
+            color: black !important;
+        }
         
         .print-layout table { 
-            font-size: 8px !important; 
+            font-size: 9px !important; 
             border-collapse: collapse !important;
             border: 2px solid black !important;
+            width: 100% !important;
         }
         
         .print-layout table th, .print-layout table td {
             border: 1px solid black !important;
-            padding: 2px !important;
+            padding: 3px !important;
             text-align: center !important;
             vertical-align: middle !important;
+            color: black !important;
         }
         
         .print-layout .table-light th {
@@ -409,6 +472,7 @@
             color: black !important;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
+            font-weight: bold !important;
         }
         
         /* Ajustes específicos para firmas */
@@ -441,15 +505,67 @@ document.addEventListener('DOMContentLoaded', function(){
     set('.ip-ini-lote', borrador.ini_lote); set('.ip-ini-e', borrador.ini_e); set('.ip-ini-s1', borrador.ini_s1); set('.ip-ini-s2', borrador.ini_s2);
     set('.ip-lev-lote', borrador.lev_lote); set('.ip-lev-e', borrador.lev_e); set('.ip-lev-s1', borrador.lev_s1); set('.ip-lev-s2', borrador.lev_s2);
     set('.ip-ceb-lote', borrador.ceb_lote); set('.ip-ceb-e', borrador.ceb_e); set('.ip-ceb-s1', borrador.ceb_s1); set('.ip-ceb-s2', borrador.ceb_s2);
+    
+    // Firmas
+    set('.ip-sig-realizado', borrador.sig_realizado);
+    set('.ip-sig-revisado', borrador.sig_revisado);
+    set('.ip-sig-aprobado', borrador.sig_aprobado);
   }
+  function renderPrintTable() {
+    // Clear all data cells in print table
+    document.querySelectorAll('.print-layout tbody tr').forEach(tr => {
+        tr.querySelectorAll('td:not(:first-child)').forEach(td => td.textContent = '');
+    });
+
+    // Fill with historical data
+    if (Array.isArray(registros)) {
+        registros.forEach(r => {
+            const day = parseInt(r.dia);
+            if (day >= 1 && day <= 31) {
+                const tr = document.getElementById('print-row-' + day);
+                if (tr) {
+                    const setCell = (cls, val) => {
+                        const cell = tr.querySelector('.' + cls);
+                        if (cell) cell.textContent = val || '';
+                    };
+                    setCell('pv-lac-lote', r.lac_lote); setCell('pv-lac-e', r.lac_e); setCell('pv-lac-s1', r.lac_s1); setCell('pv-lac-s2', r.lac_s2);
+                    setCell('pv-ges-lote', r.ges_lote); setCell('pv-ges-e', r.ges_e); setCell('pv-ges-s1', r.ges_s1); setCell('pv-ges-s2', r.ges_s2);
+                    setCell('pv-pre-lote', r.pre_lote); setCell('pv-pre-e', r.pre_e); setCell('pv-pre-s1', r.pre_s1); setCell('pv-pre-s2', r.pre_s2);
+                    setCell('pv-ini-lote', r.ini_lote); setCell('pv-ini-e', r.ini_e); setCell('pv-ini-s1', r.ini_s1); setCell('pv-ini-s2', r.ini_s2);
+                    setCell('pv-lev-lote', r.lev_lote); setCell('pv-lev-e', r.lev_e); setCell('pv-lev-s1', r.lev_s1); setCell('pv-lev-s2', r.lev_s2);
+                    setCell('pv-ceb-lote', r.ceb_lote); setCell('pv-ceb-e', r.ceb_e); setCell('pv-ceb-s1', r.ceb_s1); setCell('pv-ceb-s2', r.ceb_s2);
+                }
+            }
+        });
+    }
+  }
+
   function sync(){
-    setText('.pv-dia', get('.ip-dia'));
-    setText('.pv-lac-lote', get('.ip-lac-lote')); setText('.pv-lac-e', get('.ip-lac-e')); setText('.pv-lac-s1', get('.ip-lac-s1')); setText('.pv-lac-s2', get('.ip-lac-s2'));
-    setText('.pv-ges-lote', get('.ip-ges-lote')); setText('.pv-ges-e', get('.ip-ges-e')); setText('.pv-ges-s1', get('.ip-ges-s1')); setText('.pv-ges-s2', get('.ip-ges-s2'));
-    setText('.pv-pre-lote', get('.ip-pre-lote')); setText('.pv-pre-e', get('.ip-pre-e')); setText('.pv-pre-s1', get('.ip-pre-s1')); setText('.pv-pre-s2', get('.ip-pre-s2'));
-    setText('.pv-ini-lote', get('.ip-ini-lote')); setText('.pv-ini-e', get('.ip-ini-e')); setText('.pv-ini-s1', get('.ip-ini-s1')); setText('.pv-ini-s2', get('.ip-ini-s2'));
-    setText('.pv-lev-lote', get('.ip-lev-lote')); setText('.pv-lev-e', get('.ip-lev-e')); setText('.pv-lev-s1', get('.ip-lev-s1')); setText('.pv-lev-s2', get('.ip-lev-s2'));
-    setText('.pv-ceb-lote', get('.ip-ceb-lote')); setText('.pv-ceb-e', get('.ip-ceb-e')); setText('.pv-ceb-s1', get('.ip-ceb-s1')); setText('.pv-ceb-s2', get('.ip-ceb-s2'));
+    // First render history
+    renderPrintTable();
+
+    // Then overlay current form data
+    const day = parseInt(get('.ip-dia'));
+    if (day >= 1 && day <= 31) {
+        const tr = document.getElementById('print-row-' + day);
+        if (tr) {
+            const setCell = (cls, val) => {
+                const cell = tr.querySelector('.' + cls);
+                if (cell) cell.textContent = val || '';
+            };
+            setCell('pv-lac-lote', get('.ip-lac-lote')); setCell('pv-lac-e', get('.ip-lac-e')); setCell('pv-lac-s1', get('.ip-lac-s1')); setCell('pv-lac-s2', get('.ip-lac-s2'));
+            setCell('pv-ges-lote', get('.ip-ges-lote')); setCell('pv-ges-e', get('.ip-ges-e')); setCell('pv-ges-s1', get('.ip-ges-s1')); setCell('pv-ges-s2', get('.ip-ges-s2'));
+            setCell('pv-pre-lote', get('.ip-pre-lote')); setCell('pv-pre-e', get('.ip-pre-e')); setCell('pv-pre-s1', get('.ip-pre-s1')); setCell('pv-pre-s2', get('.ip-pre-s2'));
+            setCell('pv-ini-lote', get('.ip-ini-lote')); setCell('pv-ini-e', get('.ip-ini-e')); setCell('pv-ini-s1', get('.ip-ini-s1')); setCell('pv-ini-s2', get('.ip-ini-s2'));
+            setCell('pv-lev-lote', get('.ip-lev-lote')); setCell('pv-lev-e', get('.ip-lev-e')); setCell('pv-lev-s1', get('.ip-lev-s1')); setCell('pv-lev-s2', get('.ip-lev-s2'));
+            setCell('pv-ceb-lote', get('.ip-ceb-lote')); setCell('pv-ceb-e', get('.ip-ceb-e')); setCell('pv-ceb-s1', get('.ip-ceb-s1')); setCell('pv-ceb-s2', get('.ip-ceb-s2'));
+        }
+    }
+    
+    // Sync Firmas
+    setText('.pv-sig-realizado-nombre', get('.ip-sig-realizado'));
+    setText('.pv-sig-revisado-nombre', get('.ip-sig-revisado'));
+    setText('.pv-sig-aprobado-nombre', get('.ip-sig-aprobado'));
   }
   function buildJSON(){
     const obj={ mes:get('.ip-mes'), dia:get('.ip-dia'),
@@ -458,7 +574,12 @@ document.addEventListener('DOMContentLoaded', function(){
       pre_lote:get('.ip-pre-lote'), pre_e:get('.ip-pre-e'), pre_s1:get('.ip-pre-s1'), pre_s2:get('.ip-pre-s2'),
       ini_lote:get('.ip-ini-lote'), ini_e:get('.ip-ini-e'), ini_s1:get('.ip-ini-s1'), ini_s2:get('.ip-ini-s2'),
       lev_lote:get('.ip-lev-lote'), lev_e:get('.ip-lev-e'), lev_s1:get('.ip-lev-s1'), lev_s2:get('.ip-lev-s2'),
-      ceb_lote:get('.ip-ceb-lote'), ceb_e:get('.ip-ceb-e'), ceb_s1:get('.ip-ceb-s1'), ceb_s2:get('.ip-ceb-s2') };
+      ceb_lote:get('.ip-ceb-lote'), ceb_e:get('.ip-ceb-e'), ceb_s1:get('.ip-ceb-s1'), ceb_s2:get('.ip-ceb-s2'),
+      // Save Firmas
+      sig_realizado:get('.ip-sig-realizado'),
+      sig_revisado:get('.ip-sig-revisado'),
+      sig_aprobado:get('.ip-sig-aprobado')
+    };
     out.value = JSON.stringify(obj);
   }
   document.querySelectorAll('input').forEach(el=>el.addEventListener('input', sync));
@@ -474,7 +595,7 @@ document.addEventListener('DOMContentLoaded', function(){
       registros.forEach((r, idx) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td class="ps-4 fw-bold text-primary">${r.mes||''}</td>
+          <td class="ps-4 fw-bold">${r.mes||''}</td>
           <td>${r.dia||''}</td>
           <td>${r.lac_e||''}</td>
           <td>${r.ges_e||''}</td>
@@ -483,17 +604,17 @@ document.addEventListener('DOMContentLoaded', function(){
           <td>${r.lev_e||''}</td>
           <td>${r.ceb_e||''}</td>
           <td class="text-end pe-4">
-            <a class="btn btn-action btn-outline-primary" href="{% url 'porcinos:registro_alimento' %}?load_index=${idx}" title="Ver">
+            <a class="btn btn-glass-green btn-sm me-1" href="{% url 'porcinos:registro_alimento' %}?load_index=${idx}" title="Ver">
                 <i class="fas fa-eye"></i>
             </a>
-            <a class="btn btn-action btn-outline-secondary" href="{% url 'porcinos:registro_alimento' %}?load_index=${idx}&autoprint=1" title="Imprimir">
+            <a class="btn btn-sm btn-glass-green fw-bold" href="{% url 'porcinos:registro_alimento' %}?load_index=${idx}&autoprint=1" title="Imprimir">
                 <i class="fas fa-print"></i>
             </a>
           </td>`;
         tbody.appendChild(tr);
       });
     } else {
-      const tr=document.createElement('tr'); tr.innerHTML='<td colspan="9" class="text-muted">Sin registros</td>'; tbody.appendChild(tr);
+      const tr=document.createElement('tr'); tr.innerHTML='<td colspan="9" class="text-center py-4 text-muted">Sin registros recientes</td>'; tbody.appendChild(tr);
     }
   }
 });

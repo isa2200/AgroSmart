@@ -3,28 +3,27 @@
 {% block title %}Eliminar Bitácora{% endblock %}
 {% block page_title %}Eliminar Bitácora{% endblock %}
 
-{% block breadcrumb %}
-<nav aria-label="breadcrumb" class="mb-3">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'dashboard:principal' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'porcinos:dashboard' %}">Porcinos</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'porcinos:bitacora_list' %}">Bitácora</a></li>
-        <li class="breadcrumb-item active">Eliminar</li>
-    </ol>
-</nav>
-{% endblock %}
+{% block breadcrumb %}{% endblock %}
 
 
 
 {% block content %}
-<div class="card">
-    <div class="card-body">
-        <p>¿Confirma eliminar el registro de bitácora del <strong>{{ obj.fecha }}</strong> del lote <strong>{{ obj.lote.codigo }}</strong>?</p>
-        <form method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Eliminar</button>
-            <a href="{% url 'porcinos:bitacora_list' %}" class="btn btn-secondary">Cancelar</a>
-        </form>
+<div class="unified-dashboard-card">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="mb-0 fw-bold text-white"><i class="fas fa-exclamation-triangle me-2"></i>Confirmar Eliminación</h5>
     </div>
+    <div class="text-white mb-4">
+        <p class="mb-0">¿Confirma eliminar el registro de bitácora del <strong>{{ obj.fecha }}</strong> del lote <strong class="text-warning">{{ obj.lote.codigo }}</strong>?</p>
+        <p class="small text-white-50 mt-2"><i class="fas fa-info-circle me-1"></i>Esta acción no se puede deshacer.</p>
+    </div>
+    <form method="post" class="d-flex justify-content-end gap-2">
+        {% csrf_token %}
+        <a href="{% url 'porcinos:bitacora_list' %}" class="btn btn-secondary">
+            <i class="fas fa-times me-2"></i>Cancelar
+        </a>
+        <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash-alt me-2"></i>Eliminar
+        </button>
+    </form>
 </div>
 {% endblock %}

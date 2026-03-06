@@ -1,268 +1,363 @@
 {% extends 'cunicultura/base.html' %}
 {% load static %}
 
+{% block title %}Inventario Permanente - AgroSmart{% endblock %}
+
+{% block breadcrumb %}{% endblock %}
+{% block page_header %}{% endblock %}
+
 {% block extra_css %}
     {{ block.super }}
 <style>
-    /* Glassmorphism Green Transparent Theme (Matching Avian Dashboard) */
-    .glass-card {
-        border: 1px solid rgba(255,255,255,0.2);
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
+    /* Estilos unificados Glassmorphism - Copiado Exacto de Avicultura */
+    .unified-dashboard-card {
         background: rgba(0, 175, 0, 0.25);
         backdrop-filter: blur(5px);
-        color: #2c3e50;
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
         margin-bottom: 2rem;
     }
     
-    .glass-card .card-header {
-        background: rgba(255, 255, 255, 0.4);
-        border-bottom: 1px solid rgba(255,255,255,0.3);
-        color: #1b5e20;
-        padding: 15px 20px;
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-weight: bold;
     }
 
-    .glass-card .card-body {
-        background: transparent;
-        padding: 25px;
+    .unified-dashboard-card .card-body {
+        padding: 0; /* Remove padding for full-width table */
     }
 
-    /* Table Styles */
-    .table {
-        color: #2c3e50;
-        margin-bottom: 0;
-    }
-    .table thead th {
-        background-color: #2e7d32 !important;
-        color: white !important;
-        border-bottom: none;
+    .section-title {
+        margin: 0;
+        color: white;
         font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    .glass-wrap {
+        width: 100%;
+        max-width: 98%; /* Slightly wider for this table */
+        margin: 0 auto;
+    }
+
+    /* Table Styles within Glass Card */
+    .table-custom {
+        margin-bottom: 0;
+        width: 100%;
+        border-collapse: separate; 
+        border-spacing: 0;
+    }
+    
+    .table-custom thead th {
+        background-color: #2E7D32 !important;
+        color: white !important;
+        border: 1px solid rgba(255,255,255,0.1);
         vertical-align: middle;
+        font-weight: 600;
         text-transform: uppercase;
         font-size: 0.85rem;
-    }
-    .table-striped > tbody > tr:nth-of-type(odd) > * {
-        background-color: white;
-        color: #2c3e50;
-    }
-    .table-striped > tbody > tr:nth-of-type(even) > * {
-        background-color: rgba(255,255,255,0.7);
-        color: #2c3e50;
-    }
-    .table-striped > tbody > tr:hover > * {
-        background-color: rgba(255,255,255,0.9);
-    }
-    
-    .table-bordered > :not(caption) > * > * {
-        border-width: 0 1px;
-        border-color: #dee2e6;
-    }
-    
-    .table-bordered {
-        border-color: rgba(255,255,255,0.2);
+        padding: 12px 8px;
+        letter-spacing: 0.5px;
     }
 
-    /* Text Utilities override */
-    .text-muted {
-        color: rgba(255,255,255,0.7) !important;
-    }
-    
-    /* Button Styles */
-    .btn-modern {
-        background: white;
-        color: #2e7d32;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-    .btn-modern:hover {
-        background: #f1f8e9;
-        color: #1b5e20;
-        transform: translateY(-2px);
-    }
-
-    /* Header specific overrides */
-    .table thead th.bg-header-1 { background-color: rgba(56, 142, 60, 0.8) !important; }
-    .table thead th.bg-header-2 { background-color: rgba(67, 160, 71, 0.8) !important; }
-    .table thead th.bg-header-3 { background-color: rgba(76, 175, 80, 0.8) !important; }
-
-    /* Modal Styles to match Glassmorphism Light */
-    .modal-content {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(15px);
-        border: 1px solid rgba(0,0,0,0.1);
-        color: #2c3e50;
-    }
-    .modal-header {
-        border-bottom: 1px solid rgba(0,0,0,0.1);
-    }
-    .modal-footer {
-        border-top: 1px solid rgba(0,0,0,0.1);
-    }
-    .btn-close {
-        filter: none;
-    }
-    
-    /* Editable cells indication */
-    td[contenteditable="true"]:hover {
-        background-color: rgba(255, 255, 255, 0.8) !important;
-        cursor: text;
-        outline: 1px dashed rgba(0,0,0,0.2);
-    }
-    td[contenteditable="true"]:focus {
+    .table-custom tbody tr {
         background-color: white !important;
-        outline: 2px solid #2e7d32;
-        box-shadow: 0 0 5px rgba(46, 125, 50, 0.5);
+        color: #444 !important;
+        transition: all 0.2s;
     }
+    
+    .table-custom tbody tr:hover {
+        background-color: #f1f8e9 !important;
+    }
+    
+    .table-custom tbody td {
+        border: 1px solid #e9ecef;
+        padding: 10px 8px;
+        vertical-align: middle;
+    }
+    
+    .total-cell {
+        font-weight: bold;
+        color: #2E7D32 !important;
+        background-color: #f9fbe7 !important;
+    }
+
+    /* Botones */
+    .btn-light-custom {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.5);
+        color: #2e7d32;
+        font-weight: 600;
+    }
+    .btn-light-custom:hover {
+        background: #fff;
+        color: #1b5e20;
+    }
+
+    /* Print Styles */
+    @media print {
+        @page { size: legal landscape; margin: 5mm; }
+        body * { visibility: hidden; }
+        .print-layout, .print-layout * { visibility: visible; }
+        .print-layout { position: absolute; left: 0; top: 0; width: 100%; display: block !important; background-color: white; padding: 10px; }
+        .no-print, .sidebar, .navbar, .card-footer, .btn, form, .card-header, .page-header, .breadcrumb, .modal, .glass-wrap h2 { display: none !important; }
+        .main-content { margin: 0 !important; padding: 0 !important; background-color: white !important; }
+        table { width: 100% !important; border-collapse: collapse !important; font-size: 10px !important; font-family: Arial, sans-serif !important; }
+        th, td { border: 1px solid black !important; padding: 2px !important; color: black !important; vertical-align: middle !important; }
+        th { background-color: white !important; font-weight: bold !important; text-align: center !important; }
+        .text-center { text-align: center !important; }
+        .text-start { text-align: left !important; }
+        .fw-bold { font-weight: bold !important; }
+    }
+    .print-layout { display: none; }
 </style>
 {% endblock %}
 
-{% block dashboard_content %}
-<div class="glass-card mt-4">
-    <div class="card-header">
-        <div>
-            <h5 class="mb-0"><i class="fas fa-clipboard-list me-2"></i>Registro Inventario Permanente de Conejos</h5>
-            <small class="text-muted" style="color: rgba(255,255,255,0.7) !important;">Control de existencias y novedades diarias - <span class="text-white"><i class="fas fa-edit me-1"></i>Haga clic en las celdas para editar</span></small>
+{% block content %}
+<div class="glass-wrap">
+    <h2 class="text-center text-white mb-4 fw-bold" style="font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Inventario Permanente</h2>
+
+    <div class="unified-dashboard-card">
+        <div class="card-header">
+            <h5 class="section-title">
+                <i class="fas fa-clipboard-list"></i>
+                Registro de Inventario
+            </h5>
+            <div class="d-flex gap-2">
+                <form class="d-flex gap-2 align-items-center me-2" method="get">
+                    <input type="date" name="fecha_inicio" class="form-control form-control-sm" value="{{ fecha_inicio|default:'' }}" placeholder="Desde">
+                    <span class="text-white">-</span>
+                    <input type="date" name="fecha_fin" class="form-control form-control-sm" value="{{ fecha_fin|default:'' }}" placeholder="Hasta">
+                    <button type="submit" class="btn btn-sm btn-light-custom">
+                        <i class="fas fa-filter"></i>
+                    </button>
+                    {% if fecha_inicio or fecha_fin %}
+                        <a href="{% url 'cunicultura:inventario_permanente' %}" class="btn btn-sm btn-outline-light" title="Limpiar Filtros">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    {% endif %}
+                </form>
+
+                <a href="{% url 'cunicultura:historial_inventario' %}" class="btn btn-light-custom" title="Historial">
+                    <i class="fas fa-history"></i>
+                </a>
+                <button type="button" class="btn btn-light-custom" onclick="window.print()">
+                    <i class="fas fa-print me-2"></i>Imprimir
+                </button>
+                <button type="button" class="btn btn-light-custom" data-bs-toggle="modal" data-bs-target="#registroModal">
+                    <i class="fas fa-plus me-2"></i>Nuevo Registro
+                </button>
+            </div>
         </div>
-        <button type="button" class="btn btn-modern" data-bs-toggle="modal" data-bs-target="#registroModal">
-            <i class="fas fa-plus me-2"></i>Nuevo Registro
-        </button>
-    </div>
-    
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered text-center mb-0">
-                <thead>
-                    <tr>
-                        <th rowspan="2" class="align-middle">Fecha</th>
-                        <th colspan="2" class="bg-header-1">Clasificación</th>
-                        <th colspan="5" class="bg-header-2">Novedades</th>
-                        <th colspan="8" class="bg-header-3">Inventario</th>
-                    </tr>
-                    <tr>
-                        <th>Detalle</th>
-                        <th>Madre #</th>
-                        <th>Gazapos Vivos</th>
-                        <th>Gazapos Muertos</th>
-                        <th>Compra</th>
-                        <th>Venta</th>
-                        <th>Muerte</th>
-                        <th>Macho L/C</th>
-                        <th>Hembra L/C</th>
-                        <th>Reprod.</th>
-                        <th>Hembra Reempl.</th>
-                        <th>Hembra No Lact.</th>
-                        <th>Hembra Lact.</th>
-                        <th>Gazapos</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for registro in registros %}
-                    <tr data-id="{{ registro.id }}">
-                        <td class="fw-bold">{{ registro.fecha|date:"d/m/Y" }}</td>
-                        <td contenteditable="true" onblur="updateRegistro(this, 'detalle')">{{ registro.detalle }}</td>
-                        <td contenteditable="true" onblur="updateRegistro(this, 'madre_id')">{{ registro.madre_id|default:"-" }}</td>
-                        
-                        <!-- Novedades -->
-                        <td contenteditable="true" onblur="updateRegistro(this, 'gazapos_vivos')">{{ registro.gazapos_vivos }}</td>
-                        <td contenteditable="true" onblur="updateRegistro(this, 'gazapos_muertos')">{{ registro.gazapos_muertos }}</td>
-                        <td contenteditable="true" onblur="updateRegistro(this, 'compra')">{{ registro.compra }}</td>
-                        <td contenteditable="true" onblur="updateRegistro(this, 'venta')">{{ registro.venta }}</td>
-                        <td contenteditable="true" onblur="updateRegistro(this, 'muerte')">{{ registro.muerte }}</td>
-                        
-                        <!-- Inventario -->
-                        <td contenteditable="true" onblur="updateRegistro(this, 'macho_levante_ceba')">{{ registro.macho_levante_ceba }}</td>
-                        <td contenteditable="true" onblur="updateRegistro(this, 'hembra_levante_ceba')">{{ registro.hembra_levante_ceba }}</td>
-                        <td contenteditable="true" onblur="updateRegistro(this, 'reproductores')">{{ registro.reproductores }}</td>
-                        <td contenteditable="true" onblur="updateRegistro(this, 'hembra_reemplazo')">{{ registro.hembra_reemplazo }}</td>
-                        <td contenteditable="true" onblur="updateRegistro(this, 'hembra_no_lactando')">{{ registro.hembra_no_lactando }}</td>
-                        <td contenteditable="true" onblur="updateRegistro(this, 'hembra_lactando')">{{ registro.hembra_lactando }}</td>
-                        <td contenteditable="true" onblur="updateRegistro(this, 'gazapos')">{{ registro.gazapos }}</td>
-                        <td class="fw-bold text-success total-cell" style="color: #4caf50 !important;">{{ registro.total }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="16" class="text-center py-5">
-                            <i class="fas fa-clipboard-list fa-3x text-muted mb-3 d-block"></i>
-                            <span class="text-muted">No hay registros disponibles</span>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-custom table-sm text-center mb-0">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" class="align-middle">Fecha</th>
+                            <th colspan="2">Clasificación</th>
+                            <th colspan="5">Novedades</th>
+                            <th colspan="7">Inventario</th>
+                            <th rowspan="2" class="align-middle">Total</th>
+                            <th rowspan="2" class="align-middle">Firma</th>
+                            <th rowspan="2" class="align-middle">Acciones</th>
+                        </tr>
+                        <tr>
+                            <th>Detalle</th>
+                            <th>Madre #</th>
+                            <th>Vivos</th>
+                            <th>Muertos</th>
+                            <th>Compra</th>
+                            <th>Venta</th>
+                            <th>Muerte</th>
+                            <th>M-L/C</th>
+                            <th>H-L/C</th>
+                            <th>Repr</th>
+                            <th>H-Reem</th>
+                            <th>H-NoLact</th>
+                            <th>H-Lact</th>
+                            <th>Gaz</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for registro in registros %}
+                        <tr data-id="{{ registro.id }}"
+                            data-fecha="{{ registro.fecha|date:'Y-m-d' }}"
+                            data-detalle="{{ registro.detalle }}"
+                            data-madre_id="{{ registro.madre_id|default:'' }}"
+                            data-gazapos_vivos="{{ registro.gazapos_vivos }}"
+                            data-gazapos_muertos="{{ registro.gazapos_muertos }}"
+                            data-compra="{{ registro.compra }}"
+                            data-venta="{{ registro.venta }}"
+                            data-muerte="{{ registro.muerte }}"
+                            data-macho_levante_ceba="{{ registro.macho_levante_ceba }}"
+                            data-hembra_levante_ceba="{{ registro.hembra_levante_ceba }}"
+                            data-reproductores="{{ registro.reproductores }}"
+                            data-hembra_reemplazo="{{ registro.hembra_reemplazo }}"
+                            data-hembra_no_lactando="{{ registro.hembra_no_lactando }}"
+                            data-hembra_lactando="{{ registro.hembra_lactando }}"
+                            data-gazapos="{{ registro.gazapos }}"
+                            data-firma_url="{% if registro.firma_responsable %}{{ registro.firma_responsable.url }}{% endif %}">
+                            <td class="fw-bold text-nowrap">{{ registro.fecha|date:"d/m/Y" }}</td>
+                            <td class="text-start text-truncate" style="max-width: 150px;">{{ registro.detalle }}</td>
+                            <td>{{ registro.madre_id|default:"-" }}</td>
+                            
+                            <!-- Novedades -->
+                            <td>{{ registro.gazapos_vivos }}</td>
+                            <td>{{ registro.gazapos_muertos }}</td>
+                            <td>{{ registro.compra }}</td>
+                            <td>{{ registro.venta }}</td>
+                            <td>{{ registro.muerte }}</td>
+                            
+                            <!-- Inventario -->
+                            <td>{{ registro.macho_levante_ceba }}</td>
+                            <td>{{ registro.hembra_levante_ceba }}</td>
+                            <td>{{ registro.reproductores }}</td>
+                            <td>{{ registro.hembra_reemplazo }}</td>
+                            <td>{{ registro.hembra_no_lactando }}</td>
+                            <td>{{ registro.hembra_lactando }}</td>
+                            <td>{{ registro.gazapos }}</td>
+                            
+                            <td class="total-cell">{{ registro.total }}</td>
+                            <td>
+                                <div id="signature-cell-{{ registro.id }}" class="d-flex justify-content-center align-items-center">
+                                    {% if registro.firma_responsable %}
+                                        <a href="{{ registro.firma_responsable.url }}" target="_blank" title="Ver firma completa">
+                                            <img src="{{ registro.firma_responsable.url }}" alt="Firma" class="img-thumbnail" style="height: 30px; width: auto; max-width: 80px; padding: 2px;">
+                                        </a>
+                                    {% else %}
+                                        <span class="text-muted small"><i class="fas fa-signature"></i></span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-center align-items-center gap-2">
+                                    <label class="btn btn-sm btn-outline-secondary p-1 border-0" style="line-height: 1; cursor: pointer;" title="{% if registro.firma_responsable %}Cambiar{% else %}Subir{% endif %} Firma">
+                                        <i class="fas fa-upload small text-dark"></i>
+                                        <input type="file" class="d-none" onchange="uploadFirma(this, '{{ registro.id }}')" accept="image/*">
+                                    </label>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary p-1 border-0" onclick="imprimirIndividual('{{ registro.id }}', '{% if registro.firma_responsable %}{{ registro.firma_responsable.url }}{% endif %}')" title="Imprimir registro">
+                                        <i class="fas fa-print small text-dark"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary p-1 border-0" onclick="openEditModal(this)" title="Editar">
+                                        <i class="fas fa-edit small text-dark"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary p-1 border-0" onclick="openDeleteModal(registro.id)" title="Eliminar">
+                                        <i class="fas fa-trash small text-dark"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="19" class="text-center py-5">
+                                <i class="fas fa-clipboard-list fa-3x text-muted mb-3 d-block"></i>
+                                <span class="text-muted">No hay registros disponibles</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    function updateRegistro(element, field) {
-        const row = element.closest('tr');
-        const id = row.dataset.id;
-        // Clean value (remove extra spaces, newlines)
-        let value = element.innerText.trim();
+    function openEditModal(btn) {
+        const row = btn.closest('tr');
+        const data = row.dataset;
+        const modal = document.getElementById('registroModal');
+        const form = modal.querySelector('form');
         
-        // Handle empty numeric fields as 0
-        if (value === '' && field !== 'detalle' && field !== 'madre_id') {
-            value = '0';
-            element.innerText = '0';
+        // Update Modal Title and Button
+        modal.querySelector('.modal-title').innerText = 'Editar Registro';
+        modal.querySelector('button[type="submit"]').innerText = 'Guardar Cambios';
+        
+        // Set Hidden Fields
+        document.getElementById('formAction').value = 'edit';
+        document.getElementById('registroId').value = data.id;
+        
+        // Show Justification Field
+        document.getElementById('justificacionContainer').style.display = 'block';
+        document.getElementById('justificacionField').required = true;
+        
+        // Populate Form Fields
+        // Map data attributes to form field names
+        const fields = [
+            'fecha', 'detalle', 'madre_id', 
+            'gazapos_vivos', 'gazapos_muertos', 'compra', 'venta', 'muerte',
+            'macho_levante_ceba', 'hembra_levante_ceba', 'reproductores',
+            'hembra_reemplazo', 'hembra_no_lactando', 'hembra_lactando', 'gazapos'
+        ];
+        
+        fields.forEach(field => {
+            const input = form.querySelector(`[name="${field}"]`);
+            if (input && data[field]) {
+                input.value = data[field];
+            }
+        });
+        
+        // Handle Signature Preview
+        const firmaPreview = document.getElementById('firmaPreview');
+        if (data.firma_url) {
+            firmaPreview.innerHTML = `Firma actual: <a href="${data.firma_url}" target="_blank" class="text-success">Ver archivo</a>`;
+        } else {
+            firmaPreview.innerHTML = 'Sin firma registrada';
         }
 
-        fetch('{% url "cunicultura:inventario_permanente" %}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: JSON.stringify({
-                id: id,
-                field: field,
-                value: value
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                // Visual feedback
-                element.style.backgroundColor = 'rgba(212, 237, 218, 0.8)'; // Greenish
-                setTimeout(() => {
-                    element.style.backgroundColor = '';
-                }, 500);
-                
-                // Update total if provided
-                if (data.new_total !== undefined) {
-                    const totalCell = row.querySelector('.total-cell');
-                    if (totalCell) {
-                        totalCell.innerText = data.new_total;
-                        // Flash total cell too
-                        totalCell.style.backgroundColor = 'rgba(212, 237, 218, 0.8)';
-                        setTimeout(() => {
-                            totalCell.style.backgroundColor = '';
-                        }, 500);
-                    }
-                }
-            } else {
-                alert('Error al actualizar: ' + data.message);
-                element.style.backgroundColor = 'rgba(248, 215, 218, 0.8)'; // Reddish
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error de conexión');
-            element.style.backgroundColor = 'rgba(248, 215, 218, 0.8)';
-        });
+        // Show Modal
+        const bsModal = new bootstrap.Modal(modal);
+        bsModal.show();
     }
+    
+    function openDeleteModal(id) {
+        document.getElementById('deleteRegistroId').value = id;
+        const bsModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        bsModal.show();
+    }
+
+    // Reset modal when closed - Wrapped in DOMContentLoaded to ensure element exists
+    document.addEventListener('DOMContentLoaded', function() {
+        const registroModal = document.getElementById('registroModal');
+        if (registroModal) {
+            registroModal.addEventListener('hidden.bs.modal', function () {
+                const form = this.querySelector('form');
+                form.reset();
+                this.querySelector('.modal-title').innerText = 'Nuevo Registro de Inventario';
+                this.querySelector('button[type="submit"]').innerText = 'Guardar Registro';
+                document.getElementById('formAction').value = 'create';
+                document.getElementById('registroId').value = '';
+                document.getElementById('justificacionContainer').style.display = 'none';
+                document.getElementById('justificacionField').required = false;
+                document.getElementById('firmaPreview').innerHTML = '';
+                
+                // Reset date to today
+                const dateInput = document.getElementById('id_fecha');
+                if (dateInput) {
+                    const today = new Date();
+                    const yyyy = today.getFullYear();
+                    const mm = String(today.getMonth() + 1).padStart(2, '0');
+                    const dd = String(today.getDate()).padStart(2, '0');
+                    dateInput.value = `${yyyy}-${mm}-${dd}`;
+                }
+            });
+        }
+    });
 </script>
 
-<!-- Modal Registro -->
+<!-- Modal Registro/Edición -->
 <div class="modal fade" id="registroModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -270,13 +365,22 @@
                 <h5 class="modal-title">Nuevo Registro de Inventario</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
+                <input type="hidden" name="action" id="formAction" value="create">
+                <input type="hidden" name="registro_id" id="registroId" value="">
+                
                 <div class="modal-body">
+                    <!-- Justificación (Visible solo en Edición) -->
+                    <div id="justificacionContainer" class="mb-4" style="display: none;">
+                        <label class="form-label text-success fw-bold">Justificación de la Edición *</label>
+                        <textarea name="justificacion" id="justificacionField" class="form-control form-control-glass text-dark" rows="2" placeholder="Explique el motivo del cambio..."></textarea>
+                    </div>
+
                     <div class="row g-3">
                         <div class="col-md-4">
                             <label class="form-label">Fecha</label>
-                            {{ form.fecha }}
+                            <input type="date" name="fecha" class="form-control" required id="id_fecha" value="{% now 'Y-m-d' %}">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Detalle</label>
@@ -291,23 +395,23 @@
                             <h6 class="border-bottom pb-2 text-success">Novedades</h6>
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label small">Gazapos Vivos</label>
+                            <label class="form-label small text-muted">Gazapos Vivos</label>
                             {{ form.gazapos_vivos }}
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label small">Gazapos Muertos</label>
+                            <label class="form-label small text-muted">Gazapos Muertos</label>
                             {{ form.gazapos_muertos }}
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label small">Compra</label>
+                            <label class="form-label small text-muted">Compra</label>
                             {{ form.compra }}
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label small">Venta</label>
+                            <label class="form-label small text-muted">Venta</label>
                             {{ form.venta }}
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label small">Muerte</label>
+                            <label class="form-label small text-muted">Muerte</label>
                             {{ form.muerte }}
                         </div>
                         
@@ -315,32 +419,37 @@
                             <h6 class="border-bottom pb-2 text-success">Inventario Actual</h6>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label small">Macho Levante/Ceba</label>
+                            <label class="form-label small text-muted">Macho Levante/Ceba</label>
                             {{ form.macho_levante_ceba }}
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label small">Hembra Levante/Ceba</label>
+                            <label class="form-label small text-muted">Hembra Levante/Ceba</label>
                             {{ form.hembra_levante_ceba }}
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label small">Reproductores</label>
+                            <label class="form-label small text-muted">Reproductores</label>
                             {{ form.reproductores }}
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label small">Hembra Reemplazo</label>
+                            <label class="form-label small text-muted">Hembra Reemplazo</label>
                             {{ form.hembra_reemplazo }}
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label small">Hembra No Lactando</label>
+                            <label class="form-label small text-muted">Hembra No Lactando</label>
                             {{ form.hembra_no_lactando }}
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label small">Hembra Lactando</label>
+                            <label class="form-label small text-muted">Hembra Lactando</label>
                             {{ form.hembra_lactando }}
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label small">Gazapos</label>
+                            <label class="form-label small text-muted">Gazapos</label>
                             {{ form.gazapos }}
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <label class="form-label">Firma Responsable</label>
+                            {{ form.firma_responsable }}
+                            <div id="firmaPreview" class="mt-2 text-muted small fst-italic"></div>
                         </div>
                     </div>
                 </div>
@@ -352,4 +461,196 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Eliminar -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="registro_id" id="deleteRegistroId" value="">
+                
+                <div class="modal-body">
+                    <p>¿Está seguro que desea eliminar este registro? Esta acción no se puede deshacer.</p>
+                    
+                    <div class="mb-3">
+                        <label class="form-label text-danger fw-bold">Justificación de la Eliminación *</label>
+                        <textarea name="justificacion" class="form-control form-control-glass" rows="3" required placeholder="Explique por qué elimina este registro..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar Registro</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Print Layout (SENA Format) -->
+<div class="print-layout">
+    <table class="table table-bordered mb-0" style="width: 100%; margin-bottom: 0 !important; border: 2px solid black;">
+        <tbody>
+            <tr>
+                <td style="width: 60%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="https://www.sena.edu.co/Style%20Library/alayout/images/logoSena.png" alt="Logo SENA" style="height:20mm; width:auto; object-fit:contain;">
+                        <div class="fw-bold" style="font-size: 14px; line-height: 1.2;">
+                            Centro de los Recursos Naturales Renovables La Salada<br>
+                            Regional Antioquia
+                        </div>
+                    </div>
+                </td>
+                <td style="width: 40%; text-align: left !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="fw-bold">Código del documento: <span class="fw-normal">-</span></div>
+                    <div class="mt-1 fw-bold">Versión: <span class="fw-normal">01</span></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-center" style="text-align: center !important; vertical-align: middle !important; padding: 10px !important;">
+                    <div class="fw-bold">Unidad productiva de cunicultura</div>
+                    <div class="h5 mb-0 fw-bold">INVENTARIO PERMANENTE DE CONEJOS</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-bordered mt-0" style="width: 100%; border: 2px solid black; border-top: none; margin-top: -2px !important; font-size: 9px !important;">
+        <thead>
+            <tr style="background-color: white;">
+                <th rowspan="2" class="align-middle text-center">FECHA</th>
+                <th colspan="2" class="align-middle text-center">CLASIFICACIÓN</th>
+                <th colspan="5" class="align-middle text-center">NOVEDADES</th>
+                <th colspan="7" class="align-middle text-center">INVENTARIO</th>
+                <th rowspan="2" class="align-middle text-center">TOTAL</th>
+                <th rowspan="2" class="align-middle text-center">FIRMA</th>
+            </tr>
+            <tr style="background-color: white;">
+                <th class="text-center">DETALLE</th>
+                <th class="text-center">MADRE #</th>
+                <th class="text-center">VIVOS</th>
+                <th class="text-center">MUERTOS</th>
+                <th class="text-center">COMPRA</th>
+                <th class="text-center">VENTA</th>
+                <th class="text-center">MUERTE</th>
+                <th class="text-center">MACHO L/C</th>
+                <th class="text-center">HEMBRA L/C</th>
+                <th class="text-center">REPROD.</th>
+                <th class="text-center">HEMBRA REEMPL.</th>
+                <th class="text-center">HEMBRA NO LACT.</th>
+                <th class="text-center">HEMBRA LACT.</th>
+                <th class="text-center">GAZAPOS</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registro in registros %}
+            <tr data-id="{{ registro.id }}">
+                <td class="text-center">{{ registro.fecha|date:"d/m/Y" }}</td>
+                <td class="text-start">{{ registro.detalle }}</td>
+                <td class="text-center">{{ registro.madre_id|default:"-" }}</td>
+                <td class="text-center">{{ registro.gazapos_vivos }}</td>
+                <td class="text-center">{{ registro.gazapos_muertos }}</td>
+                <td class="text-center">{{ registro.compra }}</td>
+                <td class="text-center">{{ registro.venta }}</td>
+                <td class="text-center">{{ registro.muerte }}</td>
+                <td class="text-center">{{ registro.macho_levante_ceba }}</td>
+                <td class="text-center">{{ registro.hembra_levante_ceba }}</td>
+                <td class="text-center">{{ registro.reproductores }}</td>
+                <td class="text-center">{{ registro.hembra_reemplazo }}</td>
+                <td class="text-center">{{ registro.hembra_no_lactando }}</td>
+                <td class="text-center">{{ registro.hembra_lactando }}</td>
+                <td class="text-center">{{ registro.gazapos }}</td>
+                <td class="text-center fw-bold">{{ registro.total }}</td>
+                <td class="text-center">
+                    {% if registro.firma_responsable %}
+                        <img src="{{ registro.firma_responsable.url }}" alt="Firma" class="signature-img" style="max-height: 40px; max-width: 100px;">
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function imprimirIndividual(id, firmaUrl) {
+        // 1. Hide all rows in print table except the one with data-id=id
+        const rows = document.querySelectorAll('.print-layout tbody tr');
+        rows.forEach(row => {
+            if (row.dataset.id) {
+                if (row.dataset.id == id) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
+
+        // 3. Print
+        window.print();
+
+        // 4. Restore rows and footer after print
+        setTimeout(() => {
+            rows.forEach(row => {
+                row.style.display = '';
+            });
+        }, 1000);
+    }
+
+    function uploadFirma(input, id) {
+        if (input.files && input.files[0]) {
+            const formData = new FormData();
+            formData.append('id', id);
+            formData.append('firma_responsable', input.files[0]);
+
+            const container = document.getElementById(`signature-cell-${id}`);
+            const originalContent = container.innerHTML;
+            
+            // Show spinner
+            container.innerHTML = '<div class="spinner-border spinner-border-sm text-success" role="status"></div>';
+
+            fetch('{% url "cunicultura:inventario_permanente" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    container.innerHTML = `
+                        <a href="${data.url}" target="_blank" title="Ver firma completa">
+                            <img src="${data.url}" alt="Firma" class="img-thumbnail" style="height: 30px; width: auto; max-width: 80px; padding: 2px;">
+                        </a>
+                    `;
+                    // Update print layout signature as well if it exists
+                    const printSigImg = document.querySelector(`.print-layout tr[data-id="${id}"] .signature-img`);
+                    if (printSigImg) {
+                        printSigImg.src = data.url;
+                    } else {
+                        // If no image existed in print layout, we might need to add it, but for now this is fine
+                        const printSigCell = document.querySelector(`.print-layout tr[data-id="${id}"] td:nth-last-child(2)`); // Assuming signature is 2nd to last
+                         if (printSigCell) {
+                            printSigCell.innerHTML = `<img src="${data.url}" alt="Firma" class="signature-img" style="max-height: 40px; max-width: 100px;">`;
+                         }
+                    }
+                } else {
+                    alert('Error: ' + data.message);
+                    container.innerHTML = originalContent;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al subir la firma');
+                container.innerHTML = originalContent;
+            });
+        }
+    }
+</script>
 {% endblock %}

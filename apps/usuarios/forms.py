@@ -369,3 +369,20 @@ class LoginForm(AuthenticationForm):
             'password',
             Submit('submit', 'Iniciar Sesión', css_class='btn btn-primary w-100')
         )
+
+
+class RegistroVisitanteForm(forms.Form):
+    """
+    Formulario para registro rápido de visitantes vía QR.
+    """
+    nombre = forms.CharField(max_length=50, required=True, label='Nombre Completo')
+    cedula = forms.CharField(max_length=20, required=True, label='Documento de Identidad')
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'nombre',
+            'cedula',
+            Submit('submit', 'Ingresar', css_class='btn btn-success btn-lg w-100')
+        )

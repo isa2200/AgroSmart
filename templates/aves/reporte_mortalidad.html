@@ -3,68 +3,310 @@
 
 {% block title %}Reporte de Mortalidad - AgroSmart{% endblock %}
 
+{% block page_title %}{% endblock %}
+{% block breadcrumb_items %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos unificados Glassmorphism */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 2rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    .glass-wrap {
+        width: 100%;
+        max-width: 98%;
+        margin: 0 auto;
+    }
+
+    .unified-dashboard-card .form-label {
+        color: white;
+        font-weight: 500;
+    }
+
+    .unified-dashboard-card .form-control,
+    .unified-dashboard-card .form-select {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: #333;
+    }
+
+    .unified-dashboard-card .form-control:focus,
+    .unified-dashboard-card .form-select:focus {
+        background: white;
+        box-shadow: 0 0 0 0.25rem rgba(46, 125, 50, 0.25);
+        border-color: #2e7d32;
+    }
+    
+    .btn-light-custom {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.5);
+        color: #2e7d32;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+    
+    .btn-light-custom:hover {
+        background: white;
+        color: #1b5e20;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Metric Cards */
+    .metric-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        text-align: center;
+        height: 100%;
+    }
+
+    .metric-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        background: rgba(0, 175, 0, 0.35);
+    }
+
+    .metric-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 0.5rem;
+    }
+
+    .metric-label {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1rem;
+        margin: 0;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .metric-icon {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 1.5rem;
+        color: white;
+        opacity: 0.5;
+    }
+
+    /* Table Styles */
+    .table-custom {
+        margin-bottom: 0;
+        width: 100%;
+        border-collapse: separate; 
+        border-spacing: 0;
+        color: white;
+    }
+    
+    .table-custom thead th {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        color: white !important;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+        vertical-align: middle;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 15px;
+    }
+
+    .table-custom tbody tr:hover {
+        background-color: rgba(255,255,255,0.1) !important;
+    }
+    
+    .table-custom tbody td {
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding: 15px;
+        vertical-align: middle;
+        color: white;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container-fluid">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2><i class="fas fa-chart-pie text-danger me-2"></i>Reporte de Mortalidad</h2>
+<div class="glass-wrap">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white fw-bold mb-0" style="font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+            Reporte de Mortalidad
+        </h2>
+        <a href="{% url 'aves:reportes' %}" class="btn btn-light-custom">
+            <i class="fas fa-arrow-left me-2"></i>Volver
+        </a>
+    </div>
+    
+    <!-- Filtros -->
+    <div class="unified-dashboard-card">
+        <div class="card-header">
+            <h5 class="section-title"><i class="fas fa-filter"></i>Filtros</h5>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Lote</label>
+                    <select name="lote_id" class="form-select">
+                        <option value="">Todos los lotes</option>
+                        {% for lote in lotes_activos %}
+                            <option value="{{ lote.id }}" {% if filtros.lote_id == lote.id|stringformat:"s" %}selected{% endif %}>
+                                {{ lote.codigo }} - {{ lote.galpon }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Inicio</label>
+                    <input type="date" name="fecha_inicio" class="form-control" value="{{ filtros.fecha_inicio|default:'' }}">
+                </div>
+                
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Fin</label>
+                    <input type="date" name="fecha_fin" class="form-control" value="{{ filtros.fecha_fin|default:'' }}">
+                </div>
+                
+                <div class="col-md-3">
+                    <label class="form-label">&nbsp;</label>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-light-custom">
+                            <i class="fas fa-search me-2"></i>Generar Reporte
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
     
-    <div class="row">
+    {% if datos_mortalidad %}
+    <!-- Resumen -->
+    <div class="row mb-4">
         <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5><i class="fas fa-filter me-2"></i>Filtros</h5>
-                </div>
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label class="form-label">Lote</label>
-                            <select name="lote_id" class="form-select">
-                                <option value="">Todos los lotes</option>
-                                {% for lote in lotes_activos %}
-                                    <option value="{{ lote.id }}">{{ lote.codigo }} - {{ lote.galpon }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Fecha Inicio</label>
-                            <input type="date" name="fecha_inicio" class="form-control">
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Fecha Fin</label>
-                            <input type="date" name="fecha_fin" class="form-control">
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Formato</label>
-                            <select name="formato" class="form-select">
-                                <option value="html">Ver en pantalla</option>
-                                <option value="excel">Descargar Excel</option>
-                            </select>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary w-100">
-                            <i class="fas fa-chart-pie me-2"></i>Generar Reporte
-                        </button>
-                    </form>
-                </div>
+            <div class="metric-card">
+                <i class="fas fa-skull-crossbones metric-icon"></i>
+                <div class="metric-value text-danger">{{ resumen.total_mortalidad }}</div>
+                <div class="metric-label">Total Mortalidad</div>
             </div>
         </div>
-        
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body text-center">
-                    <i class="fas fa-chart-pie fa-5x text-muted mb-3"></i>
-                    <h5>Selecciona los filtros y genera tu reporte</h5>
-                    <p class="text-muted">Configura los parámetros en el panel izquierdo y haz clic en "Generar Reporte"</p>
-                </div>
+        <div class="col-md-4">
+            <div class="metric-card">
+                <i class="fas fa-chart-bar metric-icon"></i>
+                <div class="metric-value">{{ resumen.promedio_diario }}</div>
+                <div class="metric-label">Promedio Diario</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="metric-card">
+                <i class="fas fa-list metric-icon"></i>
+                <div class="metric-value">{{ resumen.registros_encontrados }}</div>
+                <div class="metric-label">Registros</div>
             </div>
         </div>
     </div>
+
+    <!-- Tabla de Datos -->
+    <div class="unified-dashboard-card">
+        <div class="card-header">
+            <h5 class="section-title"><i class="fas fa-table"></i>Detalle de Mortalidad</h5>
+            <div class="btn-group">
+                <a href="?{{ request.GET.urlencode }}&formato=excel" class="btn btn-light-custom btn-sm">
+                    <i class="fas fa-file-excel me-2"></i>Excel
+                </a>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-custom">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Lote</th>
+                            <th>Galpón</th>
+                            <th>Aves Actuales</th>
+                            <th>Mortalidad</th>
+                            <th>% Impacto</th>
+                            <th>Causa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dato in datos_mortalidad %}
+                        <tr>
+                            <td>{{ dato.fecha|date:"d/m/Y" }}</td>
+                            <td><span class="badge bg-light text-dark">{{ dato.lote }}</span></td>
+                            <td>{{ dato.galpon }}</td>
+                            <td>{{ dato.aves_actuales }}</td>
+                            <td class="text-danger fw-bold">{{ dato.mortalidad }}</td>
+                            <td>
+                                <span class="badge {% if dato.porcentaje_mortalidad <= 0.5 %}bg-success{% elif dato.porcentaje_mortalidad <= 1.0 %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ dato.porcentaje_mortalidad }}%
+                                </span>
+                            </td>
+                            <td>{{ dato.causa_mortalidad|default:"-" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+        {% if filtros.lote_id or filtros.fecha_inicio or filtros.fecha_fin %}
+        <div class="unified-dashboard-card">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-search fa-3x text-white-50 mb-3"></i>
+                <h5 class="text-white">No se encontraron registros</h5>
+                <p class="text-white-50">Intenta con otros criterios de búsqueda.</p>
+            </div>
+        </div>
+        {% else %}
+        <div class="unified-dashboard-card">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-heartbeat fa-5x text-white-50 mb-4"></i>
+                <h4 class="text-white fw-bold mb-3">Generador de Reportes de Mortalidad</h4>
+                <p class="text-white mb-4" style="font-size: 1.1rem; opacity: 0.9; max-width: 600px; margin: 0 auto;">
+                    Utiliza los filtros superiores para analizar la mortalidad de tus lotes y detectar anomalías.
+                </p>
+            </div>
+        </div>
+        {% endif %}
+    {% endif %}
 </div>
 {% endblock %}

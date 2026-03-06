@@ -1,0 +1,259 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AgroSmart - Módulo Equino{% endblock %}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'img/logo-ico.ico' %}">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+    
+    {% block extra_css %}{% endblock %}
+    
+    <style>
+        :root {
+            --sidebar-width: 280px;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            /* Background image matching the style of other units */
+            background-image: url('{% static "img/Fondo_equinos.png" %}'); 
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* Sidebar Styling - Matching Aves/Porcinos */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: var(--sidebar-width);
+            background: rgba(0, 40, 0, 0.95); /* Green standard for Equinos */
+            backdrop-filter: blur(5px);
+            color: white;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+           
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.9);
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin: 2px 0;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid transparent;
+        }
+        
+        .sidebar .nav-link:hover {
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+            border-color: rgba(255,255,255,0.15);
+        }
+        
+        .sidebar .nav-link.active {
+            background: linear-gradient(180deg, rgba(29,94,33,0.92) 0%, rgba(25,75,28,0.92) 100%); /* Green Gradient */
+            border: 1px solid rgba(255,255,255,0.25);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2) inset;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* Sidebar Header */
+        .sidebar-header {
+            padding: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 260px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.1);
+            margin: -12px -12px 12px -12px;
+        }
+
+        .sidebar-header img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            transform: scale(1.35);
+        }
+
+        /* Home Link Special Style */
+        .home-link {
+            justify-content: flex-start;
+            font-size: 1rem;
+            font-weight: 600;
+            background-color: rgba(46, 125, 50, 0.85); /* Green Standard */
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 0.8rem 1.2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            color: white !important;
+            border-radius: 10px;
+        }
+        
+        .home-link:hover {
+            background-color: rgba(46, 125, 50, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* User Info Widget */
+        .user-info {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            margin-top: 1.5rem;
+        }
+        
+        .user-info .user-name {
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        
+        .user-info .user-role {
+            color: #bdc3c7;
+            font-size: 0.8em;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 15px;
+            }
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="p-3">
+            <div class="sidebar-header">
+                <a href="{% url 'dashboard:principal' %}" style="display:block; width:100%;">
+                    <img src="{% static 'img/logo_agro.png' %}" alt="AgroSmart">
+                </a>
+            </div>
+
+            <nav class="nav flex-column">
+                <a href="{% url 'equinos:dashboard' %}" class="nav-link home-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <i class="fas fa-chart-line fa-fw"></i> Inicio
+                </a>
+                
+                <div class="text-uppercase small text-white-50 px-3 mt-3 mb-2" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.5rem;">Gestión</div>
+                
+                <a href="{% url 'equinos:equino_list' %}" class="nav-link {% if 'equinos' in request.path and 'tableros' not in request.path %}active{% endif %}">
+                    <i class="fas fa-horse-head fa-fw"></i> Equinos
+                </a>
+
+                <a href="{% url 'equinos:crear_registro_diario' %}" class="nav-link {% if 'registro_diario' in request.path %}active{% endif %}">
+                    <i class="fas fa-clipboard-list fa-fw"></i> Bitácora Diaria
+                </a>
+
+                <a href="{% url 'equinos:plan_vacunacion_list' %}" class="nav-link {% if 'plan-vacunacion' in request.path %}active{% endif %}">
+                    <i class="fas fa-syringe fa-fw"></i> Plan de Vacunación
+                </a>
+
+
+                <div class="text-uppercase small text-white-50 px-3 mt-3 mb-2" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.5rem;">Sistema</div>
+
+                <a href="{% url 'dashboard:principal' %}" class="nav-link">
+                    <i class="fas fa-home fa-fw"></i> Dashboard Principal
+                </a>
+            </nav>
+
+            {% if user.is_authenticated %}
+            <div class="user-info">
+                <div class="user-name">
+                    <i class="fas fa-user-circle me-2"></i>
+                    {{ user.get_full_name|default:user.username }}
+                </div>
+                <div class="user-role">
+                    {% if user.perfilusuario %}
+                        <i class="fas fa-id-badge me-1"></i>{{ user.perfilusuario.get_rol_display }}
+                    {% else %}
+                        <i class="fas fa-id-badge me-1"></i>Usuario
+                    {% endif %}
+                </div>
+                <a href="{% url 'usuarios:logout' %}" class="btn btn-sm btn-danger w-100 mt-2">
+                    <i class="fas fa-sign-out-alt me-1"></i> Cerrar Sesión
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Toggle Button for Mobile -->
+        <button class="btn btn-dark d-md-none mb-3" onclick="$('.sidebar').toggleClass('active')">
+            <i class="fas fa-bars"></i> Menú
+        </button>
+
+        {% if messages %}
+        <div class="messages mb-4">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

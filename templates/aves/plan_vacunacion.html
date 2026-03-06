@@ -6,23 +6,158 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'aves/css/vacunacion.css' %}">
 <style>
-    .vacuna-card {
-        border-left: 4px solid #28a745;
+    /* Estilos unificados Glassmorphism */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 1.5rem;
+    }
+
+    /* Metric Card Styles (from Dashboard) */
+    .metric-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+        color: white;
+    }
+
+    .metric-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        background: rgba(0, 175, 0, 0.35);
+    }
+
+    .metric-card.danger {
+        border-left: 4px solid #dc3545;
+        background: rgba(220, 53, 69, 0.15);
+    }
+
+    .metric-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.5rem;
+    }
+
+    .metric-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+        background: rgba(255,255,255,0.2);
+        backdrop-filter: blur(5px);
+    }
+
+    .metric-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        line-height: 1.2;
+    }
+
+    .metric-label {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9rem;
+        margin: 0;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Tabla Custom */
+    .table-custom {
+        color: white;
+        margin-bottom: 0;
+    }
+    
+    .table-custom thead th {
+        background: rgba(0, 0, 0, 0.2);
+        color: white;
+        border: none;
+        padding: 1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+    
+    .table-custom tbody td {
+        background: rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+        padding: 1rem;
+        vertical-align: middle;
+    }
+    
+    .table-custom tbody tr:hover td {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Tabs */
+    .nav-tabs {
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .nav-tabs .nav-link {
+        color: rgba(255, 255, 255, 0.7);
+        border: none;
+        border-bottom: 2px solid transparent;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
         transition: all 0.3s ease;
     }
-    .vacuna-card:hover {
+    
+    .nav-tabs .nav-link:hover {
+        color: white;
+        background: rgba(255,255,255,0.1);
+        border-radius: 8px 8px 0 0;
+    }
+    
+    .nav-tabs .nav-link.active {
+        color: white;
+        background: transparent;
+        border-bottom: 3px solid #fff;
+        font-weight: bold;
+    }
+
+    .btn-light-custom {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #2e7d32;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-light-custom:hover {
+        background: #fff;
+        color: #1b5e20;
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-    .vacuna-pendiente {
-        border-left-color: #ffc107;
-    }
-    .vacuna-vencida {
-        border-left-color: #dc3545;
-    }
-    .vacuna-aplicada {
-        border-left-color: #28a745;
-    }
+
+    /* Timeline Styles */
     .timeline {
         position: relative;
         padding-left: 30px;
@@ -34,7 +169,7 @@
         top: 0;
         bottom: 0;
         width: 2px;
-        background: #dee2e6;
+        background: rgba(255, 255, 255, 0.3);
     }
     .timeline-item {
         position: relative;
@@ -44,20 +179,60 @@
         content: '';
         position: absolute;
         left: -19px;
-        top: 10px;
+        top: 20px;
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        background: #6c757d;
+        background: rgba(255, 255, 255, 0.5);
+        border: 2px solid rgba(255,255,255,0.8);
     }
     .timeline-item.aplicada::before {
         background: #28a745;
+        box-shadow: 0 0 10px #28a745;
     }
     .timeline-item.pendiente::before {
         background: #ffc107;
+        box-shadow: 0 0 10px #ffc107;
     }
     .timeline-item.vencida::before {
         background: #dc3545;
+        box-shadow: 0 0 10px #dc3545;
+    }
+
+    .vacuna-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        border-left: 4px solid #28a745;
+        transition: all 0.3s ease;
+        color: white;
+    }
+    .vacuna-card:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.15);
+    }
+    .vacuna-pendiente { border-left-color: #ffc107; }
+    .vacuna-vencida { border-left-color: #dc3545; }
+    .vacuna-aplicada { border-left-color: #28a745; }
+    
+    /* Pagination */
+    .pagination .page-link {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+    .pagination .page-item.active .page-link {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 255, 255, 0.4);
+        font-weight: bold;
+    }
+    .pagination .page-link:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+    .pagination .page-item.disabled .page-link {
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.5);
     }
 </style>
 {% endblock %}
@@ -69,16 +244,16 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h2><i class="fas fa-syringe text-success"></i> Plan de Vacunación</h2>
-                    <p class="text-muted">Gestión y seguimiento del programa de vacunación avícola</p>
+                    <h2 class="text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);"><i class="fas fa-syringe text-success me-2"></i> Plan de Vacunación</h2>
+                    <p class="text-white-50">Gestión y seguimiento del programa de vacunación avícola</p>
                 </div>
                 <div>
                     {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'veterinario' %}
-                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalNuevaVacuna">
+                    <button class="btn btn-light-custom" data-bs-toggle="modal" data-bs-target="#modalNuevaVacuna">
                         <i class="fas fa-plus"></i> Nueva Vacuna
                     </button>
                     {% endif %}
-                    <button class="btn btn-info" onclick="generarCalendario()">
+                    <button class="btn btn-light-custom" onclick="generarCalendario()">
                         <i class="fas fa-calendar-alt"></i> Calendario
                     </button>
                 </div>
@@ -89,11 +264,11 @@
     <!-- Filtros -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="card">
+            <div class="unified-dashboard-card">
                 <div class="card-body">
                     <form method="get" class="row g-3">
                         <div class="col-md-3">
-                            <label class="form-label">Lote</label>
+                            <label class="form-label text-white">Lote</label>
                             <select name="lote" class="form-select">
                                 <option value="">Todos los lotes</option>
                                 {% for lote in lotes %}
@@ -104,7 +279,7 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label">Estado</label>
+                            <label class="form-label text-white">Estado</label>
                             <select name="estado" class="form-select">
                                 <option value="">Todos</option>
                                 <option value="pendiente" {% if request.GET.estado == 'pendiente' %}selected{% endif %}>Pendientes</option>
@@ -113,17 +288,17 @@
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label">Desde</label>
+                            <label class="form-label text-white">Desde</label>
                             <input type="date" name="fecha_desde" class="form-control" value="{{ request.GET.fecha_desde }}">
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label">Hasta</label>
+                            <label class="form-label text-white">Hasta</label>
                             <input type="date" name="fecha_hasta" class="form-control" value="{{ request.GET.fecha_hasta }}">
                         </div>
                         <div class="col-md-2">
                             <label class="form-label">&nbsp;</label>
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-light-custom">
                                     <i class="fas fa-search"></i> Filtrar
                                 </button>
                             </div>
@@ -137,53 +312,53 @@
     <!-- Estadísticas -->
     <div class="row mb-4">
         <div class="col-md-3">
-            <div class="card bg-success text-white">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h4>{{ stats.aplicadas }}</h4>
-                            <p class="mb-0">Aplicadas</p>
-                        </div>
-                        <i class="fas fa-check-circle fa-2x opacity-75"></i>
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div>
+                        <h3 class="metric-value">{{ stats.aplicadas }}</h3>
+                        <p class="metric-label">Aplicadas</p>
+                    </div>
+                    <div class="metric-icon">
+                        <i class="fas fa-check-circle"></i>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-warning text-white">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h4>{{ stats.pendientes }}</h4>
-                            <p class="mb-0">Pendientes</p>
-                        </div>
-                        <i class="fas fa-clock fa-2x opacity-75"></i>
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div>
+                        <h3 class="metric-value">{{ stats.pendientes }}</h3>
+                        <p class="metric-label">Pendientes</p>
+                    </div>
+                    <div class="metric-icon">
+                        <i class="fas fa-clock"></i>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-danger text-white">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h4>{{ stats.vencidas }}</h4>
-                            <p class="mb-0">Vencidas</p>
-                        </div>
-                        <i class="fas fa-exclamation-triangle fa-2x opacity-75"></i>
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div>
+                        <h3 class="metric-value">{{ stats.proximas }}</h3>
+                        <p class="metric-label">Próximas (7 días)</p>
+                    </div>
+                    <div class="metric-icon">
+                        <i class="fas fa-calendar-alt"></i>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-info text-white">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h4>{{ stats.proximas }}</h4>
-                            <p class="mb-0">Próximas (7 días)</p>
-                        </div>
-                        <i class="fas fa-calendar-check fa-2x opacity-75"></i>
+            <div class="metric-card danger">
+                <div class="metric-header">
+                    <div>
+                        <h3 class="metric-value">{{ stats.vencidas }}</h3>
+                        <p class="metric-label">Vencidas</p>
+                    </div>
+                    <div class="metric-icon">
+                        <i class="fas fa-exclamation-circle"></i>
                     </div>
                 </div>
             </div>
@@ -193,7 +368,7 @@
     <!-- Vista de Tabs -->
     <div class="row">
         <div class="col-12">
-            <ul class="nav nav-tabs" id="vacunacionTabs" role="tablist">
+            <ul class="nav nav-tabs mb-3" id="vacunacionTabs" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="lista-tab" data-bs-toggle="tab" data-bs-target="#lista" type="button">
                         <i class="fas fa-list"></i> Lista de Vacunas
@@ -214,11 +389,11 @@
             <div class="tab-content" id="vacunacionTabsContent">
                 <!-- Lista de Vacunas -->
                 <div class="tab-pane fade show active" id="lista" role="tabpanel">
-                    <div class="card">
+                    <div class="unified-dashboard-card">
                         <div class="card-body">
                             {% if vacunas %}
                             <div class="table-responsive">
-                                <table class="table table-hover">
+                                <table class="table table-custom table-hover">
                                     <thead>
                                         <tr>
                                             <th>Lote</th>
@@ -233,34 +408,34 @@
                                     </thead>
                                     <tbody>
                                         {% for vacuna in vacunas %}
-                                        <tr class="{% if vacuna.estado == 'vencida' %}table-danger{% elif vacuna.estado == 'pendiente' %}table-warning{% else %}table-success{% endif %}">
+                                        <tr>
                                             <td>
-                                                <strong>{{ vacuna.lote.codigo }}</strong><br>
-                                                <small class="text-muted">{{ vacuna.lote.raza }}</small>
+                                                <strong class="text-white">{{ vacuna.lote.codigo }}</strong><br>
+                                                <small class="text-white-50">{{ vacuna.lote.raza }}</small>
                                             </td>
                                             <td>
-                                                <strong>{{ vacuna.nombre_vacuna }}</strong><br>
-                                                <small class="text-muted">{{ vacuna.tipo_vacuna }}</small>
+                                                <strong class="text-white">{{ vacuna.nombre_vacuna }}</strong><br>
+                                                <small class="text-white-50">{{ vacuna.tipo_vacuna }}</small>
                                             </td>
-                                            <td>{{ vacuna.fecha_programada|date:"d/m/Y" }}</td>
-                                            <td>{{ vacuna.edad_dias }}</td>
+                                            <td class="text-white">{{ vacuna.fecha_programada|date:"d/m/Y" }}</td>
+                                            <td class="text-white">{{ vacuna.edad_dias }}</td>
                                             <td>
                                                 {% if vacuna.estado == 'aplicada' %}
                                                     <span class="badge bg-success">Aplicada</span>
                                                 {% elif vacuna.estado == 'pendiente' %}
-                                                    <span class="badge bg-warning">Pendiente</span>
+                                                    <span class="badge bg-warning text-dark">Pendiente</span>
                                                 {% else %}
                                                     <span class="badge bg-danger">Vencida</span>
                                                 {% endif %}
                                             </td>
-                                            <td>
+                                            <td class="text-white">
                                                 {% if vacuna.fecha_aplicacion %}
                                                     {{ vacuna.fecha_aplicacion|date:"d/m/Y" }}
                                                 {% else %}
                                                     -
                                                 {% endif %}
                                             </td>
-                                            <td>
+                                            <td class="text-white">
                                                 {% if vacuna.aplicada_por %}
                                                     {{ vacuna.aplicada_por.get_full_name }}
                                                 {% else %}
@@ -270,14 +445,14 @@
                                             <td>
                                                 <div class="btn-group btn-group-sm">
                                                     {% if vacuna.estado == 'pendiente' %}
-                                                    <button class="btn btn-success" onclick="aplicarVacuna({{ vacuna.id }})">
+                                                    <button class="btn btn-light-custom btn-sm" onclick="aplicarVacuna({{ vacuna.id }})" title="Aplicar">
                                                         <i class="fas fa-check"></i>
                                                     </button>
                                                     {% endif %}
-                                                    <button class="btn btn-info" onclick="verDetalles({{ vacuna.id }})">
+                                                    <button class="btn btn-light-custom btn-sm" onclick="verDetalles({{ vacuna.id }})" title="Ver detalles">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
-                                                    <button class="btn btn-warning" onclick="editarVacuna({{ vacuna.id }})">
+                                                    <button class="btn btn-light-custom btn-sm" onclick="editarVacuna({{ vacuna.id }})" title="Editar">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                 </div>
@@ -290,7 +465,7 @@
 
                             <!-- Paginación -->
                             {% if is_paginated %}
-                            <nav aria-label="Paginación">
+                            <nav aria-label="Paginación" class="mt-4">
                                 <ul class="pagination justify-content-center">
                                     {% if page_obj.has_previous %}
                                     <li class="page-item">
@@ -314,10 +489,10 @@
                             {% endif %}
                             {% else %}
                             <div class="text-center py-5">
-                                <i class="fas fa-syringe fa-3x text-muted mb-3"></i>
-                                <h5>No hay vacunas registradas</h5>
-                                <p class="text-muted">Comienza agregando el primer plan de vacunación</p>
-                                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalNuevaVacuna">
+                                <i class="fas fa-syringe fa-3x text-white-50 mb-3"></i>
+                                <h5 class="text-white">No hay vacunas registradas</h5>
+                                <p class="text-white-50">Comienza agregando el primer plan de vacunación</p>
+                                <button class="btn btn-light-custom" data-bs-toggle="modal" data-bs-target="#modalNuevaVacuna">
                                     <i class="fas fa-plus"></i> Agregar Vacuna
                                 </button>
                             </div>
@@ -328,7 +503,7 @@
 
                 <!-- Timeline -->
                 <div class="tab-pane fade" id="timeline" role="tabpanel">
-                    <div class="card">
+                    <div class="unified-dashboard-card">
                         <div class="card-body">
                             <div class="timeline">
                                 {% for vacuna in vacunas_timeline %}
@@ -337,8 +512,8 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-8">
-                                                    <h6 class="card-title">{{ vacuna.nombre_vacuna }}</h6>
-                                                    <p class="card-text">
+                                                    <h6 class="card-title text-white">{{ vacuna.nombre_vacuna }}</h6>
+                                                    <p class="card-text text-white-50">
                                                         <strong>Lote:</strong> {{ vacuna.lote.codigo }}<br>
                                                         <strong>Fecha:</strong> {{ vacuna.fecha_programada|date:"d/m/Y" }}<br>
                                                         <strong>Edad:</strong> {{ vacuna.edad_dias }} días
@@ -347,9 +522,9 @@
                                                 <div class="col-md-4 text-end">
                                                     {% if vacuna.estado == 'aplicada' %}
                                                         <span class="badge bg-success mb-2">Aplicada</span><br>
-                                                        <small class="text-muted">{{ vacuna.fecha_aplicacion|date:"d/m/Y" }}</small>
+                                                        <small class="text-white-50">{{ vacuna.fecha_aplicacion|date:"d/m/Y" }}</small>
                                                     {% elif vacuna.estado == 'pendiente' %}
-                                                        <span class="badge bg-warning mb-2">Pendiente</span><br>
+                                                        <span class="badge bg-warning text-dark mb-2">Pendiente</span><br>
                                                         <button class="btn btn-sm btn-success" onclick="aplicarVacuna({{ vacuna.id }})">
                                                             Aplicar
                                                         </button>
@@ -369,7 +544,7 @@
 
                 <!-- Calendario -->
                 <div class="tab-pane fade" id="calendario" role="tabpanel">
-                    <div class="card">
+                    <div class="unified-dashboard-card">
                         <div class="card-body">
                             <div id="calendar"></div>
                         </div>
@@ -383,10 +558,10 @@
 <!-- Modal Nueva Vacuna -->
 <div class="modal fade" id="modalNuevaVacuna" tabindex="-1">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Nueva Vacuna</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-content glass-modal">
+            <div class="modal-header border-bottom border-light">
+                <h5 class="modal-title text-white">Nueva Vacuna</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <form id="formNuevaVacuna">
                 <div class="modal-body">
@@ -394,7 +569,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Lote *</label>
+                                <label class="form-label text-white">Lote *</label>
                                 <select name="lote" class="form-select" required>
                                     <option value="">Seleccionar lote</option>
                                     {% for lote in lotes_activos %}

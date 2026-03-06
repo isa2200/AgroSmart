@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView, TemplateView
 from django.http import Http404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.db.models import Q
 from .models import PerfilUsuario, RegistroAcceso
@@ -26,6 +26,7 @@ class LoginView(CreateView):
     form_class = LoginForm
     
     def get(self, request, *args, **kwargs):
+        self.object = None
         if request.user.is_authenticated:
             # Redirección basada en el rol del usuario autenticado
             try:
@@ -41,19 +42,27 @@ class LoginView(CreateView):
             except:
                 return redirect('dashboard:principal')
         form = self.form_class()
-        return render(request, self.template_name, {'form': form})
+        context = self.get_context_data(form=form)
+        return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
+        self.object = None
+        print("--- DEBUG LOGIN POST ---")
+        print(f"POST data: {request.POST}")
         form = self.form_class(data=request.POST)
         if form.is_valid():
+            print("Form is valid")
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
+            print(f"Attempting authenticate for {username}")
             user = authenticate(username=username, password=password)
+            print(f"Authenticate result: {user}")
             if user:
                 # Verificar si el usuario está activo
                 if not user.is_active:
                     messages.error(request, 'Tu cuenta está desactivada. Contacta al administrador.')
-                    return render(request, self.template_name, {'form': form})
+                    context = self.get_context_data(form=form)
+                    return render(request, self.template_name, context)
                 
                 login(request, user)
                 # Registrar acceso
@@ -86,8 +95,21 @@ class LoginView(CreateView):
                 messages.error(request, 'Usuario o contraseña incorrectos. Por favor, verifica tus datos.')
                 # También agregar error específico al formulario
                 form.add_error(None, 'Las credenciales proporcionadas no son válidas.')
+        else:
+            print("--- FORM INVALID ---")
+            print(form.errors)
+            # Try manual auth to see if it works outside form
+            username = form.data.get('username')
+            password = form.data.get('password')
+            user_manual = authenticate(username=username, password=password)
+            print(f"Manual authenticate check: {user_manual}")
+            if user_manual:
+                print("Manual auth worked! Something wrong with form validation.")
+            else:
+                print("Manual auth failed too.")
         
-        return render(request, self.template_name, {'form': form})
+        context = self.get_context_data(form=form)
+        return render(request, self.template_name, context)
     
     def get_client_ip(self, request):
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')

@@ -2,73 +2,185 @@
 
 {% block title %}Reportes Avícolas - AgroSmart{% endblock %}
 
-{% block page_title %}Reportes Avícolas{% endblock %}
+{% block page_title %}{% endblock %}
 
-{% block breadcrumb_items %}
-    <li class="breadcrumb-item active">Reportes</li>
+{% block breadcrumb_items %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos unificados Glassmorphism */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+        height: 100%;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .unified-dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .unified-dashboard-card .card-body {
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .glass-wrap {
+        width: 100%;
+        max-width: 95%;
+        margin: 0 auto;
+    }
+
+    .icon-container {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .icon-container i {
+        font-size: 2.5rem;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .card-title {
+        color: white;
+        font-weight: 700;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .card-text {
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .btn-glass-action {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: white;
+        padding: 0.6rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .btn-glass-action:hover {
+        background: rgba(255, 255, 255, 0.35);
+        color: white;
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .info-card {
+        background: rgba(13, 202, 240, 0.15);
+        border: 1px solid rgba(13, 202, 240, 0.3);
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="card bg-primary text-white">
-            <div class="card-body text-center">
-                <h4><i class="fas fa-chart-line me-2"></i>Dashboard de Reportes</h4>
-                <p class="mb-3">Accede al dashboard interactivo con métricas en tiempo real</p>
-                <a href="{% url 'aves:reportes_dashboard' %}" class="btn btn-light">
-                    <i class="fas fa-tachometer-alt me-2"></i>Ir al Dashboard
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <!-- Reporte de Producción -->
-    <div class="col-md-6 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <div class="mb-3">
-                    <i class="fas fa-chart-line fa-3x text-primary"></i>
-                </div>
-                <h5 class="card-title">Reporte de Producción</h5>
-                <p class="card-text">Genera reportes detallados de la producción de huevos por lote y período.</p>
-                <a href="{% url 'aves:reporte_produccion' %}" class="btn btn-primary">
-                    <i class="fas fa-file-alt me-2"></i>Generar Reporte
-                </a>
-            </div>
-        </div>
-    </div>
+<div class="glass-wrap">
+    <h2 class="text-center text-white mb-5 fw-bold" style="font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Reportes Avícolas</h2>
     
-    <!-- Reporte de Vacunación -->
-    <div class="col-md-6 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <div class="mb-3">
-                    <i class="fas fa-syringe fa-3x text-info"></i>
+    <div class="row mb-5 justify-content-center">
+        <div class="col-12 col-xl-10">
+            <div class="unified-dashboard-card p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8 text-start">
+                        <h3 class="fw-bold text-white mb-2"><i class="fas fa-chart-line me-2"></i>Dashboard de Reportes</h3>
+                        <p class="text-white-50 mb-0">Accede al dashboard interactivo con métricas en tiempo real, gráficos de producción y análisis detallado.</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <a href="{% url 'aves:reportes_dashboard' %}" class="btn-glass-action">
+                            <i class="fas fa-tachometer-alt me-2"></i>Ir al Dashboard
+                        </a>
+                    </div>
                 </div>
-                <h5 class="card-title">Reporte de Vacunación</h5>
-                <p class="card-text">Seguimiento del plan de vacunación y cumplimiento.</p>
-                <a href="{% url 'aves:reporte_vacunacion' %}" class="btn btn-info">
-                    <i class="fas fa-file-alt me-2"></i>Generar Reporte
-                </a>
             </div>
         </div>
     </div>
 
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Información</h5>
+    <div class="row justify-content-center">
+        <!-- Reporte de Producción -->
+        <div class="col-md-5 mb-4">
+            <div class="unified-dashboard-card">
+                <div class="card-body">
+                    <div class="icon-container" style="background: rgba(13, 110, 253, 0.25); border-color: rgba(13, 110, 253, 0.4);">
+                        <i class="fas fa-egg"></i>
+                    </div>
+                    <h5 class="card-title">Reporte de Producción</h5>
+                    <p class="card-text">Genera reportes detallados de la producción de huevos por lote y período, exportables a Excel.</p>
+                    <a href="{% url 'aves:reporte_produccion' %}" class="btn-glass-action" style="background: rgba(13, 110, 253, 0.3); border-color: rgba(13, 110, 253, 0.5);">
+                        <i class="fas fa-file-excel me-2"></i>Generar Reporte
+                    </a>
+                </div>
             </div>
-            <div class="card-body">
-                <p class="mb-0">
-                    Los reportes te permiten analizar el rendimiento de tus lotes avícolas. 
-                    Cada reporte puede exportarse en formato Excel según tus necesidades.
-                    Utiliza el dashboard para obtener una vista general en tiempo real de todos tus indicadores.
-                    El reporte SENA genera un archivo Excel con el formato oficial para registro mensual de postura.
-                </p>
+        </div>
+        
+        <!-- Reporte de Vacunación -->
+        <div class="col-md-5 mb-4">
+            <div class="unified-dashboard-card">
+                <div class="card-body">
+                    <div class="icon-container" style="background: rgba(23, 162, 184, 0.25); border-color: rgba(23, 162, 184, 0.4);">
+                        <i class="fas fa-syringe"></i>
+                    </div>
+                    <h5 class="card-title">Reporte de Vacunación</h5>
+                    <p class="card-text">Seguimiento detallado del plan de vacunación, cumplimiento y próximas dosis programadas.</p>
+                    <a href="{% url 'aves:reporte_vacunacion' %}" class="btn-glass-action" style="background: rgba(23, 162, 184, 0.3); border-color: rgba(23, 162, 184, 0.5);">
+                        <i class="fas fa-file-medical me-2"></i>Generar Reporte
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 justify-content-center">
+        <div class="col-12 col-xl-10">
+            <div class="unified-dashboard-card info-card">
+                <div class="card-header border-0 bg-transparent">
+                    <h5 class="mb-0 text-white"><i class="fas fa-info-circle me-2"></i>Información Importante</h5>
+                </div>
+                <div class="card-body text-start pt-0">
+                    <p class="mb-0 text-white-50">
+                        Los reportes te permiten analizar el rendimiento de tus lotes avícolas. 
+                        Cada reporte puede exportarse en formato Excel según tus necesidades.
+                        Utiliza el dashboard para obtener una vista general en tiempo real de todos tus indicadores.
+                        El reporte SENA genera un archivo Excel con el formato oficial para registro mensual de postura.
+                    </p>
+                </div>
             </div>
         </div>
     </div>

@@ -1,204 +1,298 @@
 {% extends 'aves/base.html' %}
+{% load static %}
 
 {% block title %}Movimientos de Huevos - AgroSmart{% endblock %}
 
-{% block page_title %}Movimientos de Huevos{% endblock %}
+{% block page_title %}{% endblock %}
+{% block breadcrumb_items %}{% endblock %}
 
-{% block breadcrumb_items %}
-    <li class="breadcrumb-item active">Movimientos de Huevos</li>
-{% endblock %}
+{% block extra_css %}
+<style>
+    /* Estilos unificados Glassmorphism */
+    .unified-dashboard-card {
+        background: rgba(0, 175, 0, 0.25);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .unified-dashboard-card .card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-{% block page_actions %}
-    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
-    <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-primary">
-        <i class="fas fa-plus me-2"></i>Nuevo Movimiento
-    </a>
-    {% endif %}
+    .unified-dashboard-card .card-body {
+        padding: 2rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    .glass-wrap {
+        width: 100%;
+        max-width: 98%;
+        margin: 0 auto;
+    }
+
+    /* Form Styles */
+    .unified-dashboard-card .form-label {
+        color: white;
+        font-weight: 500;
+    }
+
+    .unified-dashboard-card .form-control,
+    .unified-dashboard-card .form-select {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: #333;
+    }
+
+    .unified-dashboard-card .form-control:focus,
+    .unified-dashboard-card .form-select:focus {
+        background: white;
+        box-shadow: 0 0 0 0.25rem rgba(46, 125, 50, 0.25);
+        border-color: #2e7d32;
+    }
+
+    /* Table Styles within Glass Card */
+    .table-custom {
+        margin-bottom: 0;
+        width: 100%;
+        border-collapse: separate; 
+        border-spacing: 0;
+        color: white;
+    }
+    
+    .table-custom thead th {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        color: white !important;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+        vertical-align: middle;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 15px;
+        letter-spacing: 0.5px;
+    }
+
+    .table-custom tbody tr {
+        background-color: transparent !important;
+        transition: all 0.2s;
+    }
+    
+    .table-custom tbody tr:hover {
+        background-color: rgba(255,255,255,0.1) !important;
+    }
+    
+    .table-custom tbody td {
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding: 15px;
+        vertical-align: middle;
+        color: white;
+    }
+
+    .btn-light-custom {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.5);
+        color: #2e7d32;
+        font-weight: 600;
+    }
+    
+    .btn-light-custom:hover {
+        background: white;
+        color: #1b5e20;
+    }
+
+    /* Pagination */
+    .pagination .page-link {
+        background: rgba(255,255,255,0.1);
+        border-color: rgba(255,255,255,0.2);
+        color: white;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background: #2e7d32;
+        border-color: #2e7d32;
+    }
+    
+    .pagination .page-item.disabled .page-link {
+        background: rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.5);
+    }
+    
+    .pagination .page-link:hover {
+        background: rgba(255,255,255,0.2);
+        color: white;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<!-- Filtros -->
-<div class="card mb-4">
-    <div class="card-body">
-        <form method="get" class="row g-3">
-            <div class="col-md-3">
-                <label class="form-label">Tipo de Movimiento</label>
-                <select name="tipo_movimiento" class="form-select">
-                    <option value="">Todos los tipos</option>
-                    {% for value, label in tipos_movimiento %}
-                        <option value="{{ value }}" {% if request.GET.tipo_movimiento == value %}selected{% endif %}>
-                            {{ label }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Fecha Desde</label>
-                <input type="date" name="fecha_desde" class="form-control" value="{{ request.GET.fecha_desde }}">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Fecha Hasta</label>
-                <input type="date" name="fecha_hasta" class="form-control" value="{{ request.GET.fecha_hasta }}">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">&nbsp;</label>
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-outline-primary">
-                        <i class="fas fa-search me-2"></i>Filtrar
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Lista de movimientos -->
-<div class="card">
-    <div class="card-body">
-        {% if movimientos %}
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Tipo</th>
-                            <th>Descripción</th>
-                            <th>Cantidad Total</th>
-                            <th>Valor Total</th>
-                            <th>Usuario</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for movimiento in movimientos %}
-                            <tr>
-                                <td>{{ movimiento.fecha|date:"d/m/Y" }}</td>
-                                <td>
-                                    <span class="badge bg-{% if movimiento.tipo_movimiento == 'venta' %}success{% elif movimiento.tipo_movimiento == 'autoconsumo' %}warning{% elif movimiento.tipo_movimiento == 'baja' %}danger{% else %}info{% endif %}">
-                                        {{ movimiento.get_tipo_movimiento_display }}
-                                    </span>
-                                </td>
-                                <td>{{ movimiento.descripcion|default:"-" }}</td>
-                                <td>{{ movimiento.cantidad_total }} unidades</td>
-                                <td>${{ movimiento.valor_total|floatformat:0 }}</td>
-                                <td>{{ movimiento.usuario_registro.get_full_name|default:movimiento.usuario_registro.username }}</td>
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#detalleModal{{ movimiento.id }}">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Paginación -->
-            {% if movimientos.has_other_pages %}
-                <nav aria-label="Paginación">
-                    <ul class="pagination justify-content-center">
-                        {% if movimientos.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ movimientos.previous_page_number }}{% if request.GET.tipo_movimiento %}&tipo_movimiento={{ request.GET.tipo_movimiento }}{% endif %}{% if request.GET.fecha_desde %}&fecha_desde={{ request.GET.fecha_desde }}{% endif %}{% if request.GET.fecha_hasta %}&fecha_hasta={{ request.GET.fecha_hasta }}{% endif %}">Anterior</a>
-                            </li>
-                        {% endif %}
-
-                        {% for num in movimientos.paginator.page_range %}
-                            {% if movimientos.number == num %}
-                                <li class="page-item active">
-                                    <span class="page-link">{{ num }}</span>
-                                </li>
-                            {% elif num > movimientos.number|add:'-3' and num < movimientos.number|add:'3' %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ num }}{% if request.GET.tipo_movimiento %}&tipo_movimiento={{ request.GET.tipo_movimiento }}{% endif %}{% if request.GET.fecha_desde %}&fecha_desde={{ request.GET.fecha_desde }}{% endif %}{% if request.GET.fecha_hasta %}&fecha_hasta={{ request.GET.fecha_hasta }}{% endif %}">{{ num }}</a>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-
-                        {% if movimientos.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ movimientos.next_page_number }}{% if request.GET.tipo_movimiento %}&tipo_movimiento={{ request.GET.tipo_movimiento }}{% endif %}{% if request.GET.fecha_desde %}&fecha_desde={{ request.GET.fecha_desde }}{% endif %}{% if request.GET.fecha_hasta %}&fecha_hasta={{ request.GET.fecha_hasta }}{% endif %}">Siguiente</a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            {% endif %}
-        {% else %}
-            <div class="text-center py-5">
-                <i class="fas fa-egg fa-3x text-muted mb-3"></i>
-                <h5 class="text-muted">No hay movimientos registrados</h5>
-                <p class="text-muted">Comienza registrando tu primer movimiento de huevos.</p>
-                {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
-                <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i>Nuevo Movimiento
-                </a>
-                {% endif %}
-            </div>
+<div class="glass-wrap">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white fw-bold mb-0" style="font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+            Movimientos de Huevos
+        </h2>
+        {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
+        <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-light-custom">
+            <i class="fas fa-plus me-2"></i>Nuevo Movimiento
+        </a>
         {% endif %}
     </div>
-</div>
 
-<!-- Modales de detalle -->
-{% for movimiento in movimientos %}
-    <div class="modal fade" id="detalleModal{{ movimiento.id }}" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Detalle del Movimiento</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <!-- Filtros -->
+    <div class="unified-dashboard-card">
+        <div class="card-header">
+            <h5 class="section-title">
+                <i class="fas fa-filter"></i>
+                Filtros de Búsqueda
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Tipo de Movimiento</label>
+                    <select name="tipo_movimiento" class="form-select">
+                        <option value="">Todos los tipos</option>
+                        {% for value, label in tipos_movimiento %}
+                            <option value="{{ value }}" {% if request.GET.tipo_movimiento == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
                 </div>
-                <div class="modal-body">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <strong>Fecha:</strong> {{ movimiento.fecha|date:"d/m/Y" }}
-                        </div>
-                        <div class="col-md-6">
-                            <strong>Tipo:</strong> {{ movimiento.get_tipo_movimiento_display }}
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <strong>Descripción:</strong> {{ movimiento.descripcion|default:"Sin descripción" }}
-                        </div>
-                    </div>
-                    
-                    <h6>Detalles por Categoría:</h6>
-                    <div class="table-responsive">
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Categoría</th>
-                                    <th>Cantidad (Docenas)</th>
-                                    <th>Precio por Docena</th>
-                                    <th>Subtotal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for detalle in movimiento.detalles.all %}
-                                    <tr>
-                                        <td>{{ detalle.categoria_huevo }}</td>
-                                        <td>{{ detalle.cantidad_docenas|floatformat:2 }} docenas ({{ detalle.cantidad_unidades }} unidades)</td>
-                                        <td>${{ detalle.precio_por_docena|floatformat:0 }}</td>
-                                        <td>${{ detalle.subtotal|floatformat:0 }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                            <tfoot>
-                                <tr class="table-active">
-                                    <th colspan="3">Total:</th>
-                                    <th>${{ movimiento.valor_total|floatformat:0 }}</th>
-                                </tr>
-                            </tfoot>
-                        </table>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Desde</label>
+                    <input type="date" name="fecha_desde" class="form-control" value="{{ request.GET.fecha_desde }}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Hasta</label>
+                    <input type="date" name="fecha_hasta" class="form-control" value="{{ request.GET.fecha_hasta }}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">&nbsp;</label>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-light-custom">
+                            <i class="fas fa-search me-2"></i>Filtrar
+                        </button>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
-{% endfor %}
+
+    <!-- Lista de movimientos -->
+    <div class="unified-dashboard-card">
+        <div class="card-header">
+            <h5 class="section-title">
+                <i class="fas fa-list"></i>
+                Registro de Movimientos
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            {% if movimientos %}
+                <div class="table-responsive">
+                    <table class="table table-custom text-center mb-0">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                                <th>Cantidad Total</th>
+                                <th>Valor Total</th>
+                                <th>Usuario</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for movimiento in movimientos %}
+                                <tr>
+                                    <td>{{ movimiento.fecha|date:"d/m/Y" }}</td>
+                                    <td>
+                                        <span class="badge bg-{% if movimiento.tipo_movimiento == 'venta' %}success{% elif movimiento.tipo_movimiento == 'autoconsumo' %}warning{% elif movimiento.tipo_movimiento == 'baja' %}danger{% else %}info{% endif %}">
+                                            {{ movimiento.get_tipo_movimiento_display }}
+                                        </span>
+                                    </td>
+                                    <td class="text-start">{{ movimiento.descripcion|default:"-" }}</td>
+                                    <td>{{ movimiento.cantidad_total }} unidades</td>
+                                    <td>${{ movimiento.valor_total|floatformat:0 }}</td>
+                                    <td>{{ movimiento.usuario_registro.get_full_name|default:movimiento.usuario_registro.username }}</td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <a href="{% url 'aves:movimiento_huevos_detail' movimiento.id %}" class="btn btn-sm btn-light-custom" title="Ver detalle">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{% url 'aves:movimiento_huevos_detail' movimiento.id %}?print=true" target="_blank" class="btn btn-sm btn-light-custom" title="Imprimir Comprobante">
+                                                <i class="fas fa-print"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Paginación -->
+                {% if movimientos.has_other_pages %}
+                    <div class="p-3">
+                        <nav aria-label="Paginación">
+                            <ul class="pagination justify-content-center mb-0">
+                                {% if movimientos.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ movimientos.previous_page_number }}{% if request.GET.tipo_movimiento %}&tipo_movimiento={{ request.GET.tipo_movimiento }}{% endif %}{% if request.GET.fecha_desde %}&fecha_desde={{ request.GET.fecha_desde }}{% endif %}{% if request.GET.fecha_hasta %}&fecha_hasta={{ request.GET.fecha_hasta }}{% endif %}">Anterior</a>
+                                    </li>
+                                {% endif %}
+
+                                {% for num in movimientos.paginator.page_range %}
+                                    {% if movimientos.number == num %}
+                                        <li class="page-item active">
+                                            <span class="page-link">{{ num }}</span>
+                                        </li>
+                                    {% elif num > movimientos.number|add:'-3' and num < movimientos.number|add:'3' %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ num }}{% if request.GET.tipo_movimiento %}&tipo_movimiento={{ request.GET.tipo_movimiento }}{% endif %}{% if request.GET.fecha_desde %}&fecha_desde={{ request.GET.fecha_desde }}{% endif %}{% if request.GET.fecha_hasta %}&fecha_hasta={{ request.GET.fecha_hasta }}{% endif %}">{{ num }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if movimientos.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ movimientos.next_page_number }}{% if request.GET.tipo_movimiento %}&tipo_movimiento={{ request.GET.tipo_movimiento }}{% endif %}{% if request.GET.fecha_desde %}&fecha_desde={{ request.GET.fecha_desde }}{% endif %}{% if request.GET.fecha_hasta %}&fecha_hasta={{ request.GET.fecha_hasta }}{% endif %}">Siguiente</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-egg fa-3x text-white mb-3" style="opacity: 0.5;"></i>
+                    <h5 class="text-white">No hay movimientos registrados</h5>
+                    <p class="text-white-50">Comienza registrando tu primer movimiento de huevos.</p>
+                    {% if user.perfilusuario and user.perfilusuario.rol == 'superusuario' or user.perfilusuario and user.perfilusuario.rol == 'admin_aves' %}
+                    <a href="{% url 'aves:movimiento_huevos_create' %}" class="btn btn-light-custom mt-2">
+                        <i class="fas fa-plus me-2"></i>Nuevo Movimiento
+                    </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}
