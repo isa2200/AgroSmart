@@ -21,5 +21,7 @@ AgroSmart es un sistema integral de gestión agropecuaria desarrollado en Django
 - Decoradores de seguridad personalizados
 - Auditoría de acciones
 
+<img width="1132" height="594" alt="Captura de pantalla 2026-03-06 103320" src="https://github.com/user-attachments/assets/ef24d841-6bd5-4613-b5bb-f806d8e66864" />
 
 ## Estructura del Proyecto
+
